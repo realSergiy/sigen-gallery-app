@@ -9,7 +9,7 @@ export const SHOULD_DEBUG_SQL = false;
 
 // META / SOURCE / DOMAINS
 
-export const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || 'Photo Blog';
+export const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || 'Segmentation Gallery';
 
 // SOURCE
 export const VERCEL_COMMIT_MESSAGE =
@@ -53,7 +53,7 @@ const SITE_DOMAIN_SHORT = shortenUrl(SITE_DOMAIN);
 export const SITE_DOMAIN_OR_TITLE = SITE_DOMAIN_SHORT || SITE_TITLE;
 
 export const SITE_DESCRIPTION =
-  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || SITE_DOMAIN;
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "Unlocking the Value of Videos";
 
 export const SITE_ABOUT = process.env.NEXT_PUBLIC_SITE_ABOUT;
 
@@ -121,7 +121,7 @@ export const DEFAULT_THEME =
       : 'system';
 export const PRO_MODE_ENABLED = process.env.NEXT_PUBLIC_PRO_MODE === '1';
 export const GRID_HOMEPAGE_ENABLED =
-  process.env.NEXT_PUBLIC_GRID_HOMEPAGE === '1';
+  process.env.NEXT_PUBLIC_FEED_HOMEPAGE === '0';
 export const STATICALLY_OPTIMIZED_PAGES =
   process.env.NEXT_PUBLIC_STATICALLY_OPTIMIZE_PAGES === '1';
 export const STATICALLY_OPTIMIZED_OG_IMAGES =
@@ -140,7 +140,7 @@ export const PRIORITY_ORDER_ENABLED =
 export const PUBLIC_API_ENABLED = process.env.NEXT_PUBLIC_PUBLIC_API === '1';
 export const ALLOW_PUBLIC_DOWNLOADS =
   process.env.NEXT_PUBLIC_ALLOW_PUBLIC_DOWNLOADS === '1';
-export const SHOW_REPO_LINK = process.env.NEXT_PUBLIC_HIDE_REPO_LINK !== '1';
+export const SHOW_REPO_LINK = process.env.NEXT_PUBLIC_SHOW_REPO_LINK === '1';
 export const SHOW_SOCIAL = process.env.NEXT_PUBLIC_HIDE_SOCIAL !== '1';
 export const SHOW_FILM_SIMULATIONS =
   process.env.NEXT_PUBLIC_HIDE_FILM_SIMULATIONS !== '1';
