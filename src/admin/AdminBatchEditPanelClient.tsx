@@ -65,7 +65,7 @@ export default function AdminBatchEditPanelClient({
     isInTagMode ? (
       <>
         <LoaderButton
-          className="min-h-[2.5rem]"
+          className="min-h-10"
           icon={<IoCloseSharp size={19} className="translate-y-[0.5px]" />}
           onClick={() => {
             setTags(undefined);
@@ -76,7 +76,7 @@ export default function AdminBatchEditPanelClient({
           Cancel
         </LoaderButton>
         <LoaderButton
-          className="min-h-[2.5rem]"
+          className="min-h-10"
           icon={<FaCheck size={15} />}
           // eslint-disable-next-line max-len
           confirmText={`Are you sure you want to apply tags to ${photosText}? This action cannot be undone.`}

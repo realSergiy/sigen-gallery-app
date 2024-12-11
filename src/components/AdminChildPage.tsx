@@ -32,13 +32,13 @@ function AdminChildPage({
               className={clsx(
                 'flex items-center gap-x-2 gap-y-3',
                 !breadcrumbEllipsis && 'flex-wrap',
-                'min-h-[2.25rem]', // min-h-9 equivalent
+                'min-h-9',
               )}
             >
               <div
                 className={clsx(
                   'flex items-center gap-x-1.5 gap-y-1 sm:gap-x-3',
-                  'flex-grow',
+                  'grow',
                   breadcrumbEllipsis ? 'min-w-0' : 'flex-wrap',
                 )}
               >
@@ -55,9 +55,7 @@ function AdminChildPage({
                     <span>/</span>
                     <Badge
                       dimContent={isLoading}
-                      className={clsx(
-                        breadcrumbEllipsis && 'truncate text-ellipsis',
-                      )}
+                      className={clsx(breadcrumbEllipsis && 'truncate')}
                     >
                       {breadcrumb}
                     </Badge>

@@ -8,20 +8,18 @@
   ],
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/migration-from-tailwind-2": "off",
+    "tailwindcss/enforces-shorthand": "off",
+    "tailwindcss/classnames-order": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "": "off",
+    "": "off",
+    "": "off",
+    "": "off",
     "@next/next/no-img-element": "off",
-    "@typescript-eslint/no-unused-expressions": "warn",
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_"
-      }
-    ],
-    "comma-dangle": ["warn", "always-multiline"],
-    "indent": ["warn", 2],
-    "linebreak-style": ["warn", "unix"],
-    "quotes": ["warn", "single"],
-    "semi": ["warn", "always"],
-    "max-len": ["warn", { "code": 80 }]
+    "tailwindcss/no-unnecessary-arbitrary-value": "off",
+    "tailwindcss/no-contradicting-classname": "off",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

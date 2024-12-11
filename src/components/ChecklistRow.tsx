@@ -34,7 +34,7 @@ export default function ChecklistRow({
         }
         loading={isPending}
       />
-      <div className="flex min-w-0 flex-grow flex-col">
+      <div className="flex min-w-0 grow flex-col">
         <div
           className={clsx(
             'flex flex-wrap items-center gap-2 pb-0.5',

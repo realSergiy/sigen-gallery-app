@@ -428,7 +428,7 @@ export const getPhotos = async (options: GetPhotosOptions = {}) =>
     const { wheres, wheresValues, lastValuesIndex } =
       getWheresFromOptions(options);
 
-    let valuesIndex = lastValuesIndex;
+    const valuesIndex = lastValuesIndex;
 
     if (wheres) {
       sql.push(wheres);
