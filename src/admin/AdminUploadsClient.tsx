@@ -7,19 +7,19 @@ import { Tags } from '@/tag';
 import AdminUploadsTable from './AdminUploadsTable';
 
 export type UrlAddStatus = {
-  url: string
-  uploadedAt?: Date
-  status?: 'waiting' | 'adding' | 'added'
-  statusMessage?: string
-  progress?: number
+  url: string;
+  uploadedAt?: Date;
+  status?: 'waiting' | 'adding' | 'added';
+  statusMessage?: string;
+  progress?: number;
 };
 
 export default function AdminUploadsClient({
   urls,
   uniqueTags,
 }: {
-  urls: StorageListResponse
-  uniqueTags?: Tags
+  urls: StorageListResponse;
+  uniqueTags?: Tags;
 }) {
   const [isAdding, setIsAdding] = useState(false);
   const [urlAddStatuses, setUrlAddStatuses] = useState<UrlAddStatus[]>(urls);
@@ -28,14 +28,17 @@ export default function AdminUploadsClient({
 
   return (
     <div className="space-y-4">
-      {(urls.length > 1 || isAdding) &&
-        <AdminAddAllUploads {...{
-          storageUrls,
-          uniqueTags,
-          isAdding,
-          setIsAdding,
-          setUrlAddStatuses,
-        }} />}
+      {(urls.length > 1 || isAdding) && (
+        <AdminAddAllUploads
+          {...{
+            storageUrls,
+            uniqueTags,
+            isAdding,
+            setIsAdding,
+            setUrlAddStatuses,
+          }}
+        />
+      )}
       <AdminUploadsTable {...{ isAdding, urlAddStatuses, setUrlAddStatuses }} />
     </div>
   );

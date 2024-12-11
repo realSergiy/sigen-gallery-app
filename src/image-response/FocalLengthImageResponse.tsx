@@ -13,18 +13,20 @@ export default function FocalLengthImageResponse({
   height,
   fontFamily,
 }: {
-  focal: number,
-  photos: Photo[]
-  width: NextImageSize
-  height: number
-  fontFamily: string
-}) {  
+  focal: number;
+  photos: Photo[];
+  width: NextImageSize;
+  height: number;
+  fontFamily: string;
+}) {
   return (
-    <ImageContainer {...{
-      width,
-      height,
-      ...photos.length === 0 && { background: 'black' },
-    }}>
+    <ImageContainer
+      {...{
+        width,
+        height,
+        ...(photos.length === 0 && { background: 'black' }),
+      }}
+    >
       <ImagePhotoGrid
         {...{
           photos,
@@ -32,18 +34,22 @@ export default function FocalLengthImageResponse({
           height,
         }}
       />
-      <ImageCaption {...{
-        width,
-        height,
-        fontFamily,
-        icon: <TbCone
-          size={height * .075}
-          style={{
-            transform: `translateY(${height * .007}px) rotate(270deg)`,
-            marginRight: height * .01,
-          }}
-        />,
-      }}>
+      <ImageCaption
+        {...{
+          width,
+          height,
+          fontFamily,
+          icon: (
+            <TbCone
+              size={height * 0.075}
+              style={{
+                transform: `translateY(${height * 0.007}px) rotate(270deg)`,
+                marginRight: height * 0.01,
+              }}
+            />
+          ),
+        }}
+      >
         {formatFocalLength(focal)}
       </ImageCaption>
     </ImageContainer>

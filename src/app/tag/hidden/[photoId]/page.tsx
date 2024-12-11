@@ -4,9 +4,7 @@ import {
   titleForPhoto,
 } from '@/photo';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
-import {
-  getPhotosNearIdCached,
-} from '@/photo/cache';
+import { getPhotosNearIdCached } from '@/photo/cache';
 import { getPhotosMeta } from '@/photo/db/query';
 import { PATH_ROOT, absolutePathForPhoto } from '@/site/paths';
 import { TAG_HIDDEN } from '@/tag';
@@ -15,13 +13,14 @@ import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
 const getPhotosNearIdCachedCached = cache((photoId: string) =>
-  getPhotosNearIdCached(
-    photoId,
-    { hidden: 'only' , limit: RELATED_GRID_PHOTOS_TO_SHOW + 2 },
-  ));
+  getPhotosNearIdCached(photoId, {
+    hidden: 'only',
+    limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
+  }),
+);
 
 interface PhotoTagProps {
-  params: { photoId: string }
+  params: { photoId: string };
 }
 
 export async function generateMetadata({
@@ -29,7 +28,9 @@ export async function generateMetadata({
 }: PhotoTagProps): Promise<Metadata> {
   const { photo } = await getPhotosNearIdCachedCached(photoId);
 
-  if (!photo) { return {}; }
+  if (!photo) {
+    return {};
+  }
 
   const title = titleForPhoto(photo);
   const description = descriptionForPhoto(photo);
@@ -57,21 +58,25 @@ export default async function PhotoTagHiddenPage({
   const { photo, photos, photosGrid, indexNumber } =
     await getPhotosNearIdCachedCached(photoId);
 
-  if (!photo) { redirect(PATH_ROOT); }
+  if (!photo) {
+    redirect(PATH_ROOT);
+  }
 
   const { count, dateRange } = await getPhotosMeta({ hidden: 'only' });
 
   return (
-    <PhotoDetailPage {...{
-      photo,
-      photos,
-      photosGrid,
-      indexNumber,
-      count,
-      dateRange,
-      tag: TAG_HIDDEN,
-      shouldShare: false,
-      includeFavoriteInAdminMenu: false,
-    }} />
+    <PhotoDetailPage
+      {...{
+        photo,
+        photos,
+        photosGrid,
+        indexNumber,
+        count,
+        dateRange,
+        tag: TAG_HIDDEN,
+        shouldShare: false,
+        includeFavoriteInAdminMenu: false,
+      }}
+    />
   );
 }

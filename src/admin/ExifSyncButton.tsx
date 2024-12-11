@@ -12,8 +12,8 @@ export default function ExifSyncButton({
   photoUrl,
   onSync,
 }: {
-  photoUrl: string
-  onSync?: (data: Partial<PhotoFormData>) => void
+  photoUrl: string;
+  onSync?: (data: Partial<PhotoFormData>) => void;
 } & ComponentProps<typeof SubmitButtonWithStatus>) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,11 +27,14 @@ export default function ExifSyncButton({
           .then(onSync)
           .finally(() => setIsLoading(false));
       }}
-      icon={<IconGrSync
-        className={clsx(
-          'translate-y-[0.5px] translate-x-[0.5px]',
-          'sm:translate-x-[-0.5px]',
-        )} />}
+      icon={
+        <IconGrSync
+          className={clsx(
+            'translate-x-[0.5px] translate-y-[0.5px]',
+            'sm:translate-x-[-0.5px]',
+          )}
+        />
+      }
     >
       EXIF
     </LoaderButton>

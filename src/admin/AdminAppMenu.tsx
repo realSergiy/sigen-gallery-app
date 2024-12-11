@@ -8,43 +8,39 @@ import { ImCheckboxUnchecked } from 'react-icons/im';
 import { IoCloseSharp } from 'react-icons/io5';
 
 export default function AdminAppMenu() {
-  const {
-    selectedPhotoIds,
-    setSelectedPhotoIds,
-  } = useAppState();
+  const { selectedPhotoIds, setSelectedPhotoIds } = useAppState();
 
   const isSelecting = selectedPhotoIds !== undefined;
 
   return (
     <MoreMenu
-      items={[{
-        label: 'App Config',
-        icon: <BiCog className="text-[17px]" />,
-        href: PATH_ADMIN_CONFIGURATION,
-      }, {
-        label: isSelecting
-          ? 'Exit Select'
-          : 'Select Multiple',
-        icon: isSelecting
-          ? <IoCloseSharp
-            className="text-[18px] translate-y-[-0.5px]"
-          />
-          : <ImCheckboxUnchecked
-            className="text-[0.75rem]"
-          />,
-        href: PATH_GRID_INFERRED,
-        action: () => {
-          if (isSelecting) {
-            setSelectedPhotoIds?.(undefined);
-          } else {
-            setSelectedPhotoIds?.([]);
-          }
-          if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-          }
+      items={[
+        {
+          label: 'App Config',
+          icon: <BiCog className="text-[17px]" />,
+          href: PATH_ADMIN_CONFIGURATION,
         },
-        shouldPreventDefault: false,
-      }]}
+        {
+          label: isSelecting ? 'Exit Select' : 'Select Multiple',
+          icon: isSelecting ? (
+            <IoCloseSharp className="translate-y-[-0.5px] text-[18px]" />
+          ) : (
+            <ImCheckboxUnchecked className="text-[0.75rem]" />
+          ),
+          href: PATH_GRID_INFERRED,
+          action: () => {
+            if (isSelecting) {
+              setSelectedPhotoIds?.(undefined);
+            } else {
+              setSelectedPhotoIds?.([]);
+            }
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
+          },
+          shouldPreventDefault: false,
+        },
+      ]}
       ariaLabel="Admin Menu"
     />
   );

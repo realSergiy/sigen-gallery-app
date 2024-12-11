@@ -10,10 +10,11 @@ const getPhotosFocalLengthDataCachedCached = cache((focal: number) =>
   getPhotosFocalLengthDataCached({
     focal,
     limit: INFINITE_SCROLL_GRID_INITIAL,
-  }));
+  }),
+);
 
 interface FocalLengthProps {
-  params: { focal: string }
+  params: { focal: string };
 }
 
 export async function generateMetadata({
@@ -21,17 +22,15 @@ export async function generateMetadata({
 }: FocalLengthProps): Promise<Metadata> {
   const focal = getFocalLengthFromString(focalString);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosFocalLengthDataCachedCached(focal);
+  const [photos, { count, dateRange }] =
+    await getPhotosFocalLengthDataCachedCached(focal);
 
-  const {
-    url,
-    title,
-    description,
-    images,
-  } = generateMetaForFocalLength(focal, photos, count, dateRange);
+  const { url, title, description, images } = generateMetaForFocalLength(
+    focal,
+    photos,
+    count,
+    dateRange,
+  );
 
   return {
     title,
@@ -55,16 +54,16 @@ export default async function Share({
 }: FocalLengthProps) {
   const focal = getFocalLengthFromString(focalString);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosFocalLengthDataCachedCached(focal);
+  const [photos, { count, dateRange }] =
+    await getPhotosFocalLengthDataCachedCached(focal);
 
-  return <>
-    <FocalLengthShareModal {...{ focal, photos, count, dateRange }} />
-    <FocalLengthOverview
-      {...{ focal, photos, count, dateRange }}
-      animateOnFirstLoadOnly
-    />
-  </>;
+  return (
+    <>
+      <FocalLengthShareModal {...{ focal, photos, count, dateRange }} />
+      <FocalLengthOverview
+        {...{ focal, photos, count, dateRange }}
+        animateOnFirstLoadOnly
+      />
+    </>
+  );
 }

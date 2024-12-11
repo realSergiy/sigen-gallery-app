@@ -18,38 +18,43 @@ import { BiCog } from 'react-icons/bi';
 import { FaRegClock } from 'react-icons/fa';
 
 // Updates considered recent if they occurred in past 5 minutes
-const areTimesRecent = (dates: Date[]) => dates
-  .some(date => differenceInMinutes(new Date(), date) < 5);
+const areTimesRecent = (dates: Date[]) =>
+  dates.some(date => differenceInMinutes(new Date(), date) < 5);
 
 export default function AdminNavClient({
   items,
   mostRecentPhotoUpdateTime,
 }: {
   items: {
-    label: string,
-    href: string,
-    count: number,
-  }[]
-  mostRecentPhotoUpdateTime?: Date
+    label: string;
+    href: string;
+    count: number;
+  }[];
+  mostRecentPhotoUpdateTime?: Date;
 }) {
   const pathname = usePathname();
 
   const { adminUpdateTimes = [] } = useAppState();
 
-  const updateTimes = useMemo(() =>
-    (mostRecentPhotoUpdateTime ? [mostRecentPhotoUpdateTime] : [])
-      .concat(adminUpdateTimes)
-  , [mostRecentPhotoUpdateTime, adminUpdateTimes]);
+  const updateTimes = useMemo(
+    () =>
+      (mostRecentPhotoUpdateTime ? [mostRecentPhotoUpdateTime] : []).concat(
+        adminUpdateTimes,
+      ),
+    [mostRecentPhotoUpdateTime, adminUpdateTimes],
+  );
 
-  const [hasRecentUpdates, setHasRecentUpdates] =
-    useState(areTimesRecent(updateTimes));
+  const [hasRecentUpdates, setHasRecentUpdates] = useState(
+    areTimesRecent(updateTimes),
+  );
 
   useEffect(() => {
     // Check every 5 seconds if update times are recent
     setHasRecentUpdates(areTimesRecent(updateTimes));
-    const interval = setInterval(() =>
-      setHasRecentUpdates(areTimesRecent(updateTimes))
-    , 5_000);
+    const interval = setInterval(
+      () => setHasRecentUpdates(areTimesRecent(updateTimes)),
+      5_000,
+    );
     return () => clearInterval(interval);
   }, [updateTimes]);
 
@@ -59,15 +64,19 @@ export default function AdminNavClient({
     <SiteGrid
       contentMain={
         <div className="space-y-5">
-          <div className={clsx(
-            'flex gap-2 md:gap-4',
-            'border-b border-gray-200 dark:border-gray-800 pb-3',
-          )}>
-            <div className={clsx(
+          <div
+            className={clsx(
               'flex gap-2 md:gap-4',
-              'flex-grow overflow-x-auto',
-            )}>
-              {items.map(({ label, href, count }) =>
+              'border-b border-gray-200 pb-3 dark:border-gray-800',
+            )}
+          >
+            <div
+              className={clsx(
+                'flex gap-2 md:gap-4',
+                'flex-grow overflow-x-auto',
+              )}
+            >
+              {items.map(({ label, href, count }) => (
                 <Link
                   key={label}
                   href={href}
@@ -78,15 +87,15 @@ export default function AdminNavClient({
                   prefetch={false}
                 >
                   <span>{label}</span>
-                  {count > 0 &&
-                    <span>({count})</span>}
-                </Link>)}
+                  {count > 0 && <span>({count})</span>}
+                </Link>
+              ))}
             </div>
             <Link
               href={PATH_ADMIN_CONFIGURATION}
-              className={isPathAdminConfiguration(pathname)
-                ? 'font-bold'
-                : 'text-dim'}
+              className={
+                isPathAdminConfiguration(pathname) ? 'font-bold' : 'text-dim'
+              }
             >
               <BiCog
                 size={18}
@@ -95,11 +104,12 @@ export default function AdminNavClient({
               />
             </Link>
           </div>
-          {shouldShowBanner &&
+          {shouldShowBanner && (
             <Note icon={<FaRegClock className="flex-shrink-0" />}>
               Photo updates detected—they may take several minutes to show up
               for visitors
-            </Note>}
+            </Note>
+          )}
         </div>
       }
     />

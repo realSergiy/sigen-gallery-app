@@ -13,19 +13,21 @@ export default function CameraImageResponse({
   height,
   fontFamily,
 }: {
-  camera: Camera
-  photos: Photo[]
-  width: NextImageSize
-  height: number
-  fontFamily: string
+  camera: Camera;
+  photos: Photo[];
+  width: NextImageSize;
+  height: number;
+  fontFamily: string;
 }) {
   const camera = cameraFromPhoto(photos[0], cameraProp);
   return (
-    <ImageContainer {...{
-      width,
-      height,
-      ...photos.length === 0 && { background: 'black' },
-    }}>
+    <ImageContainer
+      {...{
+        width,
+        height,
+        ...(photos.length === 0 && { background: 'black' }),
+      }}
+    >
       <ImagePhotoGrid
         {...{
           photos,
@@ -33,18 +35,22 @@ export default function CameraImageResponse({
           height,
         }}
       />
-      <ImageCaption {...{
-        width,
-        height,
-        fontFamily,
-        icon: <IoMdCamera
-          size={height * .079}
-          style={{
-            transform: `translateY(${height * .003}px)`,
-            marginRight: height * .015,
-          }}
-        />,
-      }}>
+      <ImageCaption
+        {...{
+          width,
+          height,
+          fontFamily,
+          icon: (
+            <IoMdCamera
+              size={height * 0.079}
+              style={{
+                transform: `translateY(${height * 0.003}px)`,
+                marginRight: height * 0.015,
+              }}
+            />
+          ),
+        }}
+      >
         {formatCameraText(camera).toLocaleUpperCase()}
       </ImageCaption>
     </ImageContainer>

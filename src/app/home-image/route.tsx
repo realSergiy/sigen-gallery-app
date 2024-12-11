@@ -12,11 +12,7 @@ import { isNextImageReadyBasedOnPhotos } from '@/photo';
 export const dynamic = 'force-static';
 
 export async function GET() {
-  const [
-    photos,
-    headers,
-    { fontFamily, fonts },
-  ] = await Promise.all([
+  const [photos, headers, { fontFamily, fonts }] = await Promise.all([
     getPhotosCached({ limit: MAX_PHOTOS_TO_SHOW_OG }).catch(() => []),
     getImageResponseCacheControlHeaders(),
     getIBMPlexMonoMedium(),
@@ -29,12 +25,16 @@ export async function GET() {
   const isNextImageReady = await isNextImageReadyBasedOnPhotos(photos);
 
   return new ImageResponse(
-    <HomeImageResponse {...{
-      photos: isNextImageReady ? photos : [],
-      width,
-      height,
-      fontFamily,
-    }}/>,
+    (
+      <HomeImageResponse
+        {...{
+          photos: isNextImageReady ? photos : [],
+          width,
+          height,
+          fontFamily,
+        }}
+      />
+    ),
     { width, height, headers, fonts },
   );
 }

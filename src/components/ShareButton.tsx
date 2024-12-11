@@ -9,19 +9,16 @@ export default function ShareButton({
   dim,
   className,
 }: {
-  path: string
-  prefetch?: boolean
-  shouldScroll?: boolean
-  dim?: boolean
-  className?: string
+  path: string;
+  prefetch?: boolean;
+  shouldScroll?: boolean;
+  dim?: boolean;
+  className?: string;
 }) {
   return (
     <PathLoaderButton
       path={path}
-      className={clsx(
-        className,
-        dim ? 'text-dim' : 'text-medium',
-      )}
+      className={clsx(className, dim ? 'text-dim' : 'text-medium')}
       icon={<TbPhotoShare size={16} />}
       spinnerColor="dim"
       prefetch={prefetch}

@@ -6,11 +6,13 @@ import { redirect } from 'next/navigation';
 export default async function Share({
   params: { photoId },
 }: {
-  params: { photoId: string }
+  params: { photoId: string };
 }) {
   const photo = await getPhotoCached(photoId);
 
-  if (!photo) { return redirect(PATH_ROOT); }
+  if (!photo) {
+    return redirect(PATH_ROOT);
+  }
 
   return <PhotoShareModal photo={photo} />;
 }

@@ -13,20 +13,24 @@ export default function CameraHeader({
   count,
   dateRange,
 }: {
-  camera: Camera
-  photos: Photo[]
-  selectedPhoto?: Photo
-  indexNumber?: number
-  count?: number
-  dateRange?: PhotoDateRange
+  camera: Camera;
+  photos: Photo[];
+  selectedPhoto?: Photo;
+  indexNumber?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   const camera = cameraFromPhoto(photos[0], cameraProp);
   return (
     <PhotoHeader
       camera={camera}
       entity={<PhotoCamera {...{ camera }} contrast="high" hideAppleIcon />}
-      entityDescription={
-        descriptionForCameraPhotos(photos, undefined, count, dateRange)}
+      entityDescription={descriptionForCameraPhotos(
+        photos,
+        undefined,
+        count,
+        dateRange,
+      )}
       photos={photos}
       selectedPhoto={selectedPhoto}
       sharePath={pathForCameraShare(camera)}

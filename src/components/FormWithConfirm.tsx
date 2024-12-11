@@ -9,11 +9,11 @@ export default function FormWithConfirm({
   className,
   children,
 }: {
-  action: (formData: FormData) => void
-  confirmText?: string
-  onSubmit?: () => void
-  className?: string
-  children: ReactNode
+  action: (formData: FormData) => void;
+  confirmText?: string;
+  onSubmit?: () => void;
+  className?: string;
+  children: ReactNode;
 }) {
   return (
     <form
@@ -31,4 +31,4 @@ export default function FormWithConfirm({
       {children}
     </form>
   );
-};
+}

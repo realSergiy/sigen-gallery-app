@@ -1,8 +1,4 @@
-export default function IconGrSync({
-  className,
-}: {
-  className?: string
-}) {
+export default function IconGrSync({ className }: { className?: string }) {
   return (
     <svg
       stroke="currentColor"

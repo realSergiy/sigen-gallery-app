@@ -1,8 +1,5 @@
 import { cameraFromPhoto, getCameraFromParams } from '.';
-import {
-  getPhotosCached,
-  getPhotosMetaCached,
-} from '@/photo/cache';
+import { getPhotosCached, getPhotosMetaCached } from '@/photo/cache';
 
 export const getPhotosCameraDataCached = async (
   make: string,
@@ -13,10 +10,8 @@ export const getPhotosCameraDataCached = async (
   return Promise.all([
     getPhotosCached({ camera, limit }),
     getPhotosMetaCached({ camera }),
-  ])
-    .then(([photos, meta]) => [
-      photos,
-      meta,
-      cameraFromPhoto(photos[0], camera),
-    ] as const);
+  ]).then(
+    ([photos, meta]) =>
+      [photos, meta, cameraFromPhoto(photos[0], camera)] as const,
+  );
 };

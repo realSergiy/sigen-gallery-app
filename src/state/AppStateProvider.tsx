@@ -12,41 +12,32 @@ import { getPhotosHiddenMetaCachedAction } from '@/photo/actions';
 export default function AppStateProvider({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode;
 }) {
   const { previousPathname } = usePathnames();
 
   // CORE
-  const [hasLoaded, setHasLoaded] =
-    useState(false);
-  const [swrTimestamp, setSwrTimestamp] =
-    useState(Date.now());
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [swrTimestamp, setSwrTimestamp] = useState(Date.now());
   const [nextPhotoAnimation, setNextPhotoAnimation] =
     useState<AnimationConfig>();
   const [shouldRespondToKeyboardCommands, setShouldRespondToKeyboardCommands] =
     useState(true);
-  const [isCommandKOpen, setIsCommandKOpen] =
-    useState(false);
+  const [isCommandKOpen, setIsCommandKOpen] = useState(false);
   // ADMIN
-  const [userEmail, setUserEmail] =
-    useState<string>();
-  const [adminUpdateTimes, setAdminUpdateTimes] =
-    useState<Date[]>([]);
-  const [hiddenPhotosCount, setHiddenPhotosCount] =
-    useState(0);
-  const [selectedPhotoIds, setSelectedPhotoIds] =
-    useState<string[] | undefined>();
-  const [isPerformingSelectEdit, setIsPerformingSelectEdit] =
-    useState(false);
+  const [userEmail, setUserEmail] = useState<string>();
+  const [adminUpdateTimes, setAdminUpdateTimes] = useState<Date[]>([]);
+  const [hiddenPhotosCount, setHiddenPhotosCount] = useState(0);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<
+    string[] | undefined
+  >();
+  const [isPerformingSelectEdit, setIsPerformingSelectEdit] = useState(false);
   // DEBUG
-  const [isGridHighDensity, setIsGridHighDensity] =
-    useState(HIGH_DENSITY_GRID);
-  const [arePhotosMatted, setArePhotosMatted] =
-    useState(MATTE_PHOTOS);
+  const [isGridHighDensity, setIsGridHighDensity] = useState(HIGH_DENSITY_GRID);
+  const [arePhotosMatted, setArePhotosMatted] = useState(MATTE_PHOTOS);
   const [shouldDebugImageFallbacks, setShouldDebugImageFallbacks] =
     useState(false);
-  const [shouldShowBaselineGrid, setShouldShowBaselineGrid] =
-    useState(false);
+  const [shouldShowBaselineGrid, setShouldShowBaselineGrid] = useState(false);
 
   const invalidateSwr = useCallback(() => setSwrTimestamp(Date.now()), []);
 
@@ -57,19 +48,23 @@ export default function AppStateProvider({
   const isUserSignedIn = Boolean(userEmail);
   useEffect(() => {
     if (isUserSignedIn) {
-      const timeout = setTimeout(() =>
-        getPhotosHiddenMetaCachedAction().then(({ count }) =>
-          setHiddenPhotosCount(count))
-      , 100);
+      const timeout = setTimeout(
+        () =>
+          getPhotosHiddenMetaCachedAction().then(({ count }) =>
+            setHiddenPhotosCount(count),
+          ),
+        100,
+      );
       return () => clearTimeout(timeout);
     } else {
       setHiddenPhotosCount(0);
     }
   }, [isUserSignedIn]);
 
-  const registerAdminUpdate = useCallback(() =>
-    setAdminUpdateTimes(updates => [...updates, new Date()])
-  , []);
+  const registerAdminUpdate = useCallback(
+    () => setAdminUpdateTimes(updates => [...updates, new Date()]),
+    [],
+  );
 
   useEffect(() => {
     setHasLoaded?.(true);
@@ -116,4 +111,4 @@ export default function AppStateProvider({
       {children}
     </AppStateContext.Provider>
   );
-};
+}

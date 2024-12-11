@@ -15,45 +15,35 @@ import PhotoFeedPage from '@/photo/PhotoFeedPage';
 export const dynamic = 'force-static';
 export const maxDuration = 60;
 
-const getPhotosCached = cache(() => getPhotos({
-  limit: GRID_HOMEPAGE_ENABLED
-    ? INFINITE_SCROLL_GRID_INITIAL
-    : INFINITE_SCROLL_FEED_INITIAL,
-}));
+const getPhotosCached = cache(() =>
+  getPhotos({
+    limit: GRID_HOMEPAGE_ENABLED
+      ? INFINITE_SCROLL_GRID_INITIAL
+      : INFINITE_SCROLL_FEED_INITIAL,
+  }),
+);
 
 export async function generateMetadata(): Promise<Metadata> {
-  const photos = await getPhotosCached()
-    .catch(() => []);
+  const photos = await getPhotosCached().catch(() => []);
   return generateOgImageMetaForPhotos(photos);
 }
 
 export default async function HomePage() {
-  const [
-    photos,
-    photosCount,
-    tags,
-    cameras,
-    simulations,
-  ] = await Promise.all([
-    getPhotosCached()
-      .catch(() => []),
+  const [photos, photosCount, tags, cameras, simulations] = await Promise.all([
+    getPhotosCached().catch(() => []),
     getPhotosMeta()
       .then(({ count }) => count)
       .catch(() => 0),
-    ...(GRID_HOMEPAGE_ENABLED
-      ? getPhotoSidebarData()
-      : [[], [], []]),
+    ...(GRID_HOMEPAGE_ENABLED ? getPhotoSidebarData() : [[], [], []]),
   ]);
 
-  return (
-    photos.length > 0
-      ? GRID_HOMEPAGE_ENABLED
-        ? <PhotoGridPage
-          {...{ photos, photosCount, tags, cameras, simulations }}
-        />
-        : <PhotoFeedPage
-          {...{ photos, photosCount }}
-        />
-      : <PhotosEmptyState />
+  return photos.length > 0 ? (
+    GRID_HOMEPAGE_ENABLED ? (
+      <PhotoGridPage {...{ photos, photosCount, tags, cameras, simulations }} />
+    ) : (
+      <PhotoFeedPage {...{ photos, photosCount }} />
+    )
+  ) : (
+    <PhotosEmptyState />
   );
 }

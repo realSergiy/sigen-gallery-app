@@ -10,7 +10,8 @@ import { GENERATE_STATIC_PARAMS_LIMIT } from '@/photo/db';
 import { isNextImageReadyBasedOnPhotos } from '@/photo';
 
 export let generateStaticParams:
-  (() => Promise<{ photoId: string }[]>) | undefined = undefined;
+  | (() => Promise<{ photoId: string }[]>)
+  | undefined = undefined;
 
 if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {
@@ -23,32 +24,34 @@ export async function GET(
   _: Request,
   context: { params: { photoId: string } },
 ) {
-  const [
-    photo,
-    { fontFamily, fonts },
-    headers,
-  ] = await Promise.all([
+  const [photo, { fontFamily, fonts }, headers] = await Promise.all([
     getPhotoCached(context.params.photoId),
     getIBMPlexMonoMedium(),
     getImageResponseCacheControlHeaders(),
   ]);
-  
-  if (!photo) { return new Response('Photo not found', { status: 404 }); }
+
+  if (!photo) {
+    return new Response('Photo not found', { status: 404 });
+  }
 
   const { width, height } = IMAGE_OG_DIMENSION;
 
   // Make sure next/image can be reached from absolute urls,
   // which may not exist on first pre-render
   const isNextImageReady = await isNextImageReadyBasedOnPhotos([photo]);
-  
+
   return new ImageResponse(
-    <PhotoImageResponse {...{
-      photo,
-      width,
-      height,
-      fontFamily,
-      isNextImageReady,
-    }} />,
+    (
+      <PhotoImageResponse
+        {...{
+          photo,
+          width,
+          height,
+          fontFamily,
+          isNextImageReady,
+        }}
+      />
+    ),
     { width, height, fonts, headers },
   );
 }

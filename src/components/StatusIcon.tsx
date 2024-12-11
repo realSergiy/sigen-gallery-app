@@ -9,41 +9,41 @@ export default function StatusIcon({
   type,
   loading,
 }: {
-  type: 'checked' | 'missing' | 'warning' | 'optional'
-  loading?: boolean
+  type: 'checked' | 'missing' | 'warning' | 'optional';
+  loading?: boolean;
 }) {
   const getIcon = () => {
     switch (type) {
-    case 'checked':
-      return <BiSolidCheckboxChecked
-        size={18}
-        className="text-green-400"
-      />;
-    case 'missing':
-      return <BiSolidXSquare
-        size={14}
-        className="text-red-400 translate-x-[2px] translate-y-[1.5px]"
-      />;
-    case 'warning':
-      return <BiSolidXSquare
-        size={14}
-        className="text-amber-500 translate-x-[2px] translate-y-[1.5px]"
-      />;
-    case 'optional':
-      return <BiSolidCheckboxMinus
-        size={18}
-        className="text-dim"
-      />;
+      case 'checked':
+        return <BiSolidCheckboxChecked size={18} className="text-green-400" />;
+      case 'missing':
+        return (
+          <BiSolidXSquare
+            size={14}
+            className="translate-x-[2px] translate-y-[1.5px] text-red-400"
+          />
+        );
+      case 'warning':
+        return (
+          <BiSolidXSquare
+            size={14}
+            className="translate-x-[2px] translate-y-[1.5px] text-amber-500"
+          />
+        );
+      case 'optional':
+        return <BiSolidCheckboxMinus size={18} className="text-dim" />;
     }
   };
 
   return (
     <div className="min-w-[1.2rem] pt-[1px]">
-      {loading
-        ? <div className="translate-y-0.5">
+      {loading ? (
+        <div className="translate-y-0.5">
           <Spinner size={14} />
         </div>
-        : getIcon()}
+      ) : (
+        getIcon()
+      )}
     </div>
   );
 }

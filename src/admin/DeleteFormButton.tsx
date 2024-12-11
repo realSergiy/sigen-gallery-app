@@ -6,10 +6,10 @@ import { clsx } from 'clsx/lite';
 import { ComponentProps, useCallback } from 'react';
 import { BiTrash } from 'react-icons/bi';
 
-export default function DeleteFormButton (
+export default function DeleteFormButton(
   props: ComponentProps<typeof SubmitButtonWithStatus> & {
-    clearLocalState?: boolean
-  }
+    clearLocalState?: boolean;
+  },
 ) {
   const {
     onFormSubmit: onFormSubmitProps,
@@ -28,19 +28,21 @@ export default function DeleteFormButton (
     }
   }, [onFormSubmitProps, clearLocalState, invalidateSwr, registerAdminUpdate]);
 
-  return <SubmitButtonWithStatus
-    {...rest}
-    title="Delete"
-    icon={<BiTrash size={16} />}
-    spinnerColor="text"
-    className={clsx(
-      className,
-      '!text-red-500 dark:!text-red-600',
-      'active:!bg-red-100/50 active:dark:!bg-red-950/50',
-      'disabled:!bg-red-100/50 disabled:dark:!bg-red-950/50',
-      '!border-red-200 hover:!border-red-300',
-      'dark:!border-red-900/75 dark:hover:!border-red-900',
-    )}
-    onFormSubmit={onFormSubmit}
-  />;
+  return (
+    <SubmitButtonWithStatus
+      {...rest}
+      title="Delete"
+      icon={<BiTrash size={16} />}
+      spinnerColor="text"
+      className={clsx(
+        className,
+        '!text-red-500 dark:!text-red-600',
+        'active:!bg-red-100/50 active:dark:!bg-red-950/50',
+        'disabled:!bg-red-100/50 disabled:dark:!bg-red-950/50',
+        '!border-red-200 hover:!border-red-300',
+        'dark:!border-red-900/75 dark:hover:!border-red-900',
+      )}
+      onFormSubmit={onFormSubmit}
+    />
+  );
 }

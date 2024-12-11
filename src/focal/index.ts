@@ -10,27 +10,27 @@ import {
 } from '@/site/paths';
 
 export type FocalLengths = {
-  focal: number
-  count: number
-}[]
+  focal: number;
+  count: number;
+}[];
 
 export const getFocalLengthFromString = (focalString?: string) => {
   const focal = focalString?.match(/^([0-9]+)mm/)?.[1];
   return focal ? parseInt(focal, 10) : 0;
 };
 
-export const formatFocalLength = (focal?: number) => focal ?
-  `${focal}mm`
-  : undefined;
+export const formatFocalLength = (focal?: number) =>
+  focal ? `${focal}mm` : undefined;
 
 export const titleForFocalLength = (
   focal: number,
   photos: Photo[],
   explicitCount?: number,
-) => [
-  `${formatFocalLength(focal)} Focal Length`,
-  photoQuantityText(explicitCount ?? photos.length),
-].join(' ');
+) =>
+  [
+    `${formatFocalLength(focal)} Focal Length`,
+    photoQuantityText(explicitCount ?? photos.length),
+  ].join(' ');
 
 export const shareTextFocalLength = (focal: number) =>
   `Photos shot at ${formatFocalLength(focal)}`;

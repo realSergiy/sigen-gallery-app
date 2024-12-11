@@ -4,7 +4,7 @@ import Badge from './Badge';
 export default function ExperimentalBadge({
   className,
 }: {
-  className?: string
+  className?: string;
 }) {
   return (
     <Badge
@@ -14,7 +14,8 @@ export default function ExperimentalBadge({
         'bg-pink-100 dark:bg-pink-600',
         'pt-0.5',
         className,
-      )}>
+      )}
+    >
       Experimental
     </Badge>
   );

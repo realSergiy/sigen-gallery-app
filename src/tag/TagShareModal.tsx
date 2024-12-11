@@ -10,10 +10,10 @@ export default function TagShareModal({
   count,
   dateRange,
 }: {
-  tag: string
-  photos: Photo[]
-  count?: number
-  dateRange?: PhotoDateRange
+  tag: string;
+  photos: Photo[];
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <ShareModal
@@ -24,4 +24,4 @@ export default function TagShareModal({
       <TagOGTile {...{ tag, photos, count, dateRange }} />
     </ShareModal>
   );
-};
+}

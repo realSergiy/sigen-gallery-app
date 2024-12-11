@@ -29,11 +29,11 @@ export default function AdminAddAllUploads({
   setIsAdding,
   setUrlAddStatuses,
 }: {
-  storageUrls: string[]
-  uniqueTags?: Tags
-  isAdding: boolean
-  setIsAdding: (isAdding: boolean) => void
-  setUrlAddStatuses: Dispatch<SetStateAction<UrlAddStatus[]>>
+  storageUrls: string[];
+  uniqueTags?: Tags;
+  isAdding: boolean;
+  setIsAdding: (isAdding: boolean) => void;
+  setUrlAddStatuses: Dispatch<SetStateAction<UrlAddStatus[]>>;
 }) {
   const [buttonText, setButtonText] = useState('Add All Uploads');
   const [showTags, setShowTags] = useState(false);
@@ -55,35 +55,33 @@ export default function AdminAddAllUploads({
         takenAtNaiveLocal: generateLocalNaivePostgresString(),
       });
       for await (const data of readStreamableValue(stream)) {
-        setButtonText(addedUploadCount.current === 0
-          ? `Adding 1 of ${storageUrls.length}`
-          : `Adding ${addedUploadCount.current + 1} of ${storageUrls.length}`
+        setButtonText(
+          addedUploadCount.current === 0
+            ? `Adding 1 of ${storageUrls.length}`
+            : `Adding ${addedUploadCount.current + 1} of ${storageUrls.length}`,
         );
         setUrlAddStatuses(current => {
           const update = current.map(status =>
             status.url === data?.url
               ? {
-                ...status,
-                // Prevent status regressions
-                status: status.status !== 'added' ? data.status : 'added',
-                statusMessage: data.statusMessage,
-                progress: data.progress,
-              }
-              : status
+                  ...status,
+                  // Prevent status regressions
+                  status: status.status !== 'added' ? data.status : 'added',
+                  statusMessage: data.statusMessage,
+                  progress: data.progress,
+                }
+              : status,
           );
-          addedUploadCount.current = update
-            .filter(({ status }) => status === 'added')
-            .length;
+          addedUploadCount.current = update.filter(
+            ({ status }) => status === 'added',
+          ).length;
           return update;
         });
         setAddingProgress((current = 0) => {
-          const updatedProgress = (
-            (
-              ((addedUploadCount.current || 1) - 1) +
-              (data?.progress ?? 0)
-            ) /
-            storageUrls.length
-          ) * 0.95;
+          const updatedProgress =
+            (((addedUploadCount.current || 1) - 1 + (data?.progress ?? 0)) /
+              storageUrls.length) *
+            0.95;
           // Prevent out-of-order updates causing progress to go backwards
           return Math.max(current, updatedProgress);
         });
@@ -98,15 +96,16 @@ export default function AdminAddAllUploads({
 
   return (
     <>
-      {actionErrorMessage &&
-        <ErrorNote>{actionErrorMessage}</ErrorNote>}
+      {actionErrorMessage && <ErrorNote>{actionErrorMessage}</ErrorNote>}
       <Container padding="tight">
         <div className="w-full space-y-4 py-1">
           <div className="flex">
-            <div className={clsx(
-              'flex-grow',
-              tagErrorMessage ? 'text-error' : 'text-main',
-            )}>
+            <div
+              className={clsx(
+                'flex-grow',
+                tagErrorMessage ? 'text-error' : 'text-main',
+              )}
+            >
               {showTags
                 ? tagErrorMessage || 'Add tags to all uploads'
                 : `Found ${storageUrls.length} uploads`}
@@ -120,7 +119,7 @@ export default function AdminAddAllUploads({
               readOnly={isAdding}
             />
           </div>
-          {showTags && !actionErrorMessage &&
+          {showTags && !actionErrorMessage && (
             <PhotoTagFieldset
               tags={tags}
               tagOptions={uniqueTags}
@@ -129,7 +128,8 @@ export default function AdminAddAllUploads({
               readOnly={isAdding}
               openOnLoad
               hideLabel
-            />}
+            />
+          )}
           <div className="space-y-2">
             <ProgressButton
               primary
@@ -137,18 +137,27 @@ export default function AdminAddAllUploads({
               progress={addingProgress}
               isLoading={isAdding}
               disabled={Boolean(tagErrorMessage) || isAddingComplete}
-              icon={isAddingComplete
-                ? <BiCheckCircle size={18} className="translate-x-[1px]" />
-                : <BiImageAdd size={18} className="translate-x-[1px]" />
+              icon={
+                isAddingComplete ? (
+                  <BiCheckCircle size={18} className="translate-x-[1px]" />
+                ) : (
+                  <BiImageAdd size={18} className="translate-x-[1px]" />
+                )
               }
               onClick={async () => {
                 // eslint-disable-next-line max-len
-                if (confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
+                if (
+                  confirm(
+                    `Are you sure you want to add all ${storageUrls.length} uploads?`,
+                  )
+                ) {
                   setIsAdding(true);
-                  setUrlAddStatuses(current => current.map((url, index) => ({
-                    ...url,
-                    status: index === 0 ? 'adding' : 'waiting',
-                  })));
+                  setUrlAddStatuses(current =>
+                    current.map((url, index) => ({
+                      ...url,
+                      status: index === 0 ? 'adding' : 'waiting',
+                    })),
+                  );
                   const uploadsToAdd = storageUrls.slice();
                   try {
                     while (uploadsToAdd.length > 0) {
@@ -161,7 +170,8 @@ export default function AdminAddAllUploads({
                     setIsAdding(false);
                     setIsAddingComplete(true);
                     await sleep(1000).then(() =>
-                      router.push(PATH_ADMIN_PHOTOS));
+                      router.push(PATH_ADMIN_PHOTOS),
+                    );
                   } catch (e: any) {
                     setAddingProgress(undefined);
                     setIsAdding(false);

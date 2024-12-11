@@ -5,14 +5,13 @@ export default function useMetaThemeColor({
   colorLight,
   colorDark,
 }: {
-  colorLight?: string
-  colorDark?: string
+  colorLight?: string;
+  colorDark?: string;
 }) {
   const { resolvedTheme } = useTheme();
 
-  const preferredThemeColor = resolvedTheme === 'light'
-    ? colorLight
-    : colorDark;
+  const preferredThemeColor =
+    resolvedTheme === 'light' ? colorLight : colorDark;
 
   useEffect(() => {
     if (preferredThemeColor) {

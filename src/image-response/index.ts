@@ -7,9 +7,9 @@ export const MAX_PHOTOS_TO_SHOW_TEMPLATE = 16;
 export const MAX_PHOTOS_TO_SHOW_TEMPLATE_TIGHT = 12;
 
 interface OGImageDimension {
-  width: NextImageSize
-  height: number
-  aspectRatio: number
+  width: NextImageSize;
+  height: number;
+  aspectRatio: number;
 }
 
 // 16:9 og image ratio

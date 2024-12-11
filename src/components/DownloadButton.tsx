@@ -9,26 +9,25 @@ export default function DownloadButton({
   photo,
   className,
 }: {
-  photo: Photo
-  className?: string
+  photo: Photo;
+  className?: string;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <LoaderButton
       title="Download Original File"
-      className={clsx(
-        className,
-        'text-medium',
-      )}
+      className={clsx(className, 'text-medium')}
       icon={<MdOutlineFileDownload size={18} />}
-      spinnerColor='dim'
-      styleAs='link'
+      spinnerColor="dim"
+      styleAs="link"
       isLoading={isLoading}
       onClick={async () => {
         setIsLoading(true);
-        downloadFileFromBrowser(photo.url, downloadFileNameForPhoto(photo))
-          .finally(() => setIsLoading(false));
+        downloadFileFromBrowser(
+          photo.url,
+          downloadFileNameForPhoto(photo),
+        ).finally(() => setIsLoading(false));
       }}
     />
   );

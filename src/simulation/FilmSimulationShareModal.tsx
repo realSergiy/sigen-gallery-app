@@ -13,10 +13,10 @@ export default function FilmSimulationShareModal({
   count,
   dateRange,
 }: {
-  simulation: FilmSimulation
-  photos: Photo[]
-  count?: number
-  dateRange?: PhotoDateRange
+  simulation: FilmSimulation;
+  photos: Photo[];
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <ShareModal
@@ -27,4 +27,4 @@ export default function FilmSimulationShareModal({
       <FilmSimulationOGTile {...{ simulation, photos, count, dateRange }} />
     </ShareModal>
   );
-};
+}

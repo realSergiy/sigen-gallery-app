@@ -11,10 +11,11 @@ const getPhotosFocalDataCachedCached = cache((focal: number) =>
   getPhotosFocalLengthDataCached({
     focal,
     limit: INFINITE_SCROLL_GRID_INITIAL,
-  }));
+  }),
+);
 
 interface FocalLengthProps {
-  params: { focal: string }
+  params: { focal: string };
 }
 
 export async function generateMetadata({
@@ -22,19 +23,19 @@ export async function generateMetadata({
 }: FocalLengthProps): Promise<Metadata> {
   const focal = getFocalLengthFromString(focalString);
 
-  const [
+  const [photos, { count, dateRange }] =
+    await getPhotosFocalDataCachedCached(focal);
+
+  if (photos.length === 0) {
+    return {};
+  }
+
+  const { url, title, description, images } = generateMetaForFocalLength(
+    focal,
     photos,
-    { count, dateRange },
-  ] = await getPhotosFocalDataCachedCached(focal);
-
-  if (photos.length === 0) { return {}; }
-
-  const {
-    url,
-    title,
-    description,
-    images,
-  } = generateMetaForFocalLength(focal, photos, count, dateRange);
+    count,
+    dateRange,
+  );
 
   return {
     title,
@@ -55,17 +56,15 @@ export async function generateMetadata({
 
 export default async function TagPage({
   params: { focal: focalString },
-}:FocalLengthProps) {
+}: FocalLengthProps) {
   const focal = getFocalLengthFromString(focalString);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosFocalDataCachedCached(focal);
+  const [photos, { count, dateRange }] =
+    await getPhotosFocalDataCachedCached(focal);
 
-  if (photos.length === 0) { redirect(PATH_ROOT); }
+  if (photos.length === 0) {
+    redirect(PATH_ROOT);
+  }
 
-  return (
-    <FocalLengthOverview {...{ focal, photos, count, dateRange }} />
-  );
+  return <FocalLengthOverview {...{ focal, photos, count, dateRange }} />;
 }

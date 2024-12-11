@@ -18,20 +18,17 @@ export const titleForCamera = (
   camera: Camera,
   photos: Photo[],
   explicitCount?: number,
-) => [
-  'Shot on',
-  formatCameraText(cameraFromPhoto(photos[0], camera)),
-  photoQuantityText(explicitCount ?? photos.length),
-].join(' ');
-
-export const shareTextForCamera = (
-  camera: Camera,
-  photos: Photo[],
 ) =>
   [
-    'Photos shot on',
+    'Shot on',
     formatCameraText(cameraFromPhoto(photos[0], camera)),
+    photoQuantityText(explicitCount ?? photos.length),
   ].join(' ');
+
+export const shareTextForCamera = (camera: Camera, photos: Photo[]) =>
+  ['Photos shot on', formatCameraText(cameraFromPhoto(photos[0], camera))].join(
+    ' ',
+  );
 
 export const descriptionForCameraPhotos = (
   photos: Photo[],
@@ -55,7 +52,11 @@ export const generateMetaForCamera = (
 ) => ({
   url: absolutePathForCamera(camera),
   title: titleForCamera(camera, photos, explicitCount),
-  description:
-    descriptionForCameraPhotos(photos, true, explicitCount, explicitDateRange),
+  description: descriptionForCameraPhotos(
+    photos,
+    true,
+    explicitCount,
+    explicitDateRange,
+  ),
   images: absolutePathForCameraImage(camera),
 });

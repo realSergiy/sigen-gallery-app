@@ -11,13 +11,13 @@ export default function HomeImageResponse({
   height,
   fontFamily,
 }: {
-  photos: Photo[]
-  width: NextImageSize
-  height: number
-  fontFamily: string
+  photos: Photo[];
+  width: NextImageSize;
+  height: number;
+  fontFamily: string;
 }) {
   return (
-    <ImageContainer {...{ width, height }} >
+    <ImageContainer {...{ width, height }}>
       <ImagePhotoGrid
         {...{
           photos,

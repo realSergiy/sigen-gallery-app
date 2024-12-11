@@ -19,9 +19,9 @@ export default function SubmitButtonWithStatus({
   type: _type,
   ...buttonProps
 }: {
-  onFormStatusChange?: (pending: boolean) => void
-  onFormSubmitToastMessage?: string
-  onFormSubmit?: () => void
+  onFormStatusChange?: (pending: boolean) => void;
+  onFormSubmitToastMessage?: string;
+  onFormSubmit?: () => void;
 } & ComponentProps<typeof LoaderButton>) {
   const { pending } = useFormStatus();
 
@@ -46,10 +46,7 @@ export default function SubmitButtonWithStatus({
       {...buttonProps}
       type="submit"
       disabled={disabled}
-      className={clsx(
-        'inline-flex items-center gap-2',
-        className,
-      )}
+      className={clsx('inline-flex items-center gap-2', className)}
       icon={icon}
       spinnerColor={spinnerColor}
       styleAs={styleAs}
@@ -58,4 +55,4 @@ export default function SubmitButtonWithStatus({
       {children}
     </LoaderButton>
   );
-};
+}

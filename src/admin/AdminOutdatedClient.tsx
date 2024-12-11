@@ -18,8 +18,8 @@ export default function AdminOutdatedClient({
   photos,
   hasAiTextGeneration,
 }: {
-  photos: Photo[]
-  hasAiTextGeneration: boolean
+  photos: Photo[];
+  hasAiTextGeneration: boolean;
 }) {
   const updateBatchSize = Math.min(UPDATE_BATCH_SIZE_MAX, photos.length);
 
@@ -33,30 +33,32 @@ export default function AdminOutdatedClient({
     <AdminChildPage
       backLabel="Photos"
       backPath={PATH_ADMIN_PHOTOS}
-      breadcrumb={<>
-        <span className="hidden sm:inline-block">
-          Outdated ({photos.length})
-        </span>
-        <span className="sm:hidden">
-          Outdated
-        </span>
-      </>}
-      accessory={<LoaderButton
-        primary
-        icon={<IconGrSync className="translate-y-[1px]" />}
-        hideTextOnMobile={false}
-        onClick={async () => {
-          if (window.confirm(
-            // eslint-disable-next-line max-len
-            `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`
-          )) {
-            const photosToSync = photos
-              .slice(0, updateBatchSize)
-              .map(photo => photo.id);
-            const isFinalBatch = photosToSync.length >= photos.length;
-            setPhotoIdsSyncing(photosToSync);
-            syncPhotosAction(photosToSync)
-              .finally(() => {
+      breadcrumb={
+        <>
+          <span className="hidden sm:inline-block">
+            Outdated ({photos.length})
+          </span>
+          <span className="sm:hidden">Outdated</span>
+        </>
+      }
+      accessory={
+        <LoaderButton
+          primary
+          icon={<IconGrSync className="translate-y-[1px]" />}
+          hideTextOnMobile={false}
+          onClick={async () => {
+            if (
+              window.confirm(
+                // eslint-disable-next-line max-len
+                `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`,
+              )
+            ) {
+              const photosToSync = photos
+                .slice(0, updateBatchSize)
+                .map(photo => photo.id);
+              const isFinalBatch = photosToSync.length >= photos.length;
+              setPhotoIdsSyncing(photosToSync);
+              syncPhotosAction(photosToSync).finally(() => {
                 if (isFinalBatch) {
                   router.push(PATH_ADMIN_PHOTOS);
                 } else {
@@ -64,30 +66,28 @@ export default function AdminOutdatedClient({
                   router.refresh();
                 }
               });
-          }
-        }}
-        isLoading={arePhotoIdsSyncing}
-      >
-        {arePhotoIdsSyncing
-          ? 'Syncing'
-          : <ResponsiveText shortText={`Sync Next ${updateBatchSize}`}>
-            Sync Next {updateBatchSize} Photos
-          </ResponsiveText>}
-      </LoaderButton>}
+            }
+          }}
+          isLoading={arePhotoIdsSyncing}
+        >
+          {arePhotoIdsSyncing ? (
+            'Syncing'
+          ) : (
+            <ResponsiveText shortText={`Sync Next ${updateBatchSize}`}>
+              Sync Next {updateBatchSize} Photos
+            </ResponsiveText>
+          )}
+        </LoaderButton>
+      }
     >
       <div className="space-y-6">
         <Note>
           <div className="space-y-1.5">
-            {photos.length}
-            {' '}
-            {photos.length === 1 ? 'photo' : 'photos'}
-            {' ('}last updated before
-            {' '}
-            {new Date(OUTDATED_THRESHOLD).toLocaleDateString()}{')'}
-            {' '}
-            may have: missing EXIF fields, inaccurate blur data,
-            {' '}
-            undesired privacy settings
+            {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
+            {' ('}last updated before{' '}
+            {new Date(OUTDATED_THRESHOLD).toLocaleDateString()}
+            {')'} may have: missing EXIF fields, inaccurate blur data, undesired
+            privacy settings
             {hasAiTextGeneration && ', missing AI-generated text'}
           </div>
         </Note>

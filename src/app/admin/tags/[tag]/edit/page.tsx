@@ -10,23 +10,22 @@ import AdminTagBadge from '@/admin/AdminTagBadge';
 const MAX_PHOTO_TO_SHOW = 6;
 
 interface Props {
-  params: { tag: string }
+  params: { tag: string };
 }
 
 export default async function PhotoPageEdit({
-  params: { tag: tagFromParams } }: Props
-) {
+  params: { tag: tagFromParams },
+}: Props) {
   const tag = decodeURIComponent(tagFromParams);
-  
-  const [
-    { count },
-    photos,
-  ] = await Promise.all([
+
+  const [{ count }, photos] = await Promise.all([
     getPhotosMeta({ tag }),
     getPhotosCached({ tag, limit: MAX_PHOTO_TO_SHOW }),
   ]);
 
-  if (count === 0) { redirect(PATH_ADMIN); }
+  if (count === 0) {
+    redirect(PATH_ADMIN);
+  }
 
   return (
     <AdminChildPage
@@ -43,4 +42,4 @@ export default async function PhotoPageEdit({
       </TagForm>
     </AdminChildPage>
   );
-};
+}

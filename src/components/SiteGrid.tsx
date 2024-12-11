@@ -19,12 +19,12 @@ export default function SiteGrid({
   sideFirstOnMobile,
   sideHiddenOnMobile,
 }: {
-  containerRef?: RefObject<HTMLDivElement>
-  className?: string
-  contentMain: JSX.Element
-  contentSide?: JSX.Element
-  sideFirstOnMobile?: boolean
-  sideHiddenOnMobile?: boolean
+  containerRef?: RefObject<HTMLDivElement>;
+  className?: string;
+  contentMain: JSX.Element;
+  contentSide?: JSX.Element;
+  sideFirstOnMobile?: boolean;
+  sideHiddenOnMobile?: boolean;
 }) {
   return (
     <div
@@ -40,20 +40,25 @@ export default function SiteGrid({
         className,
       )}
     >
-      <div className={clsx(
-        'col-span-1 md:col-span-9',
-        sideFirstOnMobile && 'order-2 md:order-none',
-      )}>
+      <div
+        className={clsx(
+          'col-span-1 md:col-span-9',
+          sideFirstOnMobile && 'order-2 md:order-none',
+        )}
+      >
         {contentMain}
       </div>
-      {contentSide &&
-        <div className={clsx(
-          'col-span-1 md:col-span-3',
-          sideFirstOnMobile && 'order-1 md:order-none',
-          sideHiddenOnMobile && 'hidden md:block',
-        )}>
+      {contentSide && (
+        <div
+          className={clsx(
+            'col-span-1 md:col-span-3',
+            sideFirstOnMobile && 'order-1 md:order-none',
+            sideHiddenOnMobile && 'hidden md:block',
+          )}
+        >
           {contentSide}
-        </div>}
+        </div>
+      )}
     </div>
   );
-};
+}

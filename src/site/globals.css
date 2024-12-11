@@ -5,200 +5,133 @@
 @layer base {
   /* Core */
   body {
-    @apply
-      text-main
-      bg-main
-      font-mono text-sm md:text-base
+    @apply text-main bg-main font-mono text-sm md:text-base;
   }
   /* Forms */
   label {
-    @apply
-      font-sans font-medium block uppercase text-xs
-      text-medium
-      tracking-wider
+    @apply text-medium block font-sans text-xs font-medium uppercase tracking-wider;
   }
   .control,
-  button, .button,
-  input[type=text], input[type=email], input[type=password], select, textarea {
-    @apply
-      px-2.5 py-2
-      border rounded-md
-      bg-main
-      border-gray-200 dark:border-gray-700
-      font-mono text-base leading-tight      
+  button,
+  .button,
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  select,
+  textarea {
+    @apply bg-main rounded-md border border-gray-200 px-2.5 py-2 font-mono text-base leading-tight dark:border-gray-700;
   }
-  input[type=text], input[type=email], input[type=password], select, textarea {
-    @apply
-      text-[1rem] /* Prevent iOS auto-zoom behavior */
-      read-only:cursor-default
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  select,
+  textarea {
+    @apply /* Prevent iOS auto-zoom behavior */ text-[1rem] read-only:cursor-default;
   }
-  input[type=text], input[type=email], input[type=password], select {
-    @apply
-      min-h-[2.4rem]
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  select {
+    @apply min-h-[2.4rem];
   }
-  input[type=text], input[type=email], input[type=password], textarea {
-    @apply
-      read-only:bg-gray-100
-      dark:read-only:bg-gray-900 dark:read-only:text-gray-400
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  textarea {
+    @apply read-only:bg-gray-100 dark:read-only:bg-gray-900 dark:read-only:text-gray-400;
   }
   /* Required for readonly behavior on <select /> */
   .disabled-select {
-    @apply
-      text-medium
-      bg-gray-100 dark:bg-gray-900
-      pointer-events-none
+    @apply text-medium pointer-events-none bg-gray-100 dark:bg-gray-900;
   }
-  input[type=file] {
-    @apply
-      block font-mono w-full text-medium
-      file:bg-white dark:file:bg-gray-950
-      file:mr-2 file:my-2 file:px-4 file:py-1.5 file:rounded-md
-      file:border-solid file:border
-      file:border-gray-200 dark:file:border-gray-700
-      file:cursor-pointer
-      file:shadow-sm
-      file:active:bg-gray-100
-      file:disabled:bg-gray-100
-      file:hover:border-gray-300 file:dark:hover:border-gray-600
-      file:hover:disabled:border-gray-200 file:dark:hover:disabled:border-gray-700
-      file:active:disabled:bg-white
-      file:hover:disabled:cursor-not-allowed
+  input[type='file'] {
+    @apply text-medium block w-full font-mono file:my-2 file:mr-2 file:cursor-pointer file:rounded-md file:border file:border-solid file:border-gray-200 file:bg-white file:px-4 file:py-1.5 file:shadow-sm file:hover:border-gray-300 file:active:bg-gray-100 file:disabled:bg-gray-100 file:hover:disabled:cursor-not-allowed file:hover:disabled:border-gray-200 file:active:disabled:bg-white dark:file:border-gray-700 dark:file:bg-gray-950 file:dark:hover:border-gray-600 file:dark:hover:disabled:border-gray-700;
   }
-  input[type=checkbox] {
-    @apply
-      rounded-md
-      dark:bg-transparent
+  input[type='checkbox'] {
+    @apply rounded-md dark:bg-transparent;
   }
   .error {
-    @apply
-      border-red-500 dark:border-red-400
+    @apply border-red-500 dark:border-red-400;
   }
-  button, .button {
-    @apply
-      cursor-pointer
-      hover:no-underline
-      inline-flex gap-2 items-center
-      px-3
-      text-base
-      shadow-sm
-      active:bg-gray-100 dark:active:bg-gray-900
-      hover:border-gray-300 dark:hover:border-gray-600
-      disabled:cursor-not-allowed
-      disabled:text-dim
-      disabled:bg-gray-100 dark:disabled:bg-gray-900
-      disabled:border-gray-200 disabled:dark:border-gray-700
+  button,
+  .button {
+    @apply disabled:text-dim inline-flex cursor-pointer items-center gap-2 px-3 text-base shadow-sm hover:border-gray-300 hover:no-underline active:bg-gray-100 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-100 dark:hover:border-gray-600 dark:active:bg-gray-900 disabled:dark:border-gray-700 dark:disabled:bg-gray-900;
   }
-  button.subtle, .button.subtle {
-    @apply
-      disabled:shadow-none
-      disabled:bg-transparent dark:disabled:bg-transparent
-      disabled:border-gray-100 dark:disabled:border-gray-900
+  button.subtle,
+  .button.subtle {
+    @apply disabled:border-gray-100 disabled:bg-transparent disabled:shadow-none dark:disabled:border-gray-900 dark:disabled:bg-transparent;
   }
-  button.primary, .button.primary {
-    @apply
-      text-invert
-      bg-gray-900 dark:bg-gray-100
-      disabled:text-dim
-      font-medium
-      disabled:bg-gray-100 dark:disabled:bg-gray-900
-      disabled:border-gray-200 disabled:dark:border-gray-700
-      border-gray-900 dark:border-gray-100
-      active:bg-gray-700 active:border-gray-700
-      active:dark:bg-gray-300 active:dark:border-gray-300
-      shadow-none
+  button.primary,
+  .button.primary {
+    @apply text-invert disabled:text-dim border-gray-900 bg-gray-900 font-medium shadow-none active:border-gray-700 active:bg-gray-700 disabled:border-gray-200 disabled:bg-gray-100 dark:border-gray-100 dark:bg-gray-100 active:dark:border-gray-300 active:dark:bg-gray-300 disabled:dark:border-gray-700 dark:disabled:bg-gray-900;
   }
-  button.primary.disabled, .button.primary.disabled {
-    @apply
-      text-medium
+  button.primary.disabled,
+  .button.primary.disabled {
+    @apply text-medium;
   }
   button.link {
-    @apply
-      p-0 min-h-0
-      border-none bg-transparent active:bg-transparent shadow-none rounded-none
+    @apply min-h-0 rounded-none border-none bg-transparent p-0 shadow-none active:bg-transparent;
   }
-  a, .link {
-    @apply
-      hover:text-gray-600
-      hover:dark:text-gray-400
+  a,
+  .link {
+    @apply hover:text-gray-600 hover:dark:text-gray-400;
   }
   /* Utilities: Text */
   .text-main {
-    @apply
-      text-gray-900 dark:text-gray-100
+    @apply text-gray-900 dark:text-gray-100;
   }
   .text-invert {
-    @apply
-      text-white dark:text-black
+    @apply text-white dark:text-black;
   }
   .text-medium {
-    @apply
-      text-gray-500 dark:text-gray-400
+    @apply text-gray-500 dark:text-gray-400;
   }
   .text-dim {
-    @apply
-      text-gray-400 dark:text-gray-500
+    @apply text-gray-400 dark:text-gray-500;
   }
   .text-extra-dim {
-    @apply
-      text-gray-400/80 dark:text-gray-400/50
+    @apply text-gray-400/80 dark:text-gray-400/50;
   }
   .text-extra-extra-dim {
-    @apply
-      text-gray-200 dark:text-gray-800
+    @apply text-gray-200 dark:text-gray-800;
   }
   .text-icon {
-    @apply
-      text-gray-800 dark:text-gray-200
+    @apply text-gray-800 dark:text-gray-200;
   }
   .text-error {
-    @apply
-      text-red-500 dark:text-red-400
+    @apply text-red-500 dark:text-red-400;
   }
   /* Utilities: Border */
   .border-subtle {
-    @apply
-      border border-gray-200 dark:border-gray-800
+    @apply border border-gray-200 dark:border-gray-800;
   }
   /* Utilities: Background */
   .bg-main {
-    @apply
-      bg-white dark:bg-black
+    @apply bg-white dark:bg-black;
   }
   .bg-content {
-    @apply
-      bg-white border-gray-200
-      dark:bg-black dark:border-gray-800
+    @apply border-gray-200 bg-white dark:border-gray-800 dark:bg-black;
   }
   .bg-invert {
-    @apply
-      bg-gray-900 dark:bg-gray-100
+    @apply bg-gray-900 dark:bg-gray-100;
   }
   /* Utilities: Baseline Grid */
   .space-y-baseline {
-    @apply
-      space-y-[1.1875rem] md:space-y-[1.25rem]
+    @apply space-y-[1.1875rem] md:space-y-[1.25rem];
   }
   .gap-y-baseline {
-    @apply
-      gap-y-[1.1875rem] md:gap-y-[1.25rem]
+    @apply gap-y-[1.1875rem] md:gap-y-[1.25rem];
   }
   .gap-baseline {
-    @apply
-      gap-[1.1875rem] md:gap-[1.25rem]
+    @apply gap-[1.1875rem] md:gap-[1.25rem];
   }
   .max-h-baseline {
-    @apply
-      max-h-[1.1875rem] md:max-h-[1.25rem]
+    @apply max-h-[1.1875rem] md:max-h-[1.25rem];
   }
   .-mt-baseline {
-    @apply
-      -mt-[1.1875rem] md:-mt-[1.25rem]
+    @apply -mt-[1.1875rem] md:-mt-[1.25rem];
   }
   .bg-baseline-grid {
-    @apply
-      bg-[repeating-linear-gradient(to_bottom,#eee,#eee_1px,transparent_1px,transparent_1.1875rem)]
-      md:bg-[repeating-linear-gradient(to_bottom,#eee,#eee_1px,transparent_1px,transparent_1.25rem)]
-      dark:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.1875rem)]
-      dark:md:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.25rem)]
+    @apply bg-[repeating-linear-gradient(to_bottom,#eee,#eee_1px,transparent_1px,transparent_1.1875rem)] dark:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.1875rem)] md:bg-[repeating-linear-gradient(to_bottom,#eee,#eee_1px,transparent_1px,transparent_1.25rem)] dark:md:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.25rem)];
   }
 }

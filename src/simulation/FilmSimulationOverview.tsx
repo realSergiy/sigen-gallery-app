@@ -10,25 +10,31 @@ export default function FilmSimulationOverview({
   dateRange,
   animateOnFirstLoadOnly,
 }: {
-  simulation: FilmSimulation,
-  photos: Photo[],
-  count: number,
-  dateRange?: PhotoDateRange,
-  animateOnFirstLoadOnly?: boolean,
+  simulation: FilmSimulation;
+  photos: Photo[];
+  count: number;
+  dateRange?: PhotoDateRange;
+  animateOnFirstLoadOnly?: boolean;
 }) {
   return (
-    <PhotoGridContainer {...{
-      cacheKey: `simulation-${simulation}`, 
-      photos,
-      count,
-      simulation,
-      header: <FilmSimulationHeader {...{
-        simulation,
+    <PhotoGridContainer
+      {...{
+        cacheKey: `simulation-${simulation}`,
         photos,
         count,
-        dateRange,
-      }} />,
-      animateOnFirstLoadOnly,
-    }} />
+        simulation,
+        header: (
+          <FilmSimulationHeader
+            {...{
+              simulation,
+              photos,
+              count,
+              dateRange,
+            }}
+          />
+        ),
+        animateOnFirstLoadOnly,
+      }}
+    />
   );
 }

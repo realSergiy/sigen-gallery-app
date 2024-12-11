@@ -11,10 +11,10 @@ export default function CameraShareModal({
   count,
   dateRange,
 }: {
-  camera: Camera
-  photos: Photo[]
-  count: number
-  dateRange?: PhotoDateRange,
+  camera: Camera;
+  photos: Photo[];
+  count: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <ShareModal
@@ -25,4 +25,4 @@ export default function CameraShareModal({
       <CameraOGTile {...{ camera, photos, count, dateRange }} />
     </ShareModal>
   );
-};
+}

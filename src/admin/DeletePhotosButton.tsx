@@ -18,12 +18,12 @@ export default function DeletePhotosButton({
   toastText,
   ...rest
 }: {
-  photoIds?: string[]
-  onClick?: () => void
-  onFinish?: () => void
-  onDelete?: () => void
-  clearLocalState?: boolean
-  toastText?: string
+  photoIds?: string[];
+  onClick?: () => void;
+  onFinish?: () => void;
+  onDelete?: () => void;
+  clearLocalState?: boolean;
+  toastText?: string;
 } & ComponentProps<typeof LoaderButton>) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,7 +36,10 @@ export default function DeletePhotosButton({
       {...rest}
       isLoading={isLoading}
       // eslint-disable-next-line max-len
-      confirmText={confirmText ?? `Are you sure you want to delete ${photosText}? This action cannot be undone.`}
+      confirmText={
+        confirmText ??
+        `Are you sure you want to delete ${photosText}? This action cannot be undone.`
+      }
       onClick={() => {
         onClick?.();
         setIsLoading(true);

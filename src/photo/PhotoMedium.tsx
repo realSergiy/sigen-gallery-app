@@ -26,12 +26,12 @@ export default function PhotoMedium({
   className,
   onVisible,
 }: {
-  photo: Photo
-  selected?: boolean
-  priority?: boolean
-  prefetch?: boolean
-  className?: string
-  onVisible?: () => void
+  photo: Photo;
+  selected?: boolean;
+  priority?: boolean;
+  prefetch?: boolean;
+  className?: string;
+  onVisible?: () => void;
 } & PhotoSetAttributes) {
   const ref = useRef<HTMLAnchorElement>(null);
 
@@ -53,11 +53,11 @@ export default function PhotoMedium({
         aspectRatio={photo.aspectRatio}
         blurDataURL={photo.blurData}
         blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
-        className="flex object-cover w-full h-full"
+        className="flex h-full w-full object-cover"
         imgClassName="object-cover w-full h-full"
         alt={altTextForPhoto(photo)}
         priority={priority}
       />
     </Link>
   );
-};
+}

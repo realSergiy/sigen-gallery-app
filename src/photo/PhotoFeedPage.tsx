@@ -9,18 +9,19 @@ import PhotosLargeInfinite from './PhotosLargeInfinite';
 export default function PhotoFeedPage({
   photos,
   photosCount,
-}:{
-  photos: Photo[]
-  photosCount: number
+}: {
+  photos: Photo[];
+  photosCount: number;
 }) {
   return (
     <div className="space-y-1">
       <PhotosLarge {...{ photos }} />
-      {photosCount > photos.length &&
+      {photosCount > photos.length && (
         <PhotosLargeInfinite
           initialOffset={INFINITE_SCROLL_FEED_INITIAL}
           itemsPerPage={INFINITE_SCROLL_FEED_MULTIPLE}
-        />}
+        />
+      )}
     </div>
   );
 }

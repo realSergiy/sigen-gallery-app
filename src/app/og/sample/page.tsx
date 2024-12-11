@@ -22,24 +22,21 @@ export default async function OGOverviewPage() {
     photosSimulation,
     photosFocal,
   ] = await Promise.all([
-    getPhotosCached({ limit: 1 }).then(photos => photos[0])
+    getPhotosCached({ limit: 1 })
+      .then(photos => photos[0])
       .catch(() => undefined),
-    getPhotosCached({ limit: 1, camera: cameraIcon }).then(photos => photos[0])
+    getPhotosCached({ limit: 1, camera: cameraIcon })
+      .then(photos => photos[0])
       .catch(() => undefined),
-    getPhotosCached({ limit: 1, tag })
-      .catch(() => []),
-    getPhotosCached({ limit: 1, tag: TAG_FAVS })
-      .catch(() => []),
-    getPhotosCached({ limit: 1, camera })
-      .catch(() => []),
-    getPhotosCached({ limit: 1, simulation })
-      .catch(() => []),
-    getPhotosCached({ limit: 1, focal })
-      .catch(() => []),
+    getPhotosCached({ limit: 1, tag }).catch(() => []),
+    getPhotosCached({ limit: 1, tag: TAG_FAVS }).catch(() => []),
+    getPhotosCached({ limit: 1, camera }).catch(() => []),
+    getPhotosCached({ limit: 1, simulation }).catch(() => []),
+    getPhotosCached({ limit: 1, focal }).catch(() => []),
   ]);
 
   return (
-    <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
       {photoBasic && <PhotoOGTile photo={photoBasic} />}
       {photoIcon && <PhotoOGTile photo={photoIcon} />}
       <TagOGTile tag={tag} photos={photosTag} />

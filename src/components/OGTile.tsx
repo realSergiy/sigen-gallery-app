@@ -22,29 +22,27 @@ export default function OGTile({
   retryTime,
   onVisible,
 }: {
-  title: string
-  description: string
-  path: string
-  pathImageAbsolute: string
-  loadingState?: OGLoadingState
-  onLoad?: () => void
-  onFail?: () => void
-  riseOnHover?: boolean
-  retryTime?: number
-  onVisible?: () => void
+  title: string;
+  description: string;
+  path: string;
+  pathImageAbsolute: string;
+  loadingState?: OGLoadingState;
+  onLoad?: () => void;
+  onFail?: () => void;
+  riseOnHover?: boolean;
+  retryTime?: number;
+  onVisible?: () => void;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
 
-  const [loadingStateInternal, setLoadingStateInternal] =
-    useState(loadingStateExternal ?? 'unloaded');
+  const [loadingStateInternal, setLoadingStateInternal] = useState(
+    loadingStateExternal ?? 'unloaded',
+  );
 
   const loadingState = loadingStateExternal ?? loadingStateInternal;
 
   useEffect(() => {
-    if (
-      !loadingStateExternal &&
-      loadingStateInternal === 'unloaded'
-    ) {
+    if (!loadingStateExternal && loadingStateInternal === 'unloaded') {
       setLoadingStateInternal('loading');
     }
   }, [loadingStateExternal, loadingStateInternal]);
@@ -59,36 +57,39 @@ export default function OGTile({
       href={path}
       className={clsx(
         'group',
-        'block w-full rounded-md overflow-hidden',
+        'block w-full overflow-hidden rounded-md',
         'border shadow-sm',
         'border-gray-200 dark:border-gray-800',
-        riseOnHover && 'hover:-translate-y-1.5 transition-transform',
+        riseOnHover && 'transition-transform hover:-translate-y-1.5',
       )}
     >
-      <div
-        className="relative"
-        style={{ aspectRatio }}
-      >
-        {loadingState === 'loading' &&
-          <div className={clsx(
-            'absolute top-0 left-0 right-0 bottom-0 z-10',
-            'flex items-center justify-center',
-          )}>
+      <div className="relative" style={{ aspectRatio }}>
+        {loadingState === 'loading' && (
+          <div
+            className={clsx(
+              'absolute bottom-0 left-0 right-0 top-0 z-10',
+              'flex items-center justify-center',
+            )}
+          >
             <Spinner size={40} />
-          </div>}
-        {loadingState === 'failed' &&
-          <div className={clsx(
-            'absolute top-0 left-0 right-0 bottom-0 z-[11]',
-            'flex items-center justify-center',
-            'text-red-400',
-          )}>
+          </div>
+        )}
+        {loadingState === 'failed' && (
+          <div
+            className={clsx(
+              'absolute bottom-0 left-0 right-0 top-0 z-[11]',
+              'flex items-center justify-center',
+              'text-red-400',
+            )}
+          >
             <BiError size={32} />
-          </div>}
-        {(loadingState === 'loading' || loadingState === 'loaded') &&
+          </div>
+        )}
+        {(loadingState === 'loading' || loadingState === 'loaded') && (
           <img
             alt={title}
             className={clsx(
-              'absolute top-0 left-0 right-0 bottom-0 z-0',
+              'absolute bottom-0 left-0 right-0 top-0 z-0',
               'w-full',
               loadingState === 'loading' && 'opacity-0',
               'transition-opacity',
@@ -115,23 +116,22 @@ export default function OGTile({
                 }, retryTime);
               }
             }}
-          />}
+          />
+        )}
       </div>
-      <div className={clsx(
-        'h-full flex flex-col gap-0.5 p-3',
-        'font-sans leading-tight',
-        'bg-gray-50 dark:bg-gray-900/50',
-        'group-active:bg-gray-50 group-active:dark:bg-gray-900/50',
-        'group-hover:bg-gray-100 group-hover:dark:bg-gray-900/70',
-        'border-t border-gray-200 dark:border-gray-800',
-      )}>
-        <div className="text-gray-800 dark:text-white font-medium">
-          {title}
-        </div>
-        <div className="text-medium">
-          {description}
-        </div>
+      <div
+        className={clsx(
+          'flex h-full flex-col gap-0.5 p-3',
+          'font-sans leading-tight',
+          'bg-gray-50 dark:bg-gray-900/50',
+          'group-active:bg-gray-50 group-active:dark:bg-gray-900/50',
+          'group-hover:bg-gray-100 group-hover:dark:bg-gray-900/70',
+          'border-t border-gray-200 dark:border-gray-800',
+        )}
+      >
+        <div className="font-medium text-gray-800 dark:text-white">{title}</div>
+        <div className="text-medium">{description}</div>
       </div>
     </Link>
   );
-};
+}

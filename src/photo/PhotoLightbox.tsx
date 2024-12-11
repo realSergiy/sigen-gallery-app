@@ -9,41 +9,44 @@ export default function PhotoLightbox({
   maxPhotosToShow = 6,
   moreLink,
 }: {
-  count: number
-  photos: Photo[]
-  maxPhotosToShow?: number
-  moreLink: string
+  count: number;
+  photos: Photo[];
+  maxPhotosToShow?: number;
+  moreLink: string;
 }) {
-  const photoCountToShow = maxPhotosToShow < count
-    ? maxPhotosToShow - 1
-    : maxPhotosToShow;
+  const photoCountToShow =
+    maxPhotosToShow < count ? maxPhotosToShow - 1 : maxPhotosToShow;
 
   const countNotShown = count - photoCountToShow;
 
   const showOverageTile = countNotShown > 0;
 
   return (
-    <div className={clsx(
-      'border dark:border-gray-800 p-1.5 lg:p-2 rounded-md',
-      'bg-gray-50 dark:bg-gray-950',
-    )}>
+    <div
+      className={clsx(
+        'rounded-md border p-1.5 dark:border-gray-800 lg:p-2',
+        'bg-gray-50 dark:bg-gray-950',
+      )}
+    >
       <PhotoGrid
         photos={photos.slice(0, photoCountToShow)}
         animate={false}
-        additionalTile={showOverageTile
-          ? <Link
-            href={moreLink}
-            className={clsx(
-              'flex flex-col items-center justify-center',
-              'gap-0.5 lg:gap-1',
-            )}
-          >
-            <div className="text-[1.1rem] lg:text-[1.5rem]">
-              +{countNotShown}
-            </div>
-            <div className="text-dim">More</div>
-          </Link>
-          : undefined}
+        additionalTile={
+          showOverageTile ? (
+            <Link
+              href={moreLink}
+              className={clsx(
+                'flex flex-col items-center justify-center',
+                'gap-0.5 lg:gap-1',
+              )}
+            >
+              <div className="text-[1.1rem] lg:text-[1.5rem]">
+                +{countNotShown}
+              </div>
+              <div className="text-dim">More</div>
+            </Link>
+          ) : undefined
+        }
         small
       />
     </div>

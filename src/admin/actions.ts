@@ -9,12 +9,12 @@ import { CONFIG_CHECKLIST_STATUS } from '@/site/config';
 
 const scanForError = (
   shouldCheck: boolean,
-  promise: () => Promise<any>
+  promise: () => Promise<any>,
 ): Promise<string> =>
   shouldCheck
     ? promise()
-      .then(() => '')
-      .catch(error => error.message)
+        .then(() => '')
+        .catch(error => error.message)
     : Promise.resolve('');
 
 export const testConnectionsAction = async () =>
@@ -26,12 +26,7 @@ export const testConnectionsAction = async () =>
       isAiTextGenerationEnabled,
     } = CONFIG_CHECKLIST_STATUS;
 
-    const [
-      databaseError,
-      storageError,
-      kvError,
-      aiError,
-    ] = await Promise.all([
+    const [databaseError, storageError, kvError, aiError] = await Promise.all([
       scanForError(hasDatabase, testDatabaseConnection),
       scanForError(hasStorageProvider, testStorageConnection),
       scanForError(hasVercelKv, testKvConnection),

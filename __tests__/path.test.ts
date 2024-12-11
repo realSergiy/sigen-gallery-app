@@ -24,52 +24,52 @@ import {
 } from '@/site/paths';
 import { TAG_HIDDEN } from '@/tag';
 
-const PHOTO_ID            = 'UsKSGcbt';
-const TAG                 = 'tag-name';
-const CAMERA_MAKE         = 'fujifilm';
-const CAMERA_MODEL        = 'x-t1';
-const CAMERA_OBJECT       = { make: CAMERA_MAKE, model: CAMERA_MODEL };
-const FILM_SIMULATION     = 'acros';
-const FOCAL_LENGTH        = 90;
+const PHOTO_ID = 'UsKSGcbt';
+const TAG = 'tag-name';
+const CAMERA_MAKE = 'fujifilm';
+const CAMERA_MODEL = 'x-t1';
+const CAMERA_OBJECT = { make: CAMERA_MAKE, model: CAMERA_MODEL };
+const FILM_SIMULATION = 'acros';
+const FOCAL_LENGTH = 90;
 const FOCAL_LENGTH_STRING = `${FOCAL_LENGTH}mm`;
-const SHARE               = 'share';
+const SHARE = 'share';
 
-const PATH_ROOT                         = '/';
-const PATH_GRID                         = '/grid';
-const PATH_FEED                         = '/feed';
-const PATH_ADMIN                        = '/admin/photos';
-const PATH_OG                           = '/og';
-const PATH_OG_ALL                       = `${PATH_OG}/all`;
-const PATH_OG_SAMPLE                    = `${PATH_OG}/sample`;
+const PATH_ROOT = '/';
+const PATH_GRID = '/grid';
+const PATH_FEED = '/feed';
+const PATH_ADMIN = '/admin/photos';
+const PATH_OG = '/og';
+const PATH_OG_ALL = `${PATH_OG}/all`;
+const PATH_OG_SAMPLE = `${PATH_OG}/sample`;
 
-const PATH_PHOTO                        = `/p/${PHOTO_ID}`;
-const PATH_PHOTO_SHARE                  = `${PATH_PHOTO}/${SHARE}`;
+const PATH_PHOTO = `/p/${PHOTO_ID}`;
+const PATH_PHOTO_SHARE = `${PATH_PHOTO}/${SHARE}`;
 
-const PATH_TAG                          = `/tag/${TAG}`;
-const PATH_TAG_SHARE                    = `${PATH_TAG}/${SHARE}`;
-const PATH_TAG_PHOTO                    = `${PATH_TAG}/${PHOTO_ID}`;
-const PATH_TAG_PHOTO_SHARE              = `${PATH_TAG_PHOTO}/${SHARE}`;
+const PATH_TAG = `/tag/${TAG}`;
+const PATH_TAG_SHARE = `${PATH_TAG}/${SHARE}`;
+const PATH_TAG_PHOTO = `${PATH_TAG}/${PHOTO_ID}`;
+const PATH_TAG_PHOTO_SHARE = `${PATH_TAG_PHOTO}/${SHARE}`;
 
-const PATH_TAG_HIDDEN                   = `/tag/${TAG_HIDDEN}`;
-const PATH_TAG_HIDDEN_SHARE             = `${PATH_TAG_HIDDEN}/${SHARE}`;
-const PATH_TAG_HIDDEN_PHOTO             = `${PATH_TAG_HIDDEN}/${PHOTO_ID}`;
-const PATH_TAG_HIDDEN_PHOTO_SHARE       = `${PATH_TAG_HIDDEN_PHOTO}/${SHARE}`;
+const PATH_TAG_HIDDEN = `/tag/${TAG_HIDDEN}`;
+const PATH_TAG_HIDDEN_SHARE = `${PATH_TAG_HIDDEN}/${SHARE}`;
+const PATH_TAG_HIDDEN_PHOTO = `${PATH_TAG_HIDDEN}/${PHOTO_ID}`;
+const PATH_TAG_HIDDEN_PHOTO_SHARE = `${PATH_TAG_HIDDEN_PHOTO}/${SHARE}`;
 
-const PATH_CAMERA                       = `/shot-on/${CAMERA_MAKE}/${CAMERA_MODEL}`;
-const PATH_CAMERA_SHARE                 = `${PATH_CAMERA}/${SHARE}`;
-const PATH_CAMERA_PHOTO                 = `${PATH_CAMERA}/${PHOTO_ID}`;
-const PATH_CAMERA_PHOTO_SHARE           = `${PATH_CAMERA_PHOTO}/${SHARE}`;
+const PATH_CAMERA = `/shot-on/${CAMERA_MAKE}/${CAMERA_MODEL}`;
+const PATH_CAMERA_SHARE = `${PATH_CAMERA}/${SHARE}`;
+const PATH_CAMERA_PHOTO = `${PATH_CAMERA}/${PHOTO_ID}`;
+const PATH_CAMERA_PHOTO_SHARE = `${PATH_CAMERA_PHOTO}/${SHARE}`;
 
-const PATH_FILM_SIMULATION              = `/film/${FILM_SIMULATION}`;
-const PATH_FILM_SIMULATION_SHARE        = `${PATH_FILM_SIMULATION}/${SHARE}`;
-const PATH_FILM_SIMULATION_PHOTO        = `${PATH_FILM_SIMULATION}/${PHOTO_ID}`;
-const PATH_FILM_SIMULATION_PHOTO_SHARE  = `${PATH_FILM_SIMULATION_PHOTO}/${SHARE}`;
+const PATH_FILM_SIMULATION = `/film/${FILM_SIMULATION}`;
+const PATH_FILM_SIMULATION_SHARE = `${PATH_FILM_SIMULATION}/${SHARE}`;
+const PATH_FILM_SIMULATION_PHOTO = `${PATH_FILM_SIMULATION}/${PHOTO_ID}`;
+const PATH_FILM_SIMULATION_PHOTO_SHARE = `${PATH_FILM_SIMULATION_PHOTO}/${SHARE}`;
 
-const PATH_FOCAL_LENGTH                 = `/focal/${FOCAL_LENGTH_STRING}`;
-const PATH_FOCAL_LENGTH_SHARE           = `${PATH_FOCAL_LENGTH}/${SHARE}`;
-const PATH_FOCAL_LENGTH_PHOTO           = `${PATH_FOCAL_LENGTH}/${PHOTO_ID}`;
-const PATH_FOCAL_LENGTH_PHOTO_SHARE     = `${PATH_FOCAL_LENGTH_PHOTO}/${SHARE}`;
- 
+const PATH_FOCAL_LENGTH = `/focal/${FOCAL_LENGTH_STRING}`;
+const PATH_FOCAL_LENGTH_SHARE = `${PATH_FOCAL_LENGTH}/${SHARE}`;
+const PATH_FOCAL_LENGTH_PHOTO = `${PATH_FOCAL_LENGTH}/${PHOTO_ID}`;
+const PATH_FOCAL_LENGTH_PHOTO_SHARE = `${PATH_FOCAL_LENGTH_PHOTO}/${SHARE}`;
+
 describe('Paths', () => {
   it('can be protected', () => {
     // Public
@@ -104,11 +104,15 @@ describe('Paths', () => {
     expect(isPathFilmSimulation(PATH_FILM_SIMULATION)).toBe(true);
     expect(isPathFilmSimulationShare(PATH_FILM_SIMULATION_SHARE)).toBe(true);
     expect(isPathFilmSimulationPhoto(PATH_FILM_SIMULATION_PHOTO)).toBe(true);
-    expect(isPathFilmSimulationPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(true);
+    expect(
+      isPathFilmSimulationPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE),
+    ).toBe(true);
     expect(isPathFocalLength(PATH_FOCAL_LENGTH)).toBe(true);
     expect(isPathFocalLengthShare(PATH_FOCAL_LENGTH_SHARE)).toBe(true);
     expect(isPathFocalLengthPhoto(PATH_FOCAL_LENGTH_PHOTO)).toBe(true);
-    expect(isPathFocalLengthPhotoShare(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toBe(true);
+    expect(isPathFocalLengthPhotoShare(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toBe(
+      true,
+    );
     // Negative
     expect(isPathPhoto(PATH_TAG_PHOTO_SHARE)).toBe(false);
     expect(isPathPhotoShare(PATH_TAG_PHOTO)).toBe(false);
@@ -127,7 +131,9 @@ describe('Paths', () => {
     expect(isPathFocalLength(PATH_FILM_SIMULATION)).toBe(false);
     expect(isPathFocalLengthShare(PATH_FILM_SIMULATION_SHARE)).toBe(false);
     expect(isPathFocalLengthPhoto(PATH_FILM_SIMULATION_PHOTO)).toBe(false);
-    expect(isPathFocalLengthPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(false);
+    expect(isPathFocalLengthPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(
+      false,
+    );
   });
   it('can be parsed', () => {
     // Core
@@ -220,13 +226,21 @@ describe('Paths', () => {
     expect(getEscapePath(PATH_CAMERA_PHOTO_SHARE)).toEqual(PATH_CAMERA_PHOTO);
     // Film Simulation
     expect(getEscapePath(PATH_FILM_SIMULATION)).toEqual(PATH_ROOT);
-    expect(getEscapePath(PATH_FILM_SIMULATION_SHARE)).toEqual(PATH_FILM_SIMULATION);
-    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO)).toEqual(PATH_FILM_SIMULATION);
-    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO_SHARE)).toEqual(PATH_FILM_SIMULATION_PHOTO);
+    expect(getEscapePath(PATH_FILM_SIMULATION_SHARE)).toEqual(
+      PATH_FILM_SIMULATION,
+    );
+    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO)).toEqual(
+      PATH_FILM_SIMULATION,
+    );
+    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO_SHARE)).toEqual(
+      PATH_FILM_SIMULATION_PHOTO,
+    );
     // Focal Length
     expect(getEscapePath(PATH_FOCAL_LENGTH)).toEqual(PATH_ROOT);
     expect(getEscapePath(PATH_FOCAL_LENGTH_SHARE)).toEqual(PATH_FOCAL_LENGTH);
     expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO)).toEqual(PATH_FOCAL_LENGTH);
-    expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toEqual(PATH_FOCAL_LENGTH_PHOTO);
+    expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toEqual(
+      PATH_FOCAL_LENGTH_PHOTO,
+    );
   });
 });

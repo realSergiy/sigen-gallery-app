@@ -12,19 +12,20 @@ export default function HiddenTag({
   prefetch,
   countOnHover,
 }: {
-  countOnHover?: number
+  countOnHover?: number;
 } & EntityLinkExternalProps) {
   return (
     <EntityLink
-      label={badged
-        ? <span className="inline-flex gap-1">
-          {TAG_HIDDEN}
-          <AiOutlineEyeInvisible
-            size={13}
-            className="translate-y-[-1.5px]"
-          />
-        </span>
-        : TAG_HIDDEN}
+      label={
+        badged ? (
+          <span className="inline-flex gap-1">
+            {TAG_HIDDEN}
+            <AiOutlineEyeInvisible size={13} className="translate-y-[-1.5px]" />
+          </span>
+        ) : (
+          TAG_HIDDEN
+        )
+      }
       href={pathForTag(TAG_HIDDEN)}
       icon={!badged && <AiOutlineEyeInvisible size={16} />}
       type={type}

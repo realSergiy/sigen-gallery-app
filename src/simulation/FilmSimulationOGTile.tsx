@@ -23,28 +23,34 @@ export default function FilmSimulationOGTile({
   count,
   dateRange,
 }: {
-  simulation: FilmSimulation
-  photos: Photo[]
-  loadingState?: OGLoadingState
-  onLoad?: () => void
-  onFail?: () => void
-  riseOnHover?: boolean
-  retryTime?: number
-  count?: number
-  dateRange?: PhotoDateRange
+  simulation: FilmSimulation;
+  photos: Photo[];
+  loadingState?: OGLoadingState;
+  onLoad?: () => void;
+  onFail?: () => void;
+  riseOnHover?: boolean;
+  retryTime?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
-    <OGTile {...{
-      title: titleForFilmSimulation(simulation, photos, count),
-      description:
-        descriptionForFilmSimulationPhotos(photos, true, count, dateRange),
-      path: pathForFilmSimulation(simulation),
-      pathImageAbsolute: absolutePathForFilmSimulationImage(simulation),
-      loadingState: loadingStateExternal,
-      onLoad,
-      onFail,
-      riseOnHover,
-      retryTime,
-    }}/>
+    <OGTile
+      {...{
+        title: titleForFilmSimulation(simulation, photos, count),
+        description: descriptionForFilmSimulationPhotos(
+          photos,
+          true,
+          count,
+          dateRange,
+        ),
+        path: pathForFilmSimulation(simulation),
+        pathImageAbsolute: absolutePathForFilmSimulationImage(simulation),
+        loadingState: loadingStateExternal,
+        onLoad,
+        onFail,
+        riseOnHover,
+        retryTime,
+      }}
+    />
   );
-};
+}

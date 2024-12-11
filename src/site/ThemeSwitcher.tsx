@@ -6,7 +6,7 @@ import Switcher from '@/components/Switcher';
 import SwitcherItem from '@/components/SwitcherItem';
 import { BiDesktop, BiMoon, BiSun } from 'react-icons/bi';
 
-export default function ThemeSwitcher () {
+export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 

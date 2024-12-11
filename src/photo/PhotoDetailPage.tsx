@@ -25,71 +25,79 @@ export default function PhotoDetailPage({
   shouldShare,
   includeFavoriteInAdminMenu,
 }: {
-  photo: Photo
-  photos: Photo[]
-  photosGrid?: Photo[]
-  indexNumber?: number
-  count?: number
-  dateRange?: PhotoDateRange
-  shouldShare?: boolean
-  includeFavoriteInAdminMenu?: boolean
+  photo: Photo;
+  photos: Photo[];
+  photosGrid?: Photo[];
+  indexNumber?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
+  shouldShare?: boolean;
+  includeFavoriteInAdminMenu?: boolean;
 } & PhotoSetAttributes) {
   let customHeader: JSX.Element | undefined;
 
   if (tag) {
-    customHeader = tag === TAG_HIDDEN
-      ? <HiddenHeader
-        photos={photos}
-        selectedPhoto={photo}
-        indexNumber={indexNumber}
-        count={count ?? 0}
-      />
-      : <TagHeader
-        key={tag}
-        tag={tag}
+    customHeader =
+      tag === TAG_HIDDEN ? (
+        <HiddenHeader
+          photos={photos}
+          selectedPhoto={photo}
+          indexNumber={indexNumber}
+          count={count ?? 0}
+        />
+      ) : (
+        <TagHeader
+          key={tag}
+          tag={tag}
+          photos={photos}
+          selectedPhoto={photo}
+          indexNumber={indexNumber}
+          count={count}
+          dateRange={dateRange}
+        />
+      );
+  } else if (camera) {
+    customHeader = (
+      <CameraHeader
+        camera={camera}
         photos={photos}
         selectedPhoto={photo}
         indexNumber={indexNumber}
         count={count}
         dateRange={dateRange}
-      />;
-  } else if (camera) {
-    customHeader = <CameraHeader
-      camera={camera}
-      photos={photos}
-      selectedPhoto={photo}
-      indexNumber={indexNumber}
-      count={count}
-      dateRange={dateRange}
-    />;
+      />
+    );
   } else if (simulation) {
-    customHeader = <FilmSimulationHeader
-      simulation={simulation}
-      photos={photos}
-      selectedPhoto={photo}
-      indexNumber={indexNumber}
-      count={count}
-      dateRange={dateRange}
-    />;
+    customHeader = (
+      <FilmSimulationHeader
+        simulation={simulation}
+        photos={photos}
+        selectedPhoto={photo}
+        indexNumber={indexNumber}
+        count={count}
+        dateRange={dateRange}
+      />
+    );
   } else if (focal) {
-    customHeader = <FocalLengthHeader
-      focal={focal}
-      photos={photos}
-      selectedPhoto={photo}
-      indexNumber={indexNumber}
-      count={count}
-      dateRange={dateRange}
-    />;
+    customHeader = (
+      <FocalLengthHeader
+        focal={focal}
+        photos={photos}
+        selectedPhoto={photo}
+        indexNumber={indexNumber}
+        count={count}
+        dateRange={dateRange}
+      />
+    );
   }
 
   return (
     <div>
       <SiteGrid
-        className="mt-1.5 mb-6"
-        contentMain={customHeader ?? <PhotoHeader
-          selectedPhoto={photo}
-          photos={photos}
-        />}
+        className="mb-6 mt-1.5"
+        contentMain={
+          customHeader ?? <PhotoHeader selectedPhoto={photo} photos={photos} />
+        }
       />
       <AnimateItems
         className="md:mb-8"
@@ -116,15 +124,17 @@ export default function PhotoDetailPage({
       />
       <SiteGrid
         sideFirstOnMobile
-        contentMain={<PhotoGrid
-          photos={photosGrid ?? photos}
-          selectedPhoto={photo}
-          tag={tag}
-          camera={camera}
-          simulation={simulation}
-          focal={focal}
-          animateOnFirstLoadOnly
-        />}
+        contentMain={
+          <PhotoGrid
+            photos={photosGrid ?? photos}
+            selectedPhoto={photo}
+            tag={tag}
+            camera={camera}
+            simulation={simulation}
+            focal={focal}
+            animateOnFirstLoadOnly
+          />
+        }
       />
     </div>
   );

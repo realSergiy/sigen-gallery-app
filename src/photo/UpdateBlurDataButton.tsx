@@ -8,18 +8,15 @@ export default function UpdateBlurDataButton({
   photoUrl,
   onUpdatedBlurData,
 }: {
-  photoUrl?: string
-  onUpdatedBlurData: (blurData: string) => void
+  photoUrl?: string;
+  onUpdatedBlurData: (blurData: string) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <button
       type="button"
-      className={clsx(
-        'flex min-w-[3.25rem] min-h-9 justify-center',
-        'h-full',
-      )}
+      className={clsx('flex min-h-9 min-w-[3.25rem] justify-center', 'h-full')}
       disabled={!photoUrl || isLoading}
       onClick={() => {
         if (photoUrl) {

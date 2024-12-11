@@ -11,10 +11,7 @@ import {
   absolutePathForPhotoImage,
 } from '@/site/paths';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
-import {
-  getPhotosMetaCached,
-  getPhotosNearIdCached,
-} from '@/photo/cache';
+import { getPhotosMetaCached, getPhotosNearIdCached } from '@/photo/cache';
 import {
   PhotoCameraProps,
   cameraFromPhoto,
@@ -22,24 +19,22 @@ import {
 } from '@/camera';
 import { ReactNode, cache } from 'react';
 
-const getPhotosNearIdCachedCached = cache((
-  photoId: string,
-  make: string,
-  model: string,
-) =>
-  getPhotosNearIdCached(
-    photoId, {
+const getPhotosNearIdCachedCached = cache(
+  (photoId: string, make: string, model: string) =>
+    getPhotosNearIdCached(photoId, {
       camera: getCameraFromParams({ make, model }),
       limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
-    },
-  ));
+    }),
+);
 
 export async function generateMetadata({
   params: { photoId, make, model },
 }: PhotoCameraProps): Promise<Metadata> {
   const { photo } = await getPhotosNearIdCachedCached(photoId, make, model);
 
-  if (!photo) { return {}; }
+  if (!photo) {
+    return {};
+  }
 
   const title = titleForPhoto(photo);
   const description = descriptionForPhoto(photo);
@@ -74,22 +69,28 @@ export default async function PhotoCameraPage({
   const { photo, photos, photosGrid, indexNumber } =
     await getPhotosNearIdCachedCached(photoId, make, model);
 
-  if (!photo) { redirect(PATH_ROOT); }
+  if (!photo) {
+    redirect(PATH_ROOT);
+  }
 
   const camera = cameraFromPhoto(photo, { make, model });
 
   const { count, dateRange } = await getPhotosMetaCached({ camera });
 
-  return <>
-    {children}
-    <PhotoDetailPage {...{
-      photo,
-      photos,
-      photosGrid,
-      camera,
-      indexNumber,
-      count,
-      dateRange,
-    }} />
-  </>;
+  return (
+    <>
+      {children}
+      <PhotoDetailPage
+        {...{
+          photo,
+          photos,
+          photosGrid,
+          camera,
+          indexNumber,
+          count,
+          dateRange,
+        }}
+      />
+    </>
+  );
 }

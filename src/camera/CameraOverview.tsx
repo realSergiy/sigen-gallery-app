@@ -10,25 +10,31 @@ export default function CameraOverview({
   dateRange,
   animateOnFirstLoadOnly,
 }: {
-  camera: Camera,
-  photos: Photo[],
-  count: number,
-  dateRange?: PhotoDateRange,
-  animateOnFirstLoadOnly?: boolean,
+  camera: Camera;
+  photos: Photo[];
+  count: number;
+  dateRange?: PhotoDateRange;
+  animateOnFirstLoadOnly?: boolean;
 }) {
   return (
-    <PhotoGridContainer {...{
-      cacheKey: `camera-${createCameraKey(camera)}`,
-      photos,
-      count,
-      camera,
-      animateOnFirstLoadOnly,
-      header: <CameraHeader {...{
-        camera,
+    <PhotoGridContainer
+      {...{
+        cacheKey: `camera-${createCameraKey(camera)}`,
         photos,
         count,
-        dateRange,
-      }} />,
-    }} />
+        camera,
+        animateOnFirstLoadOnly,
+        header: (
+          <CameraHeader
+            {...{
+              camera,
+              photos,
+              count,
+              dateRange,
+            }}
+          />
+        ),
+      }}
+    />
   );
 }

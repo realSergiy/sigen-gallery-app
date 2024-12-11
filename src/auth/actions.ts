@@ -21,7 +21,7 @@ export const signInAction = async (
     await signIn('credentials', Object.fromEntries(formData));
   } catch (error) {
     if (
-      `${error}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR) || 
+      `${error}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR) ||
       `${error}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR_URL) ||
       // New error thrown in next-auth 5.0.0-beta.19 for incorrect credentials
       `${error}`.includes(KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL)
@@ -37,7 +37,7 @@ export const signInAction = async (
       throw error;
     }
   }
-  redirect(formData.get(KEY_CALLBACK_URL) as string || PATH_ADMIN_PHOTOS);
+  redirect((formData.get(KEY_CALLBACK_URL) as string) || PATH_ADMIN_PHOTOS);
 };
 
 export const signOutAndRedirectAction = async () =>

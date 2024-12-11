@@ -1,13 +1,13 @@
 import { makeUrlAbsolute, shortenUrl } from '@/utility/url';
 import '@testing-library/jest-dom';
 
-const URL_LONG_1  = 'https://www.example.com/';
-const URL_LONG_2  = 'https://www.example.com';
-const URL_LONG_3  = 'https://example.com/';
-const URL_LONG_4  = 'http://example.com/';
-const URL_LONG_5  = 'https://example.com';
-const URL_LONG_6  = 'https://example.com/final-path';
-const URL_LONG_7  = 'https://example.com/final-path/';
+const URL_LONG_1 = 'https://www.example.com/';
+const URL_LONG_2 = 'https://www.example.com';
+const URL_LONG_3 = 'https://example.com/';
+const URL_LONG_4 = 'http://example.com/';
+const URL_LONG_5 = 'https://example.com';
+const URL_LONG_6 = 'https://example.com/final-path';
+const URL_LONG_7 = 'https://example.com/final-path/';
 
 const URL_SHORT_1 = 'example.com';
 const URL_SHORT_2 = 'example.com/';

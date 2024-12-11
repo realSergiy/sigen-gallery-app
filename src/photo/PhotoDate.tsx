@@ -7,40 +7,39 @@ export default function PhotoDate({
   className,
   dateType = 'takenAt',
 }: {
-  photo: Photo
-  className?: string
-  dateType?: 'takenAt' | 'createdAt' | 'updatedAt'
+  photo: Photo;
+  className?: string;
+  dateType?: 'takenAt' | 'createdAt' | 'updatedAt';
 }) {
   const date = useMemo(() => {
-    const date = new Date(dateType === 'takenAt'
-      ? photo.takenAt
-      : dateType === 'createdAt'
-        ? photo.createdAt
-        : photo.updatedAt);
+    const date = new Date(
+      dateType === 'takenAt'
+        ? photo.takenAt
+        : dateType === 'createdAt'
+          ? photo.createdAt
+          : photo.updatedAt,
+    );
     return isNaN(date.getTime()) ? new Date() : date;
-  }, [
-    dateType,
-    photo.takenAt,
-    photo.createdAt,
-    photo.updatedAt,
-  ]);
+  }, [dateType, photo.takenAt, photo.createdAt, photo.updatedAt]);
 
   const getTitleLabel = () => {
     switch (dateType) {
-    case 'takenAt':
-      return 'TAKEN';
-    case 'createdAt':
-      return 'CREATED';
-    case 'updatedAt':
-      return 'UPDATED';
+      case 'takenAt':
+        return 'TAKEN';
+      case 'createdAt':
+        return 'CREATED';
+      case 'updatedAt':
+        return 'UPDATED';
     }
   };
 
   return (
-    <ResponsiveDate {...{
-      date,
-      className,
-      titleLabel: getTitleLabel(),
-    }} />
+    <ResponsiveDate
+      {...{
+        date,
+        className,
+        titleLabel: getTitleLabel(),
+      }}
+    />
   );
 }

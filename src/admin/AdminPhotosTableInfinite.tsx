@@ -12,8 +12,8 @@ export default function AdminPhotosTableInfinite({
   canEdit,
   canDelete,
 }: {
-  initialOffset: number
-  itemsPerPage: number
+  initialOffset: number;
+  itemsPerPage: number;
 } & Omit<ComponentProps<typeof AdminPhotosTable>, 'photos'>) {
   return (
     <InfinitePhotoScroll
@@ -24,7 +24,7 @@ export default function AdminPhotosTableInfinite({
       sortBy="createdAt"
       includeHiddenPhotos
     >
-      {({ photos, onLastPhotoVisible, revalidatePhoto }) =>
+      {({ photos, onLastPhotoVisible, revalidatePhoto }) => (
         <AdminPhotosTable
           photos={photos}
           onLastPhotoVisible={onLastPhotoVisible}
@@ -32,7 +32,8 @@ export default function AdminPhotosTableInfinite({
           hasAiTextGeneration={hasAiTextGeneration}
           canEdit={canEdit}
           canDelete={canDelete}
-        />}
+        />
+      )}
     </InfinitePhotoScroll>
   );
 }

@@ -18,11 +18,11 @@ export default function PhotoEditPageClient({
   imageThumbnailBase64,
   blurData,
 }: {
-  photo: Photo
-  uniqueTags: Tags
-  hasAiTextGeneration: boolean
-  imageThumbnailBase64: string
-  blurData: string
+  photo: Photo;
+  uniqueTags: Tags;
+  hasAiTextGeneration: boolean;
+  imageThumbnailBase64: string;
+  blurData: string;
 }) {
   const photoForm = convertPhotoToFormData(photo);
 
@@ -46,19 +46,18 @@ export default function PhotoEditPageClient({
     <AdminChildPage
       backPath={PATH_ADMIN_PHOTOS}
       backLabel="Photos"
-      breadcrumb={pending && updatedTitle
-        ? updatedTitle
-        : photo.title || photo.id}
+      breadcrumb={
+        pending && updatedTitle ? updatedTitle : photo.title || photo.id
+      }
       breadcrumbEllipsis
       accessory={
         <div className="flex gap-2">
-          {hasAiTextGeneration &&
-            <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />}
-          <ExifSyncButton
-            photoUrl={photo.url}
-            onSync={setUpdatedExifData}
-          />
-        </div>}
+          {hasAiTextGeneration && (
+            <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />
+          )}
+          <ExifSyncButton photoUrl={photo.url} onSync={setUpdatedExifData} />
+        </div>
+      }
       isLoading={pending}
     >
       <PhotoForm
@@ -74,4 +73,4 @@ export default function PhotoEditPageClient({
       />
     </AdminChildPage>
   );
-};
+}

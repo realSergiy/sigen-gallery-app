@@ -16,27 +16,29 @@ export default function TagOGTile({
   count,
   dateRange,
 }: {
-  tag: string
-  photos: Photo[]
-  loadingState?: OGLoadingState
-  onLoad?: () => void
-  onFail?: () => void
-  riseOnHover?: boolean
-  retryTime?: number
-  count?: number
-  dateRange?: PhotoDateRange
+  tag: string;
+  photos: Photo[];
+  loadingState?: OGLoadingState;
+  onLoad?: () => void;
+  onFail?: () => void;
+  riseOnHover?: boolean;
+  retryTime?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
-    <OGTile {...{
-      title: titleForTag(tag, photos, count),
-      description: descriptionForTaggedPhotos(photos, true, count, dateRange),
-      path: pathForTag(tag),
-      pathImageAbsolute: absolutePathForTagImage(tag),
-      loadingState: loadingStateExternal,
-      onLoad,
-      onFail,
-      riseOnHover,
-      retryTime,
-    }}/>
+    <OGTile
+      {...{
+        title: titleForTag(tag, photos, count),
+        description: descriptionForTaggedPhotos(photos, true, count, dateRange),
+        path: pathForTag(tag),
+        pathImageAbsolute: absolutePathForTagImage(tag),
+        loadingState: loadingStateExternal,
+        onLoad,
+        onFail,
+        riseOnHover,
+        retryTime,
+      }}
+    />
   );
-};
+}

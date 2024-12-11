@@ -6,21 +6,23 @@ export default function ImageContainer({
   background = 'transparent',
   children,
 }: {
-  width: number
-  height: number
-  background?: 'transparent' | 'black'
-  children: ReactNode
+  width: number;
+  height: number;
+  background?: 'transparent' | 'black';
+  children: ReactNode;
 }) {
   return (
-    <div style={{
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background,
-      width,
-      height,
-    }}>
+    <div
+      style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background,
+        width,
+        height,
+      }}
+    >
       {children}
     </div>
   );

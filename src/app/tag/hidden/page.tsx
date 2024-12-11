@@ -11,12 +11,15 @@ import { Metadata } from 'next';
 import { cache } from 'react';
 
 const getPhotosHiddenMetaCached = cache(() =>
-  getPhotosMeta({ hidden: 'only' }));
+  getPhotosMeta({ hidden: 'only' }),
+);
 
 export async function generateMetadata(): Promise<Metadata> {
   const { count, dateRange } = await getPhotosHiddenMetaCached();
 
-  if (count === 0) { return {}; }
+  if (count === 0) {
+    return {};
+  }
 
   const title = titleForTag(TAG_HIDDEN, undefined, count);
   const description = descriptionForTaggedPhotos(
@@ -43,32 +46,31 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HiddenTagPage() {
-  const [
-    photos,
-    { count, dateRange },
-  ] = await Promise.all([
+  const [photos, { count, dateRange }] = await Promise.all([
     getPhotosNoStore({ hidden: 'only' }),
     getPhotosHiddenMetaCached(),
   ]);
 
   return (
     <SiteGrid
-      contentMain={<div className="space-y-4 mt-4">
-        <AnimateItems
-          type="bottom"
-          items={[<HiddenHeader
-            key="HiddenHeader"
-            {...{ photos, count, dateRange }}
-          />]}
-          animateOnFirstLoadOnly
-        />
-        <div className="space-y-6">
-          <Note animate>
-            Only visible to authenticated admins
-          </Note>
-          <PhotoGrid {...{ photos }} />
+      contentMain={
+        <div className="mt-4 space-y-4">
+          <AnimateItems
+            type="bottom"
+            items={[
+              <HiddenHeader
+                key="HiddenHeader"
+                {...{ photos, count, dateRange }}
+              />,
+            ]}
+            animateOnFirstLoadOnly
+          />
+          <div className="space-y-6">
+            <Note animate>Only visible to authenticated admins</Note>
+            <PhotoGrid {...{ photos }} />
+          </div>
         </div>
-      </div>}
+      }
     />
   );
 }

@@ -4,23 +4,23 @@ import { parameterize } from '@/utility/string';
 const LENS_PLACEHOLDER: Lens = { make: 'Lens', model: 'Model' };
 
 export type Lens = {
-  make: string
-  model: string
+  make: string;
+  model: string;
 };
 
 export interface LensProps {
-  params: Lens
+  params: Lens;
 }
 
 export interface PhotoLensProps {
-  params: Lens & { photoId: string }
+  params: Lens & { photoId: string };
 }
 
 export type LensWithCount = {
-  lensKey: string
-  lens: Lens
-  count: number
-}
+  lensKey: string;
+  lens: Lens;
+  count: number;
+};
 
 export type Lenses = LensWithCount[];
 
@@ -31,8 +31,8 @@ export const getLensFromParams = ({
   make,
   model,
 }: {
-  make: string,
-  model: string,
+  make: string;
+  model: string;
 }): Lens => ({
   make: parameterize(make, true),
   model: parameterize(model, true),
@@ -44,4 +44,4 @@ export const lensFromPhoto = (
 ): Lens =>
   photo?.lensMake && photo?.lensModel
     ? { make: photo.lensMake, model: photo.lensModel }
-    : fallback ?? LENS_PLACEHOLDER;
+    : (fallback ?? LENS_PLACEHOLDER);

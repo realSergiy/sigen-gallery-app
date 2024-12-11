@@ -16,18 +16,18 @@ export default function PhotoGridPage({
   tags,
   cameras,
   simulations,
-}:{
-  photos: Photo[]
-  photosCount: number
-  tags: Tags
-  cameras: Cameras
-  simulations: FilmSimulations
+}: {
+  photos: Photo[];
+  photosCount: number;
+  tags: Tags;
+  cameras: Cameras;
+  simulations: FilmSimulations;
 }) {
   const { setSelectedPhotoIds } = useAppState();
-  
+
   useEffect(
     () => () => setSelectedPhotoIds?.(undefined),
-    [setSelectedPhotoIds]
+    [setSelectedPhotoIds],
   );
 
   return (
@@ -35,14 +35,18 @@ export default function PhotoGridPage({
       cacheKey={`page-${PATH_GRID}`}
       photos={photos}
       count={photosCount}
-      sidebar={<div className="sticky top-4 space-y-4 mt-[-4px]">
-        <PhotoGridSidebar {...{
-          tags,
-          cameras,
-          simulations,
-          photosCount,
-        }} />
-      </div>}
+      sidebar={
+        <div className="sticky top-4 mt-[-4px] space-y-4">
+          <PhotoGridSidebar
+            {...{
+              tags,
+              cameras,
+              simulations,
+              photosCount,
+            }}
+          />
+        </div>
+      }
       canSelect
     />
   );

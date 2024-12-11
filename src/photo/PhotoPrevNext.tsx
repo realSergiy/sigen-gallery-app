@@ -29,16 +29,14 @@ export default function PhotoPrevNext({
   simulation,
   focal,
 }: {
-  photo?: Photo
-  photos?: Photo[]
-  className?: string
+  photo?: Photo;
+  photos?: Photo[];
+  className?: string;
 } & PhotoSetAttributes) {
   const router = useRouter();
 
-  const {
-    setNextPhotoAnimation,
-    shouldRespondToKeyboardCommands,
-  } = useAppState();
+  const { setNextPhotoAnimation, shouldRespondToKeyboardCommands } =
+    useAppState();
 
   const previousPhoto = photo ? getPreviousPhoto(photo, photos) : undefined;
   const nextPhoto = photo ? getNextPhoto(photo, photos) : undefined;
@@ -47,39 +45,39 @@ export default function PhotoPrevNext({
     if (shouldRespondToKeyboardCommands) {
       const onKeyUp = (e: KeyboardEvent) => {
         switch (e.key.toUpperCase()) {
-        case 'ARROWLEFT':
-        case 'J':
-          if (previousPhoto) {
-            setNextPhotoAnimation?.(ANIMATION_RIGHT);
-            router.push(
-              pathForPhoto({
-                photo: previousPhoto,
-                tag,
-                camera,
-                simulation,
-                focal,
-              }),
-              { scroll: false },
-            );
-          }
-          break;
-        case 'ARROWRIGHT':
-        case 'L':
-          if (nextPhoto) {
-            setNextPhotoAnimation?.(ANIMATION_LEFT);
-            router.push(
-              pathForPhoto({
-                photo: nextPhoto,
-                tag,
-                camera, 
-                simulation,
-                focal,
-              }),
-              { scroll: false },
-            );
-          }
-          break;
-        };
+          case 'ARROWLEFT':
+          case 'J':
+            if (previousPhoto) {
+              setNextPhotoAnimation?.(ANIMATION_RIGHT);
+              router.push(
+                pathForPhoto({
+                  photo: previousPhoto,
+                  tag,
+                  camera,
+                  simulation,
+                  focal,
+                }),
+                { scroll: false },
+              );
+            }
+            break;
+          case 'ARROWRIGHT':
+          case 'L':
+            if (nextPhoto) {
+              setNextPhotoAnimation?.(ANIMATION_LEFT);
+              router.push(
+                pathForPhoto({
+                  photo: nextPhoto,
+                  tag,
+                  camera,
+                  simulation,
+                  focal,
+                }),
+                { scroll: false },
+              );
+            }
+            break;
+        }
       };
       window.addEventListener(LISTENER_KEYUP, onKeyUp);
       return () => window.removeEventListener(LISTENER_KEYUP, onKeyUp);
@@ -95,16 +93,13 @@ export default function PhotoPrevNext({
     simulation,
     focal,
   ]);
-  
+
   return (
-    <div className={clsx(
-      'flex items-center',
-      className,
-    )}>
-      <div className="flex items-center gap-2 select-none">
+    <div className={clsx('flex items-center', className)}>
+      <div className="flex select-none items-center gap-2">
         <PhotoLink
           photo={previousPhoto}
-          className="select-none h-[1rem]"
+          className="h-[1rem] select-none"
           nextPhotoAnimation={ANIMATION_RIGHT}
           tag={tag}
           camera={camera}
@@ -113,17 +108,13 @@ export default function PhotoPrevNext({
           scroll={false}
           prefetch
         >
-          <FiChevronLeft
-            className="sm:hidden text-[1.1rem] translate-y-[-1px]"
-          />
+          <FiChevronLeft className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">PREV</span>
         </PhotoLink>
-        <span className="text-extra-extra-dim">
-          /
-        </span>
+        <span className="text-extra-extra-dim">/</span>
         <PhotoLink
           photo={nextPhoto}
-          className="select-none h-[1rem]"
+          className="h-[1rem] select-none"
           nextPhotoAnimation={ANIMATION_LEFT}
           tag={tag}
           camera={camera}
@@ -132,12 +123,10 @@ export default function PhotoPrevNext({
           scroll={false}
           prefetch
         >
-          <FiChevronRight
-            className="sm:hidden text-[1.1rem] translate-y-[-1px]"
-          />
+          <FiChevronRight className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">NEXT</span>
         </PhotoLink>
       </div>
     </div>
   );
-};
+}

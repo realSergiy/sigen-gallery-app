@@ -10,12 +10,14 @@ export default async function SignInPage() {
   if (session?.user) {
     redirect(PATH_ADMIN);
   }
-  
+
   return (
-    <div className={clsx(
-      'fixed top-0 left-0 right-0 bottom-0',
-      'flex items-center justify-center flex-col gap-8',
-    )}>
+    <div
+      className={clsx(
+        'fixed bottom-0 left-0 right-0 top-0',
+        'flex flex-col items-center justify-center gap-8',
+      )}
+    >
       <SignInForm />
     </div>
   );

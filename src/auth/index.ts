@@ -19,8 +19,10 @@ export const {
     Credentials({
       async authorize({ email, password }) {
         if (
-          process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
-          process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
+          process.env.ADMIN_EMAIL &&
+          process.env.ADMIN_EMAIL === email &&
+          process.env.ADMIN_PASSWORD &&
+          process.env.ADMIN_PASSWORD === password
         ) {
           const user: User = { email, name: 'Admin User' };
           return user;
@@ -57,7 +59,7 @@ export const runAuthenticatedAdminServerAction = async <T>(
   }
 };
 
-export const generateAuthSecret = () => fetch(
-  'https://generate-secret.vercel.app/32',
-  { cache: 'no-cache' },
-).then(res => res.text());
+export const generateAuthSecret = () =>
+  fetch('https://generate-secret.vercel.app/32', { cache: 'no-cache' }).then(
+    res => res.text(),
+  );

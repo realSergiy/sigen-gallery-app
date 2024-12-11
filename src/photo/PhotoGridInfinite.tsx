@@ -16,8 +16,8 @@ export default function PhotoGridInfinite({
   animateOnFirstLoadOnly,
   canSelect,
 }: {
-  cacheKey: string
-  initialOffset: number
+  cacheKey: string;
+  initialOffset: number;
 } & Omit<ComponentProps<typeof PhotoGrid>, 'photos'>) {
   return (
     <InfinitePhotoScroll
@@ -28,18 +28,21 @@ export default function PhotoGridInfinite({
       camera={camera}
       simulation={simulation}
     >
-      {({ photos, onLastPhotoVisible }) =>
-        <PhotoGrid {...{
-          photos,
-          canStart,
-          tag,
-          camera,
-          simulation,
-          focal,
-          onLastPhotoVisible,
-          animateOnFirstLoadOnly,
-          canSelect,
-        }} />}
+      {({ photos, onLastPhotoVisible }) => (
+        <PhotoGrid
+          {...{
+            photos,
+            canStart,
+            tag,
+            camera,
+            simulation,
+            focal,
+            onLastPhotoVisible,
+            animateOnFirstLoadOnly,
+            canSelect,
+          }}
+        />
+      )}
     </InfinitePhotoScroll>
   );
 }

@@ -22,19 +22,19 @@ export default function ImageInput({
   showUploadStatus = true,
   debug,
 }: {
-  onStart?: () => void
+  onStart?: () => void;
   onBlobReady?: (args: {
-    blob: Blob,
-    extension?: string,
-    hasMultipleUploads?: boolean,
-    isLastBlob?: boolean,
-  }) => Promise<any>
-  shouldResize?: boolean
-  maxSize?: number
-  quality?: number
-  loading?: boolean
-  showUploadStatus?: boolean
-  debug?: boolean
+    blob: Blob;
+    extension?: string;
+    hasMultipleUploads?: boolean;
+    isLastBlob?: boolean;
+  }) => Promise<any>;
+  shouldResize?: boolean;
+  maxSize?: number;
+  quality?: number;
+  loading?: boolean;
+  showUploadStatus?: boolean;
+  debug?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,25 +45,29 @@ export default function ImageInput({
   const [fileUploadName, setFileUploadName] = useState('');
 
   return (
-    <div className="space-y-4 min-w-0">
+    <div className="min-w-0 space-y-4">
       <div className="flex items-center gap-2 sm:gap-4">
         <label
           htmlFor={INPUT_ID}
           className={clsx(
-            'shrink-0 select-none text-main',
+            'text-main shrink-0 select-none',
             loading && 'pointer-events-none cursor-not-allowed',
           )}
         >
           <ProgressButton
             type="button"
             isLoading={loading}
-            progress={filesLength > 1
-              ? (fileUploadIndex + 1) / filesLength * 0.95
-              : undefined}
-            icon={<FiUploadCloud
-              size={18}
-              className="translate-x-[-0.5px] translate-y-[0.5px]"
-            />}
+            progress={
+              filesLength > 1
+                ? ((fileUploadIndex + 1) / filesLength) * 0.95
+                : undefined
+            }
+            icon={
+              <FiUploadCloud
+                size={18}
+                className="translate-x-[-0.5px] translate-y-[0.5px]"
+              />
+            }
             aria-disabled={loading}
             onClick={() => inputRef.current?.click()}
             hideTextOnMobile={false}
@@ -99,13 +103,13 @@ export default function ImageInput({
                   };
 
                   const isPng = callbackArgs.extension === 'png';
-                  
+
                   const canvas = canvasRef.current;
 
                   // Specify wide gamut to avoid data loss while resizing
-                  const ctx = canvas?.getContext(
-                    '2d', { colorSpace: 'display-p3' }
-                  );
+                  const ctx = canvas?.getContext('2d', {
+                    colorSpace: 'display-p3',
+                  });
 
                   if ((shouldResize || isPng) && canvas && ctx) {
                     // Process images that need resizing
@@ -114,33 +118,50 @@ export default function ImageInput({
                     setImage(image);
 
                     ctx.save();
-                    
-                    let orientation = await exifr
-                      .orientation(file)
-                      .catch(() => 1) ?? 1;
+
+                    let orientation =
+                      (await exifr.orientation(file).catch(() => 1)) ?? 1;
 
                     // Preserve EXIF data for PNGs
                     if (!isPng) {
                       // Reverse engineer orientation
                       // so preserved EXIF data can be copied
                       switch (orientation) {
-                      case 1: orientation = 1; break;
-                      case 2: orientation = 1; break;
-                      case 3: orientation = 3; break;
-                      case 4: orientation = 1; break;
-                      case 5: orientation = 1; break;
-                      case 6: orientation = 8; break;
-                      case 7: orientation = 1; break;
-                      case 8: orientation = 6; break;
+                        case 1:
+                          orientation = 1;
+                          break;
+                        case 2:
+                          orientation = 1;
+                          break;
+                        case 3:
+                          orientation = 3;
+                          break;
+                        case 4:
+                          orientation = 1;
+                          break;
+                        case 5:
+                          orientation = 1;
+                          break;
+                        case 6:
+                          orientation = 8;
+                          break;
+                        case 7:
+                          orientation = 1;
+                          break;
+                        case 8:
+                          orientation = 6;
+                          break;
                       }
                     }
 
                     const ratio = image.width / image.height;
-  
-                    const width =
-                      Math.round(ratio >= 1 ? maxSize : maxSize * ratio);
-                    const height =
-                      Math.round(ratio >= 1 ? maxSize / ratio : maxSize);
+
+                    const width = Math.round(
+                      ratio >= 1 ? maxSize : maxSize * ratio,
+                    );
+                    const height = Math.round(
+                      ratio >= 1 ? maxSize / ratio : maxSize,
+                    );
 
                     canvas.width = width;
                     canvas.height = height;
@@ -148,45 +169,45 @@ export default function ImageInput({
                     // Orientation transforms from:
                     // eslint-disable-next-line max-len
                     // https://gist.github.com/SagiMedina/f00a57de4e211456225d3114fd10b0d0
-                    
-                    switch(orientation) {
-                    case 2:
-                      ctx.translate(width, 0);
-                      ctx.scale(-1, 1);
-                      break;
-                    case 3:
-                      ctx.translate(width, height);
-                      ctx.rotate((180 / 180) * Math.PI);
-                      break;
-                    case 4:
-                      ctx.translate(0, height);
-                      ctx.scale(1, -1);
-                      break;
-                    case 5:
-                      canvas.width = height;
-                      canvas.height = width;
-                      ctx.rotate((90 / 180) * Math.PI);
-                      ctx.scale(1, -1);
-                      break;
-                    case 6:
-                      canvas.width = height;
-                      canvas.height = width;
-                      ctx.rotate((90 / 180) * Math.PI);
-                      ctx.translate(0, -height);
-                      break;
-                    case 7:
-                      canvas.width = height;
-                      canvas.height = width;
-                      ctx.rotate((270 / 180) * Math.PI);
-                      ctx.translate(-width, height);
-                      ctx.scale(1, -1);
-                      break;
-                    case 8:
-                      canvas.width = height;
-                      canvas.height = width;
-                      ctx.translate(0, width);
-                      ctx.rotate((270 / 180) * Math.PI);
-                      break;
+
+                    switch (orientation) {
+                      case 2:
+                        ctx.translate(width, 0);
+                        ctx.scale(-1, 1);
+                        break;
+                      case 3:
+                        ctx.translate(width, height);
+                        ctx.rotate((180 / 180) * Math.PI);
+                        break;
+                      case 4:
+                        ctx.translate(0, height);
+                        ctx.scale(1, -1);
+                        break;
+                      case 5:
+                        canvas.width = height;
+                        canvas.height = width;
+                        ctx.rotate((90 / 180) * Math.PI);
+                        ctx.scale(1, -1);
+                        break;
+                      case 6:
+                        canvas.width = height;
+                        canvas.height = width;
+                        ctx.rotate((90 / 180) * Math.PI);
+                        ctx.translate(0, -height);
+                        break;
+                      case 7:
+                        canvas.width = height;
+                        canvas.height = width;
+                        ctx.rotate((270 / 180) * Math.PI);
+                        ctx.translate(-width, height);
+                        ctx.scale(1, -1);
+                        break;
+                      case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        ctx.translate(0, width);
+                        ctx.rotate((270 / 180) * Math.PI);
+                        break;
                     }
 
                     ctx.drawImage(image, 0, 0, width, height);
@@ -221,15 +242,16 @@ export default function ImageInput({
             }}
           />
         </label>
-        {showUploadStatus && filesLength > 0 &&
+        {showUploadStatus && filesLength > 0 && (
           <div className="max-w-full truncate text-ellipsis">
             {fileUploadName}
-          </div>}
+          </div>
+        )}
       </div>
       <canvas
         ref={canvasRef}
         className={clsx(
-          'bg-gray-50 dark:bg-gray-900/50 rounded-md',
+          'rounded-md bg-gray-50 dark:bg-gray-900/50',
           'border border-gray-200 dark:border-gray-800',
           'w-[400px]',
           (!image || !debug) && 'hidden',

@@ -6,14 +6,14 @@ export const GENERATE_STATIC_PARAMS_LIMIT = 1000;
 export const PHOTO_DEFAULT_LIMIT = 100;
 
 export type GetPhotosOptions = {
-  sortBy?: 'createdAt' | 'createdAtAsc' | 'takenAt' | 'priority'
-  limit?: number
-  offset?: number
-  query?: string
-  takenBefore?: Date
-  takenAfterInclusive?: Date
-  updatedBefore?: Date
-  hidden?: 'exclude' | 'include' | 'only'
+  sortBy?: 'createdAt' | 'createdAtAsc' | 'takenAt' | 'priority';
+  limit?: number;
+  offset?: number;
+  query?: string;
+  takenBefore?: Date;
+  takenAfterInclusive?: Date;
+  updatedBefore?: Date;
+  hidden?: 'exclude' | 'include' | 'only';
 } & PhotoSetAttributes;
 
 export const areOptionsSensitive = (options: GetPhotosOptions) =>
@@ -21,7 +21,7 @@ export const areOptionsSensitive = (options: GetPhotosOptions) =>
 
 export const getWheresFromOptions = (
   options: GetPhotosOptions,
-  initialValuesIndex = 1
+  initialValuesIndex = 1,
 ) => {
   const {
     hidden = 'exclude',
@@ -41,12 +41,12 @@ export const getWheresFromOptions = (
   let valuesIndex = initialValuesIndex;
 
   switch (hidden) {
-  case 'exclude':
-    wheres.push('hidden IS NOT TRUE');
-    break;
-  case 'only':
-    wheres.push('hidden IS TRUE');
-    break;
+    case 'exclude':
+      wheres.push('hidden IS NOT TRUE');
+      break;
+    case 'only':
+      wheres.push('hidden IS TRUE');
+      break;
   }
 
   if (takenBefore) {
@@ -63,7 +63,9 @@ export const getWheresFromOptions = (
   }
   if (query) {
     // eslint-disable-next-line max-len
-    wheres.push(`CONCAT(title, ' ', caption, ' ', semantic_description) ILIKE $${valuesIndex++}`);
+    wheres.push(
+      `CONCAT(title, ' ', caption, ' ', semantic_description) ILIKE $${valuesIndex++}`,
+    );
     wheresValues.push(`%${query.toLocaleLowerCase()}%`);
   }
   if (tag) {
@@ -92,28 +94,24 @@ export const getWheresFromOptions = (
   }
 
   return {
-    wheres: wheres.length > 0
-      ? `WHERE ${wheres.join(' AND ')}`
-      : '',
+    wheres: wheres.length > 0 ? `WHERE ${wheres.join(' AND ')}` : '',
     wheresValues,
     lastValuesIndex: valuesIndex,
   };
 };
 
 export const getOrderByFromOptions = (options: GetPhotosOptions) => {
-  const {
-    sortBy = PRIORITY_ORDER_ENABLED ? 'priority' : 'takenAt',
-  } = options;
+  const { sortBy = PRIORITY_ORDER_ENABLED ? 'priority' : 'takenAt' } = options;
 
   switch (sortBy) {
-  case 'createdAt':
-    return 'ORDER BY created_at DESC';
-  case 'createdAtAsc':
-    return 'ORDER BY created_at ASC';
-  case 'takenAt':
-    return 'ORDER BY taken_at DESC';
-  case 'priority':
-    return 'ORDER BY priority_order ASC, taken_at DESC';
+    case 'createdAt':
+      return 'ORDER BY created_at DESC';
+    case 'createdAtAsc':
+      return 'ORDER BY created_at ASC';
+    case 'takenAt':
+      return 'ORDER BY taken_at DESC';
+    case 'priority':
+      return 'ORDER BY priority_order ASC, taken_at DESC';
   }
 };
 
@@ -121,10 +119,7 @@ export const getLimitAndOffsetFromOptions = (
   options: GetPhotosOptions,
   initialValuesIndex = 1,
 ) => {
-  const {
-    limit = PHOTO_DEFAULT_LIMIT,
-    offset = 0,
-  } = options;
+  const { limit = PHOTO_DEFAULT_LIMIT, offset = 0 } = options;
 
   let valuesIndex = initialValuesIndex;
 
