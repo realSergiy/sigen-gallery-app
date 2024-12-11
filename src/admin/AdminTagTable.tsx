@@ -10,34 +10,31 @@ import { pathForAdminTagEdit } from '@/site/paths';
 import { clsx } from 'clsx/lite';
 import AdminTagBadge from './AdminTagBadge';
 
-export default function AdminTagTable({
-  tags,
-}: {
-  tags: Tags
-}) {
+export default function AdminTagTable({ tags }: { tags: Tags }) {
   return (
     <AdminTable>
-      {sortTagsObject(tags).map(({ tag, count }) =>
+      {sortTagsObject(tags).map(({ tag, count }) => (
         <Fragment key={tag}>
-          <div className="pr-2 col-span-2">
+          <div className="col-span-2 pr-2">
             <AdminTagBadge {...{ tag, count }} />
           </div>
-          <div className={clsx(
-            'flex flex-nowrap',
-            'gap-2 sm:gap-3 items-center',
-          )}>
+          <div
+            className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}
+          >
             <EditButton path={pathForAdminTagEdit(tag)} />
             <FormWithConfirm
               action={deletePhotoTagGloballyAction}
               confirmText={
                 // eslint-disable-next-line max-len
-                `Are you sure you want to remove "${formatTag(tag)}" from ${photoQuantityText(count, false).toLowerCase()}?`}
+                `Are you sure you want to remove "${formatTag(tag)}" from ${photoQuantityText(count, false).toLowerCase()}?`
+              }
             >
               <input type="hidden" name="tag" value={tag} />
               <DeleteFormButton clearLocalState />
             </FormWithConfirm>
           </div>
-        </Fragment>)}
+        </Fragment>
+      ))}
     </AdminTable>
   );
 }

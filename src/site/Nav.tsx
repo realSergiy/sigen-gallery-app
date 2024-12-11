@@ -37,13 +37,12 @@ export default function Nav({
 
   const showNav = !isPathSignIn(pathname);
 
-  const renderLink = (
-    text: string,
-    linkOrAction: string | (() => void),
-  ) =>
-    typeof linkOrAction === 'string'
-      ? <Link href={linkOrAction}>{text}</Link>
-      : <button onClick={linkOrAction}>{text}</button>;
+  const renderLink = (text: string, linkOrAction: string | (() => void)) =>
+    typeof linkOrAction === 'string' ? (
+      <Link href={linkOrAction}>{text}</Link>
+    ) : (
+      <button onClick={linkOrAction}>{text}</button>
+    );
 
   const switcherSelectionForPath = (): SwitcherSelection | undefined => {
     if (pathname === PATH_ROOT) {
@@ -64,51 +63,65 @@ export default function Nav({
           animateOnFirstLoadOnly
           type={!isPathAdmin(pathname) ? 'bottom' : 'none'}
           distanceOffset={10}
-          items={showNav
-            ? [<div
-              key="nav"
-              className={clsx(
-                'flex items-center w-full',
-                NAV_HEIGHT_CLASS,
-              )}>
-              <ViewSwitcher
-                currentSelection={switcherSelectionForPath()}
-                showAdmin={isUserSignedIn}
-              />
-              <div className={clsx(
-                'flex-grow text-right min-w-0',
-                'hidden xs:block',
-                'translate-y-[-1px]',
-              )}>
-                <div className={clsx(
-                  'truncate overflow-hidden',
-                  HAS_DEFINED_SITE_DESCRIPTION && 'sm:font-bold',
-                )}>
-                  {renderLink(siteDomainOrTitle, PATH_ROOT)}
-                </div>
-                {HAS_DEFINED_SITE_DESCRIPTION &&
-                  <div className={clsx(
-                    'hidden sm:block truncate overflow-hidden',
-                    'leading-tight',
-                  )}>
-                    {SITE_DESCRIPTION}
-                  </div>}
-              </div>
-            </div>]
-            : []}
+          items={
+            showNav
+              ? [
+                  <div
+                    key="nav"
+                    className={clsx(
+                      'flex w-full items-center',
+                      NAV_HEIGHT_CLASS,
+                    )}
+                  >
+                    <ViewSwitcher
+                      currentSelection={switcherSelectionForPath()}
+                      showAdmin={isUserSignedIn}
+                    />
+                    <div
+                      className={clsx(
+                        'min-w-0 flex-grow text-right',
+                        'hidden xs:block',
+                        'translate-y-[-1px]',
+                      )}
+                    >
+                      <div
+                        className={clsx(
+                          'overflow-hidden truncate',
+                          HAS_DEFINED_SITE_DESCRIPTION && 'sm:font-bold',
+                        )}
+                      >
+                        {renderLink(siteDomainOrTitle, PATH_ROOT)}
+                      </div>
+                      {HAS_DEFINED_SITE_DESCRIPTION && (
+                        <div
+                          className={clsx(
+                            'hidden overflow-hidden truncate sm:block',
+                            'leading-tight',
+                          )}
+                        >
+                          {SITE_DESCRIPTION}
+                        </div>
+                      )}
+                    </div>
+                  </div>,
+                ]
+              : []
+          }
         />
       }
-      contentSide={isUserSignedIn && !isPathAdmin(pathname)
-        ? <div
-          className={clsx(
-            'flex items-center translate-x-[-6px] w-full',
-            NAV_HEIGHT_CLASS,
-          )}
-        >
-          <AdminAppMenu />
-        </div>
-        : undefined}
+      contentSide={
+        isUserSignedIn && !isPathAdmin(pathname) ? (
+          <div
+            className={clsx(
+              'flex w-full translate-x-[-6px] items-center',
+              NAV_HEIGHT_CLASS,
+            )}
+          >
+            <AdminAppMenu />
+          </div>
+        ) : undefined
+      }
       sideHiddenOnMobile
     />
   );
-};
+}

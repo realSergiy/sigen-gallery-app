@@ -15,12 +15,12 @@ export default function MoreMenuItem({
   action,
   shouldPreventDefault = true,
 }: {
-  label: ReactNode
-  icon?: ReactNode
-  href?: string
-  hrefDownloadName?: string
-  action?: () => Promise<void> | void
-  shouldPreventDefault?: boolean
+  label: ReactNode;
+  icon?: ReactNode;
+  href?: string;
+  hrefDownloadName?: string;
+  action?: () => Promise<void> | void;
+  shouldPreventDefault?: boolean;
 }) {
   const router = useRouter();
 
@@ -34,18 +34,18 @@ export default function MoreMenuItem({
     <DropdownMenu.Item
       disabled={isLoading}
       className={clsx(
-        'flex items-center h-8',
-        'px-2 py-1.5 rounded-[3px]',
+        'flex h-8 items-center',
+        'rounded-[3px] px-2 py-1.5',
         'select-none hover:outline-none',
         'hover:bg-gray-50 active:bg-gray-100',
         'hover:dark:bg-gray-900/75 active:dark:bg-gray-900',
         'whitespace-nowrap',
-        isLoading
-          ? 'cursor-not-allowed opacity-50'
-          : 'cursor-pointer',
+        isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
       )}
       onClick={async e => {
-        if (shouldPreventDefault) { e.preventDefault(); }
+        if (shouldPreventDefault) {
+          e.preventDefault();
+        }
         if (action) {
           const result = action();
           if (result instanceof Promise) {
@@ -56,8 +56,9 @@ export default function MoreMenuItem({
         if (href && href !== pathname) {
           if (hrefDownloadName) {
             setIsLoading(true);
-            downloadFileFromBrowser(href, hrefDownloadName)
-              .finally(() => setIsLoading(false));
+            downloadFileFromBrowser(href, hrefDownloadName).finally(() =>
+              setIsLoading(false),
+            );
           } else {
             startTransition(() => router.push(href));
           }

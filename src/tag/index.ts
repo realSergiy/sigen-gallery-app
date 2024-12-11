@@ -17,13 +17,13 @@ import {
 } from '@/utility/string';
 
 // Reserved tags
-export const TAG_FAVS   = 'favs';
+export const TAG_FAVS = 'favs';
 export const TAG_HIDDEN = 'hidden';
 
 export type Tags = {
-  tag: string
-  count: number
-}[]
+  tag: string;
+  count: number;
+}[];
 
 export const formatTag = (tag?: string) =>
   capitalizeWords(tag?.replaceAll('-', ' '));
@@ -39,32 +39,25 @@ export const getValidationMessageForTags = (tags?: string) => {
 
 export const titleForTag = (
   tag: string,
-  photos:Photo[] = [],
+  photos: Photo[] = [],
   explicitCount?: number,
-) => [
-  formatTag(tag),
-  photoQuantityText(explicitCount ?? photos.length),
-].join(' ');
+) =>
+  [formatTag(tag), photoQuantityText(explicitCount ?? photos.length)].join(' ');
 
 export const shareTextForTag = (tag: string) =>
   isTagFavs(tag) ? 'Favorite photos' : `Photos tagged '${formatTag(tag)}'`;
 
-export const sortTags = (
-  tags: string[],
-  tagToHide?: string,
-) => tags
-  .filter(tag => tag !== tagToHide)
-  .sort((a, b) => isTagFavs(a) ? -1 : a.localeCompare(b));
+export const sortTags = (tags: string[], tagToHide?: string) =>
+  tags
+    .filter(tag => tag !== tagToHide)
+    .sort((a, b) => (isTagFavs(a) ? -1 : a.localeCompare(b)));
 
-export const sortTagsObject = (
-  tags: Tags,
-  tagToHide?: string,
-) => tags
-  .filter(({ tag }) => tag!== tagToHide)
-  .sort(({ tag: a }, { tag: b }) => isTagFavs(a) ? -1 : a.localeCompare(b));
+export const sortTagsObject = (tags: Tags, tagToHide?: string) =>
+  tags
+    .filter(({ tag }) => tag !== tagToHide)
+    .sort(({ tag: a }, { tag: b }) => (isTagFavs(a) ? -1 : a.localeCompare(b)));
 
-export const sortTagsWithoutFavs = (tags: string[]) =>
-  sortTags(tags, TAG_FAVS);
+export const sortTagsWithoutFavs = (tags: string[]) => sortTags(tags, TAG_FAVS);
 
 export const sortTagsObjectWithoutFavs = (tags: Tags) =>
   sortTagsObject(tags, TAG_FAVS);
@@ -91,8 +84,12 @@ export const generateMetaForTag = (
 ) => ({
   url: absolutePathForTag(tag),
   title: titleForTag(tag, photos, explicitCount),
-  description:
-    descriptionForTaggedPhotos(photos, true, explicitCount, explicitDateRange),
+  description: descriptionForTaggedPhotos(
+    photos,
+    true,
+    explicitCount,
+    explicitDateRange,
+  ),
   images: absolutePathForTagImage(tag),
 });
 
@@ -117,9 +114,8 @@ export const addHiddenToTags = (tags: Tags, hiddenPhotosCount = 0) => {
 };
 
 export const convertTagsForForm = (tags: Tags = []) =>
-  sortTagsObjectWithoutFavs(tags)
-    .map(({ tag, count }) => ({
-      value: tag,
-      annotation: formatCount(count),
-      annotationAria: formatCountDescriptive(count, 'tagged'),
-    }));
+  sortTagsObjectWithoutFavs(tags).map(({ tag, count }) => ({
+    value: tag,
+    annotation: formatCount(count),
+    annotationAria: formatCountDescriptive(count, 'tagged'),
+  }));

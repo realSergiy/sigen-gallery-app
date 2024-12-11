@@ -24,9 +24,9 @@ export default function AdminPhotoMenuClient({
   includeFavorite = true,
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
-  photo: Photo
-  revalidatePhoto?: RevalidatePhoto
-  includeFavorite?: boolean
+  photo: Photo;
+  revalidatePhoto?: RevalidatePhoto;
+  includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();
 
@@ -38,44 +38,41 @@ export default function AdminPhotoMenuClient({
   const favIconClass = 'translate-x-[-1px] translate-y-[0.5px]';
 
   const items = useMemo(() => {
-    const items: ComponentProps<typeof MoreMenuItem>[] = [{
-      label: 'Edit',
-      icon: <FaRegEdit size={14} />,
-      href: pathForAdminPhotoEdit(photo.id),
-    }];
+    const items: ComponentProps<typeof MoreMenuItem>[] = [
+      {
+        label: 'Edit',
+        icon: <FaRegEdit size={14} />,
+        href: pathForAdminPhotoEdit(photo.id),
+      },
+    ];
     if (includeFavorite) {
       items.push({
         label: isFav ? 'Unfavorite' : 'Favorite',
-        icon: isFav
-          ? <FaStar
-            size={14}
-            className={`text-amber-500 ${favIconClass}`}
-          />
-          : <FaRegStar
-            size={14}
-            className={favIconClass}
-          />,
-        action: () => toggleFavoritePhotoAction(
-          photo.id,
-          shouldRedirectFav,
-        ).then(() => revalidatePhoto?.(photo.id)),
+        icon: isFav ? (
+          <FaStar size={14} className={`text-amber-500 ${favIconClass}`} />
+        ) : (
+          <FaRegStar size={14} className={favIconClass} />
+        ),
+        action: () =>
+          toggleFavoritePhotoAction(photo.id, shouldRedirectFav).then(() =>
+            revalidatePhoto?.(photo.id),
+          ),
       });
     }
     items.push({
       label: 'Download',
-      icon: <MdOutlineFileDownload
-        size={17}
-        className="translate-x-[-1.5px] translate-y-[-0.5px]"
-      />,
+      icon: (
+        <MdOutlineFileDownload
+          size={17}
+          className="translate-x-[-1.5px] translate-y-[-0.5px]"
+        />
+      ),
       href: photo.url,
       hrefDownloadName: downloadFileNameForPhoto(photo),
     });
     items.push({
       label: 'Delete',
-      icon: <BiTrash
-        size={15}
-        className="translate-x-[-1.5px]"
-      />,
+      icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
       action: () => {
         if (confirm(deleteConfirmationTextForPhoto(photo))) {
           return deletePhotoAction(
@@ -100,12 +97,12 @@ export default function AdminPhotoMenuClient({
     registerAdminUpdate,
   ]);
 
-  return (
-    isUserSignedIn
-      ? <MoreMenu {...{
+  return isUserSignedIn ? (
+    <MoreMenu
+      {...{
         items,
         ...props,
-      }}/>
-      : null
-  );
+      }}
+    />
+  ) : null;
 }

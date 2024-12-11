@@ -10,10 +10,10 @@ export default function FocalLengthShareModal({
   count,
   dateRange,
 }: {
-  focal: number
-  photos: Photo[]
-  count?: number
-  dateRange?: PhotoDateRange
+  focal: number;
+  photos: Photo[];
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <ShareModal
@@ -24,4 +24,4 @@ export default function FocalLengthShareModal({
       <FocalLengthOGTile {...{ focal, photos, count, dateRange }} />
     </ShareModal>
   );
-};
+}

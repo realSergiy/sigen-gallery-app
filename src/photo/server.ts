@@ -19,22 +19,19 @@ const IMAGE_WIDTH_BLUR = 200;
 export const extractImageDataFromBlobPath = async (
   blobPath: string,
   options?: {
-    includeInitialPhotoFields?: boolean
-    generateBlurData?: boolean
-    generateResizedImage?: boolean
+    includeInitialPhotoFields?: boolean;
+    generateBlurData?: boolean;
+    generateResizedImage?: boolean;
   },
 ): Promise<{
-  blobId?: string
-  photoFormExif?: Partial<PhotoFormData>
-  imageResizedBase64?: string
-  shouldStripGpsData?: boolean
-  fileBytes?: ArrayBuffer
+  blobId?: string;
+  photoFormExif?: Partial<PhotoFormData>;
+  imageResizedBase64?: string;
+  shouldStripGpsData?: boolean;
+  fileBytes?: ArrayBuffer;
 }> => {
-  const {
-    includeInitialPhotoFields,
-    generateBlurData,
-    generateResizedImage,
-  } = options ?? {};
+  const { includeInitialPhotoFields, generateBlurData, generateResizedImage } =
+    options ?? {};
 
   const url = decodeURIComponent(blobPath);
 
@@ -79,26 +76,26 @@ export const extractImageDataFromBlobPath = async (
       imageResizedBase64 = await resizeImage(fileBytes);
     }
 
-    shouldStripGpsData = GEO_PRIVACY_ENABLED && (
-      Boolean(exifData.tags?.GPSLatitude) ||
-      Boolean(exifData.tags?.GPSLongitude)
-    );
+    shouldStripGpsData =
+      GEO_PRIVACY_ENABLED &&
+      (Boolean(exifData.tags?.GPSLatitude) ||
+        Boolean(exifData.tags?.GPSLongitude));
   }
 
   return {
     blobId,
-    ...exifData && {
+    ...(exifData && {
       photoFormExif: {
-        ...includeInitialPhotoFields && {
+        ...(includeInitialPhotoFields && {
           hidden: 'false',
           favorite: 'false',
           extension,
           url,
-        },
-        ...generateBlurData && { blurData },
+        }),
+        ...(generateBlurData && { blurData }),
         ...convertExifToFormData(exifData, filmSimulation),
       },
-    },
+    }),
     imageResizedBase64,
     shouldStripGpsData,
     fileBytes,
@@ -108,26 +105,22 @@ export const extractImageDataFromBlobPath = async (
 const generateBase64 = async (
   image: ArrayBuffer,
   middleware: (sharp: Sharp) => Sharp,
-) => 
+) =>
   middleware(sharp(image))
     .withMetadata()
     .toFormat('jpeg', { quality: 90 })
     .toBuffer()
     .then(data => `data:image/jpeg;base64,${data.toString('base64')}`);
 
-const resizeImage = async (image: ArrayBuffer) => 
-  generateBase64(image, sharp => sharp
-    .resize(IMAGE_WIDTH_RESIZE)
+const resizeImage = async (image: ArrayBuffer) =>
+  generateBase64(image, sharp => sharp.resize(IMAGE_WIDTH_RESIZE));
+
+const blurImage = async (image: ArrayBuffer) =>
+  generateBase64(image, sharp =>
+    sharp.resize(IMAGE_WIDTH_BLUR).modulate({ saturation: 1.15 }).blur(4),
   );
 
-const blurImage = async (image: ArrayBuffer) => 
-  generateBase64(image, sharp => sharp
-    .resize(IMAGE_WIDTH_BLUR)
-    .modulate({ saturation: 1.15 })
-    .blur(4)
-  );
-
-export const resizeImageFromUrl = async (url: string) => 
+export const resizeImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => resizeImage(buffer))
@@ -136,7 +129,7 @@ export const resizeImageFromUrl = async (url: string) =>
       return '';
     });
 
-export const blurImageFromUrl = async (url: string) => 
+export const blurImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => blurImage(buffer))

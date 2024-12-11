@@ -31,38 +31,35 @@ export default function SignInForm() {
     return () => {
       // Capture user email before unmounting
       getAuthAction().then(auth =>
-        setUserEmail?.(auth?.user?.email ?? undefined));
+        setUserEmail?.(auth?.user?.email ?? undefined),
+      );
     };
   }, [setUserEmail]);
 
-  const isFormValid =
-    email.length > 0 &&
-    password.length > 0;
+  const isFormValid = email.length > 0 && password.length > 0;
 
   return (
-    <Container className={clsx(
-      'w-[calc(100vw-1.5rem)] sm:w-[min(360px,90vw)]',
-      'px-6 py-5',
-    )}>
-      <h1 className={clsx(
-        'flex gap-3 items-center justify-center',
-        'self-start text-2xl mb-3.5',
-      )}>
-        <FiLock className="text-main translate-y-[0.5px]" />
-        <span className="text-main">
-          Sign in
-        </span>
-      </h1>
-      <form
-        action={action}
-        className="w-full"
+    <Container
+      className={clsx(
+        'w-[calc(100vw-1.5rem)] sm:w-[min(360px,90vw)]',
+        'px-6 py-5',
+      )}
+    >
+      <h1
+        className={clsx(
+          'flex items-center justify-center gap-3',
+          'mb-3.5 self-start text-2xl',
+        )}
       >
-        <div className="space-y-6 w-full -translate-y-0.5">
-          {response === KEY_CREDENTIALS_SIGN_IN_ERROR &&
-            <ErrorNote>
-              Invalid email/password
-            </ErrorNote>}
-          <div className="space-y-4 w-full">
+        <FiLock className="text-main translate-y-[0.5px]" />
+        <span className="text-main">Sign in</span>
+      </h1>
+      <form action={action} className="w-full">
+        <div className="w-full -translate-y-0.5 space-y-6">
+          {response === KEY_CREDENTIALS_SIGN_IN_ERROR && (
+            <ErrorNote>Invalid email/password</ErrorNote>
+          )}
+          <div className="w-full space-y-4">
             <FieldSetWithStatus
               id="email"
               inputRef={emailRef}

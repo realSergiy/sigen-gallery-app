@@ -19,31 +19,19 @@ export default function useAiImageQueries(
     resetCaption,
   ] = useTitleCaptionAiImageQuery(imageBase64);
 
-  const [
-    requestTitle,
-    titleSolo,
-    isLoadingTitleSolo,
-    resetTitleSolo,
-  ] = useAiImageQuery(imageBase64, 'title');
+  const [requestTitle, titleSolo, isLoadingTitleSolo, resetTitleSolo] =
+    useAiImageQuery(imageBase64, 'title');
 
-  const [
-    requestCaption,
-    captionSolo,
-    isLoadingCaptionSolo,
-    resetCaptionSolo,
-  ] = useAiImageQuery(imageBase64, 'caption');
+  const [requestCaption, captionSolo, isLoadingCaptionSolo, resetCaptionSolo] =
+    useAiImageQuery(imageBase64, 'caption');
 
-  const [
-    requestTags,
-    tags,
-    isLoadingTags,
-  ] = useAiImageQuery(imageBase64, 'tags');
+  const [requestTags, tags, isLoadingTags] = useAiImageQuery(
+    imageBase64,
+    'tags',
+  );
 
-  const [
-    requestSemantic,
-    semanticDescription,
-    isLoadingSemantic,
-  ] = useAiImageQuery(imageBase64, 'description-small');
+  const [requestSemantic, semanticDescription, isLoadingSemantic] =
+    useAiImageQuery(imageBase64, 'description-small');
 
   const title = _title || titleSolo;
   const caption = _caption || captionSolo;
@@ -51,52 +39,54 @@ export default function useAiImageQueries(
   const isLoadingCaption = _isLoadingCaption || isLoadingCaptionSolo;
 
   const isLoading =
-    isLoadingTitle ||
-    isLoadingCaption ||
-    isLoadingTags ||
-    isLoadingSemantic;
+    isLoadingTitle || isLoadingCaption || isLoadingTags || isLoadingSemantic;
 
   const hasRunAllQueriesOnce = useRef(false);
 
-  const request = useCallback(async (
-    fields = ALL_AI_AUTO_GENERATED_FIELDS,
-  ) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('RUNNING AI QUERIES', fields);
-    }
-    hasRunAllQueriesOnce.current = true;
-    if (fields.includes('title') && fields.includes('caption')) {
-      // Unmask individual title + caption
-      resetTitleSolo();
-      resetCaptionSolo();
-      requestTitleCaption();
-    } else {
-      if (fields.includes('title')) {
-        // Unmask combined title
-        resetTitle();
+  const request = useCallback(
+    async (fields = ALL_AI_AUTO_GENERATED_FIELDS) => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('RUNNING AI QUERIES', fields);
+      }
+      hasRunAllQueriesOnce.current = true;
+      if (fields.includes('title') && fields.includes('caption')) {
+        // Unmask individual title + caption
         resetTitleSolo();
-        requestTitle();
-      }
-      if (fields.includes('caption')) {
-        // Unmask combined caption
-        resetCaption();
         resetCaptionSolo();
-        requestCaption();
+        requestTitleCaption();
+      } else {
+        if (fields.includes('title')) {
+          // Unmask combined title
+          resetTitle();
+          resetTitleSolo();
+          requestTitle();
+        }
+        if (fields.includes('caption')) {
+          // Unmask combined caption
+          resetCaption();
+          resetCaptionSolo();
+          requestCaption();
+        }
       }
-    }
-    if (fields.includes('tags')) { requestTags(); }
-    if (fields.includes('semantic')) { requestSemantic(); }
-  }, [
-    requestTitleCaption,
-    requestTitle,
-    requestCaption,
-    requestTags,
-    requestSemantic,
-    resetTitle,
-    resetTitleSolo,
-    resetCaption,
-    resetCaptionSolo,
-  ]);
+      if (fields.includes('tags')) {
+        requestTags();
+      }
+      if (fields.includes('semantic')) {
+        requestSemantic();
+      }
+    },
+    [
+      requestTitleCaption,
+      requestTitle,
+      requestCaption,
+      requestTags,
+      requestSemantic,
+      resetTitle,
+      resetTitleSolo,
+      resetCaption,
+      resetCaptionSolo,
+    ],
+  );
 
   useEffect(() => {
     if (imageBase64 && !hasRunAllQueriesOnce.current) {

@@ -27,19 +27,19 @@ export default function PhotoGrid({
   onLastPhotoVisible,
   onAnimationComplete,
 }: {
-  photos: Photo[]
-  selectedPhoto?: Photo
-  photoPriority?: boolean
-  fast?: boolean
-  animate?: boolean
-  canStart?: boolean
-  animateOnFirstLoadOnly?: boolean
-  staggerOnFirstLoadOnly?: boolean
-  additionalTile?: JSX.Element
-  small?: boolean
-  canSelect?: boolean
-  onLastPhotoVisible?: () => void
-  onAnimationComplete?: () => void
+  photos: Photo[];
+  selectedPhoto?: Photo;
+  photoPriority?: boolean;
+  fast?: boolean;
+  animate?: boolean;
+  canStart?: boolean;
+  animateOnFirstLoadOnly?: boolean;
+  staggerOnFirstLoadOnly?: boolean;
+  additionalTile?: JSX.Element;
+  small?: boolean;
+  canSelect?: boolean;
+  onLastPhotoVisible?: () => void;
+  onAnimationComplete?: () => void;
 } & PhotoSetAttributes) {
   const {
     isUserSignedIn,
@@ -67,51 +67,66 @@ export default function PhotoGrid({
       animateOnFirstLoadOnly={animateOnFirstLoadOnly}
       staggerOnFirstLoadOnly={staggerOnFirstLoadOnly}
       onAnimationComplete={onAnimationComplete}
-      items={photos.map((photo, index) =>{
-        const isSelected = selectedPhotoIds?.includes(photo.id) ?? false;
-        return <div
-          key={photo.id}
-          className={clsx(
-            GRID_ASPECT_RATIO !== 0 && 'flex relative overflow-hidden',
-            'group',
-          )}
-          style={{
-            ...GRID_ASPECT_RATIO !== 0 && {
-              aspectRatio: GRID_ASPECT_RATIO,
-            },
-          }}
-        >
-          <PhotoMedium
-            className={clsx(
-              'flex w-full h-full',
-              // Prevent photo navigation when selecting
-              selectedPhotoIds?.length !== undefined && 'pointer-events-none',
-            )}
-            {...{
-              photo,
-              tag,
-              camera,
-              simulation,
-              focal,
-              selected: photo.id === selectedPhoto?.id,
-              priority: photoPriority,
-              onVisible: index === photos.length - 1
-                ? onLastPhotoVisible
-                : undefined,
-            }}
-          />
-          {isUserSignedIn && canSelect && selectedPhotoIds !== undefined &&
-            <SelectTileOverlay
-              isSelected={isSelected}
-              onSelectChange={() => setSelectedPhotoIds?.(isSelected
-                ? (selectedPhotoIds ?? []).filter(id => id !== photo.id)
-                : (selectedPhotoIds ?? []).concat(photo.id),
+      items={photos
+        .map((photo, index) => {
+          const isSelected = selectedPhotoIds?.includes(photo.id) ?? false;
+          return (
+            <div
+              key={photo.id}
+              className={clsx(
+                GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden',
+                'group',
               )}
-            />}
-        </div>;
-      }).concat(additionalTile ?? [])}
-      itemKeys={photos.map(photo => photo.id)
+              style={{
+                ...(GRID_ASPECT_RATIO !== 0 && {
+                  aspectRatio: GRID_ASPECT_RATIO,
+                }),
+              }}
+            >
+              <PhotoMedium
+                className={clsx(
+                  'flex h-full w-full',
+                  // Prevent photo navigation when selecting
+                  selectedPhotoIds?.length !== undefined &&
+                    'pointer-events-none',
+                )}
+                {...{
+                  photo,
+                  tag,
+                  camera,
+                  simulation,
+                  focal,
+                  selected: photo.id === selectedPhoto?.id,
+                  priority: photoPriority,
+                  onVisible:
+                    index === photos.length - 1
+                      ? onLastPhotoVisible
+                      : undefined,
+                }}
+              />
+              {isUserSignedIn &&
+                canSelect &&
+                selectedPhotoIds !== undefined && (
+                  <SelectTileOverlay
+                    isSelected={isSelected}
+                    onSelectChange={() =>
+                      setSelectedPhotoIds?.(
+                        isSelected
+                          ? (selectedPhotoIds ?? []).filter(
+                              id => id !== photo.id,
+                            )
+                          : (selectedPhotoIds ?? []).concat(photo.id),
+                      )
+                    }
+                  />
+                )}
+            </div>
+          );
+        })
+        .concat(additionalTile ?? [])}
+      itemKeys={photos
+        .map(photo => photo.id)
         .concat(additionalTile ? ['more'] : [])}
     />
   );
-};
+}

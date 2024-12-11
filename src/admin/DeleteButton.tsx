@@ -6,7 +6,7 @@ import { BiTrash } from 'react-icons/bi';
 export default function DeleteButton({
   className,
   ...rest
-}: ComponentProps <typeof LoaderButton>) {
+}: ComponentProps<typeof LoaderButton>) {
   return (
     <LoaderButton
       {...rest}

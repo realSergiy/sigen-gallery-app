@@ -9,7 +9,9 @@ export default async function Share({
 }: PhotoCameraProps) {
   const photo = await getPhotoCached(photoId);
 
-  if (!photo) { return redirect(PATH_ROOT); }
+  if (!photo) {
+    return redirect(PATH_ROOT);
+  }
 
   const camera = cameraFromPhoto(photo, { make, model });
 

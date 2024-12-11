@@ -12,39 +12,41 @@ export default function ChecklistRow({
   experimental,
   children,
 }: {
-  title: string
-  status: boolean
-  isPending?: boolean
-  optional?: boolean
-  showWarning?: boolean
-  experimental?: boolean
-  children: ReactNode
+  title: string;
+  status: boolean;
+  isPending?: boolean;
+  optional?: boolean;
+  showWarning?: boolean;
+  experimental?: boolean;
+  children: ReactNode;
 }) {
   return (
-    <div className={clsx(
-      'flex gap-2.5',
-      'px-4 pt-2 pb-2.5',
-    )}>
+    <div className={clsx('flex gap-2.5', 'px-4 pb-2.5 pt-2')}>
       <StatusIcon
-        type={status
-          ? 'checked'
-          : showWarning
-            ? 'warning'
-            : optional ? 'optional' : 'missing'}
+        type={
+          status
+            ? 'checked'
+            : showWarning
+              ? 'warning'
+              : optional
+                ? 'optional'
+                : 'missing'
+        }
         loading={isPending}
       />
-      <div className="flex flex-col min-w-0 flex-grow">
-        <div className={clsx(
-          'flex flex-wrap items-center gap-2 pb-0.5',
-          'font-bold dark:text-gray-300',
-        )}>
+      <div className="flex min-w-0 grow flex-col">
+        <div
+          className={clsx(
+            'flex flex-wrap items-center gap-2 pb-0.5',
+            'font-bold dark:text-gray-300',
+          )}
+        >
           {title}
-          {experimental &&
-            <ExperimentalBadge className="translate-y-[-0.5px]" />}
+          {experimental && (
+            <ExperimentalBadge className="translate-y-[-0.5px]" />
+          )}
         </div>
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </div>
     </div>
   );

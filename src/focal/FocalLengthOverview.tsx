@@ -9,25 +9,31 @@ export default function FocalLengthOverview({
   dateRange,
   animateOnFirstLoadOnly,
 }: {
-  focal: number,
-  photos: Photo[],
-  count: number,
-  dateRange?: PhotoDateRange,
-  animateOnFirstLoadOnly?: boolean,
+  focal: number;
+  photos: Photo[];
+  count: number;
+  dateRange?: PhotoDateRange;
+  animateOnFirstLoadOnly?: boolean;
 }) {
   return (
-    <PhotoGridContainer {...{
-      cacheKey: `focal-${focal}`,
-      photos,
-      count,
-      focal,
-      header: <FocalLengthHeader {...{
-        focal,
+    <PhotoGridContainer
+      {...{
+        cacheKey: `focal-${focal}`,
         photos,
         count,
-        dateRange,
-      }} />,
-      animateOnFirstLoadOnly,
-    }} />
+        focal,
+        header: (
+          <FocalLengthHeader
+            {...{
+              focal,
+              photos,
+              count,
+              dateRange,
+            }}
+          />
+        ),
+        animateOnFirstLoadOnly,
+      }}
+    />
   );
 }

@@ -45,32 +45,31 @@ export default function PhotoForm({
   onTextContentChange,
   onFormStatusChange,
 }: {
-  type?: 'create' | 'edit'
-  initialPhotoForm: Partial<PhotoFormData>
-  updatedExifData?: Partial<PhotoFormData>
-  updatedBlurData?: string
-  uniqueTags?: Tags
-  aiContent?: AiContent
-  shouldStripGpsData?: boolean
-  onTitleChange?: (updatedTitle: string) => void
-  onTextContentChange?: (hasContent: boolean) => void,
-  onFormStatusChange?: (pending: boolean) => void
+  type?: 'create' | 'edit';
+  initialPhotoForm: Partial<PhotoFormData>;
+  updatedExifData?: Partial<PhotoFormData>;
+  updatedBlurData?: string;
+  uniqueTags?: Tags;
+  aiContent?: AiContent;
+  shouldStripGpsData?: boolean;
+  onTitleChange?: (updatedTitle: string) => void;
+  onTextContentChange?: (hasContent: boolean) => void;
+  onFormStatusChange?: (pending: boolean) => void;
 }) {
   const [formData, setFormData] =
     useState<Partial<PhotoFormData>>(initialPhotoForm);
-  const [formErrors, setFormErrors] =
-    useState(getFormErrors(initialPhotoForm));
+  const [formErrors, setFormErrors] = useState(getFormErrors(initialPhotoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
   const { invalidateSwr, shouldDebugImageFallbacks } = useAppState();
 
-  const changedFormKeys = useMemo(() =>
-    getChangedFormFields(initialPhotoForm, formData),
-  [initialPhotoForm, formData]);
+  const changedFormKeys = useMemo(
+    () => getChangedFormFields(initialPhotoForm, formData),
+    [initialPhotoForm, formData],
+  );
   const formHasChanged = changedFormKeys.length > 0;
   const onlyChangedFieldIsBlurData =
-    changedFormKeys.length === 1 &&
-    changedFormKeys[0] === 'blurData';
+    changedFormKeys.length === 1 && changedFormKeys[0] === 'blurData';
 
   usePreventNavigation(formHasChanged && !onlyChangedFieldIsBlurData);
 
@@ -86,12 +85,11 @@ export default function PhotoForm({
       const changedKeys: (keyof PhotoFormData)[] = [];
 
       setFormData(currentForm => {
-        Object.entries(updatedExifData ?? {})
-          .forEach(([key, value]) => {
-            if (currentForm[key as keyof PhotoFormData] !== value) {
-              changedKeys.push(key as keyof PhotoFormData);
-            }
-          });
+        Object.entries(updatedExifData ?? {}).forEach(([key, value]) => {
+          if (currentForm[key as keyof PhotoFormData] !== value) {
+            changedKeys.push(key as keyof PhotoFormData);
+          }
+        });
 
         return {
           ...currentForm,
@@ -101,56 +99,63 @@ export default function PhotoForm({
 
       if (changedKeys.length > 0) {
         const fields = convertFormKeysToLabels(changedKeys);
-        toastSuccess(
-          `Updated EXIF fields: ${fields.join(', ')}`,
-          8000,
-        );
+        toastSuccess(`Updated EXIF fields: ${fields.join(', ')}`, 8000);
       } else {
         toastWarning('No new EXIF data found');
       }
     }
   }, [updatedExifData]);
 
-  const {
-    width,
-    height,
-  } = getDimensionsFromSize(THUMBNAIL_SIZE, formData.aspectRatio);
+  const { width, height } = getDimensionsFromSize(
+    THUMBNAIL_SIZE,
+    formData.aspectRatio,
+  );
 
   const url = formData.url ?? '';
 
   useEffect(() => {
     if (updatedBlurData) {
-      setFormData(data => updatedBlurData
-        ? { ...data, blurData: updatedBlurData }
-        : data);
+      setFormData(data =>
+        updatedBlurData ? { ...data, blurData: updatedBlurData } : data,
+      );
     } else if (!BLUR_ENABLED) {
       setFormData(data => ({ ...data, blurData: '' }));
     }
   }, [updatedBlurData]);
 
-  useEffect(() =>
-    setFormData(data => aiContent?.title
-      ? { ...data, title: aiContent?.title }
-      : data),
-  [aiContent?.title]);
+  useEffect(
+    () =>
+      setFormData(data =>
+        aiContent?.title ? { ...data, title: aiContent?.title } : data,
+      ),
+    [aiContent?.title],
+  );
 
-  useEffect(() =>
-    setFormData(data => aiContent?.caption
-      ? { ...data, caption: aiContent?.caption }
-      : data),
-  [aiContent?.caption]);
+  useEffect(
+    () =>
+      setFormData(data =>
+        aiContent?.caption ? { ...data, caption: aiContent?.caption } : data,
+      ),
+    [aiContent?.caption],
+  );
 
-  useEffect(() =>
-    setFormData(data => aiContent?.tags
-      ? { ...data, tags: aiContent?.tags }
-      : data),
-  [aiContent?.tags]);
+  useEffect(
+    () =>
+      setFormData(data =>
+        aiContent?.tags ? { ...data, tags: aiContent?.tags } : data,
+      ),
+    [aiContent?.tags],
+  );
 
-  useEffect(() =>
-    setFormData(data => aiContent?.semanticDescription
-      ? { ...data, semanticDescription: aiContent?.semanticDescription }
-      : data),
-  [aiContent?.semanticDescription]);
+  useEffect(
+    () =>
+      setFormData(data =>
+        aiContent?.semanticDescription
+          ? { ...data, semanticDescription: aiContent?.semanticDescription }
+          : data,
+      ),
+    [aiContent?.semanticDescription],
+  );
 
   useEffect(() => {
     onTextContentChange?.(formHasTextContent(formData));
@@ -158,57 +163,68 @@ export default function PhotoForm({
 
   const isFieldGeneratingAi = (key: keyof PhotoFormData) => {
     switch (key) {
-    case 'title':
-      return aiContent?.isLoadingTitle;
-    case 'caption':
-      return aiContent?.isLoadingCaption;
-    case 'tags':
-      return aiContent?.isLoadingTags;
-    case 'semanticDescription':
-      return aiContent?.isLoadingSemantic;
-    default:
-      return false;
+      case 'title':
+        return aiContent?.isLoadingTitle;
+      case 'caption':
+        return aiContent?.isLoadingCaption;
+      case 'tags':
+        return aiContent?.isLoadingTags;
+      case 'semanticDescription':
+        return aiContent?.isLoadingSemantic;
+      default:
+        return false;
     }
   };
 
   const accessoryForField = (key: keyof PhotoFormData) => {
     if (aiContent) {
       switch (key) {
-      case 'title':
-        return <AiButton
-          aiContent={aiContent}
-          requestFields={['title']}
-          shouldConfirm={Boolean(formData.title)}
-          className="h-full"
-        />;
-      case 'caption':
-        return <AiButton
-          aiContent={aiContent}
-          requestFields={['caption']}
-          shouldConfirm={Boolean(formData.caption)}
-          className="h-full"
-        />;
-      case 'tags':
-        return <AiButton
-          aiContent={aiContent}
-          requestFields={['tags']}
-          shouldConfirm={Boolean(formData.tags)}
-          className="h-full"
-        />;
-      case 'semanticDescription':
-        return <AiButton
-          aiContent={aiContent}
-          requestFields={['semantic']}
-          shouldConfirm={Boolean(formData.semanticDescription)}
-        />;
-      case 'blurData':
-        return shouldDebugImageFallbacks && type === 'edit' && formData.url
-          ? <UpdateBlurDataButton
-            photoUrl={getNextImageUrlForManipulation(formData.url)}
-            onUpdatedBlurData={blurData =>
-              setFormData(data => ({ ...data, blurData }))}
-          />
-          : null;
+        case 'title':
+          return (
+            <AiButton
+              aiContent={aiContent}
+              requestFields={['title']}
+              shouldConfirm={Boolean(formData.title)}
+              className="h-full"
+            />
+          );
+        case 'caption':
+          return (
+            <AiButton
+              aiContent={aiContent}
+              requestFields={['caption']}
+              shouldConfirm={Boolean(formData.caption)}
+              className="h-full"
+            />
+          );
+        case 'tags':
+          return (
+            <AiButton
+              aiContent={aiContent}
+              requestFields={['tags']}
+              shouldConfirm={Boolean(formData.tags)}
+              className="h-full"
+            />
+          );
+        case 'semanticDescription':
+          return (
+            <AiButton
+              aiContent={aiContent}
+              requestFields={['semantic']}
+              shouldConfirm={Boolean(formData.semanticDescription)}
+            />
+          );
+        case 'blurData':
+          return shouldDebugImageFallbacks &&
+            type === 'edit' &&
+            formData.url ? (
+            <UpdateBlurDataButton
+              photoUrl={getNextImageUrlForManipulation(formData.url)}
+              onUpdatedBlurData={blurData =>
+                setFormData(data => ({ ...data, blurData }))
+              }
+            />
+          ) : null;
       }
     }
   };
@@ -226,22 +242,19 @@ export default function PhotoForm({
     ) {
       return true;
     } else {
-      return (
-        (hideIfEmpty && !formData[key]) ||
-        shouldHide?.(formData)
-      );
+      return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
     }
   };
-    
+
   return (
-    <div className="space-y-8 max-w-[38rem] relative">
+    <div className="relative max-w-[38rem] space-y-8">
       <div className="flex gap-2">
         <div className="relative">
           <ImageWithFallback
             alt="Upload"
             src={url}
             className={clsx(
-              'border rounded-md overflow-hidden',
+              'overflow-hidden rounded-md border',
               'border-gray-200 dark:border-gray-700',
             )}
             blurDataURL={formData.blurData}
@@ -250,18 +263,22 @@ export default function PhotoForm({
             height={height}
             priority
           />
-          <div className={clsx(
-            'absolute top-2 left-2 transition-opacity duration-500',
-            aiContent?.isLoading ? 'opacity-100' : 'opacity-0',
-          )}>
-            <div className={clsx(
-              'leading-none text-xs font-medium uppercase tracking-wide',
-              'px-1.5 py-1 rounded-[4px]',
-              'inline-flex items-center gap-2',
-              'bg-white/70 dark:bg-black/60 backdrop-blur-md',
-              'border border-gray-900/10 dark:border-gray-700/70',
-              'select-none',
-            )}>
+          <div
+            className={clsx(
+              'absolute left-2 top-2 transition-opacity duration-500',
+              aiContent?.isLoading ? 'opacity-100' : 'opacity-0',
+            )}
+          >
+            <div
+              className={clsx(
+                'text-xs font-medium uppercase leading-none tracking-wide',
+                'rounded-[4px] px-1.5 py-1',
+                'inline-flex items-center gap-2',
+                'bg-white/70 backdrop-blur-md dark:bg-black/60',
+                'border border-gray-900/10 dark:border-gray-700/70',
+                'select-none',
+              )}
+            >
               <Spinner
                 color="text"
                 size={9}
@@ -275,14 +292,15 @@ export default function PhotoForm({
           </div>
         </div>
       </div>
-      {formActionErrorMessage &&
-        <ErrorNote>{formActionErrorMessage}</ErrorNote>}
+      {formActionErrorMessage && (
+        <ErrorNote>{formActionErrorMessage}</ErrorNote>
+      )}
       <form
-        action={data => (type === 'create'
-          ? createPhotoAction
-          : updatePhotoAction
-        )(data)
-          .catch(e => setFormActionErrorMessage(e.message))}
+        action={data =>
+          (type === 'create' ? createPhotoAction : updatePhotoAction)(
+            data,
+          ).catch(e => setFormActionErrorMessage(e.message))
+        }
         onSubmit={() => {
           setFormActionErrorMessage('');
           (document.activeElement as HTMLElement)?.blur?.();
@@ -293,32 +311,36 @@ export default function PhotoForm({
           {FORM_METADATA_ENTRIES(
             convertTagsForForm(uniqueTags),
             aiContent !== undefined,
-          )
-            .map(([key, {
-              label,
-              note,
-              required,
-              selectOptions,
-              selectOptionsDefaultLabel,
-              tagOptions,
-              readOnly,
-              validate,
-              validateStringMaxLength,
-              capitalize,
-              hideIfEmpty,
-              shouldHide,
-              loadingMessage,
-              type,
-            }]) =>
-              !shouldHideField(key, hideIfEmpty, shouldHide) &&
+          ).map(
+            ([
+              key,
+              {
+                label,
+                note,
+                required,
+                selectOptions,
+                selectOptionsDefaultLabel,
+                tagOptions,
+                readOnly,
+                validate,
+                validateStringMaxLength,
+                capitalize,
+                hideIfEmpty,
+                shouldHide,
+                loadingMessage,
+                type,
+              },
+            ]) =>
+              !shouldHideField(key, hideIfEmpty, shouldHide) && (
                 <FieldSetWithStatus
                   key={key}
                   id={key}
-                  label={label + (
-                    key === 'blurData' && shouldDebugImageFallbacks
+                  label={
+                    label +
+                    (key === 'blurData' && shouldDebugImageFallbacks
                       ? ` (${(formData[key] ?? '').length} chars.)`
-                      : ''
-                  )}
+                      : '')
+                  }
                   note={note}
                   error={formErrors[key]}
                   value={formData[key] ?? ''}
@@ -331,9 +353,10 @@ export default function PhotoForm({
                     } else if (validateStringMaxLength !== undefined) {
                       setFormErrors({
                         ...formErrors,
-                        [key]: value.length > validateStringMaxLength
-                          ? `${validateStringMaxLength} characters or less`
-                          : undefined,
+                        [key]:
+                          value.length > validateStringMaxLength
+                            ? `${validateStringMaxLength} characters or less`
+                            : undefined,
                       });
                     }
                     if (key === 'title') {
@@ -346,15 +369,20 @@ export default function PhotoForm({
                   required={required}
                   readOnly={readOnly}
                   capitalize={capitalize}
-                  placeholder={loadingMessage && !formData[key]
-                    ? loadingMessage
-                    : undefined}
+                  placeholder={
+                    loadingMessage && !formData[key]
+                      ? loadingMessage
+                      : undefined
+                  }
                   loading={
                     (loadingMessage && !formData[key] ? true : false) ||
-                    isFieldGeneratingAi(key)}
+                    isFieldGeneratingAi(key)
+                  }
                   type={type}
                   accessory={accessoryForField(key)}
-                />)}
+                />
+              ),
+          )}
           <input
             type="hidden"
             name="shouldStripGpsData"
@@ -363,10 +391,9 @@ export default function PhotoForm({
           />
         </div>
         {/* Actions */}
-        <div className={clsx(
-          'flex gap-3 sticky bottom-0',
-          'pb-4 md:pb-8 mt-12',
-        )}>
+        <div
+          className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}
+        >
           <Link
             className="button"
             href={type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_UPLOADS}
@@ -381,15 +408,17 @@ export default function PhotoForm({
           >
             {type === 'create' ? 'Create' : 'Update'}
           </SubmitButtonWithStatus>
-          <div className={clsx(
-            'absolute -top-16 -left-2 right-0 bottom-0 -z-10',
-            'pointer-events-none',
-            'bg-gradient-to-t',
-            'from-white/90 from-60%',
-            'dark:from-black/90 dark:from-50%',
-          )} />
+          <div
+            className={clsx(
+              'absolute -left-2 -top-16 bottom-0 right-0 -z-10',
+              'pointer-events-none',
+              'bg-gradient-to-t',
+              'from-white/90 from-60%',
+              'dark:from-black/90 dark:from-50%',
+            )}
+          />
         </div>
       </form>
     </div>
   );
-};
+}

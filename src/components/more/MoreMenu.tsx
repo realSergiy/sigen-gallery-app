@@ -10,18 +10,18 @@ export default function MoreMenu({
   buttonClassName,
   ariaLabel,
 }: {
-  items: ComponentProps<typeof MoreMenuItem> []
-  className?: string
-  buttonClassName?: string
-  ariaLabel: string
-}){
+  items: ComponentProps<typeof MoreMenuItem>[];
+  className?: string;
+  buttonClassName?: string;
+  ariaLabel: string;
+}) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
           className={clsx(
             buttonClassName,
-            'p-1 min-h-0 border-none shadow-none hover:outline-none',
+            'min-h-0 border-none p-1 shadow-none hover:outline-none',
             'hover:bg-gray-100 active:bg-gray-100',
             'hover:dark:bg-gray-800/75 active:dark:bg-gray-900',
             'text-dim',
@@ -39,17 +39,17 @@ export default function MoreMenu({
             'z-10',
             'min-w-[8rem]',
             'ml-2.5',
-            'p-1 rounded-md border',
+            'rounded-md border p-1',
             'bg-content',
             'shadow-lg dark:shadow-xl',
             className,
           )}
         >
-          {items.map(props =>
+          {items.map(props => (
             <MoreMenuItem key={`${props.label}`} {...props} />
-          )}
+          ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
-};
+}

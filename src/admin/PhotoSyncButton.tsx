@@ -15,30 +15,31 @@ export default function PhotoSyncButton({
   shouldConfirm,
   shouldToast,
 }: {
-  photoId: string
-  photoTitle?: string
-  onSyncComplete?: () => void
-  isSyncingExternal?: boolean
-  hasAiTextGeneration?: boolean
-  shouldConfirm?: boolean
-  shouldToast?: boolean
+  photoId: string;
+  photoTitle?: string;
+  onSyncComplete?: () => void;
+  isSyncingExternal?: boolean;
+  hasAiTextGeneration?: boolean;
+  shouldConfirm?: boolean;
+  shouldToast?: boolean;
 } & ComponentProps<typeof LoaderButton>) {
   const [isSyncing, setIsSyncing] = useState(false);
 
   const confirmText = ['Overwrite'];
-  if (photoTitle) { confirmText.push(`"${photoTitle}"`); }
+  if (photoTitle) {
+    confirmText.push(`"${photoTitle}"`);
+  }
   confirmText.push('data from original file?');
-  if (hasAiTextGeneration) { confirmText.push(
-    'AI text will be generated for undefined fields.'); }
+  if (hasAiTextGeneration) {
+    confirmText.push('AI text will be generated for undefined fields.');
+  }
   confirmText.push('This action cannot be undone.');
 
   return (
     <LoaderButton
       title="Update photo from original file"
       className={className}
-      icon={<IconGrSync
-        className="translate-y-[0.5px] translate-x-[0.5px]"
-      />}
+      icon={<IconGrSync className="translate-x-[0.5px] translate-y-[0.5px]" />}
       onClick={() => {
         if (!shouldConfirm || window.confirm(confirmText.join(' '))) {
           setIsSyncing(true);
@@ -46,9 +47,9 @@ export default function PhotoSyncButton({
             .then(() => {
               onSyncComplete?.();
               if (shouldToast) {
-                toastSuccess(photoTitle
-                  ? `"${photoTitle}" data synced`
-                  : 'Data synced');
+                toastSuccess(
+                  photoTitle ? `"${photoTitle}" data synced` : 'Data synced',
+                );
               }
             })
             .finally(() => setIsSyncing(false));

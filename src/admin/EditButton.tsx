@@ -1,11 +1,7 @@
 import PathLoaderButton from '@/components/primitives/PathLoaderButton';
 import { FaRegEdit } from 'react-icons/fa';
 
-export default function EditButton ({
-  path,
-}: {
-  path: string,
-}) {
+export default function EditButton({ path }: { path: string }) {
   return (
     <PathLoaderButton
       path={path}

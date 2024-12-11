@@ -12,47 +12,49 @@ import {
 import AdminNavClient from './AdminNavClient';
 
 export default async function AdminNav() {
-  const [
-    countPhotos,
-    countUploads,
-    countTags,
-    mostRecentPhotoUpdateTime,
-  ] = await Promise.all([
-    getPhotosMetaCached({ hidden: 'include' })
-      .then(({ count }) => count)
-      .catch(() => 0),
-    getStorageUploadUrlsNoStore()
-      .then(urls => urls.length)
-      .catch(e => {
-        console.error(`Error getting blob upload urls: ${e}`);
-        return 0;
-      }),
-    getUniqueTagsCached().then(tags => tags.length).catch(() => 0),
-    getPhotosMostRecentUpdateCached().catch(() => undefined),
-  ]);
+  const [countPhotos, countUploads, countTags, mostRecentPhotoUpdateTime] =
+    await Promise.all([
+      getPhotosMetaCached({ hidden: 'include' })
+        .then(({ count }) => count)
+        .catch(() => 0),
+      getStorageUploadUrlsNoStore()
+        .then(urls => urls.length)
+        .catch(e => {
+          console.error(`Error getting blob upload urls: ${e}`);
+          return 0;
+        }),
+      getUniqueTagsCached()
+        .then(tags => tags.length)
+        .catch(() => 0),
+      getPhotosMostRecentUpdateCached().catch(() => undefined),
+    ]);
 
   // Photos
-  const items = [{
-    label: 'Photos',
-    href: PATH_ADMIN_PHOTOS,
-    count: countPhotos,
-  }];
+  const items = [
+    {
+      label: 'Photos',
+      href: PATH_ADMIN_PHOTOS,
+      count: countPhotos,
+    },
+  ];
 
   // Uploads
-  if (countUploads > 0) { items.push({
-    label: 'Uploads',
-    href: PATH_ADMIN_UPLOADS,
-    count: countUploads,
-  }); }
+  if (countUploads > 0) {
+    items.push({
+      label: 'Uploads',
+      href: PATH_ADMIN_UPLOADS,
+      count: countUploads,
+    });
+  }
 
   // Tags
-  if (countTags > 0) { items.push({
-    label: 'Tags',
-    href: PATH_ADMIN_TAGS,
-    count: countTags,
-  }); }
+  if (countTags > 0) {
+    items.push({
+      label: 'Tags',
+      href: PATH_ADMIN_TAGS,
+      count: countTags,
+    });
+  }
 
-  return (
-    <AdminNavClient {...{ items, mostRecentPhotoUpdateTime }} />
-  );
+  return <AdminNavClient {...{ items, mostRecentPhotoUpdateTime }} />;
 }

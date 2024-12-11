@@ -13,32 +13,29 @@ export default function PhotosEmptyState() {
     <SiteGrid
       contentMain={
         <Container
-          className="min-h-[20rem] sm:min-h-[30rem] px-8"
+          className="min-h-[20rem] px-8 sm:min-h-[30rem]"
           padding="loose"
         >
-          <HiOutlinePhotograph
-            className="text-medium"
-            size={24}
-          />
-          <div className={clsx(
-            'font-bold text-2xl',
-            'text-gray-700 dark:text-gray-200',
-          )}>
+          <HiOutlinePhotograph className="text-medium" size={24} />
+          <div
+            className={clsx(
+              'text-2xl font-bold',
+              'text-gray-700 dark:text-gray-200',
+            )}
+          >
             {!IS_SITE_READY ? 'Finish Setup' : 'Setup Complete!'}
           </div>
-          {!IS_SITE_READY
-            ? <SiteChecklist simplifiedView />
-            : <div className="max-w-md text-center space-y-6">
+          {!IS_SITE_READY ? (
+            <SiteChecklist simplifiedView />
+          ) : (
+            <div className="max-w-md space-y-6 text-center">
               <div className="space-y-2">
-                <div>
-                  Add your first photo:
-                </div>
+                <div>Add your first photo:</div>
                 <AdminCTA />
               </div>
               <div>
-                Change the name of this blog and other configuration
-                by editing environment variables referenced in
-                {' '}
+                Change the name of this blog and other configuration by editing
+                environment variables referenced in{' '}
                 <Link
                   href={PATH_ADMIN_CONFIGURATION}
                   className="text-main hover:underline"
@@ -46,8 +43,10 @@ export default function PhotosEmptyState() {
                   /admin/configuration
                 </Link>
               </div>
-            </div>}
-        </Container>}
+            </div>
+          )}
+        </Container>
+      }
     />
   );
-};
+}

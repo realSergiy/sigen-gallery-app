@@ -8,7 +8,7 @@ export default function DeletePhotoButton({
   photo,
   ...rest
 }: {
-  photo: Photo
+  photo: Photo;
 } & ComponentProps<typeof DeletePhotosButton>) {
   return (
     <DeletePhotosButton

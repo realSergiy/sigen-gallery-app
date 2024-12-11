@@ -12,7 +12,8 @@ export default async function AdminTagsPage() {
           <div className="space-y-4">
             <AdminTagTable {...{ tags }} />
           </div>
-        </div>}
+        </div>
+      }
     />
   );
 }

@@ -1,9 +1,9 @@
 import { POSTGRES_SSL_ENABLED } from '@/site/config';
-import { Pool, QueryResult, QueryResultRow } from 'pg'; 
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
-  ...POSTGRES_SSL_ENABLED && { ssl: true },
+  ...(POSTGRES_SSL_ENABLED && { ssl: true }),
 });
 
 export type Primitive = string | number | boolean | undefined | null;
@@ -43,14 +43,15 @@ export const sql = <T extends QueryResultRow>(
 
 export const convertArrayToPostgresString = (
   array?: string[],
-  type: 'braces' | 'brackets' | 'parentheses' = 'braces', 
-) => array
-  ? type === 'braces'
-    ? `{${array.join(',')}}`
-    : type === 'brackets'
-      ? `[${array.map(i => `'${i}'`).join(',')}]`
-      : `(${array.map(i => `'${i}'`).join(',')})`
-  : null;
+  type: 'braces' | 'brackets' | 'parentheses' = 'braces',
+) =>
+  array
+    ? type === 'braces'
+      ? `{${array.join(',')}}`
+      : type === 'brackets'
+        ? `[${array.map(i => `'${i}'`).join(',')}]`
+        : `(${array.map(i => `'${i}'`).join(',')})`
+    : null;
 
 const isTemplateStringsArray = (
   strings: unknown,

@@ -4,25 +4,17 @@ import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import { convertTagsForForm, getValidationMessageForTags, Tags } from '@/tag';
 import { ComponentProps, useEffect, useRef, useState } from 'react';
 
-export default function PhotoTagFieldset(props: {
-  tags: string
-  tagOptions?: Tags
-  onChange: (tags: string) => void
-  onError?: (error: string) => void
-  openOnLoad?: boolean
-} & Partial<Omit<
-  ComponentProps<typeof FieldSetWithStatus>,
-  'tagOptions'
->>) {
-  const {
-    id,
-    tags,
-    tagOptions,
-    onChange,
-    onError,
-    openOnLoad,
-    ...rest
-  } = props;
+export default function PhotoTagFieldset(
+  props: {
+    tags: string;
+    tagOptions?: Tags;
+    onChange: (tags: string) => void;
+    onError?: (error: string) => void;
+    openOnLoad?: boolean;
+  } & Partial<Omit<ComponentProps<typeof FieldSetWithStatus>, 'tagOptions'>>,
+) {
+  const { id, tags, tagOptions, onChange, onError, openOnLoad, ...rest } =
+    props;
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -36,7 +28,7 @@ export default function PhotoTagFieldset(props: {
       return () => clearTimeout(timeout);
     }
   }, [openOnLoad]);
-  
+
   return (
     <div ref={ref}>
       <FieldSetWithStatus

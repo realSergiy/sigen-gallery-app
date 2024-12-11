@@ -11,22 +11,19 @@ export default function ProgressButton({
   children,
   ...props
 }: {
-  progress?: number
+  progress?: number;
 } & ComponentProps<typeof LoaderButton>) {
   return (
     <LoaderButton
       {...props}
-      isLoading={isLoading ?? ((progress ?? 1) < 1)}
-      className={clsx(
-        'relative overflow-hidden justify-center',
-        className,
-      )}
+      isLoading={isLoading ?? (progress ?? 1) < 1}
+      className={clsx('relative justify-center overflow-hidden', className)}
     >
       <div
-        style={{ transform: `scaleX(${progress ?? 0})`}}
+        style={{ transform: `scaleX(${progress ?? 0})` }}
         className={clsx(
-          'absolute top-0 left-0 w-full',
-          'transition-all duration-500 origin-left',
+          'absolute left-0 top-0 w-full',
+          'origin-left transition-all duration-500',
           'bg-invert h-[2px]',
           progress === undefined ? 'opacity-0' : 'opacity-100',
         )}

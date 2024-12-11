@@ -9,34 +9,36 @@ import { getNextImageUrlForManipulation } from '@/services/next-image';
 export default async function PhotoEditPage({
   params: { photoId },
 }: {
-  params: { photoId: string }
+  params: { photoId: string };
 }) {
   const photo = await getPhotoNoStore(photoId, true);
 
-  if (!photo) { redirect(PATH_ADMIN); }
+  if (!photo) {
+    redirect(PATH_ADMIN);
+  }
 
   const uniqueTags = await getUniqueTagsCached();
 
   const hasAiTextGeneration = AI_TEXT_GENERATION_ENABLED;
-  
+
   // Only generate image thumbnails when AI generation is enabled
   const imageThumbnailBase64 = AI_TEXT_GENERATION_ENABLED
     ? await resizeImageFromUrl(getNextImageUrlForManipulation(photo.url))
     : '';
 
   const blurData = BLUR_ENABLED
-    ? await blurImageFromUrl(
-      getNextImageUrlForManipulation(photo.url)
-    )
+    ? await blurImageFromUrl(getNextImageUrlForManipulation(photo.url))
     : '';
 
   return (
-    <PhotoEditPageClient {...{
-      photo,
-      uniqueTags,
-      hasAiTextGeneration,
-      imageThumbnailBase64,
-      blurData,
-    }} />
+    <PhotoEditPageClient
+      {...{
+        photo,
+        uniqueTags,
+        hasAiTextGeneration,
+        imageThumbnailBase64,
+        blurData,
+      }}
+    />
   );
-};
+}

@@ -14,11 +14,11 @@ export default function PhotoImageResponse({
   fontFamily,
   isNextImageReady = true,
 }: {
-  photo: Photo
-  width: NextImageSize
-  height: number
-  fontFamily: string
-  isNextImageReady: boolean
+  photo: Photo;
+  width: NextImageSize;
+  height: number;
+  fontFamily: string;
+  isNextImageReady: boolean;
 }) {
   const caption = [
     photo.model
@@ -33,23 +33,34 @@ export default function PhotoImageResponse({
 
   return (
     <ImageContainer {...{ width, height }}>
-      <ImagePhotoGrid {...{
-        photos: isNextImageReady ? [photo] : [],
-        width,
-        height,
-        ...OG_TEXT_BOTTOM_ALIGNMENT && { imagePosition: 'top' },
-      }} />
-      {shouldShowExifDataForPhoto(photo) &&
-        <ImageCaption {...{
+      <ImagePhotoGrid
+        {...{
+          photos: isNextImageReady ? [photo] : [],
           width,
           height,
-          fontFamily,
-          ...photo.make === 'Apple' && { icon: <AiFillApple style={{
-            marginRight: height * .01,
-          }} /> },
-        }}>
+          ...(OG_TEXT_BOTTOM_ALIGNMENT && { imagePosition: 'top' }),
+        }}
+      />
+      {shouldShowExifDataForPhoto(photo) && (
+        <ImageCaption
+          {...{
+            width,
+            height,
+            fontFamily,
+            ...(photo.make === 'Apple' && {
+              icon: (
+                <AiFillApple
+                  style={{
+                    marginRight: height * 0.01,
+                  }}
+                />
+              ),
+            }),
+          }}
+        >
           {caption}
-        </ImageCaption>}
+        </ImageCaption>
+      )}
     </ImageContainer>
   );
-};
+}

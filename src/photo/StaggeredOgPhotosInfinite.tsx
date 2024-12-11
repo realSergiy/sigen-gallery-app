@@ -8,8 +8,8 @@ export default function StaggeredOgPhotosInfinite({
   initialOffset,
   itemsPerPage,
 }: {
-  initialOffset: number
-  itemsPerPage: number
+  initialOffset: number;
+  itemsPerPage: number;
 }) {
   return (
     <InfinitePhotoScroll
@@ -17,11 +17,12 @@ export default function StaggeredOgPhotosInfinite({
       initialOffset={initialOffset}
       itemsPerPage={itemsPerPage}
     >
-      {({ photos, onLastPhotoVisible }) =>
+      {({ photos, onLastPhotoVisible }) => (
         <StaggeredOgPhotos
           photos={photos}
           onLastPhotoVisible={onLastPhotoVisible}
-        />}
+        />
+      )}
     </InfinitePhotoScroll>
   );
 }

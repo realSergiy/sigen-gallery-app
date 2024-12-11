@@ -13,18 +13,20 @@ export default function TagImageResponse({
   height,
   fontFamily,
 }: {
-  tag: string,
-  photos: Photo[]
-  width: NextImageSize
-  height: number
-  fontFamily: string
-}) {  
+  tag: string;
+  photos: Photo[];
+  width: NextImageSize;
+  height: number;
+  fontFamily: string;
+}) {
   return (
-    <ImageContainer {...{
-      width,
-      height,
-      ...photos.length === 0 && { background: 'black' },
-    }}>
+    <ImageContainer
+      {...{
+        width,
+        height,
+        ...(photos.length === 0 && { background: 'black' }),
+      }}
+    >
       <ImagePhotoGrid
         {...{
           photos,
@@ -32,28 +34,32 @@ export default function TagImageResponse({
           height,
         }}
       />
-      <ImageCaption {...{
-        width,
-        height,
-        fontFamily,
-        icon: isTagFavs(tag)
-          ? <FaStar
-            size={height * .066}
-            style={{
-              transform: `translateY(${height * .0095}px)`,
-              // Fix horizontal distortion in icon size
-              width: height * .076,
-              marginRight: height * .015,
-            }}
-          />
-          : <FaTag
-            size={height * .06}
-            style={{
-              transform: `translateY(${height * .016}px)`,
-              marginRight: height * .02,
-            }}
-          />,
-      }}>
+      <ImageCaption
+        {...{
+          width,
+          height,
+          fontFamily,
+          icon: isTagFavs(tag) ? (
+            <FaStar
+              size={height * 0.066}
+              style={{
+                transform: `translateY(${height * 0.0095}px)`,
+                // Fix horizontal distortion in icon size
+                width: height * 0.076,
+                marginRight: height * 0.015,
+              }}
+            />
+          ) : (
+            <FaTag
+              size={height * 0.06}
+              style={{
+                transform: `translateY(${height * 0.016}px)`,
+                marginRight: height * 0.02,
+              }}
+            />
+          ),
+        }}
+      >
         {formatTag(tag).toLocaleUpperCase()}
       </ImageCaption>
     </ImageContainer>

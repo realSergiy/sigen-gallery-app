@@ -6,16 +6,18 @@ import { testConnectionsAction } from '@/admin/actions';
 export default async function SiteChecklistServer({
   simplifiedView,
 }: {
-  simplifiedView?: boolean
+  simplifiedView?: boolean;
 }) {
   const secret = await generateAuthSecret().catch(() => 'TRY AGAIN');
   const connectionErrors = await testConnectionsAction().catch(() => ({}));
   return (
-    <SiteChecklistClient {...{
-      ...CONFIG_CHECKLIST_STATUS,
-      ...connectionErrors,
-      simplifiedView,
-      secret,
-    }} />
+    <SiteChecklistClient
+      {...{
+        ...CONFIG_CHECKLIST_STATUS,
+        ...connectionErrors,
+        simplifiedView,
+        secret,
+      }}
+    />
   );
 }

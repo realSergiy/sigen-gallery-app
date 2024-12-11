@@ -24,23 +24,18 @@ import { formatFocalLength } from '@/focal';
 import { TbCone } from 'react-icons/tb';
 
 export default async function CommandK() {
-  const [
-    count,
-    tags,
-    cameras,
-    filmSimulations,
-    focalLengths,
-  ] = await Promise.all([
-    getPhotosMetaCached()
-      .then(({ count }) => count)
-      .catch(() => 0),
-    getUniqueTagsCached().catch(() => []),
-    getUniqueCamerasCached().catch(() => []),
-    SHOW_FILM_SIMULATIONS
-      ? getUniqueFilmSimulationsCached().catch(() => [])
-      : [],
-    getUniqueFocalLengths().catch(() => []),
-  ]);
+  const [count, tags, cameras, filmSimulations, focalLengths] =
+    await Promise.all([
+      getPhotosMetaCached()
+        .then(({ count }) => count)
+        .catch(() => 0),
+      getUniqueTagsCached().catch(() => []),
+      getUniqueCamerasCached().catch(() => []),
+      SHOW_FILM_SIMULATIONS
+        ? getUniqueFilmSimulationsCached().catch(() => [])
+        : [],
+      getUniqueFocalLengths().catch(() => []),
+    ]);
 
   const SECTION_CAMERAS: CommandKSection = {
     heading: 'Cameras',
@@ -55,9 +50,11 @@ export default async function CommandK() {
 
   const SECTION_FILM: CommandKSection = {
     heading: 'Film Simulations',
-    accessory: <span className="w-3">
-      <PhotoFilmSimulationIcon className="translate-y-[0.5px]" />
-    </span>,
+    accessory: (
+      <span className="w-3">
+        <PhotoFilmSimulationIcon className="translate-y-[0.5px]" />
+      </span>
+    ),
     items: filmSimulations.map(({ simulation, count }) => ({
       label: labelForFilmSimulation(simulation).medium,
       annotation: formatCount(count),
@@ -68,9 +65,7 @@ export default async function CommandK() {
 
   const SECTION_FOCAL: CommandKSection = {
     heading: 'Focal Lengths',
-    accessory: <TbCone
-      className="rotate-[270deg] text-[14px]"
-    />,
+    accessory: <TbCone className="rotate-[270deg] text-[14px]" />,
     items: focalLengths.map(({ focal, count }) => ({
       label: formatFocalLength(focal)!,
       annotation: formatCount(count),
@@ -79,14 +74,12 @@ export default async function CommandK() {
     })),
   };
 
-  return <CommandKClient
-    tags={tags}
-    serverSections={[
-      SECTION_CAMERAS,
-      SECTION_FILM,
-      SECTION_FOCAL,
-    ]}
-    showDebugTools={ADMIN_DEBUG_TOOLS_ENABLED}
-    footer={photoQuantityText(count, false)}
-  />;
+  return (
+    <CommandKClient
+      tags={tags}
+      serverSections={[SECTION_CAMERAS, SECTION_FILM, SECTION_FOCAL]}
+      showDebugTools={ADMIN_DEBUG_TOOLS_ENABLED}
+      footer={photoQuantityText(count, false)}
+    />
+  );
 }

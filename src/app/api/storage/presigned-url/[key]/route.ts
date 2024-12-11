@@ -23,12 +23,9 @@ export async function GET(
       CURRENT_STORAGE === 'cloudflare-r2'
         ? cloudflareR2PutObjectCommandForKey(key)
         : awsS3PutObjectCommandForKey(key),
-      { expiresIn: 3600 }
+      { expiresIn: 3600 },
     );
-    return new Response(
-      url,
-      { headers: { 'content-type': 'text/plain' } },
-    );
+    return new Response(url, { headers: { 'content-type': 'text/plain' } });
   } else {
     return new Response('Unauthorized request', { status: 401 });
   }

@@ -4,23 +4,23 @@ import { parameterize } from '@/utility/string';
 const CAMERA_PLACEHOLDER: Camera = { make: 'Camera', model: 'Model' };
 
 export type Camera = {
-  make: string
-  model: string
+  make: string;
+  model: string;
 };
 
 export interface CameraProps {
-  params: Camera
+  params: Camera;
 }
 
 export interface PhotoCameraProps {
-  params: Camera & { photoId: string }
+  params: Camera & { photoId: string };
 }
 
 export type CameraWithCount = {
-  cameraKey: string
-  camera: Camera
-  count: number
-}
+  cameraKey: string;
+  camera: Camera;
+  count: number;
+};
 
 export type Cameras = CameraWithCount[];
 
@@ -31,8 +31,8 @@ export const getCameraFromParams = ({
   make,
   model,
 }: {
-  make: string,
-  model: string,
+  make: string;
+  model: string;
 }): Camera => ({
   make: parameterize(make, true),
   model: parameterize(model, true),
@@ -53,12 +53,12 @@ export const cameraFromPhoto = (
 ): Camera =>
   photo?.make && photo?.model
     ? { make: photo.make, model: photo.model }
-    : fallback ?? CAMERA_PLACEHOLDER;
+    : (fallback ?? CAMERA_PLACEHOLDER);
 
 export const formatCameraText = (
   { make: makeRaw, model: modelRaw }: Camera,
   includeMake: 'always' | 'never' | 'if-not-apple' = 'if-not-apple',
-  removeIPhoneOnLongModels?: boolean
+  removeIPhoneOnLongModels?: boolean,
 ) => {
   // Remove 'Corporation' from makes like 'Nikon Corporation'
   const make = makeRaw.replace(/ Corporation/i, '');
@@ -71,10 +71,9 @@ export const formatCameraText = (
   ) {
     model = model.replace(/iPhone\s*/i, '');
   }
-  return (
-    includeMake === 'never' || 
-    includeMake === 'if-not-apple' && make === 'Apple'
-  ) ? model
+  return includeMake === 'never' ||
+    (includeMake === 'if-not-apple' && make === 'Apple')
+    ? model
     : `${make} ${model}`;
 };
 

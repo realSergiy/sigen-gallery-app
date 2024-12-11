@@ -12,12 +12,12 @@ export default function FocalLengthHeader({
   count,
   dateRange,
 }: {
-  focal: number
-  photos: Photo[]
-  selectedPhoto?: Photo
-  indexNumber?: number
-  count?: number
-  dateRange?: PhotoDateRange
+  focal: number;
+  photos: Photo[];
+  selectedPhoto?: Photo;
+  indexNumber?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <PhotoHeader

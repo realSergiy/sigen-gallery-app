@@ -13,8 +13,8 @@ export default function PhotoFocalLength({
   prefetch,
   countOnHover,
 }: {
-  focal: number
-  countOnHover?: number
+  focal: number;
+  countOnHover?: number;
 } & EntityLinkExternalProps) {
   return (
     <EntityLink

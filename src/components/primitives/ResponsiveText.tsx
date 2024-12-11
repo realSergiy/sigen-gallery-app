@@ -4,15 +4,13 @@ export default function ResponsiveText({
   children,
   shortText,
 }: {
-  children: ReactNode
-  shortText?: string
+  children: ReactNode;
+  shortText?: string;
 }) {
   return (
     <>
       {/* Full text */}
-      <span className="hidden sm:inline">
-        {children}
-      </span>
+      <span className="hidden sm:inline">{children}</span>
       {/* Short text */}
       <span className="sm:hidden" aria-hidden>
         {shortText ?? children}

@@ -9,18 +9,16 @@ export default function Spinner({
   color = 'light-gray',
   className,
 }: {
-  size?: number
-  color?: SpinnerColor
-  className?: string
+  size?: number;
+  color?: SpinnerColor;
+  className?: string;
 }) {
   return (
     <span
       className={clsx(
         'inline-flex',
-        color === 'light-gray' && 
-          'text-gray-300 dark:text-gray-600',
-        color === 'dim' &&
-          'text-dim',
+        color === 'light-gray' && 'text-gray-300 dark:text-gray-600',
+        color === 'dim' && 'text-dim',
         className,
       )}
       style={{
@@ -34,7 +32,7 @@ export default function Spinner({
         viewBox="0 0 12 12"
         fill="none"
         stroke="currentColor"
-        strokeWidth={SIZE_DEFAULT / size * 2}
+        strokeWidth={(SIZE_DEFAULT / size) * 2}
         xmlns="http://www.w3.org/2000/svg"
         className="animate-rotate-pulse"
       >

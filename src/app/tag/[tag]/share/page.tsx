@@ -7,10 +7,11 @@ import type { Metadata } from 'next';
 import { cache } from 'react';
 
 const getPhotosTagDataCachedCached = cache((tag: string) =>
-  getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL }));
+  getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL }),
+);
 
 interface TagProps {
-  params: { tag: string }
+  params: { tag: string };
 }
 
 export async function generateMetadata({
@@ -18,17 +19,15 @@ export async function generateMetadata({
 }: TagProps): Promise<Metadata> {
   const tag = decodeURIComponent(tagFromParams);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosTagDataCachedCached(tag);
+  const [photos, { count, dateRange }] =
+    await getPhotosTagDataCachedCached(tag);
 
-  const {
-    url,
-    title,
-    description,
-    images,
-  } = generateMetaForTag(tag, photos, count, dateRange);
+  const { url, title, description, images } = generateMetaForTag(
+    tag,
+    photos,
+    count,
+    dateRange,
+  );
 
   return {
     title,
@@ -52,16 +51,16 @@ export default async function Share({
 }: TagProps) {
   const tag = decodeURIComponent(tagFromParams);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosTagDataCachedCached(tag);
+  const [photos, { count, dateRange }] =
+    await getPhotosTagDataCachedCached(tag);
 
-  return <>
-    <TagShareModal {...{ tag, photos, count, dateRange }} />
-    <TagOverview
-      {...{ tag, photos, count, dateRange }}
-      animateOnFirstLoadOnly
-    />
-  </>;
+  return (
+    <>
+      <TagShareModal {...{ tag, photos, count, dateRange }} />
+      <TagOverview
+        {...{ tag, photos, count, dateRange }}
+        animateOnFirstLoadOnly
+      />
+    </>
+  );
 }

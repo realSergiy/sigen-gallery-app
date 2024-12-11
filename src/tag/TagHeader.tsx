@@ -13,19 +13,23 @@ export default function TagHeader({
   count,
   dateRange,
 }: {
-  tag: string
-  photos: Photo[]
-  selectedPhoto?: Photo
-  indexNumber?: number
-  count?: number
-  dateRange?: PhotoDateRange
+  tag: string;
+  photos: Photo[];
+  selectedPhoto?: Photo;
+  indexNumber?: number;
+  count?: number;
+  dateRange?: PhotoDateRange;
 }) {
   return (
     <PhotoHeader
       tag={tag}
-      entity={isTagFavs(tag) 
-        ? <FavsTag contrast="high" />
-        : <PhotoTag tag={tag} contrast="high" />}
+      entity={
+        isTagFavs(tag) ? (
+          <FavsTag contrast="high" />
+        ) : (
+          <PhotoTag tag={tag} contrast="high" />
+        )
+      }
       entityVerb="Tagged"
       entityDescription={descriptionForTaggedPhotos(photos, undefined, count)}
       photos={photos}

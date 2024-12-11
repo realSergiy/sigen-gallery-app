@@ -51,20 +51,20 @@ const LISTENER_KEYDOWN = 'keydown';
 const MINIMUM_QUERY_LENGTH = 2;
 
 type CommandKItem = {
-  label: string
-  keywords?: string[]
-  accessory?: ReactNode
-  annotation?: ReactNode
-  annotationAria?: string
-  path?: string
-  action?: () => void | Promise<void>
-}
+  label: string;
+  keywords?: string[];
+  accessory?: ReactNode;
+  annotation?: ReactNode;
+  annotationAria?: string;
+  path?: string;
+  action?: () => void | Promise<void>;
+};
 
 export type CommandKSection = {
-  heading: string
-  accessory?: ReactNode
-  items: CommandKItem[]
-}
+  heading: string;
+  accessory?: ReactNode;
+  items: CommandKItem[];
+};
 
 export default function CommandKClient({
   tags,
@@ -72,10 +72,10 @@ export default function CommandKClient({
   showDebugTools,
   footer,
 }: {
-  tags: Tags
-  serverSections?: CommandKSection[]
-  showDebugTools?: boolean
-  footer?: string
+  tags: Tags;
+  serverSections?: CommandKSection[];
+  showDebugTools?: boolean;
+  footer?: string;
 }) {
   const pathname = usePathname();
 
@@ -99,7 +99,7 @@ export default function CommandKClient({
   } = useAppState();
 
   const isOpenRef = useRef(isOpen);
-  
+
   const [isPending, startTransition] = useTransition();
   const [keyPending, setKeyPending] = useState<string>();
   const shouldCloseAfterPending = useRef(false);
@@ -116,15 +116,20 @@ export default function CommandKClient({
 
   // Raw query values
   const [queryLiveRaw, setQueryLive] = useState('');
-  const [queryDebouncedRaw] =
-    useDebounce(queryLiveRaw, 500, { trailing: true });
+  const [queryDebouncedRaw] = useDebounce(queryLiveRaw, 500, {
+    trailing: true,
+  });
   const isPlaceholderVisible = queryLiveRaw === '';
 
   // Parameterized query values
-  const queryLive = useMemo(() =>
-    queryLiveRaw.trim().toLocaleLowerCase(), [queryLiveRaw]);
-  const queryDebounced = useMemo(() =>
-    queryDebouncedRaw.trim().toLocaleLowerCase(), [queryDebouncedRaw]);
+  const queryLive = useMemo(
+    () => queryLiveRaw.trim().toLocaleLowerCase(),
+    [queryLiveRaw],
+  );
+  const queryDebounced = useMemo(
+    () => queryDebouncedRaw.trim().toLocaleLowerCase(),
+    [queryDebouncedRaw],
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [queriedSections, setQueriedSections] = useState<CommandKSection[]>([]);
@@ -141,7 +146,7 @@ export default function CommandKClient({
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setIsOpen?.((open) => !open);
+        setIsOpen?.(open => !open);
       }
     };
     document.addEventListener(LISTENER_KEYDOWN, down);
@@ -154,19 +159,23 @@ export default function CommandKClient({
       searchPhotosAction(queryDebounced)
         .then(photos => {
           if (isOpenRef.current) {
-            setQueriedSections(photos.length > 0
-              ? [{
-                heading: 'Photos',
-                accessory: <TbPhoto size={14} />,
-                items: photos.map(photo => ({
-                  label: titleForPhoto(photo),
-                  keywords: getKeywordsForPhoto(photo),
-                  annotation: <PhotoDate {...{ photo }} />,
-                  accessory: <PhotoSmall photo={photo} />,
-                  path: pathForPhoto({ photo }),
-                })),
-              }]
-              : []);
+            setQueriedSections(
+              photos.length > 0
+                ? [
+                    {
+                      heading: 'Photos',
+                      accessory: <TbPhoto size={14} />,
+                      items: photos.map(photo => ({
+                        label: titleForPhoto(photo),
+                        keywords: getKeywordsForPhoto(photo),
+                        annotation: <PhotoDate {...{ photo }} />,
+                        accessory: <PhotoSmall photo={photo} />,
+                        path: pathForPhoto({ photo }),
+                      })),
+                    },
+                  ]
+                : [],
+            );
           } else {
             // Ignore stale requests that come in after dialog is closed
             setQueriedSections([]);
@@ -201,16 +210,16 @@ export default function CommandKClient({
     }
   }, [isOpen, setShouldRespondToKeyboardCommands]);
 
-  const tagsIncludingHidden = useMemo(() =>
-    addHiddenToTags(tags, hiddenPhotosCount)
-  , [tags, hiddenPhotosCount]);
+  const tagsIncludingHidden = useMemo(
+    () => addHiddenToTags(tags, hiddenPhotosCount),
+    [tags, hiddenPhotosCount],
+  );
 
   const SECTION_TAGS: CommandKSection = {
     heading: 'Tags',
-    accessory: <FaTag
-      size={10}
-      className="translate-x-[1px] translate-y-[0.75px]"
-    />,
+    accessory: (
+      <FaTag size={10} className="translate-x-[1px] translate-y-[0.75px]" />
+    ),
     items: tagsIncludingHidden.map(({ tag, count }) => ({
       label: formatTag(tag),
       annotation: formatCount(count),
@@ -219,57 +228,74 @@ export default function CommandKClient({
     })),
   };
 
-  const clientSections: CommandKSection[] = [{
-    heading: 'Theme',
-    accessory: <IoInvertModeSharp
-      size={14}
-      className="translate-y-[0.5px] translate-x-[-1px]"
-    />,
-    items: [{
-      label: 'Use System',
-      annotation: <BiDesktop />,
-      action: () => setTheme('system'),
-    }, {
-      label: 'Light Mode',
-      annotation: <BiSun size={16} className="translate-x-[1.25px]" />,
-      action: () => setTheme('light'),
-    }, {
-      label: 'Dark Mode',
-      annotation: <BiMoon className="translate-x-[1px]" />,
-      action: () => setTheme('dark'),
-    }],
-  }];
+  const clientSections: CommandKSection[] = [
+    {
+      heading: 'Theme',
+      accessory: (
+        <IoInvertModeSharp
+          size={14}
+          className="translate-x-[-1px] translate-y-[0.5px]"
+        />
+      ),
+      items: [
+        {
+          label: 'Use System',
+          annotation: <BiDesktop />,
+          action: () => setTheme('system'),
+        },
+        {
+          label: 'Light Mode',
+          annotation: <BiSun size={16} className="translate-x-[1.25px]" />,
+          action: () => setTheme('light'),
+        },
+        {
+          label: 'Dark Mode',
+          annotation: <BiMoon className="translate-x-[1px]" />,
+          action: () => setTheme('dark'),
+        },
+      ],
+    },
+  ];
 
   if (isUserSignedIn && showDebugTools) {
     clientSections.push({
       heading: 'Debug Tools',
       accessory: <RiToolsFill size={16} className="translate-x-[-1px]" />,
-      items: [{
-        label: 'Toggle Photo Matting',
-        action: () => setArePhotosMatted?.(prev => !prev),
-        annotation: arePhotosMatted ? <FaCheck size={12} /> : undefined,
-      }, {
-        label: 'Toggle High Density Grid',
-        action: () => setIsGridHighDensity?.(prev => !prev),
-        annotation: isGridHighDensity ? <FaCheck size={12} /> : undefined,
-      }, {
-        label: 'Toggle Image Fallbacks',
-        action: () => setShouldDebugImageFallbacks?.(prev => !prev),
-        annotation: shouldDebugImageFallbacks
-          ? <FaCheck size={12} />
-          : undefined,
-      }, {
-        label: 'Toggle Baseline Grid',
-        action: () => setShouldShowBaselineGrid?.(prev => !prev),
-        annotation: shouldShowBaselineGrid ? <FaCheck size={12} /> : undefined,
-      }],
+      items: [
+        {
+          label: 'Toggle Photo Matting',
+          action: () => setArePhotosMatted?.(prev => !prev),
+          annotation: arePhotosMatted ? <FaCheck size={12} /> : undefined,
+        },
+        {
+          label: 'Toggle High Density Grid',
+          action: () => setIsGridHighDensity?.(prev => !prev),
+          annotation: isGridHighDensity ? <FaCheck size={12} /> : undefined,
+        },
+        {
+          label: 'Toggle Image Fallbacks',
+          action: () => setShouldDebugImageFallbacks?.(prev => !prev),
+          annotation: shouldDebugImageFallbacks ? (
+            <FaCheck size={12} />
+          ) : undefined,
+        },
+        {
+          label: 'Toggle Baseline Grid',
+          action: () => setShouldShowBaselineGrid?.(prev => !prev),
+          annotation: shouldShowBaselineGrid ? (
+            <FaCheck size={12} />
+          ) : undefined,
+        },
+      ],
     });
   }
 
-  const pagesItems: CommandKItem[] = [{
-    label: 'Home',
-    path: PATH_ROOT,
-  }];
+  const pagesItems: CommandKItem[] = [
+    {
+      label: 'Home',
+      path: PATH_ROOT,
+    },
+  ];
 
   if (GRID_HOMEPAGE_ENABLED) {
     pagesItems.push({
@@ -293,50 +319,65 @@ export default function CommandKClient({
     heading: 'Admin',
     accessory: <BiSolidUser size={15} className="translate-x-[-1px]" />,
     items: isUserSignedIn
-      ? ([{
-        label: 'Manage Photos',
-        annotation: <BiLockAlt />,
-        path: PATH_ADMIN_PHOTOS,
-      }, {
-        label: 'Manage Uploads',
-        annotation: <BiLockAlt />,
-        path: PATH_ADMIN_UPLOADS,
-      }, {
-        label: 'Manage Tags',
-        annotation: <BiLockAlt />,
-        path: PATH_ADMIN_TAGS,
-      }, {
-        label: 'App Config',
-        annotation: <BiLockAlt />,
-        path: PATH_ADMIN_CONFIGURATION,
-      }, {
-        label: selectedPhotoIds === undefined
-          ? 'Select Multiple Photos'
-          : 'Exit Select Multiple Photos',
-        annotation: <BiLockAlt />,
-        path: selectedPhotoIds === undefined
-          ? PATH_GRID_INFERRED
-          : undefined,
-        action: selectedPhotoIds === undefined
-          ? () => setSelectedPhotoIds?.([])
-          : () => setSelectedPhotoIds?.(undefined),
-      }] as CommandKItem[])
-        .concat(showDebugTools
-          ? [{
-            label: 'Baseline Overview',
-            path: PATH_ADMIN_BASELINE,
-          }]
-          : [])
-        .concat({
-          label: 'Sign Out',
-          action: () => {
-            signOutAndRedirectAction().then(() => setUserEmail?.(undefined));
+      ? (
+          [
+            {
+              label: 'Manage Photos',
+              annotation: <BiLockAlt />,
+              path: PATH_ADMIN_PHOTOS,
+            },
+            {
+              label: 'Manage Uploads',
+              annotation: <BiLockAlt />,
+              path: PATH_ADMIN_UPLOADS,
+            },
+            {
+              label: 'Manage Tags',
+              annotation: <BiLockAlt />,
+              path: PATH_ADMIN_TAGS,
+            },
+            {
+              label: 'App Config',
+              annotation: <BiLockAlt />,
+              path: PATH_ADMIN_CONFIGURATION,
+            },
+            {
+              label:
+                selectedPhotoIds === undefined
+                  ? 'Select Multiple Photos'
+                  : 'Exit Select Multiple Photos',
+              annotation: <BiLockAlt />,
+              path:
+                selectedPhotoIds === undefined ? PATH_GRID_INFERRED : undefined,
+              action:
+                selectedPhotoIds === undefined
+                  ? () => setSelectedPhotoIds?.([])
+                  : () => setSelectedPhotoIds?.(undefined),
+            },
+          ] as CommandKItem[]
+        )
+          .concat(
+            showDebugTools
+              ? [
+                  {
+                    label: 'Baseline Overview',
+                    path: PATH_ADMIN_BASELINE,
+                  },
+                ]
+              : [],
+          )
+          .concat({
+            label: 'Sign Out',
+            action: () => {
+              signOutAndRedirectAction().then(() => setUserEmail?.(undefined));
+            },
+          })
+      : [
+          {
+            label: 'Sign In',
+            path: PATH_SIGN_IN,
           },
-        })
-      : [{
-        label: 'Sign In',
-        path: PATH_SIGN_IN,
-      }],
+        ],
   };
 
   return (
@@ -346,26 +387,22 @@ export default function CommandKClient({
       label="Global Command Menu"
       filter={(value, search, keywords) => {
         const searchFormatted = search.trim().toLocaleLowerCase();
-        return (
-          value.toLocaleLowerCase().includes(searchFormatted) ||
+        return value.toLocaleLowerCase().includes(searchFormatted) ||
           keywords?.includes(searchFormatted)
-        ) ? 1 : 0 ;
+          ? 1
+          : 0;
       }}
       loop
     >
-      <Modal
-        anchor='top'
-        onClose={() => setIsOpen?.(false)}
-        fast
-      >
+      <Modal anchor="top" onClose={() => setIsOpen?.(false)} fast>
         <div className="space-y-1.5">
           <div className="relative">
             <Command.Input
-              onChangeCapture={(e) => setQueryLive(e.currentTarget.value)}
+              onChangeCapture={e => setQueryLive(e.currentTarget.value)}
               className={clsx(
                 'w-full !min-w-0',
                 'focus:ring-0',
-                isPlaceholderVisible || isLoading && '!pr-8',
+                isPlaceholderVisible || (isLoading && '!pr-8'),
                 '!border-gray-200 dark:!border-gray-800',
                 'focus:border-gray-200 focus:dark:border-gray-800',
                 'placeholder:text-gray-400/80',
@@ -375,19 +412,21 @@ export default function CommandKClient({
               placeholder="Search photos, views, settings ..."
               disabled={isPending}
             />
-            {isLoading && !isPending &&
-              <span className={clsx(
-                'absolute top-2.5 right-0 w-8',
-                'flex items-center justify-center translate-y-[2px]',
-              )}>
+            {isLoading && !isPending && (
+              <span
+                className={clsx(
+                  'absolute right-0 top-2.5 w-8',
+                  'flex translate-y-[2px] items-center justify-center',
+                )}
+              >
                 <Spinner size={16} />
-              </span>}
+              </span>
+            )}
           </div>
-          <Command.List className={clsx(
-            'relative overflow-y-auto',
-            'max-h-48 sm:max-h-72',
-          )}>
-            <Command.Empty className="mt-1 pl-3 text-dim">
+          <Command.List
+            className={clsx('relative overflow-y-auto', 'max-h-48 sm:max-h-72')}
+          >
+            <Command.Empty className="text-dim mt-1 pl-3">
               {isLoading ? 'Searching ...' : 'No results found'}
             </Command.Empty>
             {queriedSections
@@ -397,18 +436,21 @@ export default function CommandKClient({
               .concat(adminSection)
               .concat(clientSections)
               .filter(({ items }) => items.length > 0)
-              .map(({ heading, accessory, items }) =>
+              .map(({ heading, accessory, items }) => (
                 <Command.Group
                   key={heading}
-                  heading={<div className={clsx(
-                    'flex items-center',
-                    'px-2',
-                    isPending && 'opacity-20',
-                  )}>
-                    {accessory &&
-                      <div className="w-5">{accessory}</div>}
-                    {heading}
-                  </div>}
+                  heading={
+                    <div
+                      className={clsx(
+                        'flex items-center',
+                        'px-2',
+                        isPending && 'opacity-20',
+                      )}
+                    >
+                      {accessory && <div className="w-5">{accessory}</div>}
+                      {heading}
+                    </div>
+                  }
                   className={clsx(
                     'uppercase',
                     'select-none',
@@ -419,50 +461,56 @@ export default function CommandKClient({
                     '[&>*:first-child]:tracking-wider',
                   )}
                 >
-                  {items.map(({
-                    label,
-                    keywords,
-                    accessory,
-                    annotation,
-                    annotationAria,
-                    path,
-                    action,
-                  }) => {
-                    const key = `${heading} ${label}`;
-                    return <CommandKItem
-                      key={key}
-                      label={label}
-                      value={key}
-                      keywords={keywords}
-                      onSelect={() => {
-                        if (action) {
-                          action();
-                          if (!path) { setIsOpen?.(false); }
-                        }
-                        if (path) {
-                          if (path !== pathname) {
-                            setKeyPending(key);
-                            startTransition(async () => {
-                              shouldCloseAfterPending.current = true;
-                              router.push(path, { scroll: true });
-                            });
-                          } else {
-                            setIsOpen?.(false);
-                          }
-                        }
-                      }}
-                      accessory={accessory}
-                      annotation={annotation}
-                      annotationAria={annotationAria}
-                      loading={key === keyPending}
-                      disabled={isPending && key !== keyPending}
-                    />;
-                  })}
-                </Command.Group>)}
-            {footer && !queryLive &&
-              <div className="text-center text-dim pt-3 sm:pt-4">
-                {footer}
-              </div>}
+                  {items.map(
+                    ({
+                      label,
+                      keywords,
+                      accessory,
+                      annotation,
+                      annotationAria,
+                      path,
+                      action,
+                    }) => {
+                      const key = `${heading} ${label}`;
+                      return (
+                        <CommandKItem
+                          key={key}
+                          label={label}
+                          value={key}
+                          keywords={keywords}
+                          onSelect={() => {
+                            if (action) {
+                              action();
+                              if (!path) {
+                                setIsOpen?.(false);
+                              }
+                            }
+                            if (path) {
+                              if (path !== pathname) {
+                                setKeyPending(key);
+                                startTransition(async () => {
+                                  shouldCloseAfterPending.current = true;
+                                  router.push(path, { scroll: true });
+                                });
+                              } else {
+                                setIsOpen?.(false);
+                              }
+                            }
+                          }}
+                          accessory={accessory}
+                          annotation={annotation}
+                          annotationAria={annotationAria}
+                          loading={key === keyPending}
+                          disabled={isPending && key !== keyPending}
+                        />
+                      );
+                    },
+                  )}
+                </Command.Group>
+              ))}
+            {footer && !queryLive && (
+              <div className="text-dim pt-3 text-center sm:pt-4">{footer}</div>
+            )}
           </Command.List>
         </div>
       </Modal>

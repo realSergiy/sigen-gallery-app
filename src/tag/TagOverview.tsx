@@ -9,25 +9,31 @@ export default function TagOverview({
   dateRange,
   animateOnFirstLoadOnly,
 }: {
-  tag: string,
-  photos: Photo[],
-  count: number,
-  dateRange?: PhotoDateRange,
-  animateOnFirstLoadOnly?: boolean,
+  tag: string;
+  photos: Photo[];
+  count: number;
+  dateRange?: PhotoDateRange;
+  animateOnFirstLoadOnly?: boolean;
 }) {
   return (
-    <PhotoGridContainer {...{
-      cacheKey: `tag-${tag}`,
-      photos,
-      count,
-      tag,
-      header: <TagHeader {...{
-        tag,
+    <PhotoGridContainer
+      {...{
+        cacheKey: `tag-${tag}`,
         photos,
         count,
-        dateRange,
-      }} />,
-      animateOnFirstLoadOnly,
-    }} />
+        tag,
+        header: (
+          <TagHeader
+            {...{
+              tag,
+              photos,
+              count,
+              dateRange,
+            }}
+          />
+        ),
+        animateOnFirstLoadOnly,
+      }}
+    />
   );
 }

@@ -8,10 +8,10 @@ export default function HiddenHeader({
   indexNumber,
   count,
 }: {
-  photos: Photo[]
-  selectedPhoto?: Photo
-  indexNumber?: number
-  count: number
+  photos: Photo[];
+  selectedPhoto?: Photo;
+  indexNumber?: number;
+  count: number;
 }) {
   return (
     <PhotoHeader

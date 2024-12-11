@@ -4,16 +4,17 @@ import SiteGrid from './SiteGrid';
 
 export default function PageSpinner() {
   return (
-    <SiteGrid contentMain={
-      <div className={clsx(
-        'flex justify-center items-center',
-        'w-full min-h-[20rem] sm:min-h-[30rem]',
-      )}>
-        <Spinner
-          size={24}
-          color="light-gray"
-        />
-      </div>
-    } />
+    <SiteGrid
+      contentMain={
+        <div
+          className={clsx(
+            'flex items-center justify-center',
+            'min-h-[20rem] w-full sm:min-h-[30rem]',
+          )}
+        >
+          <Spinner size={24} color="light-gray" />
+        </div>
+      }
+    />
   );
 }

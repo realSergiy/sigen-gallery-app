@@ -8,9 +8,7 @@ export const roundToString = (
   return includeZero ? result.toFixed(place) : result.toString();
 };
 
-export const roundToNumber = (
-  ...args: Parameters<typeof roundToString>
-) =>
+export const roundToNumber = (...args: Parameters<typeof roundToString>) =>
   parseFloat(roundToString(...args));
 
 const gcd = (a: number, b: number): number => {
@@ -34,12 +32,12 @@ const formatDecimalToFraction = (_decimal: number) => {
 
     let denominator = Math.pow(10, length);
     let numerator = decimal * denominator;
-    
+
     const divisor = gcd(numerator, denominator);
-  
+
     numerator /= divisor;
     denominator /= divisor;
-  
+
     return `${Math.floor(numerator)}/${Math.floor(denominator)}`;
   }
 };
@@ -51,9 +49,7 @@ const MAX_FRACTION_LENGTH = 4; // Permit 1/64 but not 1/100
 export const formatNumberToFraction = (number: number) => {
   const sign = number >= 0 ? '+' : '-';
 
-  let decimal = (1 - Math.abs(number % 1)) > STICKY_THRESHOLD
-    ? number % 1
-    : 0;
+  let decimal = 1 - Math.abs(number % 1) > STICKY_THRESHOLD ? number % 1 : 0;
   if (decimal !== 0) {
     for (const stickyDecimal of STICKY_DECIMALS) {
       if (Math.abs(Math.abs(decimal) - stickyDecimal) < STICKY_THRESHOLD) {
@@ -69,15 +65,13 @@ export const formatNumberToFraction = (number: number) => {
     integer += 1;
   }
 
-  const fraction = decimal !== 0
-    ? formatDecimalToFraction(Math.abs(decimal))
-    : '';
+  const fraction =
+    decimal !== 0 ? formatDecimalToFraction(Math.abs(decimal)) : '';
 
   // Ensure fractions aren't too long
   if (!fraction || fraction.length <= MAX_FRACTION_LENGTH) {
-    const integerString = integer > 0
-      ? fraction ? `${integer} ` : integer
-      : fraction ? '' : '0';
+    const integerString =
+      integer > 0 ? (fraction ? `${integer} ` : integer) : fraction ? '' : '0';
     return `${sign}${integerString}${fraction}`;
   } else {
     const decimalFormatted = decimal.toPrecision(2).replace(/^-*0+/, '');

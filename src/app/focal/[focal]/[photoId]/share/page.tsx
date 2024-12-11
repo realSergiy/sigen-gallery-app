@@ -7,13 +7,15 @@ import { redirect } from 'next/navigation';
 export default async function Share({
   params: { photoId, focal: focalString },
 }: {
-  params: { photoId: string, focal: string }
+  params: { photoId: string; focal: string };
 }) {
   const focal = getFocalLengthFromString(focalString);
 
   const photo = await getPhotoCached(photoId);
 
-  if (!photo) { return redirect(PATH_ROOT); }
+  if (!photo) {
+    return redirect(PATH_ROOT);
+  }
 
   return <PhotoShareModal {...{ photo, focal }} />;
 }

@@ -17,13 +17,14 @@ import { getPhotosMeta } from '@/photo/db/query';
 import { getFocalLengthFromString } from '@/focal';
 
 const getPhotosNearIdCachedCached = cache((photoId: string, focal: number) =>
-  getPhotosNearIdCached(
-    photoId,
-    { focal, limit: RELATED_GRID_PHOTOS_TO_SHOW + 2 },
-  ));
+  getPhotosNearIdCached(photoId, {
+    focal,
+    limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
+  }),
+);
 
 interface PhotoFocalLengthProps {
-  params: { photoId: string, focal: string }
+  params: { photoId: string; focal: string };
 }
 
 export async function generateMetadata({
@@ -33,7 +34,9 @@ export async function generateMetadata({
 
   const { photo } = await getPhotosNearIdCachedCached(photoId, focal);
 
-  if (!photo) { return {}; }
+  if (!photo) {
+    return {};
+  }
 
   const title = titleForPhoto(photo);
   const description = descriptionForPhoto(photo);
@@ -67,20 +70,26 @@ export default async function PhotoFocalLengthPage({
   const { photo, photos, photosGrid, indexNumber } =
     await getPhotosNearIdCachedCached(photoId, focal);
 
-  if (!photo) { redirect(PATH_ROOT); }
+  if (!photo) {
+    redirect(PATH_ROOT);
+  }
 
   const { count, dateRange } = await getPhotosMeta({ focal });
 
-  return <>
-    {children}
-    <PhotoDetailPage {...{
-      photo,
-      photos,
-      photosGrid,
-      focal,
-      indexNumber,
-      count,
-      dateRange,
-    }} />
-  </>;
+  return (
+    <>
+      {children}
+      <PhotoDetailPage
+        {...{
+          photo,
+          photos,
+          photosGrid,
+          focal,
+          indexNumber,
+          count,
+          dateRange,
+        }}
+      />
+    </>
+  );
 }

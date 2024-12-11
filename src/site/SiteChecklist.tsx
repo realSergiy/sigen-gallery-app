@@ -6,14 +6,20 @@ import SiteChecklistClient from './SiteChecklistClient';
 export default function SiteChecklist({
   simplifiedView,
 }: {
-  simplifiedView?: boolean
+  simplifiedView?: boolean;
 }) {
   return (
-    <Suspense fallback={<SiteChecklistClient {...{
-      ...CONFIG_CHECKLIST_STATUS,
-      isTestingConnections: true,
-      simplifiedView,
-    }} /> }>
+    <Suspense
+      fallback={
+        <SiteChecklistClient
+          {...{
+            ...CONFIG_CHECKLIST_STATUS,
+            isTestingConnections: true,
+            simplifiedView,
+          }}
+        />
+      }
+    >
       <SiteChecklistServer {...{ simplifiedView }} />
     </Suspense>
   );

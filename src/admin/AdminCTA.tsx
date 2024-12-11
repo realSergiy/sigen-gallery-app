@@ -14,19 +14,18 @@ export default function AdminCTA() {
 
   return (
     <div className="flex justify-center pt-4">
-      {isUserSignedIn
-        ? <PhotoUpload
+      {isUserSignedIn ? (
+        <PhotoUpload
           showUploadStatus={false}
           isUploading={isUploading}
           setIsUploading={setIsUploading}
         />
-        : <Link
-          href={PATH_ADMIN_PHOTOS}
-          className="button primary"
-        >
+      ) : (
+        <Link href={PATH_ADMIN_PHOTOS} className="button primary">
           <span>Admin Dashboard</span>
           <FaArrowRight size={10} />
-        </Link>}
+        </Link>
+      )}
     </div>
   );
 }

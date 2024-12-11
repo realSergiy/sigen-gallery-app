@@ -8,19 +8,16 @@ import {
   absolutePathForFilmSimulation,
   absolutePathForFilmSimulationImage,
 } from '@/site/paths';
-import {
-  FujifilmSimulation,
-  labelForFilmSimulation,
-} from '@/vendors/fujifilm';
+import { FujifilmSimulation, labelForFilmSimulation } from '@/vendors/fujifilm';
 
 export type FilmSimulation = FujifilmSimulation;
 
 export type FilmSimulationWithCount = {
-  simulation: FilmSimulation
-  count: number
-}
+  simulation: FilmSimulation;
+  count: number;
+};
 
-export type FilmSimulations = FilmSimulationWithCount[]
+export type FilmSimulations = FilmSimulationWithCount[];
 
 export const sortFilmSimulationsWithCount = (
   a: FilmSimulationWithCount,
@@ -35,14 +32,13 @@ export const titleForFilmSimulation = (
   simulation: FilmSimulation,
   photos: Photo[],
   explicitCount?: number,
-) => [
-  labelForFilmSimulation(simulation).large,
-  photoQuantityText(explicitCount ?? photos.length),
-].join(' ');
-
-export const shareTextForFilmSimulation = (
-  simulation: FilmSimulation,
 ) =>
+  [
+    labelForFilmSimulation(simulation).large,
+    photoQuantityText(explicitCount ?? photos.length),
+  ].join(' ');
+
+export const shareTextForFilmSimulation = (simulation: FilmSimulation) =>
   `Photos shot on Fujifilm ${labelForFilmSimulation(simulation).large}`;
 
 export const descriptionForFilmSimulationPhotos = (

@@ -16,9 +16,9 @@ const openai = AI_TEXT_GENERATION_ENABLED
 
 const ratelimit = HAS_VERCEL_KV
   ? new Ratelimit({
-    redis: kv,
-    limiter: Ratelimit.slidingWindow(RATE_LIMIT_MAX_QUERIES_PER_HOUR, '1h'),
-  })
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(RATE_LIMIT_MAX_QUERIES_PER_HOUR, '1h'),
+    })
   : undefined;
 
 // Allows 100 requests per hour
@@ -41,24 +41,29 @@ const checkRateLimitAndBailIfNecessary = async () => {
 const getImageTextArgs = (
   imageBase64: string,
   query: string,
-): (
-  Parameters<typeof streamText>[0] &
-  Parameters<typeof generateText>[0]
-) | undefined => openai ? {
-  model: openai('gpt-4o'),
-  messages: [{
-    'role': 'user',
-    'content': [
-      {
-        'type': 'text',
-        'text': query,
-      }, {
-        'type': 'image',
-        'image': removeBase64Prefix(imageBase64),
-      },
-    ],
-  }],
-} : undefined;
+):
+  | (Parameters<typeof streamText>[0] & Parameters<typeof generateText>[0])
+  | undefined =>
+  openai
+    ? {
+        model: openai('gpt-4o'),
+        messages: [
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'text',
+                text: query,
+              },
+              {
+                type: 'image',
+                image: removeBase64Prefix(imageBase64),
+              },
+            ],
+          },
+        ],
+      }
+    : undefined;
 
 export const streamOpenAiImageQuery = async (
   imageBase64: string,
@@ -92,8 +97,7 @@ export const generateOpenAiImageQuery = async (
   const args = getImageTextArgs(imageBase64, query);
 
   if (args) {
-    return generateText(args)
-      .then(({ text }) => cleanUpAiTextResponse(text));
+    return generateText(args).then(({ text }) => cleanUpAiTextResponse(text));
   }
 };
 
@@ -103,15 +107,17 @@ export const testOpenAiConnection = async () => {
   if (openai) {
     return generateText({
       model: openai('gpt-4o'),
-      messages: [{
-        'role': 'user',
-        'content': [
-          {
-            'type': 'text',
-            'text': 'Test connection',
-          },
-        ],
-      }],
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: 'Test connection',
+            },
+          ],
+        },
+      ],
     });
   }
 };

@@ -8,10 +8,11 @@ import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
 const getPhotosTagDataCachedCached = cache((tag: string) =>
-  getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL}));
+  getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL }),
+);
 
 interface TagProps {
-  params: { tag: string }
+  params: { tag: string };
 }
 
 export async function generateMetadata({
@@ -19,19 +20,19 @@ export async function generateMetadata({
 }: TagProps): Promise<Metadata> {
   const tag = decodeURIComponent(tagFromParams);
 
-  const [
+  const [photos, { count, dateRange }] =
+    await getPhotosTagDataCachedCached(tag);
+
+  if (photos.length === 0) {
+    return {};
+  }
+
+  const { url, title, description, images } = generateMetaForTag(
+    tag,
     photos,
-    { count, dateRange },
-  ] = await getPhotosTagDataCachedCached(tag);
-
-  if (photos.length === 0) { return {}; }
-
-  const {
-    url,
-    title,
-    description,
-    images,
-  } = generateMetaForTag(tag, photos, count, dateRange);
+    count,
+    dateRange,
+  );
 
   return {
     title,
@@ -52,17 +53,15 @@ export async function generateMetadata({
 
 export default async function TagPage({
   params: { tag: tagFromParams },
-}:TagProps) {
+}: TagProps) {
   const tag = decodeURIComponent(tagFromParams);
 
-  const [
-    photos,
-    { count, dateRange },
-  ] = await getPhotosTagDataCachedCached(tag);
+  const [photos, { count, dateRange }] =
+    await getPhotosTagDataCachedCached(tag);
 
-  if (photos.length === 0) { redirect(PATH_ROOT); }
+  if (photos.length === 0) {
+    redirect(PATH_ROOT);
+  }
 
-  return (
-    <TagOverview {...{ tag, photos, count, dateRange }} />
-  );
+  return <TagOverview {...{ tag, photos, count, dateRange }} />;
 }

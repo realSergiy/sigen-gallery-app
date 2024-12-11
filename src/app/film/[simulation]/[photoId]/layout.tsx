@@ -13,22 +13,18 @@ import {
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
 import { ReactNode, cache } from 'react';
 import { FilmSimulation } from '@/simulation';
-import {
-  getPhotosMetaCached,
-  getPhotosNearIdCached,
-} from '@/photo/cache';
+import { getPhotosMetaCached, getPhotosNearIdCached } from '@/photo/cache';
 
-const getPhotosNearIdCachedCached = cache((
-  photoId: string,
-  simulation: FilmSimulation,
-) =>
-  getPhotosNearIdCached(
-    photoId,
-    { simulation, limit: RELATED_GRID_PHOTOS_TO_SHOW + 2 },
-  ));
+const getPhotosNearIdCachedCached = cache(
+  (photoId: string, simulation: FilmSimulation) =>
+    getPhotosNearIdCached(photoId, {
+      simulation,
+      limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
+    }),
+);
 
 interface PhotoFilmSimulationProps {
-  params: { photoId: string, simulation: FilmSimulation }
+  params: { photoId: string; simulation: FilmSimulation };
 }
 
 export async function generateMetadata({
@@ -36,7 +32,9 @@ export async function generateMetadata({
 }: PhotoFilmSimulationProps): Promise<Metadata> {
   const { photo } = await getPhotosNearIdCachedCached(photoId, simulation);
 
-  if (!photo) { return {}; }
+  if (!photo) {
+    return {};
+  }
 
   const title = titleForPhoto(photo);
   const description = descriptionForPhoto(photo);
@@ -68,20 +66,26 @@ export default async function PhotoFilmSimulationPage({
   const { photo, photos, photosGrid, indexNumber } =
     await getPhotosNearIdCachedCached(photoId, simulation);
 
-  if (!photo) { redirect(PATH_ROOT); }
+  if (!photo) {
+    redirect(PATH_ROOT);
+  }
 
   const { count, dateRange } = await getPhotosMetaCached({ simulation });
 
-  return <>
-    {children}
-    <PhotoDetailPage {...{
-      photo,
-      photos,
-      photosGrid,
-      simulation,
-      indexNumber,
-      count,
-      dateRange,
-    }} />
-  </>;
+  return (
+    <>
+      {children}
+      <PhotoDetailPage
+        {...{
+          photo,
+          photos,
+          photosGrid,
+          simulation,
+          indexNumber,
+          count,
+          dateRange,
+        }}
+      />
+    </>
+  );
 }

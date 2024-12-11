@@ -12,7 +12,7 @@ import {
 export const maxDuration = 60;
 
 interface Params {
-  params: { uploadPath: string }
+  params: { uploadPath: string };
 }
 
 export default async function UploadPage({ params: { uploadPath } }: Params) {
@@ -27,10 +27,7 @@ export default async function UploadPage({ params: { uploadPath } }: Params) {
     generateResizedImage: AI_TEXT_GENERATION_ENABLED,
   });
 
-  if (
-    !photoFormExif ||
-    (AI_TEXT_GENERATION_ENABLED && !imageThumbnailBase64)
-  ) {
+  if (!photoFormExif || (AI_TEXT_GENERATION_ENABLED && !imageThumbnailBase64)) {
     redirect(PATH_ADMIN);
   }
 
@@ -41,14 +38,16 @@ export default async function UploadPage({ params: { uploadPath } }: Params) {
   const textFieldsToAutoGenerate = AI_TEXT_AUTO_GENERATED_FIELDS;
 
   return (
-    <UploadPageClient {...{
-      blobId,
-      photoFormExif,
-      uniqueTags,
-      hasAiTextGeneration,
-      textFieldsToAutoGenerate,
-      imageThumbnailBase64,
-      shouldStripGpsData,
-    }} />
+    <UploadPageClient
+      {...{
+        blobId,
+        photoFormExif,
+        uniqueTags,
+        hasAiTextGeneration,
+        textFieldsToAutoGenerate,
+        imageThumbnailBase64,
+        shouldStripGpsData,
+      }}
+    />
   );
-};
+}

@@ -18,38 +18,41 @@ export default function ViewSwitcher({
   currentSelection,
   showAdmin,
 }: {
-  currentSelection?: SwitcherSelection
-  showAdmin?: boolean
+  currentSelection?: SwitcherSelection;
+  showAdmin?: boolean;
 }) {
   const { setIsCommandKOpen } = useAppState();
 
-  const renderItemFeed = () =>
+  const renderItemFeed = () => (
     <SwitcherItem
       icon={<IconFeed />}
       href={PATH_FEED_INFERRED}
       active={currentSelection === 'feed'}
       noPadding
-    />;
+    />
+  );
 
-  const renderItemGrid = () =>
+  const renderItemGrid = () => (
     <SwitcherItem
       icon={<IconGrid />}
       href={PATH_GRID_INFERRED}
       active={currentSelection === 'grid'}
       noPadding
-    />;
+    />
+  );
 
   return (
     <div className="flex gap-1 sm:gap-2">
       <Switcher>
         {GRID_HOMEPAGE_ENABLED ? renderItemGrid() : renderItemFeed()}
         {GRID_HOMEPAGE_ENABLED ? renderItemFeed() : renderItemGrid()}
-        {showAdmin &&
+        {showAdmin && (
           <SwitcherItem
             icon={<BiLockAlt size={16} className="translate-y-[-0.5px]" />}
             href={PATH_ADMIN_PHOTOS}
             active={currentSelection === 'admin'}
-          />}
+          />
+        )}
       </Switcher>
       <Switcher type="borderless">
         <SwitcherItem

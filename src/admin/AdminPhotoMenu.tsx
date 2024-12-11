@@ -6,7 +6,7 @@ export default async function AdminPhotoMenu(
   props: ComponentProps<typeof AdminPhotoMenuClient>,
 ) {
   const session = await authCachedSafe();
-  return Boolean(session?.user?.email)
-    ? <AdminPhotoMenuClient {...props} />
-    : null;
+  return Boolean(session?.user?.email) ? (
+    <AdminPhotoMenuClient {...props} />
+  ) : null;
 }

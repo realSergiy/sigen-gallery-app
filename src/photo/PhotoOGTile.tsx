@@ -1,8 +1,4 @@
-import {
-  Photo,
-  descriptionForPhoto,
-  titleForPhoto,
-} from '@/photo';
+import { Photo, descriptionForPhoto, titleForPhoto } from '@/photo';
 import { absolutePathForPhotoImage, pathForPhoto } from '@/site/paths';
 import OGTile from '@/components/OGTile';
 
@@ -17,26 +13,28 @@ export default function PhotoOGTile({
   retryTime,
   onVisible,
 }: {
-  photo: Photo
-  loadingState?: OGLoadingState
-  onLoad?: () => void
-  onFail?: () => void
-  riseOnHover?: boolean
-  retryTime?: number
-  onVisible?: () => void
+  photo: Photo;
+  loadingState?: OGLoadingState;
+  onLoad?: () => void;
+  onFail?: () => void;
+  riseOnHover?: boolean;
+  retryTime?: number;
+  onVisible?: () => void;
 }) {
   return (
-    <OGTile {...{
-      title: titleForPhoto(photo),
-      description: descriptionForPhoto(photo),
-      path: pathForPhoto({ photo }),
-      pathImageAbsolute: absolutePathForPhotoImage(photo),
-      loadingState: loadingStateExternal,
-      onLoad,
-      onFail,
-      riseOnHover,
-      retryTime,
-      onVisible,
-    }}/>
+    <OGTile
+      {...{
+        title: titleForPhoto(photo),
+        description: descriptionForPhoto(photo),
+        path: pathForPhoto({ photo }),
+        pathImageAbsolute: absolutePathForPhotoImage(photo),
+        loadingState: loadingStateExternal,
+        onLoad,
+        onFail,
+        riseOnHover,
+        retryTime,
+        onVisible,
+      }}
+    />
   );
-};
+}

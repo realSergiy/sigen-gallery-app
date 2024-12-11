@@ -9,16 +9,19 @@ export default function PhotoTags({
   contrast,
   prefetch,
 }: {
-  tags: string[]
+  tags: string[];
 } & EntityLinkExternalProps) {
   return (
     <div className="flex flex-col">
-      {tags.map(tag =>
+      {tags.map(tag => (
         <Fragment key={tag}>
-          {isTagFavs(tag)
-            ? <FavsTag {...{ contrast, prefetch }} />
-            : <PhotoTag {...{ tag, contrast, prefetch }} />}
-        </Fragment>)}
+          {isTagFavs(tag) ? (
+            <FavsTag {...{ contrast, prefetch }} />
+          ) : (
+            <PhotoTag {...{ tag, contrast, prefetch }} />
+          )}
+        </Fragment>
+      ))}
     </div>
   );
 }

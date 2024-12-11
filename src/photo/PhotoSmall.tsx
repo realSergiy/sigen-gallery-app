@@ -23,11 +23,11 @@ export default function PhotoSmall({
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   onVisible,
 }: {
-  photo: Photo
-  selected?: boolean
-  className?: string
-  prefetch?: boolean
-  onVisible?: () => void
+  photo: Photo;
+  selected?: boolean;
+  className?: string;
+  prefetch?: boolean;
+  onVisible?: () => void;
 } & PhotoSetAttributes) {
   const ref = useRef<HTMLAnchorElement>(null);
 
@@ -42,7 +42,7 @@ export default function PhotoSmall({
         'active:brightness-75',
         selected && 'brightness-50',
         'min-w-[50px]',
-        'rounded-[3px] overflow-hidden',
+        'overflow-hidden rounded-[3px]',
         'border-subtle',
       )}
       prefetch={prefetch}
@@ -56,4 +56,4 @@ export default function PhotoSmall({
       />
     </Link>
   );
-};
+}

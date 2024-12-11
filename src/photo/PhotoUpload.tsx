@@ -15,28 +15,25 @@ export default function PhotoUpload({
   showUploadStatus,
   debug,
 }: {
-  shouldResize?: boolean
-  onLastUpload?: () => Promise<void>
-  isUploading: boolean
-  setIsUploading: (isUploading: boolean) => void
-  showUploadStatus?: boolean
-  debug?: boolean
+  shouldResize?: boolean;
+  onLastUpload?: () => Promise<void>;
+  isUploading: boolean;
+  setIsUploading: (isUploading: boolean) => void;
+  showUploadStatus?: boolean;
+  debug?: boolean;
 }) {
   const [uploadError, setUploadError] = useState<string>();
   const [debugDownload, setDebugDownload] = useState<{
-    href: string
-    fileName: string
+    href: string;
+    fileName: string;
   }>();
 
   const router = useRouter();
 
   return (
-    <div className={clsx(
-      'space-y-4',
-      isUploading && 'cursor-not-allowed',
-    )}>
+    <div className={clsx('space-y-4', isUploading && 'cursor-not-allowed')}>
       <div className="flex items-center gap-8">
-        <form className="flex items-center min-w-0">
+        <form className="flex min-w-0 items-center">
           <ImageInput
             loading={isUploading}
             shouldResize={shouldResize}
@@ -46,7 +43,7 @@ export default function PhotoUpload({
             }}
             onBlobReady={async ({
               blob,
-              extension, 
+              extension,
               hasMultipleUploads,
               isLastBlob,
             }) => {
@@ -58,10 +55,7 @@ export default function PhotoUpload({
                 setIsUploading(false);
                 setUploadError('');
               } else {
-                return uploadPhotoFromClient(
-                  blob,
-                  extension,
-                )
+                return uploadPhotoFromClient(blob, extension)
                   .then(async url => {
                     if (isLastBlob) {
                       await onLastUpload?.();
@@ -85,18 +79,16 @@ export default function PhotoUpload({
           />
         </form>
       </div>
-      {debug && debugDownload &&
+      {debug && debugDownload && (
         <a
           className="block"
           href={debugDownload.href}
           download={debugDownload.fileName}
         >
           Download
-        </a>}
-      {uploadError &&
-        <div className="text-error">
-          {uploadError}
-        </div>}
+        </a>
+      )}
+      {uploadError && <div className="text-error">{uploadError}</div>}
     </div>
   );
-};
+}

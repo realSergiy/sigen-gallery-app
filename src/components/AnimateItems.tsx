@@ -10,23 +10,23 @@ const IGNORE_CAN_START = true;
 export type AnimationType = 'none' | 'scale' | 'left' | 'right' | 'bottom';
 
 export interface AnimationConfig {
-  type?: AnimationType
-  duration?: number
-  staggerDelay?: number
-  scaleOffset?: number
-  distanceOffset?: number
+  type?: AnimationType;
+  duration?: number;
+  staggerDelay?: number;
+  scaleOffset?: number;
+  distanceOffset?: number;
 }
 
 interface Props extends AnimationConfig {
-  className?: string
-  classNameItem?: string
-  items: ReactNode[]
-  itemKeys?: string[]
-  canStart?: boolean
-  animateFromAppState?: boolean
-  animateOnFirstLoadOnly?: boolean
-  staggerOnFirstLoadOnly?: boolean
-  onAnimationComplete?: () => void
+  className?: string;
+  classNameItem?: string;
+  items: ReactNode[];
+  itemKeys?: string[];
+  canStart?: boolean;
+  animateFromAppState?: boolean;
+  animateOnFirstLoadOnly?: boolean;
+  staggerOnFirstLoadOnly?: boolean;
+  onAnimationComplete?: () => void;
 }
 
 function AnimateItems({
@@ -45,22 +45,19 @@ function AnimateItems({
   staggerOnFirstLoadOnly,
   onAnimationComplete,
 }: Props) {
-  const {
-    hasLoaded,
-    nextPhotoAnimation,
-    clearNextPhotoAnimation,
-  } = useAppState();
+  const { hasLoaded, nextPhotoAnimation, clearNextPhotoAnimation } =
+    useAppState();
 
   const prefersReducedMotion = usePrefersReducedMotion();
-  
+
   const hasLoadedInitial = useRef(hasLoaded);
   const nextPhotoAnimationInitial = useRef(nextPhotoAnimation);
 
-  const shouldAnimate = type !== 'none' &&
+  const shouldAnimate =
+    type !== 'none' &&
     !prefersReducedMotion &&
     !(animateOnFirstLoadOnly && hasLoadedInitial.current);
-  const shouldStagger =
-    !(staggerOnFirstLoadOnly && hasLoadedInitial.current);
+  const shouldStagger = !(staggerOnFirstLoadOnly && hasLoadedInitial.current);
 
   const typeResolved = animateFromAppState
     ? (nextPhotoAnimationInitial.current?.type ?? type)
@@ -72,22 +69,26 @@ function AnimateItems({
 
   const getInitialVariant = (): Variant => {
     switch (typeResolved) {
-    case 'left': return {
-      opacity: 0,
-      transform: `translateX(${distanceOffset}px)`,
-    };
-    case 'right': return {
-      opacity: 0,
-      transform: `translateX(${-distanceOffset}px)`,
-    };
-    case 'bottom': return {
-      opacity: 0,
-      transform: `translateY(${distanceOffset}px)`,
-    };
-    default: return {
-      opacity: 0,
-      transform: `translateY(${distanceOffset}px) scale(${scaleOffset})`,
-    };
+      case 'left':
+        return {
+          opacity: 0,
+          transform: `translateX(${distanceOffset}px)`,
+        };
+      case 'right':
+        return {
+          opacity: 0,
+          transform: `translateX(${-distanceOffset}px)`,
+        };
+      case 'bottom':
+        return {
+          opacity: 0,
+          transform: `translateY(${distanceOffset}px)`,
+        };
+      default:
+        return {
+          opacity: 0,
+          transform: `translateY(${distanceOffset}px) scale(${scaleOffset})`,
+        };
     }
   };
 
@@ -96,14 +97,17 @@ function AnimateItems({
       className={className}
       initial={shouldAnimate ? 'hidden' : false}
       animate={canStart || IGNORE_CAN_START ? 'show' : 'hidden'}
-      variants={shouldStagger
-        ? {
-          show: {
-            transition: {
-              staggerChildren: staggerDelay,
-            },
-          },
-        } : undefined}
+      variants={
+        shouldStagger
+          ? {
+              show: {
+                transition: {
+                  staggerChildren: staggerDelay,
+                },
+              },
+            }
+          : undefined
+      }
       onAnimationComplete={() => {
         if (animateFromAppState) {
           clearNextPhotoAnimation?.();
@@ -111,7 +115,7 @@ function AnimateItems({
         onAnimationComplete?.();
       }}
     >
-      {items.map((item, index) =>
+      {items.map((item, index) => (
         <motion.div
           key={itemKeys ? itemKeys[index] : index}
           className={classNameItem}
@@ -128,9 +132,10 @@ function AnimateItems({
           }}
         >
           {item}
-        </motion.div>)}
+        </motion.div>
+      ))}
     </motion.div>
   );
-};
+}
 
 export default AnimateItems;

@@ -11,9 +11,9 @@ export default function DeleteUploadButton({
   shouldRedirectToAdminPhotos,
   onDelete,
 }: {
-  url: string
-  shouldRedirectToAdminPhotos?: boolean
-  onDelete?: () => void
+  url: string;
+  shouldRedirectToAdminPhotos?: boolean;
+  onDelete?: () => void;
 }) {
   const router = useRouter();
 

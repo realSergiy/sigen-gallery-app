@@ -8,8 +8,8 @@ export default function PhotosLargeInfinite({
   initialOffset,
   itemsPerPage,
 }: {
-  initialOffset: number
-  itemsPerPage: number
+  initialOffset: number;
+  itemsPerPage: number;
 }) {
   return (
     <InfinitePhotoScroll
@@ -18,12 +18,13 @@ export default function PhotosLargeInfinite({
       itemsPerPage={itemsPerPage}
       wrapMoreButtonInGrid
     >
-      {({ photos, onLastPhotoVisible, revalidatePhoto }) =>
+      {({ photos, onLastPhotoVisible, revalidatePhoto }) => (
         <PhotosLarge
           photos={photos}
           onLastPhotoVisible={onLastPhotoVisible}
           revalidatePhoto={revalidatePhoto}
-        />}
+        />
+      )}
     </InfinitePhotoScroll>
   );
 }

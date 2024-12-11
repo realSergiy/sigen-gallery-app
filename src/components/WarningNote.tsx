@@ -6,8 +6,8 @@ export default function WarningNote({
   className,
   children,
 }: {
-  className?: string
-  children: ReactNode
+  className?: string;
+  children: ReactNode;
 }) {
   return (
     <Note

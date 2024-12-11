@@ -13,11 +13,11 @@ export default function PathLoaderButton({
   children,
   ...props
 }: {
-  path: string
-  prefetch?: boolean
-  loaderDelay?: number
-  shouldScroll?: boolean
-  shouldReplace?: boolean
+  path: string;
+  prefetch?: boolean;
+  loaderDelay?: number;
+  shouldScroll?: boolean;
+  shouldReplace?: boolean;
 } & ComponentProps<typeof LoaderButton>) {
   const router = useRouter();
 

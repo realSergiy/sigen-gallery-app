@@ -12,22 +12,16 @@ export const VERCEL_BLOB_BASE_URL = VERCEL_BLOB_STORE_ID
   : undefined;
 
 export const isUrlFromVercelBlob = (url?: string) =>
-  VERCEL_BLOB_BASE_URL &&
-  url?.startsWith(VERCEL_BLOB_BASE_URL);
+  VERCEL_BLOB_BASE_URL && url?.startsWith(VERCEL_BLOB_BASE_URL);
 
 export const vercelBlobUploadFromClient = async (
   file: File | Blob,
   fileName: string,
 ): Promise<string> =>
-  upload(
-    fileName,
-    file,
-    {
-      access: 'public',
-      handleUploadUrl: PATH_API_VERCEL_BLOB_UPLOAD,
-    },
-  )
-    .then(({ url }) => url);
+  upload(fileName, file, {
+    access: 'public',
+    handleUploadUrl: PATH_API_VERCEL_BLOB_UPLOAD,
+  }).then(({ url }) => url);
 
 export const vercelBlobPut = (
   file: Buffer,
@@ -36,29 +30,25 @@ export const vercelBlobPut = (
   put(fileName, file, {
     addRandomSuffix: false,
     access: 'public',
-  })
-    .then(({ url }) => url);
+  }).then(({ url }) => url);
 
 export const vercelBlobCopy = (
   sourceUrl: string,
   destinationFileName: string,
   addRandomSuffix?: boolean,
 ): Promise<string> =>
-  copy(
-    sourceUrl,
-    destinationFileName,
-    {
-      access: 'public',
-      addRandomSuffix,
-    },
-  )
-    .then(({ url }) => url);
+  copy(sourceUrl, destinationFileName, {
+    access: 'public',
+    addRandomSuffix,
+  }).then(({ url }) => url);
 
 export const vercelBlobDelete = (fileName: string) => del(fileName);
 
-export const vercelBlobList = (prefix: string) => list({ prefix })
-  .then(({ blobs }) => blobs.map(({ url, uploadedAt }) => ({
-    url,
-    fileName: fileNameForStorageUrl(url),
-    uploadedAt,
-  })));
+export const vercelBlobList = (prefix: string) =>
+  list({ prefix }).then(({ blobs }) =>
+    blobs.map(({ url, uploadedAt }) => ({
+      url,
+      fileName: fileNameForStorageUrl(url),
+      uploadedAt,
+    })),
+  );

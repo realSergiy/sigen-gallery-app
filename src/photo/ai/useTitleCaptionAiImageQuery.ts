@@ -2,16 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import useAiImageQuery from './useAiImageQuery';
 import { parseTitleAndCaption } from '.';
 
-export default function useTitleCaptionAiImageQuery(
-  imageBase64?: string,
-) {
-  const [
-    request,
-    text,
-    isLoading,
-    _reset,
-    error,
-  ] = useAiImageQuery(imageBase64, 'title-and-caption');
+export default function useTitleCaptionAiImageQuery(imageBase64?: string) {
+  const [request, text, isLoading, _reset, error] = useAiImageQuery(
+    imageBase64,
+    'title-and-caption',
+  );
 
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');

@@ -13,17 +13,14 @@ export default function PhotoTag({
   prefetch,
   countOnHover,
 }: {
-  tag: string
-  countOnHover?: number
+  tag: string;
+  countOnHover?: number;
 } & EntityLinkExternalProps) {
   return (
     <EntityLink
       label={formatTag(tag)}
       href={pathForTag(tag)}
-      icon={<FaTag
-        size={11}
-        className="translate-y-[1px]"
-      />}
+      icon={<FaTag size={11} className="translate-y-[1px]" />}
       type={type}
       badged={badged}
       contrast={contrast}

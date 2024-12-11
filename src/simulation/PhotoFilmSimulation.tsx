@@ -14,8 +14,8 @@ export default function PhotoFilmSimulation({
   prefetch,
   countOnHover,
 }: {
-  simulation: FilmSimulation
-  countOnHover?: number
+  simulation: FilmSimulation;
+  countOnHover?: number;
 } & EntityLinkExternalProps) {
   const { small, medium, large } = labelForFilmSimulation(simulation);
 

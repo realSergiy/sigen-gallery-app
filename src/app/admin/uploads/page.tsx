@@ -11,10 +11,13 @@ export default async function AdminUploadsPage() {
   return (
     <SiteGrid
       contentMain={
-        <AdminUploadsClient {...{
-          urls,
-          uniqueTags,
-        }} />}
+        <AdminUploadsClient
+          {...{
+            urls,
+            uniqueTags,
+          }}
+        />
+      }
     />
   );
 }

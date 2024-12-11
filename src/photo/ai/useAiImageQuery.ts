@@ -16,10 +16,7 @@ export default function useAiImageQuery(
       setIsLoading(true);
       setText('');
       try {
-        const textStream = await streamAiImageQueryAction(
-          imageBase64,
-          query,
-        );
+        const textStream = await streamAiImageQueryAction(imageBase64, query);
         for await (const text of readStreamableValue(textStream)) {
           setText(current => `${current}${text ?? ''}`);
         }
@@ -40,11 +37,5 @@ export default function useAiImageQuery(
   // Withhold streaming text if it's a null response
   const isTextError = text.toLocaleLowerCase().startsWith('sorry');
 
-  return [
-    request,
-    isTextError ? '' : text,
-    isLoading,
-    reset,
-    error,
-  ] as const;
-};
+  return [request, isTextError ? '' : text, isLoading, reset, error] as const;
+}

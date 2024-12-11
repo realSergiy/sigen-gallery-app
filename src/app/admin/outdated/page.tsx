@@ -14,9 +14,11 @@ export default async function AdminOutdatedPage() {
   }).catch(() => []);
 
   return (
-    <AdminOutdatedClient {...{
-      photos,
-      hasAiTextGeneration: AI_TEXT_GENERATION_ENABLED,
-    }} />
+    <AdminOutdatedClient
+      {...{
+        photos,
+        hasAiTextGeneration: AI_TEXT_GENERATION_ENABLED,
+      }}
+    />
   );
 }

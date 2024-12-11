@@ -8,11 +8,11 @@ export default function RedirectOnDesktop({
   redirectPath,
   shouldPrefetchRedirect = true,
 }: {
-  redirectPath: string
-  shouldPrefetchRedirect?: boolean
+  redirectPath: string;
+  shouldPrefetchRedirect?: boolean;
 }) {
   const router = useRouter();
-  
+
   const pathname = usePathname();
 
   const isDesktop = useIsDesktop();
