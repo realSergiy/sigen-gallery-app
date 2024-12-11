@@ -9,7 +9,8 @@ export const SHOULD_DEBUG_SQL = false;
 
 // META / SOURCE / DOMAINS
 
-export const SITE_TITLE = process.env.NEXT_PUBLIC_SITE_TITLE || 'Segmentation Gallery';
+export const SITE_TITLE =
+  process.env.NEXT_PUBLIC_SITE_TITLE || 'Segmentation Gallery';
 
 // SOURCE
 export const VERCEL_COMMIT_MESSAGE =
@@ -53,7 +54,7 @@ const SITE_DOMAIN_SHORT = shortenUrl(SITE_DOMAIN);
 export const SITE_DOMAIN_OR_TITLE = SITE_DOMAIN_SHORT || SITE_TITLE;
 
 export const SITE_DESCRIPTION =
-  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "Unlocking the Value of Videos";
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION || 'Unlocking the Value of Videos';
 
 export const SITE_ABOUT = process.env.NEXT_PUBLIC_SITE_ABOUT;
 

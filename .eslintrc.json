@@ -12,7 +12,7 @@
     "tailwindcss/migration-from-tailwind-2": "off",
     "tailwindcss/enforces-shorthand": "off",
     "tailwindcss/classnames-order": "off",
-    "@typescript-eslint/no-unused-vars": "off",    
+    "@typescript-eslint/no-unused-vars": "off",
     "@next/next/no-img-element": "off",
     "tailwindcss/no-unnecessary-arbitrary-value": "off",
     "tailwindcss/no-contradicting-classname": "off",
