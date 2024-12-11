@@ -73,16 +73,24 @@ export const storageTypeFromUrl = (url: string): StorageType => {
   }
 };
 
-const PREFIX_UPLOAD = 'upload';
+const PREFIX_PHOTO_UPLOAD = 'upload_p';
+const PREFIX_VIDEO_UPLOAD = 'upload_v';
 const PREFIX_PHOTO = 'photo';
+const PREFIX_VIDEO = 'video';
 
 export const generateRandomFileNameForPhoto = () =>
   `${PREFIX_PHOTO}-${generateStorageId()}`;
 
-const REGEX_UPLOAD_PATH = new RegExp(`(?:${PREFIX_UPLOAD})\.[a-z]{1,4}`, 'i');
+const REGEX_PHOTO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_PHOTO_UPLOAD})\.[a-z]{1,4}`, 'i');
+const REGEX_VIDEO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_VIDEO_UPLOAD})\.[a-z]{1,4}`, 'i');
 
-const REGEX_UPLOAD_ID = new RegExp(
-  `.${PREFIX_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`,
+const REGEX_PHOTO_UPLOAD_ID = new RegExp(
+  `.${PREFIX_PHOTO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`,
+  'i',
+);
+
+const REGEX_VIDEO_UPLOAD_ID = new RegExp(
+  `.${PREFIX_VIDEO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`,
   'i',
 );
 
@@ -100,11 +108,11 @@ export const fileNameForStorageUrl = (url: string) => {
 export const getExtensionFromStorageUrl = (url: string) =>
   url.match(/.([a-z]{1,4})$/i)?.[1];
 
-export const getIdFromStorageUrl = (url: string) =>
-  url.match(REGEX_UPLOAD_ID)?.[1];
+export const getPhotoIdFromStorageUrl = (url: string) =>
+  url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
 
-export const isUploadPathnameValid = (pathname?: string) =>
-  pathname?.match(REGEX_UPLOAD_PATH);
+export const isPhotoUploadPathnameValid = (pathname?: string) =>
+  pathname?.match(REGEX_PHOTO_UPLOAD_PATH);
 
 const getFileNameFromStorageUrl = (url: string) =>
   new URL(url).pathname.match(/\/(.+)$/)?.[1] ?? '';
@@ -133,8 +141,8 @@ export const uploadPhotoFromClient = async (
   extension = 'jpg',
 ) =>
   CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
-    ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
-    : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
+    ? uploadFromClientViaPresignedUrl(file, PREFIX_PHOTO_UPLOAD, extension, true)
+    : vercelBlobUploadFromClient(file, `${PREFIX_PHOTO_UPLOAD}.${extension}`);
 
 export const putFile = (file: Buffer, fileName: string) => {
   switch (CURRENT_STORAGE) {
@@ -212,10 +220,17 @@ const getStorageUrlsForPrefix = async (prefix = '') => {
   });
 };
 
-export const getStorageUploadUrls = () =>
-  getStorageUrlsForPrefix(`${PREFIX_UPLOAD}-`);
+export const getStoragePhotoUploadUrls = () =>
+  getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
+
+export const getStorageVideoUploadUrls = () =>
+  getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
+
 
 export const getStoragePhotoUrls = () =>
   getStorageUrlsForPrefix(`${PREFIX_PHOTO}-`);
+
+export const getStorageVideoUrls = () =>
+  getStorageUrlsForPrefix(`${PREFIX_VIDEO}-`);
 
 export const testStorageConnection = () => getStorageUrlsForPrefix();

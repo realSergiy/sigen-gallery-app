@@ -14,7 +14,7 @@ import {
   PATH_ADMIN_CONFIGURATION,
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_TAGS,
-  PATH_ADMIN_UPLOADS,
+  PATH_ADMIN_PHOTO_UPLOADS,
   PATH_FEED_INFERRED,
   PATH_GRID_INFERRED,
   PATH_ROOT,
@@ -329,7 +329,7 @@ export default function CommandKClient({
             {
               label: 'Manage Uploads',
               annotation: <BiLockAlt />,
-              path: PATH_ADMIN_UPLOADS,
+              path: PATH_ADMIN_PHOTO_UPLOADS,
             },
             {
               label: 'Manage Tags',

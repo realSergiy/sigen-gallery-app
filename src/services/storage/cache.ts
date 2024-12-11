@@ -1,11 +1,18 @@
 import { unstable_noStore } from 'next/cache';
-import { getStoragePhotoUrls, getStorageUploadUrls } from '@/services/storage';
+import { getStoragePhotoUrls, getStoragePhotoUploadUrls, getStorageVideoUrls, getStorageVideoUploadUrls } from '@/services/storage';
 
-export const getStorageUploadUrlsNoStore: typeof getStorageUploadUrls = (
+export const getStoragePhotoUploadUrlsNoStore: typeof getStoragePhotoUploadUrls = (
   ...args
 ) => {
   unstable_noStore();
-  return getStorageUploadUrls(...args);
+  return getStoragePhotoUploadUrls(...args);
+};
+
+export const getStorageVideoUploadUrlsNoStore: typeof getStorageVideoUploadUrls = (
+  ...args
+) => {
+  unstable_noStore();
+  return getStorageVideoUploadUrls(...args);
 };
 
 export const getStoragePhotoUrlsNoStore: typeof getStoragePhotoUrls = (

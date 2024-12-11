@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { uploadPhotoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
-import { PATH_ADMIN_UPLOADS, pathForAdminUploadUrl } from '@/site/paths';
+import { PATH_ADMIN_PHOTO_UPLOADS, pathForAdminUploadUrl } from '@/site/paths';
 import ImageInput from '../components/ImageInput';
 import { clsx } from 'clsx/lite';
 
@@ -61,7 +61,7 @@ export default function PhotoUpload({
                       await onLastUpload?.();
                       if (hasMultipleUploads) {
                         // Redirect to view multiple uploads
-                        router.push(PATH_ADMIN_UPLOADS);
+                        router.push(PATH_ADMIN_PHOTO_UPLOADS);
                       } else {
                         // Redirect to photo detail page
                         router.push(pathForAdminUploadUrl(url));

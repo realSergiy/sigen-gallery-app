@@ -1,6 +1,6 @@
 import {
   getExtensionFromStorageUrl,
-  getIdFromStorageUrl,
+  getPhotoIdFromStorageUrl,
 } from '@/services/storage';
 import { convertExifToFormData } from '@/photo/form';
 import {
@@ -35,7 +35,7 @@ export const extractImageDataFromBlobPath = async (
 
   const url = decodeURIComponent(blobPath);
 
-  const blobId = getIdFromStorageUrl(url);
+  const blobId = getPhotoIdFromStorageUrl(url);
 
   const extension = getExtensionFromStorageUrl(url);
 

@@ -1,7 +1,7 @@
 'use client';
 
 import AdminChildPage from '@/components/AdminChildPage';
-import { PATH_ADMIN_UPLOADS } from '@/site/paths';
+import { PATH_ADMIN_PHOTO_UPLOADS } from '@/site/paths';
 import { PhotoFormData, generateTakenAtFields } from './form';
 import PhotoForm from './form/PhotoForm';
 import { Tags } from '@/tag';
@@ -51,7 +51,7 @@ export default function UploadPageClient({
 
   return (
     <AdminChildPage
-      backPath={PATH_ADMIN_UPLOADS}
+      backPath={PATH_ADMIN_PHOTO_UPLOADS}
       backLabel="Uploads"
       breadcrumb={pending && updatedTitle ? updatedTitle : blobId}
       breadcrumbEllipsis

@@ -35,8 +35,10 @@ const PATH_FOCAL_LENGTH_DYNAMIC = `${PREFIX_FOCAL_LENGTH}/[focal]`;
 
 // Admin paths
 export const PATH_ADMIN_PHOTOS = `${PATH_ADMIN}/photos`;
+export const PATH_ADMIN_VIDEOS = `${PATH_ADMIN}/videos`;
 export const PATH_ADMIN_OUTDATED = `${PATH_ADMIN}/outdated`;
-export const PATH_ADMIN_UPLOADS = `${PATH_ADMIN}/uploads`;
+export const PATH_ADMIN_PHOTO_UPLOADS = `${PATH_ADMIN}/uploads`;
+export const PATH_ADMIN_VIDEO_UPLOADS = `${PATH_ADMIN}/video_uploads`;
 export const PATH_ADMIN_TAGS = `${PATH_ADMIN}/tags`;
 export const PATH_ADMIN_CONFIGURATION = `${PATH_ADMIN}/configuration`;
 export const PATH_ADMIN_BASELINE = `${PATH_ADMIN}/baseline`;
@@ -57,7 +59,7 @@ const EDIT = 'edit';
 export const PATHS_ADMIN = [
   PATH_ADMIN,
   PATH_ADMIN_PHOTOS,
-  PATH_ADMIN_UPLOADS,
+  PATH_ADMIN_PHOTO_UPLOADS,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_CONFIGURATION,
 ];
@@ -81,7 +83,7 @@ type PhotoPathParams = { photo: PhotoOrPhotoId } & PhotoSetAttributes;
 export const ABSOLUTE_PATH_FOR_HOME_IMAGE = `${BASE_URL}/home-image`;
 
 export const pathForAdminUploadUrl = (url: string) =>
-  `${PATH_ADMIN_UPLOADS}/${encodeURIComponent(url)}`;
+  `${PATH_ADMIN_PHOTO_UPLOADS}/${encodeURIComponent(url)}`;
 
 export const pathForAdminPhotoEdit = (photo: PhotoOrPhotoId) =>
   `${PATH_ADMIN_PHOTOS}/${getPhotoId(photo)}/${EDIT}`;
