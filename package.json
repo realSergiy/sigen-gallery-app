@@ -1,5 +1,5 @@
 {
-  "name": "sigen-video-app",
+  "name": "sigen-gallery-app",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
