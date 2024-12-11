@@ -1,15 +1,14 @@
 'use server';
 
 import {
-  deletePhoto,
-  insertPhoto,
-  deletePhotoTagGlobally,
-  updatePhoto,
+  deletePhoto,  
+  deletePhotoTagGlobally,  
   renamePhotoTagGlobally,
   getPhoto,
   getPhotos,
   addTagsToPhotos,
 } from '@/photo/db/query';
+import { insertPhoto, updatePhoto } from '@/db/photo_orm';
 import { GetPhotosOptions, areOptionsSensitive } from './db';
 import {
   PhotoFormData,

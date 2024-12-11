@@ -21,6 +21,7 @@ import {
 import { FilmSimulation } from '@/simulation';
 import { GEO_PRIVACY_ENABLED } from '@/site/config';
 import { TAG_FAVS, getValidationMessageForTags } from '@/tag';
+import { PhotoDbUpd } from '@/db/photo_orm';
 
 type VirtualFields = 'favorite';
 
@@ -237,7 +238,7 @@ export const convertExifToFormData = (
 
 export const convertFormDataToPhotoDbInsert = (
   formData: FormData | Partial<PhotoFormData>,
-): PhotoDbInsert => {
+): PhotoDbUpd => {
   const photoForm =
     formData instanceof FormData
       ? (Object.fromEntries(formData) as PhotoFormData)
@@ -266,32 +267,32 @@ export const convertFormDataToPhotoDbInsert = (
     ...(photoForm as PhotoFormData & { filmSimulation?: FilmSimulation }),
     ...(!photoForm.id && { id: generateNanoid() }),
     // Convert form strings to arrays
-    tags: tags.length > 0 ? tags : undefined,
+    tags: tags.length > 0 ? tags : null,
     // Convert form strings to numbers
     aspectRatio: photoForm.aspectRatio
       ? roundToNumber(parseFloat(photoForm.aspectRatio), 6)
       : DEFAULT_ASPECT_RATIO,
     focalLength: photoForm.focalLength
       ? parseInt(photoForm.focalLength)
-      : undefined,
+      : null,
     focalLengthIn35MmFormat: photoForm.focalLengthIn35MmFormat
       ? parseInt(photoForm.focalLengthIn35MmFormat)
-      : undefined,
-    fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : undefined,
-    latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : undefined,
+      : null,
+    fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : null,
+    latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : null,
     longitude: photoForm.longitude
       ? parseFloat(photoForm.longitude)
-      : undefined,
-    iso: photoForm.iso ? parseInt(photoForm.iso) : undefined,
+      : null,
+    iso: photoForm.iso ? parseInt(photoForm.iso) : null,
     exposureTime: photoForm.exposureTime
       ? parseFloat(photoForm.exposureTime)
-      : undefined,
+      : null,
     exposureCompensation: photoForm.exposureCompensation
       ? parseFloat(photoForm.exposureCompensation)
-      : undefined,
+      : null,
     priorityOrder: photoForm.priorityOrder
       ? parseFloat(photoForm.priorityOrder)
-      : undefined,
+      : null,
     hidden: photoForm.hidden === 'true',
     ...generateTakenAtFields(photoForm),
   };

@@ -1,4 +1,5 @@
 import { Camera } from '@/camera';
+import { PhotoDbUpd } from '@/db/photo_orm';
 import { formatFocalLength } from '@/focal';
 import { Lens } from '@/lens';
 import { getNextImageUrlForRequest } from '@/services/next-image';
@@ -150,8 +151,28 @@ export const parseCachedPhotoDates = (photo: Photo) =>
 export const parseCachedPhotosDates = (photos: Photo[]) =>
   photos.map(parseCachedPhotoDates);
 
-export const convertPhotoToPhotoDbInsert = (photo: Photo): PhotoDbInsert => ({
-  ...photo,
+export const convertPhotoToPhotoDbInsert = (photo: Photo): PhotoDbUpd => ({
+  ...photo, 
+  filmSimulation: photo.filmSimulation ?? null,
+  longitude: photo.longitude ?? null,
+  latitude: photo.latitude ?? null,
+  exposureCompensation: photo.exposureCompensation ?? null,
+  exposureTime: photo.exposureTime ?? null,
+  iso: photo.iso ?? null,
+  fNumber: photo.fNumber ?? null,
+  lensModel: photo.lensModel ?? null,
+  lensMake: photo.lensMake ?? null,
+  focalLengthIn35MmFormat: photo.focalLengthIn35MmFormat ?? null,
+  focalLength: photo.focalLength ?? null,
+  make: photo.make ?? null,
+  priorityOrder: photo.priorityOrder ?? null,
+  locationName: photo.locationName ?? null,
+  hidden: photo.hidden ?? false,
+  semanticDescription: photo.semanticDescription ?? null,
+  model: photo.model ?? null,
+  caption: photo.caption ?? null,
+  title: photo.title ?? null,
+  blurData: photo.blurData ?? null,
   takenAt: photo.takenAt.toISOString(),
 });
 

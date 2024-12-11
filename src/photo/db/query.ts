@@ -140,6 +140,7 @@ const safelyQueryPhotos = async <T>(
 };
 
 // Must provide id as 8-character nanoid
+/*
 export const insertPhoto = (photo: PhotoDbInsert) =>
   safelyQueryPhotos(
     () => sql`
@@ -205,6 +206,7 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
     'insertPhoto',
   );
 
+
 export const updatePhoto = (photo: PhotoDbInsert) =>
   safelyQueryPhotos(
     () => sql`
@@ -240,6 +242,8 @@ export const updatePhoto = (photo: PhotoDbInsert) =>
   `,
     'updatePhoto',
   );
+
+  */
 
 export const deletePhotoTagGlobally = (tag: string) =>
   safelyQueryPhotos(
