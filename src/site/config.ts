@@ -10,7 +10,7 @@ export const SHOULD_DEBUG_SQL = false;
 // META / SOURCE / DOMAINS
 
 export const SITE_TITLE =
-  process.env.NEXT_PUBLIC_SITE_TITLE || 'Sigen Gallery';
+  process.env.NEXT_PUBLIC_SITE_TITLE || 'Sigen Gallery (alpha)';
 
 // SOURCE
 export const VERCEL_COMMIT_MESSAGE =
