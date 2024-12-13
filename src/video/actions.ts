@@ -1,33 +1,23 @@
 'use server';
 
 import {
-  deletePhoto,
-  deletePhotoTagGlobally,
-  renamePhotoTagGlobally,
-  getPhoto,
-  getPhotos,
-  addTagsToPhotos,
-} from '@/photo/db/query';
-import { insertPhoto, updatePhoto } from '@/db/photo_orm';
-import { GetPhotosOptions, areOptionsSensitive } from './db';
-import {
-  PhotoFormData,
+  VideoFormData,
   convertFormDataToPhotoDbInsert,
-  convertPhotoToFormData,
+  convertVideoToFormData,
 } from './form';
 import { redirect } from 'next/navigation';
 import { deleteFile } from '@/services/storage';
 import {
-  getPhotosCached,
-  getPhotosMetaCached,
+  getVideosCached,
+  getVideosMetaCached,
   revalidateAdminPaths,
   revalidateAllKeysAndPaths,
-  revalidatePhoto,
-  revalidatePhotosKey,
+  revalidateVideo,
+  revalidateVideosKey,
   revalidateTagsKey,
 } from '@/photo/cache';
 import {
-  PATH_ADMIN_PHOTOS,
+  PATH_ADMIN_VIDEOS,
   PATH_ADMIN_TAGS,
   PATH_ROOT,
   pathForPhoto,
@@ -36,22 +26,15 @@ import { blurImageFromUrl, extractImageDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
 import { convertPhotoToPhotoDbInsert, Photo } from '.';
 import { runAuthenticatedAdminServerAction } from '@/auth';
-import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
-import { streamOpenAiImageQuery } from '@/services/openai';
-import {
-  AI_TEXT_AUTO_GENERATED_FIELDS,
-  AI_TEXT_GENERATION_ENABLED,
-  BLUR_ENABLED,
-} from '@/site/config';
-import { generateAiImageQueries } from './ai/server';
-import { createStreamableValue } from 'ai/rsc';
-import { convertUploadToPhoto } from './storage';
+
+import { convertUploadToVideo } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
+import { Video } from '@/db/video_orm';
 
 // Private actions
 
-export const createPhotoAction = async (formData: FormData) =>
+export const createVideoAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
     const shouldStripGpsData = formData.get('shouldStripGpsData') === 'true';
     formData.delete('shouldStripGpsData');
@@ -121,9 +104,6 @@ export const addAllUploadsAction = async ({
           });
 
           if (photoFormExif) {
-            if (AI_TEXT_GENERATION_ENABLED) {
-              streamUpdate('Generating AI text');
-            }
 
             const {
               title,
@@ -305,17 +285,17 @@ export const getExifDataAction = async (
 // - strip GPS data if necessary
 // - update blur data (or destroy if blur is disabled)
 // - generate AI text data, if enabled, and auto-generated fields are empty
-export const syncPhotoAction = async (photoId: string) =>
+export const syncPhotoAction = async (videoId: string) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = await getPhoto(photoId ?? '', true);
+    const video = await getVideo(videoId ?? '', true);
 
-    if (photo) {
+    if (video) {
       const {
         photoFormExif,
         imageResizedBase64,
         shouldStripGpsData,
         fileBytes,
-      } = await extractImageDataFromBlobPath(photo.url, {
+      } = await extractImageDataFromBlobPath(video.url, {
         includeInitialPhotoFields: false,
         generateBlurData: BLUR_ENABLED,
         generateResizedImage: AI_TEXT_GENERATION_ENABLED,
@@ -323,18 +303,18 @@ export const syncPhotoAction = async (photoId: string) =>
 
       let urlToDelete: string | undefined;
       if (photoFormExif) {
-        if (photo.url.includes(photo.id) || shouldStripGpsData) {
+        if (video.url.includes(video.id) || shouldStripGpsData) {
           // Anonymize storage url on update if necessary by
           // re-running image upload transfer logic
           const url = await convertUploadToPhoto({
-            urlOrigin: photo.url,
+            urlOrigin: video.url,
             fileBytes,
             shouldStripGpsData,
             shouldDeleteOrigin: false,
           });
           if (url) {
-            urlToDelete = photo.url;
-            photo.url = url;
+            urlToDelete = video.url;
+            video.url = url;
           }
         }
 
@@ -349,13 +329,13 @@ export const syncPhotoAction = async (photoId: string) =>
         );
 
         const photoFormDbInsert = convertFormDataToPhotoDbInsert({
-          ...convertPhotoToFormData(photo),
+          ...convertPhotoToFormData(video),
           ...photoFormExif,
           ...(!BLUR_ENABLED && { blurData: undefined }),
-          ...(!photo.title && { title: atTitle }),
-          ...(!photo.caption && { caption: aiCaption }),
-          ...(photo.tags.length === 0 && { tags: aiTags }),
-          ...(!photo.semanticDescription && {
+          ...(!video.title && { title: atTitle }),
+          ...(!video.caption && { caption: aiCaption }),
+          ...(video.tags.length === 0 && { tags: aiTags }),
+          ...(!video.semanticDescription && {
             semanticDescription: aiSemanticDescription,
           }),
         });
@@ -407,13 +387,13 @@ export const getPhotosAction = async (options: GetPhotosOptions) =>
 
 export const getPhotosCachedAction = async (options: GetPhotosOptions) =>
   areOptionsSensitive(options)
-    ? runAuthenticatedAdminServerAction(() => getPhotosCached(options))
-    : getPhotosCached(options);
+    ? runAuthenticatedAdminServerAction(() => getVideosCached(options))
+    : getVideosCached(options);
 
 // Public actions
 
 export const searchPhotosAction = async (query: string) =>
-  getPhotos({ query, limit: 10 }).catch(e => {
+  getVideos({ query, limit: 10 }).catch(e => {
     console.error('Could not query photos', e);
-    return [] as Photo[];
+    return [] as Video[];
   });

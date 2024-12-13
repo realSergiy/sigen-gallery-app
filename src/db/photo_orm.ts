@@ -1,16 +1,16 @@
-import {photos} from "@/db/schema";
-import {db} from "@/db";
-import { eq } from "drizzle-orm";
+import { photosTable } from '@/db/generated/schema';
+import { db } from '@/db';
+import { eq } from 'drizzle-orm';
 
-export type PhotoDbNew = typeof photos.$inferInsert;
-export type PhotoDb = typeof photos.$inferSelect;
+export type PhotoDbNew = typeof photosTable.$inferInsert;
+export type PhotoDb = typeof photosTable.$inferSelect;
 
 export type PhotoDbUpd = Omit<PhotoDb, 'createdAt' | 'updatedAt'>;
 
 export const insertPhoto = async (photo: PhotoDbNew) => {
-  return db.insert(photos).values(photo);
-}
+  return db.insert(photosTable).values(photo);
+};
 
 export const updatePhoto = async (photo: PhotoDbUpd) => {
-  return db.update(photos).set(photo).where(eq(photos.id, photo.id));
-}
+  return db.update(photosTable).set(photo).where(eq(photosTable.id, photo.id));
+};

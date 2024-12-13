@@ -1,45 +1,56 @@
-import { getStoragePhotoUploadUrlsNoStore, getStorageVideoUploadUrlsNoStore } from '@/services/storage/cache';
+import {
+  getStoragePhotoUploadUrlsNoStore,
+  getStorageVideoUploadUrlsNoStore,
+} from '@/services/storage/cache';
 import {
   getPhotosMetaCached,
-  getVideosMetaCached,
   getPhotosMostRecentUpdateCached,
   getUniqueTagsCached,
 } from '@/photo/cache';
+import { getVideosMetaCached } from '@/db/video_cache';
 import {
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_PHOTO_UPLOADS,
-  PATH_ADMIN_VIDEOS,  
+  PATH_ADMIN_VIDEOS,
   PATH_ADMIN_VIDEO_UPLOADS,
 } from '@/site/paths';
 import AdminNavClient from './AdminNavClient';
+import { eq } from 'drizzle-orm';
+import { photosTable } from '@/db/generated/schema';
 
 export default async function AdminNav() {
-  const [countPhotos, countVideos, countPhotoUploads, countVideoUploads, countTags, mostRecentPhotoUpdateTime] =
-    await Promise.all([
-      getPhotosMetaCached({ hidden: 'include' })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getVideosMetaCached({ hidden: 'include' })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getStoragePhotoUploadUrlsNoStore()
-        .then(urls => urls.length)
-        .catch(e => {
-          console.error(`Error getting blob upload urls: ${e}`);
-          return 0;
-        }),
-      getStorageVideoUploadUrlsNoStore()
-        .then(urls => urls.length)
-        .catch(e => {
-          console.error(`Error getting blob upload urls: ${e}`);
-          return 0;
-        }),        
-      getUniqueTagsCached()
-        .then(tags => tags.length)
-        .catch(() => 0),
-      getPhotosMostRecentUpdateCached().catch(() => undefined),
-    ]);
+  const [
+    countPhotos,
+    countVideos,
+    countPhotoUploads,
+    countVideoUploads,
+    countTags,
+    mostRecentPhotoUpdateTime,
+  ] = await Promise.all([
+    getPhotosMetaCached({ hidden: 'include' })
+      .then(({ count }) => count)
+      .catch(() => 0),
+    getVideosMetaCached(eq(photosTable.hidden, false))
+      .then(({ count }) => count)
+      .catch(() => 0),
+    getStoragePhotoUploadUrlsNoStore()
+      .then(urls => urls.length)
+      .catch(e => {
+        console.error(`Error getting blob upload urls: ${e}`);
+        return 0;
+      }),
+    getStorageVideoUploadUrlsNoStore()
+      .then(urls => urls.length)
+      .catch(e => {
+        console.error(`Error getting blob upload urls: ${e}`);
+        return 0;
+      }),
+    getUniqueTagsCached()
+      .then(tags => tags.length)
+      .catch(() => 0),
+    getPhotosMostRecentUpdateCached().catch(() => undefined),
+  ]);
 
   // Photos
   const items = [
@@ -52,7 +63,7 @@ export default async function AdminNav() {
       label: 'Videos',
       href: PATH_ADMIN_VIDEOS,
       count: countVideos,
-    }
+    },
   ];
 
   // Video Uploads
@@ -62,7 +73,7 @@ export default async function AdminNav() {
       href: PATH_ADMIN_VIDEO_UPLOADS,
       count: countVideoUploads,
     });
-  }  
+  }
 
   // Uploads
   if (countPhotoUploads > 0) {
@@ -76,7 +87,7 @@ export default async function AdminNav() {
   // Tags
   if (countTags > 0) {
     items.push({
-      label: 'Photo Tags',
+      label: 'Tags',
       href: PATH_ADMIN_TAGS,
       count: countTags,
     });

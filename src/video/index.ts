@@ -1,18 +1,8 @@
-import { Camera } from '@/camera';
-import { PhotoDbUpd } from '@/db/photo_orm';
-import { formatFocalLength } from '@/focal';
-import { Lens } from '@/lens';
+import { VideoDb } from '@/db/video_orm';
 import { getNextImageUrlForRequest } from '@/services/next-image';
-import { FilmSimulation } from '@/simulation';
 import { HIGH_DENSITY_GRID, SHOW_EXIF_DATA } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
 import { formatDate, formatDateFromPostgresString } from '@/utility/date';
-import {
-  formatAperture,
-  formatIso,
-  formatExposureCompensation,
-  formatExposureTime,
-} from '@/utility/exif';
 import { parameterize } from '@/utility/string';
 import camelcaseKeys from 'camelcase-keys';
 import { isBefore } from 'date-fns';
@@ -47,100 +37,18 @@ export const RELATED_GRID_PHOTOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
-export const ACCEPTED_PHOTO_FILE_TYPES = [
-  'image/jpg',
-  'image/jpeg',
-  'image/png',
-];
+export const ACCEPTED_VIDEO_FILE_TYPES = ['video/mp4'];
 
-export const MAX_PHOTO_UPLOAD_SIZE_IN_BYTES = 50_000_000;
+export const MAX_VIDEO_UPLOAD_SIZE_IN_BYTES = 70 * 1024 * 1024; // 70 MB
 
-// Core EXIF data
-export interface PhotoExif {
-  aspectRatio: number;
-  make?: string;
-  model?: string;
-  focalLength?: number;
-  focalLengthIn35MmFormat?: number;
-  lensMake?: string;
-  lensModel?: string;
-  fNumber?: number;
-  iso?: number;
-  exposureTime?: number;
-  exposureCompensation?: number;
-  latitude?: number;
-  longitude?: number;
-  filmSimulation?: FilmSimulation;
-  takenAt?: string;
-  takenAtNaive?: string;
-}
-
-// Raw db insert
-export interface PhotoDbInsert extends PhotoExif {
-  id: string;
-  url: string;
-  extension: string;
-  blurData?: string;
-  title?: string;
-  caption?: string;
-  semanticDescription?: string;
-  tags?: string[];
-  locationName?: string;
-  priorityOrder?: number;
-  hidden?: boolean;
-  takenAt: string;
-  takenAtNaive: string;
-}
-
-// Raw db response
-export interface PhotoDb extends Omit<PhotoDbInsert, 'takenAt' | 'tags'> {
-  updatedAt: Date;
-  createdAt: Date;
-  takenAt: Date;
-  tags: string[];
-}
-
-// Parsed db response
-export interface Photo extends PhotoDb {
-  focalLengthFormatted?: string;
-  focalLengthIn35MmFormatFormatted?: string;
-  fNumberFormatted?: string;
-  isoFormatted?: string;
-  exposureTimeFormatted?: string;
-  exposureCompensationFormatted?: string;
-  takenAtNaiveFormatted: string;
-}
-
-export interface PhotoSetAttributes {
-  tag?: string;
-  camera?: Camera;
-  simulation?: FilmSimulation;
-  focal?: number;
-  lens?: Lens; // Unimplemented as a set
-}
-
-export const parsePhotoFromDb = (photoDbRaw: PhotoDb): Photo => {
-  const photoDb = camelcaseKeys(
-    photoDbRaw as unknown as Record<string, unknown>,
-  ) as unknown as PhotoDb;
+export const parseVideoFromDb = (videoDb: VideoDb) => {
   return {
-    ...photoDb,
-    tags: photoDb.tags ?? [],
-    focalLengthFormatted: formatFocalLength(photoDb.focalLength),
-    focalLengthIn35MmFormatFormatted: formatFocalLength(
-      photoDb.focalLengthIn35MmFormat,
-    ),
-    fNumberFormatted: formatAperture(photoDb.fNumber),
-    isoFormatted: formatIso(photoDb.iso),
-    exposureTimeFormatted: formatExposureTime(photoDb.exposureTime),
-    exposureCompensationFormatted: formatExposureCompensation(
-      photoDb.exposureCompensation,
-    ),
-    takenAtNaiveFormatted: formatDateFromPostgresString(photoDb.takenAtNaive),
+    ...videoDb,
+    takenAtNaiveFormatted: formatDateFromPostgresString(videoDb.takenAtNaive),
   };
 };
 
-export const parseCachedPhotoDates = (photo: Photo) =>
+export const parseCachedVideoDates = (photo: Photo) =>
   ({
     ...photo,
     takenAt: new Date(photo.takenAt),

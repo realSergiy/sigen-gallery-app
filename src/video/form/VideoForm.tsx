@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   FORM_METADATA_ENTRIES,
-  PhotoFormData,
+  VideoFormData,
   convertFormKeysToLabels,
   formHasTextContent,
   getChangedFormFields,
@@ -11,53 +11,45 @@ import {
   isFormValid,
 } from '.';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
-import { createPhotoAction, updatePhotoAction } from '../actions';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
-import { PATH_ADMIN_PHOTOS, PATH_ADMIN_PHOTO_UPLOADS } from '@/site/paths';
+import { PATH_ADMIN_VIDEOS, PATH_ADMIN_VIDEO_UPLOADS } from '@/site/paths';
 import { toastSuccess, toastWarning } from '@/toast';
 import { getDimensionsFromSize } from '@/utility/size';
 import ImageWithFallback from '@/components/image/ImageWithFallback';
 import { Tags, convertTagsForForm } from '@/tag';
-import { AiContent } from '../ai/useAiImageQueries';
-import AiButton from '../ai/AiButton';
 import Spinner from '@/components/Spinner';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
-import UpdateBlurDataButton from '../UpdateBlurDataButton';
-import { getNextImageUrlForManipulation } from '@/services/next-image';
 import { BLUR_ENABLED } from '@/site/config';
-import { PhotoDbInsert } from '..';
 import ErrorNote from '@/components/ErrorNote';
 
 const THUMBNAIL_SIZE = 300;
 
-export default function PhotoForm({
+export default function VideoForm({
   type = 'create',
   initialPhotoForm,
   updatedExifData,
   updatedBlurData,
   uniqueTags,
-  aiContent,
   shouldStripGpsData,
   onTitleChange,
   onTextContentChange,
   onFormStatusChange,
 }: {
   type?: 'create' | 'edit';
-  initialPhotoForm: Partial<PhotoFormData>;
-  updatedExifData?: Partial<PhotoFormData>;
+  initialPhotoForm: Partial<VideoFormData>;
+  updatedExifData?: Partial<VideoFormData>;
   updatedBlurData?: string;
   uniqueTags?: Tags;
-  aiContent?: AiContent;
   shouldStripGpsData?: boolean;
   onTitleChange?: (updatedTitle: string) => void;
   onTextContentChange?: (hasContent: boolean) => void;
   onFormStatusChange?: (pending: boolean) => void;
 }) {
   const [formData, setFormData] =
-    useState<Partial<PhotoFormData>>(initialPhotoForm);
+    useState<Partial<VideoFormData>>(initialPhotoForm);
   const [formErrors, setFormErrors] = useState(getFormErrors(initialPhotoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
@@ -74,20 +66,18 @@ export default function PhotoForm({
   usePreventNavigation(formHasChanged && !onlyChangedFieldIsBlurData);
 
   const canFormBeSubmitted =
-    (type === 'create' || formHasChanged) &&
-    isFormValid(formData) &&
-    !aiContent?.isLoading;
+    (type === 'create' || formHasChanged) && isFormValid(formData);
 
   // Update form when EXIF data
   // is refreshed by parent
   useEffect(() => {
     if (Object.keys(updatedExifData ?? {}).length > 0) {
-      const changedKeys: (keyof PhotoFormData)[] = [];
+      const changedKeys: (keyof VideoFormData)[] = [];
 
       setFormData(currentForm => {
         Object.entries(updatedExifData ?? {}).forEach(([key, value]) => {
-          if (currentForm[key as keyof PhotoFormData] !== value) {
-            changedKeys.push(key as keyof PhotoFormData);
+          if (currentForm[key as keyof VideoFormData] !== value) {
+            changedKeys.push(key as keyof VideoFormData);
           }
         });
 
@@ -123,111 +113,9 @@ export default function PhotoForm({
     }
   }, [updatedBlurData]);
 
-  useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.title ? { ...data, title: aiContent?.title } : data,
-      ),
-    [aiContent?.title],
-  );
-
-  useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.caption ? { ...data, caption: aiContent?.caption } : data,
-      ),
-    [aiContent?.caption],
-  );
-
-  useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.tags ? { ...data, tags: aiContent?.tags } : data,
-      ),
-    [aiContent?.tags],
-  );
-
-  useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.semanticDescription
-          ? { ...data, semanticDescription: aiContent?.semanticDescription }
-          : data,
-      ),
-    [aiContent?.semanticDescription],
-  );
-
   useEffect(() => {
     onTextContentChange?.(formHasTextContent(formData));
   }, [onTextContentChange, formData]);
-
-  const isFieldGeneratingAi = (key: keyof PhotoFormData) => {
-    switch (key) {
-      case 'title':
-        return aiContent?.isLoadingTitle;
-      case 'caption':
-        return aiContent?.isLoadingCaption;
-      case 'tags':
-        return aiContent?.isLoadingTags;
-      case 'semanticDescription':
-        return aiContent?.isLoadingSemantic;
-      default:
-        return false;
-    }
-  };
-
-  const accessoryForField = (key: keyof PhotoFormData) => {
-    if (aiContent) {
-      switch (key) {
-        case 'title':
-          return (
-            <AiButton
-              aiContent={aiContent}
-              requestFields={['title']}
-              shouldConfirm={Boolean(formData.title)}
-              className="h-full"
-            />
-          );
-        case 'caption':
-          return (
-            <AiButton
-              aiContent={aiContent}
-              requestFields={['caption']}
-              shouldConfirm={Boolean(formData.caption)}
-              className="h-full"
-            />
-          );
-        case 'tags':
-          return (
-            <AiButton
-              aiContent={aiContent}
-              requestFields={['tags']}
-              shouldConfirm={Boolean(formData.tags)}
-              className="h-full"
-            />
-          );
-        case 'semanticDescription':
-          return (
-            <AiButton
-              aiContent={aiContent}
-              requestFields={['semantic']}
-              shouldConfirm={Boolean(formData.semanticDescription)}
-            />
-          );
-        case 'blurData':
-          return shouldDebugImageFallbacks &&
-            type === 'edit' &&
-            formData.url ? (
-            <UpdateBlurDataButton
-              photoUrl={getNextImageUrlForManipulation(formData.url)}
-              onUpdatedBlurData={blurData =>
-                setFormData(data => ({ ...data, blurData }))
-              }
-            />
-          ) : null;
-      }
-    }
-  };
 
   const shouldHideField = (
     key: keyof PhotoDbInsert | 'favorite',
@@ -265,8 +153,7 @@ export default function PhotoForm({
           />
           <div
             className={clsx(
-              'absolute left-2 top-2 transition-opacity duration-500',
-              aiContent?.isLoading ? 'opacity-100' : 'opacity-0',
+              'absolute left-2 top-2 opacity-0 transition-opacity duration-500',
             )}
           >
             <div
@@ -308,10 +195,7 @@ export default function PhotoForm({
       >
         {/* Fields */}
         <div className="space-y-6">
-          {FORM_METADATA_ENTRIES(
-            convertTagsForForm(uniqueTags),
-            aiContent !== undefined,
-          ).map(
+          {FORM_METADATA_ENTRIES(convertTagsForForm(uniqueTags), false).map(
             ([
               key,
               {
@@ -374,12 +258,8 @@ export default function PhotoForm({
                       ? loadingMessage
                       : undefined
                   }
-                  loading={
-                    (loadingMessage && !formData[key] ? true : false) ||
-                    isFieldGeneratingAi(key)
-                  }
+                  loading={loadingMessage && !formData[key] ? true : false}
                   type={type}
-                  accessory={accessoryForField(key)}
                 />
               ),
           )}

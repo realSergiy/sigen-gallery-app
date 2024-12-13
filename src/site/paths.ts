@@ -20,6 +20,8 @@ export const PATH_FEED_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_FEED : PATH_ROOT;
 
 // Path prefixes
 export const PREFIX_PHOTO = '/p';
+
+export const PREFIX_VIDEO = '/v';
 export const PREFIX_TAG = '/tag';
 export const PREFIX_CAMERA = '/shot-on';
 export const PREFIX_FILM_SIMULATION = '/film';
@@ -60,6 +62,8 @@ export const PATHS_ADMIN = [
   PATH_ADMIN,
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_PHOTO_UPLOADS,
+  PATH_ADMIN_VIDEOS,
+  PATH_ADMIN_VIDEO_UPLOADS,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_CONFIGURATION,
 ];
@@ -82,7 +86,10 @@ type PhotoPathParams = { photo: PhotoOrPhotoId } & PhotoSetAttributes;
 // Absolute paths
 export const ABSOLUTE_PATH_FOR_HOME_IMAGE = `${BASE_URL}/home-image`;
 
-export const pathForAdminUploadUrl = (url: string) =>
+export const pathForAdminVideoUploadUrl = (url: string) =>
+  `${PATH_ADMIN_VIDEO_UPLOADS}/${encodeURIComponent(url)}`;
+
+export const pathForAdminPhotoUploadUrl = (url: string) =>
   `${PATH_ADMIN_PHOTO_UPLOADS}/${encodeURIComponent(url)}`;
 
 export const pathForAdminPhotoEdit = (photo: PhotoOrPhotoId) =>

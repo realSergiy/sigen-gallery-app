@@ -73,19 +73,28 @@ export const storageTypeFromUrl = (url: string): StorageType => {
   }
 };
 
-const PREFIX_PHOTO_UPLOAD = 'upload_p';
-const PREFIX_VIDEO_UPLOAD = 'upload_v';
 const PREFIX_PHOTO = 'photo';
-const PREFIX_VIDEO = 'video';
 
 export const generateRandomFileNameForPhoto = () =>
   `${PREFIX_PHOTO}-${generateStorageId()}`;
 
-const REGEX_PHOTO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_PHOTO_UPLOAD})\.[a-z]{1,4}`, 'i');
-const REGEX_VIDEO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_VIDEO_UPLOAD})\.[a-z]{1,4}`, 'i');
+const PREFIX_PHOTO_UPLOAD = 'upload_p';
+
+const REGEX_PHOTO_UPLOAD_PATH = new RegExp(
+  `(?:${PREFIX_PHOTO_UPLOAD})\.[a-z]{1,4}`,
+  'i',
+);
 
 const REGEX_PHOTO_UPLOAD_ID = new RegExp(
   `.${PREFIX_PHOTO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`,
+  'i',
+);
+
+const PREFIX_VIDEO_UPLOAD = 'upload_v';
+const PREFIX_VIDEO = 'video';
+
+const REGEX_VIDEO_UPLOAD_PATH = new RegExp(
+  `(?:${PREFIX_VIDEO_UPLOAD})\.[a-z]{1,4}`,
   'i',
 );
 
@@ -139,10 +148,21 @@ export const uploadFromClientViaPresignedUrl = async (
 export const uploadPhotoFromClient = async (
   file: File | Blob,
   extension = 'jpg',
+) => uploadBlobFromClient(PREFIX_PHOTO_UPLOAD, file, extension);
+
+export const uploadVideoFromClient = async (
+  file: File | Blob,
+  extension = 'mp4',
+) => uploadBlobFromClient(PREFIX_VIDEO_UPLOAD, file, extension);
+
+const uploadBlobFromClient = async (
+  prefix: string,
+  file: File | Blob,
+  extension: string,
 ) =>
   CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
-    ? uploadFromClientViaPresignedUrl(file, PREFIX_PHOTO_UPLOAD, extension, true)
-    : vercelBlobUploadFromClient(file, `${PREFIX_PHOTO_UPLOAD}.${extension}`);
+    ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
+    : vercelBlobUploadFromClient(file, `${prefix}.${extension}`);
 
 export const putFile = (file: Buffer, fileName: string) => {
   switch (CURRENT_STORAGE) {
@@ -225,7 +245,6 @@ export const getStoragePhotoUploadUrls = () =>
 
 export const getStorageVideoUploadUrls = () =>
   getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
-
 
 export const getStoragePhotoUrls = () =>
   getStorageUrlsForPrefix(`${PREFIX_PHOTO}-`);

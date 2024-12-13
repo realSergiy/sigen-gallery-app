@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { uploadPhotoFromClient } from '@/services/storage';
+import { uploadVideoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
 import {
-  PATH_ADMIN_PHOTO_UPLOADS,
+  PATH_ADMIN_VIDEO_UPLOADS,
   pathForAdminPhotoUploadUrl,
 } from '@/site/paths';
 import ImageInput from '../components/ImageInput';
 import { clsx } from 'clsx/lite';
 
-export default function PhotoUpload({
+export default function VideoUpload({
   shouldResize,
   onLastUpload,
   isUploading,
@@ -58,13 +58,13 @@ export default function PhotoUpload({
                 setIsUploading(false);
                 setUploadError('');
               } else {
-                return uploadPhotoFromClient(blob, extension)
+                return uploadVideoFromClient(blob, extension)
                   .then(async url => {
                     if (isLastBlob) {
                       await onLastUpload?.();
                       if (hasMultipleUploads) {
                         // Redirect to view multiple uploads
-                        router.push(PATH_ADMIN_PHOTO_UPLOADS);
+                        router.push(PATH_ADMIN_VIDEO_UPLOADS);
                       } else {
                         // Redirect to photo detail page
                         router.push(pathForAdminPhotoUploadUrl(url));

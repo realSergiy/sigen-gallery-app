@@ -4,7 +4,7 @@ import {
   ACCEPTED_PHOTO_FILE_TYPES,
   MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
 } from '@/photo';
-import { isUploadPathnameValid } from '@/services/storage';
+import { isPhotoUploadPathnameValid } from '@/services/storage';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
@@ -18,7 +18,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       onBeforeGenerateToken: async pathname => {
         const session = await auth();
         if (session?.user) {
-          if (isUploadPathnameValid(pathname)) {
+          if (isPhotoUploadPathnameValid(pathname)) {
             return {
               maximumSizeInBytes: MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
               allowedContentTypes: ACCEPTED_PHOTO_FILE_TYPES,

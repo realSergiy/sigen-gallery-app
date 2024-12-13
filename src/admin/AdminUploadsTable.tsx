@@ -2,10 +2,10 @@
 
 import ImageSmall from '@/components/image/ImageSmall';
 import Spinner from '@/components/Spinner';
-import { getIdFromStorageUrl } from '@/services/storage';
+import { getPhotoIdFromStorageUrl } from '@/services/storage';
 import { clsx } from 'clsx/lite';
 import { FaRegCircleCheck } from 'react-icons/fa6';
-import { pathForAdminUploadUrl } from '@/site/paths';
+import { pathForAdminPhotoUploadUrl } from '@/site/paths';
 import AddButton from './AddButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import ResponsiveDate from '@/components/ResponsiveDate';
@@ -56,7 +56,7 @@ export default function AdminUploadsTable({
               </div>
               <span className="min-w-0 grow">
                 <div className="overflow-hidden text-ellipsis">
-                  {getIdFromStorageUrl(url)}
+                  {getPhotoIdFromStorageUrl(url)}
                 </div>
                 <div className="text-dim overflow-hidden text-ellipsis">
                   {isAdding || isComplete ? (
@@ -88,7 +88,7 @@ export default function AdminUploadsTable({
                 </>
               ) : (
                 <>
-                  <AddButton path={pathForAdminUploadUrl(url)} />
+                  <AddButton path={pathForAdminPhotoUploadUrl(url)} />
                   <DeleteBlobButton
                     url={url}
                     shouldRedirectToAdminPhotos={urlAddStatuses.length <= 1}

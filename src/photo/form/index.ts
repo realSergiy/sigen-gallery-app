@@ -272,17 +272,13 @@ export const convertFormDataToPhotoDbInsert = (
     aspectRatio: photoForm.aspectRatio
       ? roundToNumber(parseFloat(photoForm.aspectRatio), 6)
       : DEFAULT_ASPECT_RATIO,
-    focalLength: photoForm.focalLength
-      ? parseInt(photoForm.focalLength)
-      : null,
+    focalLength: photoForm.focalLength ? parseInt(photoForm.focalLength) : null,
     focalLengthIn35MmFormat: photoForm.focalLengthIn35MmFormat
       ? parseInt(photoForm.focalLengthIn35MmFormat)
       : null,
     fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : null,
     latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : null,
-    longitude: photoForm.longitude
-      ? parseFloat(photoForm.longitude)
-      : null,
+    longitude: photoForm.longitude ? parseFloat(photoForm.longitude) : null,
     iso: photoForm.iso ? parseInt(photoForm.iso) : null,
     exposureTime: photoForm.exposureTime
       ? parseFloat(photoForm.exposureTime)
