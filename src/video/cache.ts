@@ -4,22 +4,7 @@ import {
   unstable_cache,
   unstable_noStore,
 } from 'next/cache';
-import {
-  getPhoto,
-  getPhotos,
-  getUniqueCameras,
-  getUniqueTags,
-  getUniqueTagsHidden,
-  getUniqueFilmSimulations,
-  getPhotosNearId,
-  getPhotosMostRecentUpdate,
-  getPhotosMeta,
-  getUniqueFocalLengths,
-  getUniqueLenses,
-} from '@/photo/db/query';
-import { GetPhotosOptions } from './db';
-import { parseCachedPhotoDates, parseCachedPhotosDates } from '@/photo';
-import { createCameraKey } from '@/camera';
+import { parseCachedVideoDates, parseCachedVideosDates } from '@/video';
 import {
   PATHS_ADMIN,
   PATHS_TO_CACHE,
@@ -27,16 +12,23 @@ import {
   PATH_FEED,
   PATH_GRID,
   PATH_ROOT,
-  PREFIX_CAMERA,
-  PREFIX_FILM_SIMULATION,
   PREFIX_TAG,
-  pathForPhoto,
+  pathForVideo,
 } from '@/site/paths';
-import { createLensKey } from '@/lens';
+import {
+  getUniqueTags,
+  getUniqueTagsHidden,
+  getVideo,
+  getVideos,
+  getVideosMeta,
+  getVideosMostRecentUpdate,
+  getVideosNearId,
+  GetVideosOptions,
+} from '@/db/video_orm';
 
 // Table key
-const KEY_PHOTOS = 'photos';
-const KEY_PHOTO = 'photo';
+const KEY_VIDEOS = 'videos';
+const KEY_VIDEO = 'video';
 // Field keys
 const KEY_TAGS = 'tags';
 const KEY_CAMERAS = 'cameras';
@@ -48,50 +40,26 @@ const KEY_COUNT = 'count';
 const KEY_HIDDEN = 'hidden';
 const KEY_DATE_RANGE = 'date-range';
 
-const getPhotosCacheKeyForOption = (
-  options: GetPhotosOptions,
-  option: keyof GetPhotosOptions,
-): string | null => {
-  switch (option) {
-    // Complex keys
-    case 'camera': {
-      const value = options[option];
-      return value ? `${option}-${createCameraKey(value)}` : null;
-    }
-    case 'lens': {
-      const value = options[option];
-      return value ? `${option}-${createLensKey(value)}` : null;
-    }
-    case 'takenBefore':
-    case 'takenAfterInclusive':
-    case 'updatedBefore': {
-      const value = options[option];
-      return value ? `${option}-${value.toISOString()}` : null;
-    }
-    // Primitive keys
-    default:
-      const value = options[option];
-      return value !== undefined ? `${option}-${value}` : null;
+export const getVideosCacheKeys = (options: GetVideosOptions) => {
+  const key: string[] = [];
+
+  if (options.filter) {
+    key.push(`filter-${JSON.stringify(options.filter)}`);
   }
+  if (options.sort) {
+    key.push(`sort-${JSON.stringify(options.sort)}`);
+  }
+  if (options.limit) {
+    key.push(`limit-${options.limit}`);
+  }
+  if (options.offset) {
+    key.push(`offset-${options.offset}`);
+  }
+
+  return key.join(',');
 };
 
-const getPhotosCacheKeys = (options: GetPhotosOptions = {}) => {
-  const tags: string[] = [];
-
-  Object.keys(options).forEach(key => {
-    const tag = getPhotosCacheKeyForOption(
-      options,
-      key as keyof GetPhotosOptions,
-    );
-    if (tag) {
-      tags.push(tag);
-    }
-  });
-
-  return tags;
-};
-
-export const revalidatePhotosKey = () => revalidateTag(KEY_PHOTOS);
+export const revalidateVideosKey = () => revalidateTag(KEY_VIDEOS);
 
 export const revalidateTagsKey = () => revalidateTag(KEY_TAGS);
 
@@ -101,7 +69,7 @@ export const revalidateFilmSimulationsKey = () =>
   revalidateTag(KEY_FILM_SIMULATIONS);
 
 export const revalidateAllKeys = () => {
-  revalidatePhotosKey();
+  revalidateVideosKey();
   revalidateTagsKey();
   revalidateCamerasKey();
   revalidateFilmSimulationsKey();
@@ -116,111 +84,86 @@ export const revalidateAllKeysAndPaths = () => {
   PATHS_TO_CACHE.forEach(path => revalidatePath(path, 'layout'));
 };
 
-export const revalidatePhoto = (photoId: string) => {
+export const revalidateVideo = (videoId: string) => {
   // Tags
-  revalidateTag(photoId);
+  revalidateTag(videoId);
   revalidateTagsKey();
-  revalidateCamerasKey();
-  revalidateFilmSimulationsKey();
   // Paths
-  revalidatePath(pathForPhoto({ photo: photoId }), 'layout');
+  revalidatePath(pathForVideo({ video: videoId }), 'layout');
   revalidatePath(PATH_ROOT, 'layout');
   revalidatePath(PATH_GRID, 'layout');
   revalidatePath(PATH_FEED, 'layout');
   revalidatePath(PREFIX_TAG, 'layout');
-  revalidatePath(PREFIX_CAMERA, 'layout');
-  revalidatePath(PREFIX_FILM_SIMULATION, 'layout');
   revalidatePath(PATH_ADMIN, 'layout');
 };
 
 // Cache
 
-export const getPhotosCached = (...args: Parameters<typeof getPhotos>) =>
-  unstable_cache(getPhotos, [KEY_PHOTOS, ...getPhotosCacheKeys(...args)])(
+export const getVideosCached = (...args: Parameters<typeof getVideos>) =>
+  unstable_cache(getVideos, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(
     ...args,
-  ).then(parseCachedPhotosDates);
+  ).then(parseCachedVideosDates);
 
-export const getPhotosNearIdCached = (
-  ...args: Parameters<typeof getPhotosNearId>
+export const getVideosNearIdCached = (
+  ...args: Parameters<typeof getVideosNearId>
 ) =>
-  unstable_cache(getPhotosNearId, [KEY_PHOTOS, ...getPhotosCacheKeys(args[1])])(
+  unstable_cache(getVideosNearId, [KEY_VIDEOS, ...getVideosCacheKeys(args[1])])(
     ...args,
-  ).then(({ photos, indexNumber }) => {
-    const [photoId, { limit }] = args;
-    const photo = photos.find(({ id }) => id === photoId);
-    const isPhotoFirst = photos.findIndex(p => p.id === photoId) === 0;
+  ).then(({ videos, indexNumber }) => {
+    const [videoId, limit] = args;
+    const video = videos.find(({ id }) => id === videoId);
+    const isVideoFirst = videos.findIndex(p => p.id === videoId) === 0;
     return {
-      photo: photo ? parseCachedPhotoDates(photo) : undefined,
-      photos: parseCachedPhotosDates(photos),
+      video: video ? parseCachedVideoDates(video) : undefined,
+      videos: parseCachedVideosDates(videos),
       ...(limit && {
-        photosGrid: photos.slice(
-          isPhotoFirst ? 1 : 2,
-          isPhotoFirst ? limit - 1 : limit,
+        videosGrid: videos.slice(
+          isVideoFirst ? 1 : 2,
+          isVideoFirst ? limit - 1 : limit,
         ),
       }),
       indexNumber,
     };
   });
 
-export const getPhotosMetaCached = (
-  ...args: Parameters<typeof getPhotosMeta>
+export const getVideosMetaCached = (
+  ...args: Parameters<typeof getVideosMeta>
 ) =>
-  unstable_cache(getPhotosMeta, [
-    KEY_PHOTOS,
+  unstable_cache(getVideosMeta, [
+    KEY_VIDEOS,
     KEY_COUNT,
     KEY_DATE_RANGE,
-    ...getPhotosCacheKeys(...args),
+    ...getVideosCacheKeys(...args),
   ])(...args);
 
-export const getPhotosMostRecentUpdateCached = unstable_cache(
-  () => getPhotosMostRecentUpdate(),
-  [KEY_PHOTOS, KEY_COUNT, KEY_DATE_RANGE],
+export const getVideosMostRecentUpdateCached = unstable_cache(
+  () => getVideosMostRecentUpdate(),
+  [KEY_VIDEOS, KEY_COUNT, KEY_DATE_RANGE],
 );
 
-export const getPhotoCached = (...args: Parameters<typeof getPhoto>) =>
-  unstable_cache(getPhoto, [KEY_PHOTOS, KEY_PHOTO])(...args).then(photo =>
-    photo ? parseCachedPhotoDates(photo) : undefined,
+export const getVideCached = (...args: Parameters<typeof getVideo>) =>
+  unstable_cache(getVideo, [KEY_VIDEOS, KEY_VIDEO])(...args).then(video =>
+    video ? parseCachedVideoDates(video) : undefined,
   );
 
 export const getUniqueTagsCached = unstable_cache(getUniqueTags, [
-  KEY_PHOTOS,
+  KEY_VIDEOS,
   KEY_TAGS,
 ]);
 
 export const getUniqueTagsHiddenCached = unstable_cache(getUniqueTagsHidden, [
-  KEY_PHOTOS,
+  KEY_VIDEOS,
   KEY_TAGS,
   KEY_HIDDEN,
 ]);
 
-export const getUniqueCamerasCached = unstable_cache(getUniqueCameras, [
-  KEY_PHOTOS,
-  KEY_CAMERAS,
-]);
-
-export const getUniqueLensesCached = unstable_cache(getUniqueLenses, [
-  KEY_PHOTOS,
-  KEY_LENSES,
-]);
-
-export const getUniqueFilmSimulationsCached = unstable_cache(
-  getUniqueFilmSimulations,
-  [KEY_PHOTOS, KEY_FILM_SIMULATIONS],
-);
-
-export const getUniqueFocalLengthsCached = unstable_cache(
-  getUniqueFocalLengths,
-  [KEY_PHOTOS, KEY_FOCAL_LENGTHS],
-);
-
 // No store
-
-export const getPhotosNoStore = (...args: Parameters<typeof getPhotos>) => {
+export const getVideosNoStore = (...args: Parameters<typeof getVideos>) => {
   unstable_noStore();
-  return getPhotos(...args);
+  return getVideos(...args);
 };
 
-export const getPhotoNoStore = (...args: Parameters<typeof getPhoto>) => {
+export const getVideoNoStore = (...args: Parameters<typeof getVideo>) => {
   unstable_noStore();
-  return getPhoto(...args);
+  return getVideo(...args);
 };

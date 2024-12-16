@@ -2,7 +2,7 @@
 
 import {
   VideoFormData,
-  convertFormDataToPhotoDbInsert,
+  convertFormDataToVideoDbInsert,
   convertVideoToFormData,
 } from './form';
 import { redirect } from 'next/navigation';
@@ -15,22 +15,23 @@ import {
   revalidateVideo,
   revalidateVideosKey,
   revalidateTagsKey,
-} from '@/photo/cache';
+} from '@/video/cache';
 import {
   PATH_ADMIN_VIDEOS,
   PATH_ADMIN_TAGS,
   PATH_ROOT,
-  pathForPhoto,
+  pathForVideo,
 } from '@/site/paths';
 import { blurImageFromUrl, extractImageDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
-import { convertPhotoToPhotoDbInsert, Photo } from '.';
+import { convertVideoToVideoDbInsert } from '.';
 import { runAuthenticatedAdminServerAction } from '@/auth';
 
 import { convertUploadToVideo } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
-import { Video } from '@/db/video_orm';
+import { insertVideo, Video } from '@/db/video_orm';
+import { createStreamableValue } from 'ai/rsc';
 
 // Private actions
 
@@ -39,18 +40,18 @@ export const createVideoAction = async (formData: FormData) =>
     const shouldStripGpsData = formData.get('shouldStripGpsData') === 'true';
     formData.delete('shouldStripGpsData');
 
-    const photo = convertFormDataToPhotoDbInsert(formData);
+    const video = convertFormDataToVideoDbInsert(formData);
 
-    const updatedUrl = await convertUploadToPhoto({
-      urlOrigin: photo.url,
+    const updatedUrl = await convertUploadToVideo({
+      urlOrigin: video.url,
       shouldStripGpsData,
     });
 
     if (updatedUrl) {
-      photo.url = updatedUrl;
-      await insertPhoto(photo);
+      video.url = updatedUrl;
+      await insertVideo(video);
       revalidateAllKeysAndPaths();
-      redirect(PATH_ADMIN_PHOTOS);
+      redirect(PATH_ADMIN_VIDEOS);
     }
   });
 
@@ -66,7 +67,7 @@ export const addAllUploadsAction = async ({
   takenAtNaiveLocal: string;
 }) =>
   runAuthenticatedAdminServerAction(async () => {
-    const PROGRESS_TASK_COUNT = AI_TEXT_GENERATION_ENABLED ? 5 : 4;
+    const PROGRESS_TASK_COUNT = 4;
 
     const addedUploadUrls: string[] = [];
     let currentUploadUrl = '';
@@ -93,18 +94,17 @@ export const addAllUploadsAction = async ({
           streamUpdate('Parsing EXIF data');
 
           const {
-            photoFormExif,
+            videoFormExif,
             imageResizedBase64,
             shouldStripGpsData,
             fileBytes,
           } = await extractImageDataFromBlobPath(url, {
-            includeInitialPhotoFields: true,
+            includeInitialVideoFields: true,
             generateBlurData: BLUR_ENABLED,
             generateResizedImage: AI_TEXT_GENERATION_ENABLED,
           });
 
-          if (photoFormExif) {
-
+          if (videoFormExif) {
             const {
               title,
               caption,
@@ -115,19 +115,19 @@ export const addAllUploadsAction = async ({
               AI_TEXT_AUTO_GENERATED_FIELDS,
             );
 
-            const form: Partial<PhotoFormData> = {
-              ...photoFormExif,
+            const form: Partial<VideoFormData> = {
+              ...videoFormExif,
               title,
               caption,
               tags: tags || aiTags,
               semanticDescription,
-              takenAt: photoFormExif.takenAt || takenAtLocal,
-              takenAtNaive: photoFormExif.takenAtNaive || takenAtNaiveLocal,
+              takenAt: videoFormExif.takenAt || takenAtLocal,
+              takenAtNaive: videoFormExif.takenAtNaive || takenAtNaiveLocal,
             };
 
-            streamUpdate('Transferring to photo storage');
+            streamUpdate('Transferring to video storage');
 
-            const updatedUrl = await convertUploadToPhoto({
+            const updatedUrl = await convertUploadToVideo({
               urlOrigin: url,
               fileBytes,
               shouldStripGpsData,
@@ -135,9 +135,9 @@ export const addAllUploadsAction = async ({
             if (updatedUrl) {
               const subheadFinal = 'Adding to database';
               streamUpdate(subheadFinal);
-              const photo = convertFormDataToPhotoDbInsert(form);
-              photo.url = updatedUrl;
-              await insertPhoto(photo);
+              const video = convertFormDataToVideoDbInsert(form);
+              video.url = updatedUrl;
+              await insertVideo(video);
               addedUploadUrls.push(url);
               // Re-submit with updated url
               streamUpdate(subheadFinal, 'added');
@@ -147,7 +147,7 @@ export const addAllUploadsAction = async ({
       } catch (error: any) {
         // eslint-disable-next-line max-len
         stream.error(
-          `${error.message} (${addedUploadUrls.length} of ${uploadUrls.length} photos successfully added)`,
+          `${error.message} (${addedUploadUrls.length} of ${uploadUrls.length} videos successfully added)`,
         );
       }
       revalidateAllKeysAndPaths();
@@ -157,103 +157,103 @@ export const addAllUploadsAction = async ({
     return stream.value;
   });
 
-export const updatePhotoAction = async (formData: FormData) =>
+export const updateVideoAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = convertFormDataToPhotoDbInsert(formData);
+    const video = convertFormDataToVideoDbInsert(formData);
 
     let urlToDelete: string | undefined;
-    if (photo.hidden && photo.url.includes(photo.id)) {
+    if (video.hidden && video.url.includes(video.id)) {
       // Backfill:
       // Anonymize storage url on update if necessary by
       // re-running image upload transfer logic
-      const url = await convertUploadToPhoto({
-        urlOrigin: photo.url,
+      const url = await convertUploadToVideo({
+        urlOrigin: video.url,
         shouldDeleteOrigin: false,
       });
       if (url) {
-        urlToDelete = photo.url;
-        photo.url = url;
+        urlToDelete = video.url;
+        video.url = url;
       }
     }
 
-    await updatePhoto(photo).then(async () => {
+    await updateVideo(video).then(async () => {
       if (urlToDelete) {
         await deleteFile(urlToDelete);
       }
     });
 
-    revalidatePhoto(photo.id);
+    revalidateVideo(video.id);
 
     redirect(PATH_ADMIN_PHOTOS);
   });
 
-export const tagMultiplePhotosAction = (tags: string, photoIds: string[]) =>
+export const tagMultipleVideosAction = (tags: string, videoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
-    await addTagsToPhotos(convertStringToArray(tags, false) ?? [], photoIds);
+    await addTagsToVideos(convertStringToArray(tags, false) ?? [], videoIds);
     revalidateAllKeysAndPaths();
   });
 
-export const toggleFavoritePhotoAction = async (
-  photoId: string,
+export const toggleFavoriteVideoAction = async (
+  videoId: string,
   shouldRedirect?: boolean,
 ) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = await getPhoto(photoId);
-    if (photo) {
-      const { tags } = photo;
-      photo.tags = tags.some(tag => tag === TAG_FAVS)
+    const video = await getVideo(videoId);
+    if (video) {
+      const { tags } = video;
+      video.tags = tags.some(tag => tag === TAG_FAVS)
         ? tags.filter(tag => !isTagFavs(tag))
         : [...tags, TAG_FAVS];
-      await updatePhoto(convertPhotoToPhotoDbInsert(photo));
+      await updateVideo(convertVideoToVideoDbInsert(video));
       revalidateAllKeysAndPaths();
       if (shouldRedirect) {
-        redirect(pathForPhoto({ photo: photoId }));
+        redirect(pathForVideo({ video: videoId }));
       }
     }
   });
 
-export const deletePhotosAction = async (photoIds: string[]) =>
+export const deleteVideosAction = async (videoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
-    for (const photoId of photoIds) {
-      const photo = await getPhoto(photoId, true);
-      if (photo) {
-        await deletePhoto(photoId).then(() => deleteFile(photo.url));
+    for (const videoId of videoIds) {
+      const video = await getVideo(videoId, true);
+      if (video) {
+        await deleteVideo(videoId).then(() => deleteFile(video.url));
       }
     }
     revalidateAllKeysAndPaths();
   });
 
-export const deletePhotoAction = async (
-  photoId: string,
-  photoUrl: string,
+export const deleteVideoAction = async (
+  videoId: string,
+  videoUrl: string,
   shouldRedirect?: boolean,
 ) =>
   runAuthenticatedAdminServerAction(async () => {
-    await deletePhoto(photoId).then(() => deleteFile(photoUrl));
+    await deleteVideo(videoId).then(() => deleteFile(videoUrl));
     revalidateAllKeysAndPaths();
     if (shouldRedirect) {
       redirect(PATH_ROOT);
     }
   });
 
-export const deletePhotoTagGloballyAction = async (formData: FormData) =>
+export const deleteVideoTagGloballyAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
     const tag = formData.get('tag') as string;
 
-    await deletePhotoTagGlobally(tag);
+    await deleteVideoTagGlobally(tag);
 
-    revalidatePhotosKey();
+    revalidateVideosKey();
     revalidateAdminPaths();
   });
 
-export const renamePhotoTagGloballyAction = async (formData: FormData) =>
+export const renameVideoTagGloballyAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
     const tag = formData.get('tag') as string;
     const updatedTag = formData.get('updatedTag') as string;
 
     if (tag && updatedTag && tag !== updatedTag) {
-      await renamePhotoTagGlobally(tag, updatedTag);
-      revalidatePhotosKey();
+      await renameVideoTagGlobally(tag, updatedTag);
+      revalidateVideosKey();
       revalidateTagsKey();
       redirect(PATH_ADMIN_TAGS);
     }
@@ -265,48 +265,48 @@ export const deleteUploadAction = async (url: string) =>
     revalidateAdminPaths();
   });
 
-// Accessed from admin photo edit page
+// Accessed from admin video edit page
 // will not update blur data
 export const getExifDataAction = async (
   url: string,
-): Promise<Partial<PhotoFormData>> =>
+): Promise<Partial<VideoFormData>> =>
   runAuthenticatedAdminServerAction(async () => {
-    const { photoFormExif } = await extractImageDataFromBlobPath(url);
-    if (photoFormExif) {
-      return photoFormExif;
+    const { videoFormExif } = await extractImageDataFromBlobPath(url);
+    if (videoFormExif) {
+      return videoFormExif;
     } else {
       return {};
     }
   });
 
-// Accessed from admin photo table, will:
+// Accessed from admin video table, will:
 // - update EXIF data
 // - anonymize storage url if necessary
 // - strip GPS data if necessary
 // - update blur data (or destroy if blur is disabled)
 // - generate AI text data, if enabled, and auto-generated fields are empty
-export const syncPhotoAction = async (videoId: string) =>
+export const syncVideoAction = async (videoId: string) =>
   runAuthenticatedAdminServerAction(async () => {
     const video = await getVideo(videoId ?? '', true);
 
     if (video) {
       const {
-        photoFormExif,
+        videoFormExif,
         imageResizedBase64,
         shouldStripGpsData,
         fileBytes,
       } = await extractImageDataFromBlobPath(video.url, {
-        includeInitialPhotoFields: false,
+        includeInitialVideoFields: false,
         generateBlurData: BLUR_ENABLED,
         generateResizedImage: AI_TEXT_GENERATION_ENABLED,
       });
 
       let urlToDelete: string | undefined;
-      if (photoFormExif) {
+      if (videoFormExif) {
         if (video.url.includes(video.id) || shouldStripGpsData) {
           // Anonymize storage url on update if necessary by
           // re-running image upload transfer logic
-          const url = await convertUploadToPhoto({
+          const url = await convertUploadToVideo({
             urlOrigin: video.url,
             fileBytes,
             shouldStripGpsData,
@@ -328,9 +328,9 @@ export const syncPhotoAction = async (videoId: string) =>
           AI_TEXT_AUTO_GENERATED_FIELDS,
         );
 
-        const photoFormDbInsert = convertFormDataToPhotoDbInsert({
-          ...convertPhotoToFormData(video),
-          ...photoFormExif,
+        const videoFormDbInsert = convertFormDataToVideoDbInsert({
+          ...convertVideoToFormData(video),
+          ...videoFormExif,
           ...(!BLUR_ENABLED && { blurData: undefined }),
           ...(!video.title && { title: atTitle }),
           ...(!video.caption && { caption: aiCaption }),
@@ -340,7 +340,7 @@ export const syncPhotoAction = async (videoId: string) =>
           }),
         });
 
-        await updatePhoto(photoFormDbInsert).then(async () => {
+        await updateVideo(videoFormDbInsert).then(async () => {
           if (urlToDelete) {
             await deleteFile(urlToDelete);
           }
@@ -351,10 +351,10 @@ export const syncPhotoAction = async (videoId: string) =>
     }
   });
 
-export const syncPhotosAction = async (photoIds: string[]) =>
+export const syncVideosAction = async (videoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
-    for (const photoId of photoIds) {
-      await syncPhotoAction(photoId);
+    for (const videoId of videoIds) {
+      await syncVideoAction(videoId);
     }
     revalidateAllKeysAndPaths();
   });
@@ -373,27 +373,27 @@ export const streamAiImageQueryAction = async (
 export const getImageBlurAction = async (url: string) =>
   runAuthenticatedAdminServerAction(() => blurImageFromUrl(url));
 
-export const getPhotosHiddenMetaCachedAction = async () =>
+export const getVideosHiddenMetaCachedAction = async () =>
   runAuthenticatedAdminServerAction(() =>
-    getPhotosMetaCached({ hidden: 'only' }),
+    getVideosMetaCached({ hidden: 'only' }),
   );
 
 // Public/Private actions
 
-export const getPhotosAction = async (options: GetPhotosOptions) =>
+export const getVideosAction = async (options: GetVideosOptions) =>
   areOptionsSensitive(options)
-    ? runAuthenticatedAdminServerAction(() => getPhotos(options))
-    : getPhotos(options);
+    ? runAuthenticatedAdminServerAction(() => getVideos(options))
+    : getVideos(options);
 
-export const getPhotosCachedAction = async (options: GetPhotosOptions) =>
+export const getVideosCachedAction = async (options: GetVideosOptions) =>
   areOptionsSensitive(options)
     ? runAuthenticatedAdminServerAction(() => getVideosCached(options))
     : getVideosCached(options);
 
 // Public actions
 
-export const searchPhotosAction = async (query: string) =>
+export const searchVideosAction = async (query: string) =>
   getVideos({ query, limit: 10 }).catch(e => {
-    console.error('Could not query photos', e);
+    console.error('Could not query videos', e);
     return [] as Video[];
   });

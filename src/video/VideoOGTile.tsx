@@ -1,11 +1,11 @@
-import { Photo, descriptionForPhoto, titleForPhoto } from '@/photo';
-import { absolutePathForPhotoImage, pathForPhoto } from '@/site/paths';
+import { Video, descriptionForVideo, titleForVideo } from '@/video';
+import { absolutePathForVideoImage, pathForVideo } from '@/site/paths';
 import OGTile from '@/components/OGTile';
 
 export type OGLoadingState = 'unloaded' | 'loading' | 'loaded' | 'failed';
 
-export default function PhotoOGTile({
-  photo,
+export default function VideoOGTile({
+  video,
   loadingState: loadingStateExternal,
   riseOnHover,
   onLoad,
@@ -13,7 +13,7 @@ export default function PhotoOGTile({
   retryTime,
   onVisible,
 }: {
-  photo: Photo;
+  video: Video;
   loadingState?: OGLoadingState;
   onLoad?: () => void;
   onFail?: () => void;
@@ -24,10 +24,10 @@ export default function PhotoOGTile({
   return (
     <OGTile
       {...{
-        title: titleForPhoto(photo),
-        description: descriptionForPhoto(photo),
-        path: pathForPhoto({ photo }),
-        pathImageAbsolute: absolutePathForPhotoImage(photo),
+        title: titleForVideo(video),
+        description: descriptionForVideo(video),
+        path: pathForVideo({ video }),
+        pathImageAbsolute: absolutePathForVideoImage(video),
         loadingState: loadingStateExternal,
         onLoad,
         onFail,

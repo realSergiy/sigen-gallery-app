@@ -1,12 +1,10 @@
 'use client';
 
 import {
-  Photo,
-  altTextForPhoto,
-  doesPhotoNeedBlurCompatibility,
-  shouldShowCameraDataForPhoto,
-  shouldShowExifDataForPhoto,
-  titleForPhoto,
+  Video,
+  altTextForVideo,
+  doesVideoNeedBlurCompatibility,
+  titleForVideo,
 } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import ImageLarge from '@/components/image/ImageLarge';
@@ -14,96 +12,82 @@ import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import {
   pathForFocalLength,
-  pathForPhoto,
-  pathForPhotoShare,
+  pathForVideo,
+  pathForVideoShare,
 } from '@/site/paths';
-import PhotoTags from '@/tag/PhotoTags';
+import VideoTags from '@/tag/VideoTags';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
-import PhotoCamera from '../camera/PhotoCamera';
-import { cameraFromPhoto } from '@/camera';
-import PhotoFilmSimulation from '@/simulation/PhotoFilmSimulation';
+import { cameraFromVideo } from '@/camera';
+import VideoFilmSimulation from '@/simulation/VideoFilmSimulation';
 import { sortTags } from '@/tag';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
-import PhotoLink from './PhotoLink';
+import VideoLink from './VideoLink';
 import {
   SHOULD_PREFETCH_ALL_LINKS,
   ALLOW_PUBLIC_DOWNLOADS,
 } from '@/site/config';
-import AdminPhotoMenuClient from '@/admin/AdminPhotoMenuClient';
-import { RevalidatePhoto } from './InfiniteVideoScroll';
+import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
+import { RevalidateVideo } from './InfiniteVideoScroll';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
-import PhotoDate from './PhotoDate';
+import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
 
-export default function PhotoLarge({
-  photo,
+export default function VideoLarge({
+  video,
   className,
   primaryTag,
   priority,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
-  revalidatePhoto,
+  revalidateVideo,
   showTitle = true,
   showTitleAsH1,
-  showCamera = true,
-  showSimulation = true,
   shouldShare = true,
   shouldShareTag,
-  shouldShareCamera,
-  shouldShareSimulation,
-  shouldShareFocalLength,
   shouldScrollOnShare,
   includeFavoriteInAdminMenu,
   onVisible,
 }: {
-  photo: Photo;
+  video: Video;
   className?: string;
   primaryTag?: string;
   priority?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidateVideo?: RevalidateVideo;
   showTitle?: boolean;
   showTitleAsH1?: boolean;
-  showCamera?: boolean;
-  showSimulation?: boolean;
   shouldShare?: boolean;
   shouldShareTag?: boolean;
-  shouldShareCamera?: boolean;
-  shouldShareSimulation?: boolean;
-  shouldShareFocalLength?: boolean;
   shouldScrollOnShare?: boolean;
   includeFavoriteInAdminMenu?: boolean;
   onVisible?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const tags = sortTags(photo.tags, primaryTag);
+  const tags = sortTags(video.tags, primaryTag);
 
-  const camera = cameraFromPhoto(photo);
+  const camera = cameraFromVideo(video);
 
-  const showCameraContent = showCamera && shouldShowCameraDataForPhoto(photo);
   const showTagsContent = tags.length > 0;
-  const showExifContent = shouldShowExifDataForPhoto(photo);
 
   useOnVisible(ref, onVisible);
 
-  const { arePhotosMatted, isUserSignedIn } = useAppState();
+  const { areVideosMatted, isUserSignedIn } = useAppState();
 
-  const hasTitle = showTitle && Boolean(photo.title);
+  const hasTitle = showTitle && Boolean(video.title);
 
-  const hasTitleContent = hasTitle || Boolean(photo.caption);
+  const hasTitleContent = hasTitle || Boolean(video.caption);
 
-  const hasMetaContent =
-    showCameraContent || showTagsContent || showExifContent;
+  const hasMetaContent = showTagsContent;
 
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
-  const renderPhotoLink = () => (
-    <PhotoLink
-      photo={photo}
+  const renderVideoLink = () => (
+    <VideoLink
+      video={video}
       className="flex-grow font-bold uppercase"
       prefetch={prefetch}
     />
@@ -115,28 +99,28 @@ export default function PhotoLarge({
       className={className}
       contentMain={
         <Link
-          href={pathForPhoto({ photo })}
+          href={pathForVideo({ video })}
           className={clsx(
-            arePhotosMatted && 'flex aspect-[3/2] items-center bg-gray-100',
+            areVideosMatted && 'flex aspect-[3/2] items-center bg-gray-100',
           )}
           prefetch={prefetch}
         >
           <div
             className={clsx(
-              arePhotosMatted && 'flex w-full items-center justify-center',
-              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
+              areVideosMatted && 'flex w-full items-center justify-center',
+              areVideosMatted && video.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
             )}
           >
-            <ImageLarge
-              className={clsx(arePhotosMatted && 'h-full')}
+            <VideoLarge
+              className={clsx(areVideosMatted && 'h-full')}
               imgClassName={clsx(
-                arePhotosMatted && 'object-contain w-full h-full',
+                areVideosMatted && 'object-contain w-full h-full',
               )}
-              alt={altTextForPhoto(photo)}
-              src={photo.url}
-              aspectRatio={photo.aspectRatio}
-              blurDataURL={photo.blurData}
-              blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
+              alt={altTextForVideo(video)}
+              src={video.url}
+              aspectRatio={video.aspectRatio}
+              blurDataURL={video.blurData}
+              blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
               priority={priority}
             />
           </div>
@@ -157,23 +141,23 @@ export default function PhotoLarge({
             <div className="flex items-start gap-2 md:relative">
               {hasTitle &&
                 (showTitleAsH1 ? (
-                  <h1>{renderPhotoLink()}</h1>
+                  <h1>{renderVideoLink()}</h1>
                 ) : (
-                  renderPhotoLink()
+                  renderVideoLink()
                 ))}
               <div className="absolute right-0 z-10 translate-y-[-4px]">
-                <AdminPhotoMenuClient
+                <AdminVideoMenuClient
                   {...{
-                    photo,
-                    revalidatePhoto,
+                    video,
+                    revalidateVideo,
                     includeFavorite: includeFavoriteInAdminMenu,
-                    ariaLabel: `Admin menu for '${titleForPhoto(photo)}' photo`,
+                    ariaLabel: `Admin menu for '${titleForVideo(video)}' video`,
                   }}
                 />
               </div>
             </div>
             <div className="space-y-baseline">
-              {photo.caption && (
+              {video.caption && (
                 <div
                   className={clsx(
                     'uppercase',
@@ -181,20 +165,13 @@ export default function PhotoLarge({
                     isUserSignedIn && 'md:pr-7',
                   )}
                 >
-                  {photo.caption}
+                  {video.caption}
                 </div>
               )}
               {(showCameraContent || showTagsContent) && (
                 <div>
-                  {showCameraContent && (
-                    <PhotoCamera
-                      camera={camera}
-                      contrast="medium"
-                      prefetch={prefetchRelatedLinks}
-                    />
-                  )}
                   {showTagsContent && (
-                    <PhotoTags
+                    <VideoTags
                       tags={tags}
                       contrast="medium"
                       prefetch={prefetchRelatedLinks}
@@ -215,34 +192,34 @@ export default function PhotoLarge({
               <>
                 <ul className="text-medium">
                   <li>
-                    {photo.focalLength && (
+                    {video.focalLength && (
                       <Link
-                        href={pathForFocalLength(photo.focalLength)}
+                        href={pathForFocalLength(video.focalLength)}
                         className="hover:text-main active:text-medium"
                       >
-                        {photo.focalLengthFormatted}
+                        {video.focalLengthFormatted}
                       </Link>
                     )}
-                    {photo.focalLengthIn35MmFormatFormatted && (
+                    {video.focalLengthIn35MmFormatFormatted && (
                       <>
                         {' '}
                         <span
                           title="35mm equivalent"
                           className="text-extra-dim"
                         >
-                          {photo.focalLengthIn35MmFormatFormatted}
+                          {video.focalLengthIn35MmFormatFormatted}
                         </span>
                       </>
                     )}
                   </li>
-                  <li>{photo.fNumberFormatted}</li>
-                  <li>{photo.exposureTimeFormatted}</li>
-                  <li>{photo.isoFormatted}</li>
-                  <li>{photo.exposureCompensationFormatted ?? '0ev'}</li>
+                  <li>{video.fNumberFormatted}</li>
+                  <li>{video.exposureTimeFormatted}</li>
+                  <li>{video.isoFormatted}</li>
+                  <li>{video.exposureCompensationFormatted ?? '0ev'}</li>
                 </ul>
-                {showSimulation && photo.filmSimulation && (
-                  <PhotoFilmSimulation
-                    simulation={photo.filmSimulation}
+                {showSimulation && video.filmSimulation && (
+                  <VideoFilmSimulation
+                    simulation={video.filmSimulation}
                     prefetch={prefetchRelatedLinks}
                   />
                 )}
@@ -255,8 +232,8 @@ export default function PhotoLarge({
                 'md:justify-normal',
               )}
             >
-              <PhotoDate
-                photo={photo}
+              <VideoDate
+                video={video}
                 className={clsx(
                   'text-medium',
                   // Prevent collision with admin button
@@ -273,17 +250,17 @@ export default function PhotoLarge({
               >
                 {shouldShare && (
                   <ShareButton
-                    path={pathForPhotoShare({
-                      photo,
+                    path={pathForVideoShare({
+                      video,
                       tag: shouldShareTag ? primaryTag : undefined,
                       camera: shouldShareCamera ? camera : undefined,
                       // eslint-disable-next-line max-len
                       simulation: shouldShareSimulation
-                        ? photo.filmSimulation
+                        ? video.filmSimulation
                         : undefined,
                       // eslint-disable-next-line max-len
                       focal: shouldShareFocalLength
-                        ? photo.focalLength
+                        ? video.focalLength
                         : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}
@@ -293,7 +270,7 @@ export default function PhotoLarge({
                 {ALLOW_PUBLIC_DOWNLOADS && (
                   <DownloadButton
                     className={clsx('translate-y-[0.5px] md:translate-y-0')}
-                    photo={photo}
+                    video={video}
                   />
                 )}
               </div>

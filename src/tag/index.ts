@@ -20,10 +20,12 @@ import {
 export const TAG_FAVS = 'favs';
 export const TAG_HIDDEN = 'hidden';
 
-export type Tags = {
+export type TagInfo = {
   tag: string;
   count: number;
-}[];
+};
+
+export type Tags = TagInfo[];
 
 export const formatTag = (tag?: string) =>
   capitalizeWords(tag?.replaceAll('-', ' '));

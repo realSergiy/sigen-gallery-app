@@ -1,21 +1,21 @@
 'use client';
 
 import {
-  Photo,
-  PhotoSetAttributes,
-  altTextForPhoto,
-  doesPhotoNeedBlurCompatibility,
+  Video,
+  VideoSetAttributes,
+  altTextForVideo,
+  doesVideoNeedBlurCompatibility,
 } from '.';
 import ImageMedium from '@/components/image/ImageMedium';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
-import { pathForPhoto } from '@/site/paths';
+import { pathForVideo } from '@/site/paths';
 import { SHOULD_PREFETCH_ALL_LINKS } from '@/site/config';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 
-export default function PhotoMedium({
-  photo,
+export default function VideoMedium({
+  video,
   tag,
   camera,
   simulation,
@@ -26,13 +26,13 @@ export default function PhotoMedium({
   className,
   onVisible,
 }: {
-  photo: Photo;
+  video: Video;
   selected?: boolean;
   priority?: boolean;
   prefetch?: boolean;
   className?: string;
   onVisible?: () => void;
-} & PhotoSetAttributes) {
+} & VideoSetAttributes) {
   const ref = useRef<HTMLAnchorElement>(null);
 
   useOnVisible(ref, onVisible);
@@ -40,7 +40,7 @@ export default function PhotoMedium({
   return (
     <Link
       ref={ref}
-      href={pathForPhoto({ photo, tag, camera, simulation, focal })}
+      href={pathForVideo({ video, tag, camera, simulation, focal })}
       className={clsx(
         'active:brightness-75',
         selected && 'brightness-50',
@@ -49,13 +49,13 @@ export default function PhotoMedium({
       prefetch={prefetch}
     >
       <ImageMedium
-        src={photo.url}
-        aspectRatio={photo.aspectRatio}
-        blurDataURL={photo.blurData}
-        blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
-        className="flex h-full w-full object-cover"
+        src={video.url}
+        aspectRatio={video.aspectRatio}
+        blurDataURL={video.blurData}
+        blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
+        className="flex object-cover w-full h-full"
         imgClassName="object-cover w-full h-full"
-        alt={altTextForPhoto(photo)}
+        alt={altTextForVideo(video)}
         priority={priority}
       />
     </Link>

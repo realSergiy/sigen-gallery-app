@@ -1,6 +1,7 @@
 import { videosTable } from '@/db/generated/schema';
 import { db } from '@/db';
-import { count, desc, eq, max, min } from 'drizzle-orm';
+import { count, and, eq, max, min, desc, sql } from 'drizzle-orm';
+import { TagInfo } from '@/tag';
 
 export type VideoDbNew = Omit<
   typeof videosTable.$inferInsert,
@@ -15,45 +16,95 @@ type ReplaceNullWithUndefined<T> = {
 
 export type Video = ReplaceNullWithUndefined<VideoDb>;
 
-/*
-export type GetVideosOptions = {
-  sortBy?: 'createdAt' | 'createdAtAsc' | 'takenAt' | 'priority';
-  limit?: number;
-  offset?: number;
-  query?: string;
-  takenBefore?: Date;
-  takenAfterInclusive?: Date;
-  updatedBefore?: Date;
-  hidden?: 'exclude' | 'include' | 'only';
-} & VideoSetAttributes;
-
-export type VideoSetAttributes = {
-  tag?: string;
-};
-*/
-
 const videosWhereQuery = db.select().from(videosTable).where;
 const videosSortQuery = db.select().from(videosTable).orderBy;
 
 export type VideosFilter = Parameters<typeof videosWhereQuery>[0];
 export type VideosOrderBy = Parameters<typeof videosSortQuery>[1];
 
-export const getVideos = async (options: {
+export type GetVideosOptions = {
   filter?: VideosFilter;
   sort?: VideosOrderBy;
   limit?: number;
-}) => {
-  const query = db.select().from(videosTable);
-  if (options.filter) {
-    query.where(options.filter);
-  }
-  if (options.sort) {
-    query.orderBy(options.sort);
-  }
-  if (options.limit) {
-    query.limit(options.limit);
-  }
+  offset?: number;
+};
+
+export const getVideos = async (options: GetVideosOptions) => {
+  const query = db
+    .select()
+    .from(videosTable)
+    .where(options.filter)
+    .orderBy(options.sort ?? desc(videosTable.takenAt))
+    .limit(options.limit ?? 1000)
+    .offset(options.offset ?? 0);
+
   return query;
+};
+
+export const getVideosMostRecentUpdate = async () => {
+  return db
+    .select({
+      updatedAt: max(videosTable.updatedAt),
+    })
+    .from(videosTable)
+    .then(rows => rows[0].updatedAt);
+};
+
+export const getUniqueTags = async () => {
+  const qw = await db.execute<TagInfo>(sql`
+    select distinct unnest(tags) as tag, count(*)
+    from videos
+    where not hidden
+    group by tag
+    order by tag asc
+  `);
+
+  return qw.rows;
+};
+
+export const getUniqueTagsHidden = async () => {
+  const qw = await db.execute<TagInfo>(sql`
+    select distinct unnest(tags) as tag, count(*)
+    from videos
+    group by tag
+    order by tag asc
+  `);
+
+  return qw.rows;
+};
+
+export const getVideosNearId = async (videoId: string, limit: number) => {
+  const qr = await db.execute<VideoDb & { row_number: number }>(sql`
+      with win as (
+        select *, row_number()
+        over (order by taken_at desc) as row_number
+        from videos
+      ),
+      current as (
+        select row_number from win where id = ${videoId}
+      )
+      select win.*
+      from win, current
+      where win.row_number >= current.row_number - 1
+      limit ${limit}
+    `);
+
+  const photo = qr.rows.find(p => p.id === videoId);
+  const indexNumber = photo ? photo.row_number : undefined;
+  return {
+    videos: qr.rows,
+    indexNumber,
+  };
+};
+
+export const getVideo = async (id: string, includeHidden = false) => {
+  const filter = includeHidden
+    ? eq(videosTable.id, id)
+    : and(eq(videosTable.id, id), eq(videosTable.hidden, false));
+
+  const rows = await db.select().from(videosTable).where(filter);
+
+  return rows.length == 1 ? rows[0] : undefined; // ToDo: log error if > 1
 };
 
 export const insertVideo = async (video: VideoDbNew) => {

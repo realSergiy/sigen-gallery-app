@@ -11,23 +11,24 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import PhotoDate from '@/photo/PhotoDate';
 import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
-import PhotoSyncButton from './PhotoSyncButton';
+import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
+import VideoSyncButton from './VideoSyncButton';
 import DeletePhotoButton from './DeletePhotoButton';
+import { Video } from '@/db/video_orm';
 
 export default function AdminVideosTable({
-  photos,
+  videos,
   onLastPhotoVisible,
-  revalidatePhoto,
-  photoIdsSyncing = [],
+  revalidateVideo,
+  videoIdsSyncing = [],
   hasAiTextGeneration,
   showUpdatedAt,
   canEdit = true,
   canDelete = true,
 }: {
-  photos: Photo[];
+  videos: Video[];
   onLastPhotoVisible?: () => void;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidateVideo?: RevalidateVideo;
   photoIdsSyncing?: string[];
   hasAiTextGeneration: boolean;
   showUpdatedAt?: boolean;

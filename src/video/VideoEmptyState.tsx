@@ -6,9 +6,9 @@ import { PATH_ADMIN_CONFIGURATION } from '@/site/paths';
 import SiteChecklist from '@/site/SiteChecklist';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
-import { HiOutlinePhotograph } from 'react-icons/hi';
+import { HiOutlineVideograph } from 'react-icons/hi';
 
-export default function PhotosEmptyState() {
+export default function VideosEmptyState() {
   return (
     <SiteGrid
       contentMain={
@@ -16,7 +16,7 @@ export default function PhotosEmptyState() {
           className="min-h-[20rem] px-8 sm:min-h-[30rem]"
           padding="loose"
         >
-          <HiOutlinePhotograph className="text-medium" size={24} />
+          <HiOutlineVideograph className="text-medium" size={24} />
           <div
             className={clsx(
               'text-2xl font-bold',
@@ -30,7 +30,7 @@ export default function PhotosEmptyState() {
           ) : (
             <div className="max-w-md space-y-6 text-center">
               <div className="space-y-2">
-                <div>Add your first photo:</div>
+                <div>Add your first video:</div>
                 <AdminCTA />
               </div>
               <div>

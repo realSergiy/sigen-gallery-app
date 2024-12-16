@@ -14,23 +14,25 @@ import { useState } from 'react';
 import { LiaBroomSolid } from 'react-icons/lia';
 import AdminUploadsTable from './AdminUploadsTable';
 
-export default function AdminVideosClient({
-  videos,
-  photosCount,
-  photosCountOutdated,
-  onLastPhotoUpload,
-  blobPhotoUrls,
-  infiniteScrollInitial,
-  infiniteScrollMultiple,
-}: {
+type AdminVideosClientProps = {
   videos: Video[];
   videosCount: number;
   videosCountOutdated: number;
   onLastVideoUpload: () => Promise<void>;
-  blobPhotoUrls: StorageListResponse;
+  blobVideoUrls: StorageListResponse;
   infiniteScrollInitial: number;
   infiniteScrollMultiple: number;
-}) {
+};
+
+export default function AdminVideosClient({
+  videos,
+  videosCount,
+  videosCountOutdated,
+  onLastVideoUpload,
+  blobVideoUrls,
+  infiniteScrollInitial,
+  infiniteScrollMultiple,
+}: AdminVideosClientProps) {
   const [isUploading, setIsUploading] = useState(false);
 
   return (
@@ -43,24 +45,24 @@ export default function AdminVideosClient({
                 shouldResize={!PRO_MODE_ENABLED}
                 isUploading={isUploading}
                 setIsUploading={setIsUploading}
-                onLastUpload={onLastPhotoUpload}
+                onLastUpload={onLastVideoUpload}
               />
             </div>
-            {photosCountOutdated > 0 && (
+            {videosCountOutdated > 0 && (
               <PathLoaderButton
                 path={PATH_ADMIN_OUTDATED}
                 icon={
                   <LiaBroomSolid size={18} className="translate-y-[-1px]" />
                 }
-                title={`${photosCountOutdated} Outdated Photos`}
+                title={`${videosCountOutdated} Outdated Videos`}
                 className={clsx(isUploading && 'hidden md:inline-flex')}
                 hideTextOnMobile={false}
               >
-                {photosCountOutdated}
+                {videosCountOutdated}
               </PathLoaderButton>
             )}
           </div>
-          {blobPhotoUrls.length > 0 && (
+          {blobVideoUrls.length > 0 && (
             <div
               className={clsx(
                 'border-b pb-6',
@@ -69,18 +71,18 @@ export default function AdminVideosClient({
               )}
             >
               <div className="font-bold">
-                Photo Blobs ({blobPhotoUrls.length})
+                Video Blobs ({blobVideoUrls.length})
               </div>
-              <AdminUploadsTable urlAddStatuses={blobPhotoUrls} />
+              <AdminUploadsTable urlAddStatuses={blobVideoUrls} />
             </div>
           )}
           {/* Use custom spacing to address gap/space-y compatibility quirks */}
           <div className="space-y-[6px] sm:space-y-[10px]">
-            <AdminPhotosTable
-              photos={photos}
+            <AdminVideosTable
+              videos={videos}
               hasAiTextGeneration={AI_TEXT_GENERATION_ENABLED}
             />
-            {photosCount > photos.length && (
+            {videosCount > videos.length && (
               <AdminPhotosTableInfinite
                 initialOffset={infiniteScrollInitial}
                 itemsPerPage={infiniteScrollMultiple}

@@ -5,8 +5,8 @@ import { OUTDATED_THRESHOLD } from '@/photo';
 import { revalidatePath } from 'next/cache';
 import { desc, lt } from 'drizzle-orm';
 import { getVideosMetaCached } from '@/db/video_cache';
-import { videosTable } from '@/db/schema';
 import AdminVideosClient from '@/admin/AdminVideosClient';
+import { videosTable } from '@/db/generated/schema';
 
 export const maxDuration = 60;
 

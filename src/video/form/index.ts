@@ -1,30 +1,12 @@
-import type { ExifData } from 'ts-exif-parser';
-import { Video, VideoDb, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
-import { DEFAULT_ASPECT_RATIO } from '..';
+import { Video, VideoDbNew } from '@/db/video_orm';
 import {
-  convertTimestampToNaivePostgresString,
-  convertTimestampWithOffsetToPostgresString,
   generateLocalNaivePostgresString,
   generateLocalPostgresString,
 } from '@/utility/date';
-import {
-  convertApertureValueToFNumber,
-  getAspectRatioFromExif,
-  getOffsetFromExif,
-} from '@/utility/exif';
-import { roundToNumber } from '@/utility/number';
 import { convertStringToArray } from '@/utility/string';
 import { generateNanoid } from '@/utility/nanoid';
-import {
-  FILM_SIMULATION_FORM_INPUT_OPTIONS,
-  MAKE_FUJIFILM,
-} from '@/vendors/fujifilm';
 import { FilmSimulation } from '@/simulation';
-import { GEO_PRIVACY_ENABLED } from '@/site/config';
 import { TAG_FAVS, getValidationMessageForTags } from '@/tag';
-import { PhotoDbUpd } from '@/db/photo_orm';
-import { Photo as Video, PhotoExif } from '@/photo';
-import { PhotoFormData } from '@/photo/form';
 
 export type FieldSetType =
   | 'text'
@@ -139,7 +121,7 @@ export const formHasTextContent = ({
 
 // CREATE FORM DATA: FROM PHOTO
 
-export const convertPhotoToFormData = (video: Video): VideoFormData => {
+export const convertVideoToFormData = (video: Video): VideoFormData => {
   const valueForKey = (key: keyof Video, value: any) => {
     switch (key) {
       case 'tags':
@@ -197,7 +179,7 @@ export const convertFormDataToVideoDbInsert = (
   });
 
   return {
-    ...(videoForm as PhotoFormData & { filmSimulation?: FilmSimulation }),
+    ...(videoForm as VideoFormData & { filmSimulation?: FilmSimulation }),
     ...(!videoForm.id && { id: generateNanoid() }),
     // Convert form strings to arrays
     tags: tags.length > 0 ? tags : [],
@@ -212,18 +194,18 @@ export const convertFormDataToVideoDbInsert = (
 };
 
 export const getChangedFormFields = (
-  original: Partial<PhotoFormData>,
-  current: Partial<PhotoFormData>,
+  original: Partial<VideoFormData>,
+  current: Partial<VideoFormData>,
 ) => {
   return Object.keys(current).filter(
     key =>
-      (original[key as keyof PhotoFormData] ?? '') !==
-      (current[key as keyof PhotoFormData] ?? ''),
-  ) as (keyof PhotoFormData)[];
+      (original[key as keyof VideoFormData] ?? '') !==
+      (current[key as keyof VideoFormData] ?? ''),
+  ) as (keyof VideoFormData)[];
 };
 
 export const generateTakenAtFields = (
-  form?: Partial<PhotoFormData>,
+  form?: Partial<VideoFormData>,
 ): { takenAt: string; takenAtNaive: string } => ({
   takenAt: form?.takenAt || generateLocalPostgresString(),
   takenAtNaive: form?.takenAtNaive || generateLocalNaivePostgresString(),

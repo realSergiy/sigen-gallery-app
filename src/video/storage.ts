@@ -1,14 +1,14 @@
 import {
   copyFile,
   deleteFile,
-  generateRandomFileNameForPhoto,
+  generateRandomFileNameForVideo,
   getExtensionFromStorageUrl,
   moveFile,
   putFile,
 } from '@/services/storage';
 import { removeGpsData } from './server';
 
-export const convertUploadToPhoto = async ({
+export const convertUploadToVideo = async ({
   urlOrigin,
   fileBytes,
   shouldStripGpsData,
@@ -19,9 +19,9 @@ export const convertUploadToPhoto = async ({
   shouldStripGpsData?: boolean;
   shouldDeleteOrigin?: boolean;
 }) => {
-  const fileName = generateRandomFileNameForPhoto();
+  const fileName = generateRandomFileNameForVideo();
   const fileExtension = getExtensionFromStorageUrl(urlOrigin);
-  const photoPath = `${fileName}.${fileExtension || 'jpg'}`;
+  const videoPath = `${fileName}.${fileExtension || 'jpg'}`;
   if (shouldStripGpsData) {
     const fileWithoutGps = await removeGpsData(
       fileBytes ??
@@ -29,7 +29,7 @@ export const convertUploadToPhoto = async ({
           res.arrayBuffer(),
         )),
     );
-    return putFile(fileWithoutGps, photoPath).then(async url => {
+    return putFile(fileWithoutGps, videoPath).then(async url => {
       if (url && shouldDeleteOrigin) {
         await deleteFile(urlOrigin);
       }
@@ -37,7 +37,7 @@ export const convertUploadToPhoto = async ({
     });
   } else {
     return shouldDeleteOrigin
-      ? moveFile(urlOrigin, photoPath)
-      : copyFile(urlOrigin, photoPath);
+      ? moveFile(urlOrigin, videoPath)
+      : copyFile(urlOrigin, videoPath);
   }
 };

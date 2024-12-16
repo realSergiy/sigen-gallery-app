@@ -2,28 +2,28 @@
 
 import { clsx } from 'clsx/lite';
 import {
-  Photo,
-  PhotoDateRange,
-  PhotoSetAttributes,
-  dateRangeForPhotos,
-  titleForPhoto,
+  Video,
+  VideoDateRange,
+  VideoSetAttributes,
+  dateRangeForVideos,
+  titleForVideo,
 } from '.';
 import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
-import PhotoPrevNext from './PhotoPrevNext';
-import PhotoLink from './PhotoLink';
+import VideoPrevNext from './VideoPrevNext';
+import VideoLink from './VideoLink';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 import { useAppState } from '@/state/AppState';
 
-export default function PhotoHeader({
+export default function VideoHeader({
   tag,
   camera,
   simulation,
   focal,
-  photos,
-  selectedPhoto,
+  videos,
+  selectedVideo,
   entity,
   entityVerb = 'PHOTO',
   entityDescription,
@@ -32,41 +32,41 @@ export default function PhotoHeader({
   count,
   dateRange,
 }: {
-  photos: Photo[];
-  selectedPhoto?: Photo;
+  videos: Video[];
+  selectedVideo?: Video;
   entity?: ReactNode;
   entityVerb?: string;
   entityDescription?: string;
   sharePath?: string;
   indexNumber?: number;
   count?: number;
-  dateRange?: PhotoDateRange;
-} & PhotoSetAttributes) {
+  dateRange?: VideoDateRange;
+} & VideoSetAttributes) {
   const { isGridHighDensity } = useAppState();
 
-  const { start, end } = dateRangeForPhotos(photos, dateRange);
+  const { start, end } = dateRangeForVideos(videos, dateRange);
 
-  const selectedPhotoIndex = selectedPhoto
-    ? photos.findIndex(photo => photo.id === selectedPhoto.id)
+  const selectedVideoIndex = selectedVideo
+    ? videos.findIndex(video => video.id === selectedVideo.id)
     : undefined;
 
   const paginationLabel =
-    (indexNumber || (selectedPhotoIndex ?? 0 + 1)) +
+    (indexNumber || (selectedVideoIndex ?? 0 + 1)) +
     ' of ' +
-    (count ?? photos.length);
+    (count ?? videos.length);
 
   const headerType =
-    selectedPhotoIndex === undefined
-      ? 'photo-set'
+    selectedVideoIndex === undefined
+      ? 'video-set'
       : entity
-        ? 'photo-detail-with-entity'
-        : 'photo-detail';
+        ? 'video-detail-with-entity'
+        : 'video-detail';
 
   const renderPrevNext = () => (
-    <PhotoPrevNext
+    <VideoPrevNext
       {...{
-        photo: selectedPhoto,
-        photos,
+        video: selectedVideo,
+        videos,
         tag,
         camera,
         simulation,
@@ -76,7 +76,7 @@ export default function PhotoHeader({
   );
 
   const renderDateRange = () => (
-    <span className="text-dim text-right uppercase">
+    <span className="text-right uppercase text-dim">
       {start === end ? (
         start
       ) : (
@@ -90,13 +90,13 @@ export default function PhotoHeader({
 
   const renderContentA = () =>
     entity ??
-    (selectedPhoto !== undefined && (
-      <PhotoLink
-        photo={selectedPhoto}
-        className="truncate text-ellipsis font-bold uppercase"
+    (selectedVideo !== undefined && (
+      <VideoLink
+        video={selectedVideo}
+        className="font-bold uppercase truncate text-ellipsis"
       >
-        {titleForPhoto(selectedPhoto, true)}
-      </PhotoLink>
+        {titleForVideo(selectedVideo, true)}
+      </VideoLink>
     ));
 
   return (
@@ -106,7 +106,7 @@ export default function PhotoHeader({
       animateOnFirstLoadOnly
       items={[
         <DivDebugBaselineGrid
-          key="PhotosHeader"
+          key="VideosHeader"
           className={clsx(
             'grid items-start gap-0.5 sm:gap-1',
             'grid-cols-4',
@@ -115,15 +115,15 @@ export default function PhotoHeader({
               : 'md:grid-cols-3 lg:grid-cols-4',
           )}
         >
-          {/* Content A: Filter Set or Photo Title */}
+          {/* Content A: Filter Set or Video Title */}
           <div
             className={clsx(
               'inline-flex uppercase',
-              headerType === 'photo-set'
+              headerType === 'video-set'
                 ? isGridHighDensity
                   ? 'col-span-2 sm:col-span-1 lg:col-span-2'
                   : 'col-span-2 sm:col-span-1'
-                : headerType === 'photo-detail-with-entity'
+                : headerType === 'video-detail-with-entity'
                   ? isGridHighDensity
                     ? 'col-span-2 sm:col-span-1 lg:col-span-2'
                     : 'col-span-2 sm:col-span-1'
@@ -132,23 +132,23 @@ export default function PhotoHeader({
                     : 'col-span-3 md:col-span-2 lg:col-span-3',
             )}
           >
-            {headerType === 'photo-detail-with-entity' ? (
+            {headerType === 'video-detail-with-entity' ? (
               renderContentA()
             ) : (
               <h1>{renderContentA()}</h1>
             )}
           </div>
-          {/* Content B: Filter Set Meta or Photo Pagination */}
+          {/* Content B: Filter Set Meta or Video Pagination */}
           <div
             className={clsx(
               'inline-flex',
               'gap-2 self-start',
               'text-dim uppercase',
-              headerType === 'photo-set'
+              headerType === 'video-set'
                 ? isGridHighDensity
                   ? 'col-span-2 lg:col-span-3'
                   : 'col-span-2 md:col-span-1 lg:col-span-2'
-                : headerType === 'photo-detail-with-entity'
+                : headerType === 'video-detail-with-entity'
                   ? isGridHighDensity
                     ? 'sm:col-span-2 lg:col-span-3'
                     : 'sm:col-span-2 md:col-span-1 lg:col-span-2'
@@ -157,7 +157,7 @@ export default function PhotoHeader({
           >
             {entity && (
               <>
-                {headerType === 'photo-set' ? (
+                {headerType === 'video-set' ? (
                   <>
                     {entityDescription}
                     {sharePath && (
@@ -179,11 +179,11 @@ export default function PhotoHeader({
           {/* Content C: Nav */}
           <div
             className={clsx(
-              headerType === 'photo-set' ? 'hidden sm:flex' : 'flex',
+              headerType === 'video-set' ? 'hidden sm:flex' : 'flex',
               'justify-end',
             )}
           >
-            {selectedPhoto ? renderPrevNext() : renderDateRange()}
+            {selectedVideo ? renderPrevNext() : renderDateRange()}
           </div>
         </DivDebugBaselineGrid>,
       ]}

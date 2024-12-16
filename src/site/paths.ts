@@ -4,6 +4,8 @@ import { Camera } from '@/camera';
 import { FilmSimulation } from '@/simulation';
 import { parameterize } from '@/utility/string';
 import { TAG_HIDDEN } from '@/tag';
+import { Video } from '@/db/video_orm';
+import { VideoSetAttributes } from '@/video';
 
 // Core paths
 export const PATH_ROOT = '/';
@@ -82,6 +84,7 @@ export const PATHS_TO_CACHE = [
 ];
 
 type PhotoPathParams = { photo: PhotoOrPhotoId } & PhotoSetAttributes;
+type VideoPathParams = { video: VideoOrVideoId } & VideoSetAttributes;
 
 // Absolute paths
 export const ABSOLUTE_PATH_FOR_HOME_IMAGE = `${BASE_URL}/home-image`;
@@ -121,6 +124,18 @@ export const pathForPhoto = ({
           : focal
             ? `${pathForFocalLength(focal)}/${getPhotoId(photo)}`
             : `${PREFIX_PHOTO}/${getPhotoId(photo)}`;
+
+type VideoOrVideoId = Video | string;
+
+const getVideoId = (videoOrVideoId: VideoOrVideoId) =>
+  typeof videoOrVideoId === 'string' ? videoOrVideoId : videoOrVideoId.id;
+
+export const pathForVideo = ({ video, tag }: VideoPathParams) =>
+  typeof video !== 'string' && video.hidden
+    ? `${pathForTag(TAG_HIDDEN)}/${getVideoId(video)}`
+    : tag
+      ? `${pathForTag(tag)}/${getVideoId(video)}`
+      : `${PREFIX_VIDEO}/${getVideoId(video)}`;
 
 export const pathForPhotoShare = (params: PhotoPathParams) =>
   `${pathForPhoto(params)}/${SHARE}`;

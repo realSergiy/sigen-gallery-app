@@ -5,10 +5,10 @@ import { useState } from 'react';
 import Spinner from '@/components/Spinner';
 
 export default function UpdateBlurDataButton({
-  photoUrl,
+  videoUrl,
   onUpdatedBlurData,
 }: {
-  photoUrl?: string;
+  videoUrl?: string;
   onUpdatedBlurData: (blurData: string) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,11 +17,11 @@ export default function UpdateBlurDataButton({
     <button
       type="button"
       className={clsx('flex min-h-9 min-w-[3.25rem] justify-center', 'h-full')}
-      disabled={!photoUrl || isLoading}
+      disabled={!videoUrl || isLoading}
       onClick={() => {
-        if (photoUrl) {
+        if (videoUrl) {
           setIsLoading(true);
-          getImageBlurAction(photoUrl)
+          getImageBlurAction(videoUrl)
             .then(blurData => onUpdatedBlurData(blurData))
             .finally(() => setIsLoading(false));
         }

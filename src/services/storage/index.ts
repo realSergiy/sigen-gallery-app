@@ -78,6 +78,9 @@ const PREFIX_PHOTO = 'photo';
 export const generateRandomFileNameForPhoto = () =>
   `${PREFIX_PHOTO}-${generateStorageId()}`;
 
+export const generateRandomFileNameForVideo = () =>
+  `${PREFIX_VIDEO}-${generateStorageId()}`;
+
 const PREFIX_PHOTO_UPLOAD = 'upload_p';
 
 const REGEX_PHOTO_UPLOAD_PATH = new RegExp(

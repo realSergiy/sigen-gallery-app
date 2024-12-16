@@ -1,34 +1,34 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Photo } from '@/photo';
-import PhotoOGTile, { OGLoadingState } from './PhotoOGTile';
+import { Video } from '@/video';
+import VideoOGTile, { OGLoadingState } from './VideoOGTile';
 
 const DEFAULT_MAX_CONCURRENCY = 3;
 
-type PhotoLoadingState = Record<string, OGLoadingState>;
+type VideoLoadingState = Record<string, OGLoadingState>;
 
-export default function StaggeredOgPhotos({
-  photos,
+export default function StaggeredOgVideos({
+  videos,
   maxConcurrency = DEFAULT_MAX_CONCURRENCY,
-  onLastPhotoVisible,
+  onLastVideoVisible,
 }: {
-  photos: Photo[];
+  videos: Video[];
   maxConcurrency?: number;
-  onLastPhotoVisible?: () => void;
+  onLastVideoVisible?: () => void;
 }) {
   const [loadingState, setLoadingState] = useState(
-    photos.reduce(
-      (acc, photo) => ({
+    videos.reduce(
+      (acc, video) => ({
         ...acc,
-        [photo.id]: 'unloaded' as const,
+        [video.id]: 'unloaded' as const,
       }),
-      {} as PhotoLoadingState,
+      {} as VideoLoadingState,
     ),
   );
 
   const recomputeLoadingState = useCallback(
-    (updatedState: PhotoLoadingState = {}) =>
+    (updatedState: VideoLoadingState = {}) =>
       setLoadingState(currentLoadingState => {
         const initialLoadingState = {
           ...currentLoadingState,
@@ -63,15 +63,15 @@ export default function StaggeredOgPhotos({
 
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-      {photos.map((photo, index) => (
-        <PhotoOGTile
-          key={photo.id}
-          photo={photo}
-          loadingState={loadingState[photo.id]}
-          onLoad={() => recomputeLoadingState({ [photo.id]: 'loaded' })}
-          onFail={() => recomputeLoadingState({ [photo.id]: 'failed' })}
+      {videos.map((video, index) => (
+        <VideoOGTile
+          key={video.id}
+          video={video}
+          loadingState={loadingState[video.id]}
+          onLoad={() => recomputeLoadingState({ [video.id]: 'loaded' })}
+          onFail={() => recomputeLoadingState({ [video.id]: 'failed' })}
           onVisible={
-            index === photos.length - 1 ? onLastPhotoVisible : undefined
+            index === videos.length - 1 ? onLastVideoVisible : undefined
           }
           riseOnHover
         />

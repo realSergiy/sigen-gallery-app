@@ -5,7 +5,7 @@ import { uploadVideoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
 import {
   PATH_ADMIN_VIDEO_UPLOADS,
-  pathForAdminPhotoUploadUrl,
+  pathForAdminVideoUploadUrl,
 } from '@/site/paths';
 import ImageInput from '../components/ImageInput';
 import { clsx } from 'clsx/lite';
@@ -66,8 +66,8 @@ export default function VideoUpload({
                         // Redirect to view multiple uploads
                         router.push(PATH_ADMIN_VIDEO_UPLOADS);
                       } else {
-                        // Redirect to photo detail page
-                        router.push(pathForAdminPhotoUploadUrl(url));
+                        // Redirect to video detail page
+                        router.push(pathForAdminVideoUploadUrl(url));
                       }
                     }
                   })

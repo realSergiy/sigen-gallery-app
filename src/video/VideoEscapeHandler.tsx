@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const LISTENER_KEYUP = 'keyup';
 
-export default function PhotoEscapeHandler() {
+export default function VideoEscapeHandler() {
   const router = useRouter();
 
   const pathname = usePathname();

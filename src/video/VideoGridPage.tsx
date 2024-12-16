@@ -1,48 +1,48 @@
 'use client';
 
 import { Tags } from '@/tag';
-import { Photo } from '.';
+import { Video } from '.';
 import { Cameras } from '@/camera';
 import { FilmSimulations } from '@/simulation';
 import { PATH_GRID } from '@/site/paths';
-import PhotoGridSidebar from './PhotoGridSidebar';
-import PhotoGridContainer from './PhotoGridContainer';
+import VideoGridSidebar from './VideoGridSidebar';
+import VideoGridContainer from './VideoGridContainer';
 import { useEffect } from 'react';
 import { useAppState } from '@/state/AppState';
 
-export default function PhotoGridPage({
-  photos,
-  photosCount,
+export default function VideoGridPage({
+  videos,
+  videosCount,
   tags,
   cameras,
   simulations,
 }: {
-  photos: Photo[];
-  photosCount: number;
+  videos: Video[];
+  videosCount: number;
   tags: Tags;
   cameras: Cameras;
   simulations: FilmSimulations;
 }) {
-  const { setSelectedPhotoIds } = useAppState();
+  const { setSelectedVideoIds } = useAppState();
 
   useEffect(
-    () => () => setSelectedPhotoIds?.(undefined),
-    [setSelectedPhotoIds],
+    () => () => setSelectedVideoIds?.(undefined),
+    [setSelectedVideoIds],
   );
 
   return (
-    <PhotoGridContainer
+    <VideoGridContainer
       cacheKey={`page-${PATH_GRID}`}
-      photos={photos}
-      count={photosCount}
+      videos={videos}
+      count={videosCount}
       sidebar={
         <div className="sticky top-4 mt-[-4px] space-y-4">
-          <PhotoGridSidebar
+          <VideoGridSidebar
             {...{
               tags,
               cameras,
               simulations,
-              photosCount,
+              videosCount,
             }}
           />
         </div>

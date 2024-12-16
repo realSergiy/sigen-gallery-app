@@ -1,47 +1,45 @@
 import AnimateItems from '@/components/AnimateItems';
-import { Photo, PhotoDateRange, PhotoSetAttributes } from '.';
-import PhotoLarge from './PhotoLarge';
+import VideoLarge from './VideoLarge';
 import SiteGrid from '@/components/SiteGrid';
-import PhotoGrid from './PhotoGrid';
+import VideoGrid from './VideoGrid';
 import TagHeader from '@/tag/TagHeader';
 import CameraHeader from '@/camera/CameraHeader';
 import FilmSimulationHeader from '@/simulation/FilmSimulationHeader';
 import { TAG_HIDDEN } from '@/tag';
 import HiddenHeader from '@/tag/HiddenHeader';
 import FocalLengthHeader from '@/focal/FocalLengthHeader';
-import PhotoHeader from './PhotoHeader';
+import VideoHeader from './VideoHeader';
+import { Video } from '@/db/video_orm';
+import { VideoDateRange, VideoSetAttributes } from '.';
 
-export default function PhotoDetailPage({
-  photo,
-  photos,
-  photosGrid,
+export default function VideoDetailPage({
+  video,
+  videos,
+  videosGrid,
   tag,
-  camera,
-  simulation,
-  focal,
   indexNumber,
   count,
   dateRange,
   shouldShare,
   includeFavoriteInAdminMenu,
 }: {
-  photo: Photo;
-  photos: Photo[];
-  photosGrid?: Photo[];
+  video: Video;
+  videos: Video[];
+  videosGrid?: Video[];
   indexNumber?: number;
   count?: number;
-  dateRange?: PhotoDateRange;
+  dateRange?: VideoDateRange;
   shouldShare?: boolean;
   includeFavoriteInAdminMenu?: boolean;
-} & PhotoSetAttributes) {
+} & VideoSetAttributes) {
   let customHeader: JSX.Element | undefined;
 
   if (tag) {
     customHeader =
       tag === TAG_HIDDEN ? (
         <HiddenHeader
-          photos={photos}
-          selectedPhoto={photo}
+          videos={videos}
+          selectedVideo={video}
           indexNumber={indexNumber}
           count={count ?? 0}
         />
@@ -49,46 +47,13 @@ export default function PhotoDetailPage({
         <TagHeader
           key={tag}
           tag={tag}
-          photos={photos}
-          selectedPhoto={photo}
+          videos={videos}
+          selectedVideo={video}
           indexNumber={indexNumber}
           count={count}
           dateRange={dateRange}
         />
       );
-  } else if (camera) {
-    customHeader = (
-      <CameraHeader
-        camera={camera}
-        photos={photos}
-        selectedPhoto={photo}
-        indexNumber={indexNumber}
-        count={count}
-        dateRange={dateRange}
-      />
-    );
-  } else if (simulation) {
-    customHeader = (
-      <FilmSimulationHeader
-        simulation={simulation}
-        photos={photos}
-        selectedPhoto={photo}
-        indexNumber={indexNumber}
-        count={count}
-        dateRange={dateRange}
-      />
-    );
-  } else if (focal) {
-    customHeader = (
-      <FocalLengthHeader
-        focal={focal}
-        photos={photos}
-        selectedPhoto={photo}
-        indexNumber={indexNumber}
-        count={count}
-        dateRange={dateRange}
-      />
-    );
   }
 
   return (
@@ -96,16 +61,16 @@ export default function PhotoDetailPage({
       <SiteGrid
         className="mb-6 mt-1.5"
         contentMain={
-          customHeader ?? <PhotoHeader selectedPhoto={photo} photos={photos} />
+          customHeader ?? <VideoHeader selectedVideo={video} videos={videos} />
         }
       />
       <AnimateItems
         className="md:mb-8"
         animateFromAppState
         items={[
-          <PhotoLarge
-            key={photo.id}
-            photo={photo}
+          <VideoLarge
+            key={video.id}
+            video={video}
             primaryTag={tag}
             priority
             prefetchRelatedLinks
@@ -125,9 +90,9 @@ export default function PhotoDetailPage({
       <SiteGrid
         sideFirstOnMobile
         contentMain={
-          <PhotoGrid
-            photos={photosGrid ?? photos}
-            selectedPhoto={photo}
+          <VideoGrid
+            videos={videosGrid ?? videos}
+            selectedVideo={video}
             tag={tag}
             camera={camera}
             simulation={simulation}

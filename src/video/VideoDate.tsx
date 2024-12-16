@@ -1,26 +1,27 @@
 import ResponsiveDate from '@/components/ResponsiveDate';
-import { Photo } from '.';
 import { useMemo } from 'react';
+import { Video } from '@/db/video_orm';
 
-export default function PhotoDate({
-  photo,
+// ToDo: move to components, doesn't have to be photo or video specific
+export default function VideoDate({
+  video,
   className,
   dateType = 'takenAt',
 }: {
-  photo: Photo;
+  video: Video;
   className?: string;
   dateType?: 'takenAt' | 'createdAt' | 'updatedAt';
 }) {
   const date = useMemo(() => {
     const date = new Date(
       dateType === 'takenAt'
-        ? photo.takenAt
+        ? video.takenAt
         : dateType === 'createdAt'
-          ? photo.createdAt
-          : photo.updatedAt,
+          ? video.createdAt
+          : video.updatedAt,
     );
     return isNaN(date.getTime()) ? new Date() : date;
-  }, [dateType, photo.takenAt, photo.createdAt, photo.updatedAt]);
+  }, [dateType, video.takenAt, video.createdAt, video.updatedAt]);
 
   const getTitleLabel = () => {
     switch (dateType) {

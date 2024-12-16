@@ -1,47 +1,47 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { Photo, PhotoSetAttributes, titleForPhoto } from '@/photo';
+import { Video, VideoSetAttributes, titleForVideo } from '@/video';
 import Link from 'next/link';
 import { AnimationConfig } from '../components/AnimateItems';
 import { useAppState } from '@/state/AppState';
-import { pathForPhoto } from '@/site/paths';
+import { pathForVideo } from '@/site/paths';
 import { clsx } from 'clsx/lite';
 
-export default function PhotoLink({
-  photo,
+export default function VideoLink({
+  video,
   tag,
   camera,
   simulation,
   focal,
   scroll,
   prefetch,
-  nextPhotoAnimation,
+  nextVideoAnimation,
   className,
   children,
 }: {
-  photo?: Photo;
+  video?: Video;
   scroll?: boolean;
   prefetch?: boolean;
-  nextPhotoAnimation?: AnimationConfig;
+  nextVideoAnimation?: AnimationConfig;
   className?: string;
   children?: ReactNode;
-} & PhotoSetAttributes) {
-  const { setNextPhotoAnimation } = useAppState();
+} & VideoSetAttributes) {
+  const { setNextVideoAnimation } = useAppState();
 
-  return photo ? (
+  return video ? (
     <Link
-      href={pathForPhoto({ photo, tag, camera, simulation, focal })}
+      href={pathForVideo({ video, tag, camera, simulation, focal })}
       prefetch={prefetch}
       onClick={() => {
-        if (nextPhotoAnimation) {
-          setNextPhotoAnimation?.(nextPhotoAnimation);
+        if (nextVideoAnimation) {
+          setNextVideoAnimation?.(nextVideoAnimation);
         }
       }}
       className={className}
       scroll={scroll}
     >
-      {children ?? titleForPhoto(photo)}
+      {children ?? titleForVideo(video)}
     </Link>
   ) : (
     <span
@@ -50,7 +50,7 @@ export default function PhotoLink({
         className,
       )}
     >
-      {children ?? (photo ? titleForPhoto(photo) : undefined)}
+      {children ?? (video ? titleForVideo(video) : undefined)}
     </span>
   );
 }

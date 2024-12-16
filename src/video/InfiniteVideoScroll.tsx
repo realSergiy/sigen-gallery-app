@@ -33,7 +33,7 @@ export default function InfiniteVideoScroll({
   useCachedPhotos?: boolean;
   includeHiddenPhotos?: boolean;
   children: (props: {
-    photos: Photo[];
+    videos: Photo[];
     onLastPhotoVisible: () => void;
     revalidatePhoto?: RevalidatePhoto;
   }) => ReactNode;
@@ -94,14 +94,14 @@ export default function InfiniteVideoScroll({
     }
   }, [isFinished, isLoadingOrValidating, setSize]);
 
-  const photos = useMemo(() => (data ?? [])?.flat(), [data]);
+  const videos = useMemo(() => (data ?? [])?.flat(), [data]);
 
   const revalidatePhoto: RevalidatePhoto = useCallback(
-    (photoId: string, revalidateRemainingPhotos?: boolean) =>
+    (videoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
         revalidate: (_data: Photo[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(photos =>
-            photos.some(photo => photo.id === photoId),
+          const i = (data ?? []).findIndex(videos =>
+            videos.some(video => video.id === videoId),
           );
           return revalidateRemainingPhotos ? size >= i : size === i;
         },
@@ -133,7 +133,7 @@ export default function InfiniteVideoScroll({
   return (
     <div className="space-y-4">
       {children({
-        photos,
+        videos,
         onLastPhotoVisible: advance,
         revalidatePhoto,
       })}

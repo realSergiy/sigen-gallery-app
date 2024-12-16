@@ -1,14 +1,14 @@
 import {
   getExtensionFromStorageUrl,
-  getPhotoIdFromStorageUrl,
+  getVideoIdFromStorageUrl,
 } from '@/services/storage';
-import { convertExifToFormData } from '@/photo/form';
+import { convertExifToFormData } from '@/video/form';
 import {
   getFujifilmSimulationFromMakerNote,
   isExifForFujifilm,
 } from '@/vendors/fujifilm';
 import { ExifData, ExifParserFactory } from 'ts-exif-parser';
-import { PhotoFormData } from './form';
+import { VideoFormData } from './form';
 import { FilmSimulation } from '@/simulation';
 import sharp, { Sharp } from 'sharp';
 import { GEO_PRIVACY_ENABLED, PRO_MODE_ENABLED } from '@/site/config';
@@ -19,23 +19,23 @@ const IMAGE_WIDTH_BLUR = 200;
 export const extractImageDataFromBlobPath = async (
   blobPath: string,
   options?: {
-    includeInitialPhotoFields?: boolean;
+    includeInitialVideoFields?: boolean;
     generateBlurData?: boolean;
     generateResizedImage?: boolean;
   },
 ): Promise<{
   blobId?: string;
-  photoFormExif?: Partial<PhotoFormData>;
+  videoFormExif?: Partial<VideoFormData>;
   imageResizedBase64?: string;
   shouldStripGpsData?: boolean;
   fileBytes?: ArrayBuffer;
 }> => {
-  const { includeInitialPhotoFields, generateBlurData, generateResizedImage } =
+  const { includeInitialVideoFields, generateBlurData, generateResizedImage } =
     options ?? {};
 
   const url = decodeURIComponent(blobPath);
 
-  const blobId = getPhotoIdFromStorageUrl(url);
+  const blobId = getVideoIdFromStorageUrl(url);
 
   const extension = getExtensionFromStorageUrl(url);
 
@@ -85,8 +85,8 @@ export const extractImageDataFromBlobPath = async (
   return {
     blobId,
     ...(exifData && {
-      photoFormExif: {
-        ...(includeInitialPhotoFields && {
+      videoFormExif: {
+        ...(includeInitialVideoFields && {
           hidden: 'false',
           favorite: 'false',
           extension,

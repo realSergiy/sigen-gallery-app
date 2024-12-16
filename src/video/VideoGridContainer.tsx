@@ -1,15 +1,15 @@
 'use client';
 
 import SiteGrid from '@/components/SiteGrid';
-import PhotoGrid from './PhotoGrid';
-import PhotoGridInfinite from './PhotoGridInfinite';
+import VideoGrid from './VideoGrid';
+import VideoGridInfinite from './VideoGridInfinite';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
 import { ComponentProps, useCallback, useState } from 'react';
 
-export default function PhotoGridContainer({
+export default function VideoGridContainer({
   cacheKey,
-  photos,
+  videos,
   count,
   tag,
   camera,
@@ -24,7 +24,7 @@ export default function PhotoGridContainer({
   count: number;
   header?: JSX.Element;
   sidebar?: JSX.Element;
-} & ComponentProps<typeof PhotoGrid>) {
+} & ComponentProps<typeof VideoGrid>) {
   const [shouldAnimateDynamicItems, setShouldAnimateDynamicItems] =
     useState(false);
 
@@ -33,7 +33,7 @@ export default function PhotoGridContainer({
     [],
   );
 
-  const initialOffset = photos.length;
+  const initialOffset = videos.length;
 
   return (
     <SiteGrid
@@ -47,9 +47,9 @@ export default function PhotoGridContainer({
             />
           )}
           <div className="space-y-0.5 sm:space-y-1">
-            <PhotoGrid
+            <VideoGrid
               {...{
-                photos,
+                videos,
                 tag,
                 camera,
                 simulation,
@@ -60,7 +60,7 @@ export default function PhotoGridContainer({
               }}
             />
             {count > initialOffset && (
-              <PhotoGridInfinite
+              <VideoGridInfinite
                 {...{
                   cacheKey,
                   initialOffset,

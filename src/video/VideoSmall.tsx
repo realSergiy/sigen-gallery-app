@@ -1,4 +1,4 @@
-import { altTextForPhoto, doesPhotoNeedBlurCompatibility } from '.';
+import { altTextForVideo, doesVideoNeedBlurCompatibility } from '.';
 import ImageSmall from '@/components/image/ImageSmall';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
@@ -45,7 +45,7 @@ export default function VideoSmall({
         aspectRatio={video.aspectRatio}
         blurDataURL={video.blurData}
         blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
-        alt={altTextForPhoto(video)}
+        alt={altTextForVideo(video)}
       />
     </Link>
   );

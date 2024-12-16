@@ -1,11 +1,11 @@
 'use client';
 
 import { INFINITE_SCROLL_GRID_MULTIPLE } from '.';
-import InfinitePhotoScroll from './InfiniteVideoScroll';
-import PhotoGrid from './PhotoGrid';
+import InfiniteVideoScroll from './InfiniteVideoScroll';
+import VideoGrid from './VideoGrid';
 import { ComponentProps } from 'react';
 
-export default function PhotoGridInfinite({
+export default function VideoGridInfinite({
   cacheKey,
   initialOffset,
   canStart,
@@ -18,9 +18,9 @@ export default function PhotoGridInfinite({
 }: {
   cacheKey: string;
   initialOffset: number;
-} & Omit<ComponentProps<typeof PhotoGrid>, 'photos'>) {
+} & Omit<ComponentProps<typeof VideoGrid>, 'videos'>) {
   return (
-    <InfinitePhotoScroll
+    <InfiniteVideoScroll
       cacheKey={cacheKey}
       initialOffset={initialOffset}
       itemsPerPage={INFINITE_SCROLL_GRID_MULTIPLE}
@@ -28,21 +28,21 @@ export default function PhotoGridInfinite({
       camera={camera}
       simulation={simulation}
     >
-      {({ photos, onLastPhotoVisible }) => (
-        <PhotoGrid
+      {({ videos, onLastVideoVisible }) => (
+        <VideoGrid
           {...{
-            photos,
+            videos,
             canStart,
             tag,
             camera,
             simulation,
             focal,
-            onLastPhotoVisible,
+            onLastVideoVisible,
             animateOnFirstLoadOnly,
             canSelect,
           }}
         />
       )}
-    </InfinitePhotoScroll>
+    </InfiniteVideoScroll>
   );
 }

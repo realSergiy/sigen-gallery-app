@@ -1,15 +1,15 @@
 'use client';
 
 import { Cameras, sortCamerasWithCount } from '@/camera';
-import PhotoCamera from '@/camera/PhotoCamera';
+import VideoCamera from '@/camera/VideoCamera';
 import HeaderList from '@/components/HeaderList';
-import PhotoTag from '@/tag/PhotoTag';
+import VideoTag from '@/tag/VideoTag';
 import { FaTag } from 'react-icons/fa';
 import { IoMdCamera } from 'react-icons/io';
-import { PhotoDateRange, dateRangeForPhotos, photoQuantityText } from '.';
+import { VideoDateRange, dateRangeForVideos, videoQuantityText } from '.';
 import { TAG_FAVS, TAG_HIDDEN, Tags, addHiddenToTags } from '@/tag';
-import PhotoFilmSimulation from '@/simulation/PhotoFilmSimulation';
-import PhotoFilmSimulationIcon from '@/simulation/PhotoFilmSimulationIcon';
+import VideoFilmSimulation from '@/simulation/VideoFilmSimulation';
+import VideoFilmSimulationIcon from '@/simulation/VideoFilmSimulationIcon';
 import { FilmSimulations, sortFilmSimulationsWithCount } from '@/simulation';
 import FavsTag from '../tag/FavsTag';
 import { useAppState } from '@/state/AppState';
@@ -22,26 +22,26 @@ import {
 } from '@/utility/html';
 import { clsx } from 'clsx/lite';
 
-export default function PhotoGridSidebar({
+export default function VideoGridSidebar({
   tags,
   cameras,
   simulations,
-  photosCount,
-  photosDateRange,
+  videosCount,
+  videosDateRange,
 }: {
   tags: Tags;
   cameras: Cameras;
   simulations: FilmSimulations;
-  photosCount: number;
-  photosDateRange?: PhotoDateRange;
+  videosCount: number;
+  videosDateRange?: VideoDateRange;
 }) {
-  const { start, end } = dateRangeForPhotos(undefined, photosDateRange);
+  const { start, end } = dateRangeForVideos(undefined, videosDateRange);
 
-  const { hiddenPhotosCount } = useAppState();
+  const { hiddenVideosCount } = useAppState();
 
   const tagsIncludingHidden = useMemo(
-    () => addHiddenToTags(tags, hiddenPhotosCount),
-    [tags, hiddenPhotosCount],
+    () => addHiddenToTags(tags, hiddenVideosCount),
+    [tags, hiddenVideosCount],
   );
 
   return (
@@ -92,7 +92,7 @@ export default function PhotoGridSidebar({
                 );
               default:
                 return (
-                  <PhotoTag
+                  <VideoTag
                     key={tag}
                     tag={tag}
                     type="text-only"
@@ -115,7 +115,7 @@ export default function PhotoGridSidebar({
           items={cameras
             .sort(sortCamerasWithCount)
             .map(({ cameraKey, camera, count }) => (
-              <PhotoCamera
+              <VideoCamera
                 key={cameraKey}
                 camera={camera}
                 type="text-only"
@@ -131,12 +131,12 @@ export default function PhotoGridSidebar({
       {simulations.length > 0 && (
         <HeaderList
           title="Films"
-          icon={<PhotoFilmSimulationIcon className="translate-y-[0.5px]" />}
+          icon={<VideoFilmSimulationIcon className="translate-y-[0.5px]" />}
           items={simulations
             .sort(sortFilmSimulationsWithCount)
             .map(({ simulation, count }) => (
               <div key={simulation} className="translate-x-[-2px]">
-                <PhotoFilmSimulation
+                <VideoFilmSimulation
                   simulation={simulation}
                   countOnHover={count}
                   type="text-only"
@@ -146,13 +146,13 @@ export default function PhotoGridSidebar({
             ))}
         />
       )}
-      {photosCount > 0 && start ? (
+      {videosCount > 0 && start ? (
         <HeaderList
-          title={photoQuantityText(photosCount, false)}
+          title={videoQuantityText(videosCount, false)}
           items={start === end ? [start] : [`${end} –`, start]}
         />
       ) : (
-        <HeaderList items={[photoQuantityText(photosCount, false)]} />
+        <HeaderList items={[videoQuantityText(videosCount, false)]} />
       )}
     </>
   );

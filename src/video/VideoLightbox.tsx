@@ -1,23 +1,23 @@
 import { clsx } from 'clsx/lite';
-import { Photo } from '.';
-import PhotoGrid from './PhotoGrid';
+import { Video } from '.';
+import VideoGrid from './VideoGrid';
 import Link from 'next/link';
 
-export default function PhotoLightbox({
+export default function VideoLightbox({
   count,
-  photos,
-  maxPhotosToShow = 6,
+  videos,
+  maxVideosToShow = 6,
   moreLink,
 }: {
   count: number;
-  photos: Photo[];
-  maxPhotosToShow?: number;
+  videos: Video[];
+  maxVideosToShow?: number;
   moreLink: string;
 }) {
-  const photoCountToShow =
-    maxPhotosToShow < count ? maxPhotosToShow - 1 : maxPhotosToShow;
+  const videoCountToShow =
+    maxVideosToShow < count ? maxVideosToShow - 1 : maxVideosToShow;
 
-  const countNotShown = count - photoCountToShow;
+  const countNotShown = count - videoCountToShow;
 
   const showOverageTile = countNotShown > 0;
 
@@ -28,8 +28,8 @@ export default function PhotoLightbox({
         'bg-gray-50 dark:bg-gray-950',
       )}
     >
-      <PhotoGrid
-        photos={photos.slice(0, photoCountToShow)}
+      <VideoGrid
+        videos={videos.slice(0, videoCountToShow)}
         animate={false}
         additionalTile={
           showOverageTile ? (

@@ -1,21 +1,21 @@
 'use client';
 
-import { Photo, PhotoSetAttributes } from '.';
-import PhotoMedium from './PhotoMedium';
+import { Video, VideoSetAttributes } from '.';
+import VideoMedium from './VideoMedium';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
 import { GRID_ASPECT_RATIO } from '@/site/config';
 import { useAppState } from '@/state/AppState';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
 
-export default function PhotoGrid({
-  photos,
-  selectedPhoto,
+export default function VideoGrid({
+  videos,
+  selectedVideo,
   tag,
   camera,
   simulation,
   focal,
-  photoPriority,
+  videoPriority,
   fast,
   animate = true,
   canStart,
@@ -24,12 +24,12 @@ export default function PhotoGrid({
   additionalTile,
   small,
   canSelect,
-  onLastPhotoVisible,
+  onLastVideoVisible,
   onAnimationComplete,
 }: {
-  photos: Photo[];
-  selectedPhoto?: Photo;
-  photoPriority?: boolean;
+  videos: Video[];
+  selectedVideo?: Video;
+  videoPriority?: boolean;
   fast?: boolean;
   animate?: boolean;
   canStart?: boolean;
@@ -38,13 +38,13 @@ export default function PhotoGrid({
   additionalTile?: JSX.Element;
   small?: boolean;
   canSelect?: boolean;
-  onLastPhotoVisible?: () => void;
+  onLastVideoVisible?: () => void;
   onAnimationComplete?: () => void;
-} & PhotoSetAttributes) {
+} & VideoSetAttributes) {
   const {
     isUserSignedIn,
-    selectedPhotoIds,
-    setSelectedPhotoIds,
+    selectedVideoIds,
+    setSelectedVideoIds,
     isGridHighDensity,
   } = useAppState();
 
@@ -67,12 +67,12 @@ export default function PhotoGrid({
       animateOnFirstLoadOnly={animateOnFirstLoadOnly}
       staggerOnFirstLoadOnly={staggerOnFirstLoadOnly}
       onAnimationComplete={onAnimationComplete}
-      items={photos
-        .map((photo, index) => {
-          const isSelected = selectedPhotoIds?.includes(photo.id) ?? false;
+      items={videos
+        .map((video, index) => {
+          const isSelected = selectedVideoIds?.includes(video.id) ?? false;
           return (
             <div
-              key={photo.id}
+              key={video.id}
               className={clsx(
                 GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden',
                 'group',
@@ -83,39 +83,39 @@ export default function PhotoGrid({
                 }),
               }}
             >
-              <PhotoMedium
+              <VideoMedium
                 className={clsx(
                   'flex h-full w-full',
-                  // Prevent photo navigation when selecting
-                  selectedPhotoIds?.length !== undefined &&
+                  // Prevent video navigation when selecting
+                  selectedVideoIds?.length !== undefined &&
                     'pointer-events-none',
                 )}
                 {...{
-                  photo,
+                  video,
                   tag,
                   camera,
                   simulation,
                   focal,
-                  selected: photo.id === selectedPhoto?.id,
-                  priority: photoPriority,
+                  selected: video.id === selectedVideo?.id,
+                  priority: videoPriority,
                   onVisible:
-                    index === photos.length - 1
-                      ? onLastPhotoVisible
+                    index === videos.length - 1
+                      ? onLastVideoVisible
                       : undefined,
                 }}
               />
               {isUserSignedIn &&
                 canSelect &&
-                selectedPhotoIds !== undefined && (
+                selectedVideoIds !== undefined && (
                   <SelectTileOverlay
                     isSelected={isSelected}
                     onSelectChange={() =>
-                      setSelectedPhotoIds?.(
+                      setSelectedVideoIds?.(
                         isSelected
-                          ? (selectedPhotoIds ?? []).filter(
-                              id => id !== photo.id,
+                          ? (selectedVideoIds ?? []).filter(
+                              id => id !== video.id,
                             )
-                          : (selectedPhotoIds ?? []).concat(photo.id),
+                          : (selectedVideoIds ?? []).concat(video.id),
                       )
                     }
                   />
@@ -124,8 +124,8 @@ export default function PhotoGrid({
           );
         })
         .concat(additionalTile ?? [])}
-      itemKeys={photos
-        .map(photo => photo.id)
+      itemKeys={videos
+        .map(video => video.id)
         .concat(additionalTile ? ['more'] : [])}
     />
   );
