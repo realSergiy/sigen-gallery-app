@@ -6,7 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { desc, lt } from 'drizzle-orm';
 import { getVideosMetaCached } from '@/db/video_cache';
 import AdminVideosClient from '@/admin/AdminVideosClient';
-import { videosTable } from '@/db/generated/schema';
+import { tb } from '@/db/generated/schema';
 
 export const maxDuration = 60;
 
@@ -19,14 +19,14 @@ export default async function AdminPhotosPage() {
   const [videos, videosCount, videosCountOutdated, blobVideoUrls] =
     await Promise.all([
       getVideos({
-        sort: desc(videosTable.createdAt),
+        sort: desc(tb.video.createdAt),
         limit: INFINITE_SCROLL_INITIAL_ADMIN,
       }).catch(() => []),
       getVideosMetaCached()
         .then(({ count }) => count)
         .catch(() => 0),
       getVideosMetaCached(
-        lt(videosTable.updatedAt, OUTDATED_THRESHOLD.toISOString()),
+        lt(tb.video.updatedAt, OUTDATED_THRESHOLD.toISOString()),
       )
         .then(({ count }) => count)
         .catch(() => 0),

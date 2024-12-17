@@ -76,7 +76,7 @@ export default function VideoHeader({
   );
 
   const renderDateRange = () => (
-    <span className="text-right uppercase text-dim">
+    <span className="text-dim text-right uppercase">
       {start === end ? (
         start
       ) : (
@@ -93,7 +93,7 @@ export default function VideoHeader({
     (selectedVideo !== undefined && (
       <VideoLink
         video={selectedVideo}
-        className="font-bold uppercase truncate text-ellipsis"
+        className="truncate text-ellipsis font-bold uppercase"
       >
         {titleForVideo(selectedVideo, true)}
       </VideoLink>

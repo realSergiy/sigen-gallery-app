@@ -4,7 +4,6 @@ import {
   unstable_cache,
   unstable_noStore,
 } from 'next/cache';
-import { parseCachedVideoDates, parseCachedVideosDates } from '@/video';
 import {
   PATHS_ADMIN,
   PATHS_TO_CACHE,
@@ -23,7 +22,7 @@ import {
   getVideosMeta,
   getVideosMostRecentUpdate,
   getVideosNearId,
-  GetVideosOptions,
+  VideoQueryOptions,
 } from '@/db/video_orm';
 
 // Table key
@@ -40,7 +39,7 @@ const KEY_COUNT = 'count';
 const KEY_HIDDEN = 'hidden';
 const KEY_DATE_RANGE = 'date-range';
 
-export const getVideosCacheKeys = (options: GetVideosOptions) => {
+export const getVideosCacheKeys = (options: VideoQueryOptions) => {
   const key: string[] = [];
 
   if (options.filter) {
@@ -102,7 +101,7 @@ export const revalidateVideo = (videoId: string) => {
 export const getVideosCached = (...args: Parameters<typeof getVideos>) =>
   unstable_cache(getVideos, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(
     ...args,
-  ).then(parseCachedVideosDates);
+  );
 
 export const getVideosNearIdCached = (
   ...args: Parameters<typeof getVideosNearId>
@@ -110,12 +109,12 @@ export const getVideosNearIdCached = (
   unstable_cache(getVideosNearId, [KEY_VIDEOS, ...getVideosCacheKeys(args[1])])(
     ...args,
   ).then(({ videos, indexNumber }) => {
-    const [videoId, limit] = args;
+    const [videoId, { limit }] = args;
     const video = videos.find(({ id }) => id === videoId);
     const isVideoFirst = videos.findIndex(p => p.id === videoId) === 0;
     return {
-      video: video ? parseCachedVideoDates(video) : undefined,
-      videos: parseCachedVideosDates(videos),
+      video: video,
+      videos: videos,
       ...(limit && {
         videosGrid: videos.slice(
           isVideoFirst ? 1 : 2,
@@ -142,9 +141,7 @@ export const getVideosMostRecentUpdateCached = unstable_cache(
 );
 
 export const getVideCached = (...args: Parameters<typeof getVideo>) =>
-  unstable_cache(getVideo, [KEY_VIDEOS, KEY_VIDEO])(...args).then(video =>
-    video ? parseCachedVideoDates(video) : undefined,
-  );
+  unstable_cache(getVideo, [KEY_VIDEOS, KEY_VIDEO])(...args);
 
 export const getUniqueTagsCached = unstable_cache(getUniqueTags, [
   KEY_VIDEOS,

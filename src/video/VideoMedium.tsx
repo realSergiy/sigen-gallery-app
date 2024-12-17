@@ -53,7 +53,7 @@ export default function VideoMedium({
         aspectRatio={video.aspectRatio}
         blurDataURL={video.blurData}
         blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
-        className="flex object-cover w-full h-full"
+        className="flex h-full w-full object-cover"
         imgClassName="object-cover w-full h-full"
         alt={altTextForVideo(video)}
         priority={priority}

@@ -33,23 +33,23 @@ CREATE TABLE "photos" (
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
-CREATE TABLE "videos" (
+CREATE TABLE "video" (
 	"id" varchar(8) PRIMARY KEY NOT NULL,
 	"url" varchar(255) NOT NULL,
 	"extension" varchar(255) NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"caption" text NOT NULL,
 	"tags" varchar(255)[] NOT NULL,
-	"location_name" varchar(255) NOT NULL,
+	"location_name" varchar(255) DEFAULT '' NOT NULL,
 	"latitude" double precision,
 	"longitude" double precision,
-	"priority_order" real NOT NULL,
 	"taken_at" timestamp with time zone NOT NULL,
-	"taken_at_naive" varchar(255) NOT NULL,
 	"hidden" boolean DEFAULT false NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"thumbnail_url" varchar(255) NOT NULL
+	"thumbnail_url" varchar(255) NOT NULL,
+	CONSTRAINT "check_thumbnail_url" CHECK ((thumbnail_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text),
+	CONSTRAINT "check_url" CHECK ((url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text)
 );
 
 */

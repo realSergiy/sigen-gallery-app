@@ -1,8 +1,5 @@
 import { Video } from '@/db/video_orm';
-import {
-  INFINITE_SCROLL_FEED_INITIAL,
-  INFINITE_SCROLL_FEED_MULTIPLE,
-} from '.';
+import { INFINITE_SCROLL_FEED_INITIAL, INFINITE_SCROLL_FEED_MULTIPLE } from '.';
 import VideosLarge from './VideosLarge';
 import VideosLargeInfinite from './VideosLargeInfinite';
 

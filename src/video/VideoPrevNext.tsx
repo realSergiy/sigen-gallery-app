@@ -96,7 +96,7 @@ export default function VideoPrevNext({
 
   return (
     <div className={clsx('flex items-center', className)}>
-      <div className="flex items-center gap-2 select-none">
+      <div className="flex select-none items-center gap-2">
         <VideoLink
           video={previousVideo}
           className="h-[1rem] select-none"

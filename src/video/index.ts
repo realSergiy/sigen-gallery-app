@@ -1,10 +1,9 @@
 import { Video, VideoDb, VideoDbNew } from '@/db/video_orm';
 import { getNextImageUrlForRequest } from '@/services/next-image';
-import { HIGH_DENSITY_GRID, SHOW_EXIF_DATA } from '@/site/config';
+import { HIGH_DENSITY_GRID } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
 import { formatDate, formatDateFromPostgresString } from '@/utility/date';
 import { parameterize } from '@/utility/string';
-import camelcaseKeys from 'camelcase-keys';
 import { isBefore } from 'date-fns';
 import type { Metadata } from 'next';
 
@@ -45,40 +44,20 @@ export type VideoSetAttributes = {
   tag?: string;
 };
 
-export const parseVideoFromDb = (videoDb: VideoDb) => {
-  return {
-    ...videoDb,
-    takenAtNaiveFormatted: formatDateFromPostgresString(videoDb.takenAtNaive),
-  };
-};
-
-// ToDo: try timestamp mode: date
-export const parseCachedVideoDates = (video: Video) =>
-  ({
-    ...video,
-    takenAt: new Date(video.takenAt),
-    updatedAt: new Date(video.updatedAt),
-    createdAt: new Date(video.createdAt),
-  }) as Video;
-
-export const parseCachedVideosDates = (videos: Video[]) =>
-  videos.map(parseCachedVideoDates);
-
 export const convertVideoToVideoDbInsert = (video: Video): VideoDbNew => ({
   ...video,
 
   longitude: video.longitude ?? null,
   latitude: video.latitude ?? null,
-  priorityOrder: video.priorityOrder ?? null,
   locationName: video.locationName ?? null,
   hidden: video.hidden ?? false,
   caption: video.caption ?? null,
   title: video.title ?? null,
-  takenAt: video.takenAt.toISOString(),
+  takenAt: video.takenAt,
 });
 
 export const descriptionForVideo = (video: Video) =>
-  video.takenAtNaiveFormatted?.toUpperCase();
+  formatDate(video.takenAt)?.toUpperCase();
 
 export const getPreviousVideo = (video: Video, videos: Video[]) => {
   const index = videos.findIndex(p => p.id === video.id);
@@ -150,7 +129,7 @@ export const videoQuantityText = (
 export const deleteConfirmationTextForVideo = (video: Video) =>
   `Are you sure you want to delete "${titleForVideo(video)}?"`;
 
-export type VideoDateRange = { start: string; end: string };
+export type VideoDateRange = { start: Date; end: Date };
 
 export const descriptionForVideoSet = (
   videos: Video[] = [],
@@ -184,12 +163,12 @@ export const dateRangeForVideos = (
 
   if (explicitDateRange || videos.length > 0) {
     const videosSorted = sortVideosByDate(videos);
-    start = formatDateFromPostgresString(
-      explicitDateRange?.start ?? videosSorted[videos.length - 1].takenAtNaive,
+    start = formatDate(
+      explicitDateRange?.start ?? videosSorted[videos.length - 1].takenAt,
       'short',
     );
-    end = formatDateFromPostgresString(
-      explicitDateRange?.end ?? videosSorted[0].takenAtNaive,
+    end = formatDate(
+      explicitDateRange?.end ?? videosSorted[0].takenAt,
       'short',
     );
     description = start === end ? start : `${start}–${end}`;

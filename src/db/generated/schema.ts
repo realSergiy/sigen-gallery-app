@@ -7,6 +7,7 @@ import {
   doublePrecision,
   timestamp,
   boolean,
+  check,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
@@ -51,32 +52,43 @@ const photos = pgTable('photos', {
   }).default(sql`CURRENT_TIMESTAMP`),
 });
 
-export const photosTable = photos;
+const video = pgTable(
+  'video',
+  {
+    id: varchar({ length: 8 }).primaryKey().notNull(),
+    url: varchar({ length: 255 }).notNull(),
+    extension: varchar({ length: 255 }).notNull(),
+    title: varchar({ length: 255 }).notNull(),
+    caption: text().notNull(),
+    tags: varchar({ length: 255 }).array().notNull(),
+    locationName: varchar('location_name', { length: 255 })
+      .default('')
+      .notNull(),
+    latitude: doublePrecision(),
+    longitude: doublePrecision(),
+    takenAt: timestamp('taken_at', {
+      withTimezone: true,
+      mode: 'date',
+    }).notNull(),
+    hidden: boolean().default(false).notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    thumbnailUrl: varchar('thumbnail_url', { length: 255 }).notNull(),
+  },
+  table => [
+    check(
+      'check_thumbnail_url',
+      sql`(thumbnail_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`,
+    ),
+    check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
+  ],
+);
 
-const videos = pgTable('videos', {
-  id: varchar({ length: 8 }).primaryKey().notNull(),
-  url: varchar({ length: 255 }).notNull(),
-  extension: varchar({ length: 255 }).notNull(),
-  title: varchar({ length: 255 }).notNull(),
-  caption: text().notNull(),
-  tags: varchar({ length: 255 }).array().notNull(),
-  locationName: varchar('location_name', { length: 255 }).notNull(),
-  latitude: doublePrecision(),
-  longitude: doublePrecision(),
-  priorityOrder: real('priority_order').notNull(),
-  takenAt: timestamp('taken_at', {
-    withTimezone: true,
-    mode: 'string',
-  }).notNull(),
-  takenAtNaive: varchar('taken_at_naive', { length: 255 }).notNull(),
-  hidden: boolean().default(false).notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  thumbnailUrl: varchar('thumbnail_url', { length: 255 }).notNull(),
-});
-
-export const videosTable = videos;
+export const tb = {
+  photo: photos,
+  video,
+};
