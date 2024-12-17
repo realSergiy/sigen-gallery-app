@@ -24,33 +24,20 @@ export type CameraWithCount = {
 
 export type Cameras = CameraWithCount[];
 
-export const createCameraKey = ({ make, model }: Camera) =>
-  parameterize(`${make}-${model}`, true);
+export const createCameraKey = ({ make, model }: Camera) => parameterize(`${make}-${model}`, true);
 
-export const getCameraFromParams = ({
-  make,
-  model,
-}: {
-  make: string;
-  model: string;
-}): Camera => ({
+export const getCameraFromParams = ({ make, model }: { make: string; model: string }): Camera => ({
   make: parameterize(make, true),
   model: parameterize(model, true),
 });
 
-export const sortCamerasWithCount = (
-  a: CameraWithCount,
-  b: CameraWithCount,
-) => {
+export const sortCamerasWithCount = (a: CameraWithCount, b: CameraWithCount) => {
   const aText = formatCameraText(a.camera);
   const bText = formatCameraText(b.camera);
   return aText.localeCompare(bText);
 };
 
-export const cameraFromPhoto = (
-  photo: Photo | undefined,
-  fallback?: Camera,
-): Camera =>
+export const cameraFromPhoto = (photo: Photo | undefined, fallback?: Camera): Camera =>
   photo?.make && photo?.model
     ? { make: photo.make, model: photo.model }
     : (fallback ?? CAMERA_PLACEHOLDER);
@@ -64,15 +51,10 @@ export const formatCameraText = (
   const make = makeRaw.replace(/ Corporation/i, '');
   // Remove potential duplicate make from model
   let model = modelRaw.replace(`${make} `, '');
-  if (
-    removeIPhoneOnLongModels &&
-    model.includes('iPhone') &&
-    model.length > 9
-  ) {
+  if (removeIPhoneOnLongModels && model.includes('iPhone') && model.length > 9) {
     model = model.replace(/iPhone\s*/i, '');
   }
-  return includeMake === 'never' ||
-    (includeMake === 'if-not-apple' && make === 'Apple')
+  return includeMake === 'never' || (includeMake === 'if-not-apple' && make === 'Apple')
     ? model
     : `${make} ${model}`;
 };

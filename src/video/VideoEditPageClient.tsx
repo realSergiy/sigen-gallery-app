@@ -39,22 +39,17 @@ export default function VideoEditPageClient({
     imageThumbnailBase64,
   });
 
-  const [updatedExifData, setUpdatedExifData] =
-    useState<Partial<VideoFormData>>();
+  const [updatedExifData, setUpdatedExifData] = useState<Partial<VideoFormData>>();
 
   return (
     <AdminChildPage
       backPath={PATH_ADMIN_PHOTOS}
       backLabel="Videos"
-      breadcrumb={
-        pending && updatedTitle ? updatedTitle : video.title || video.id
-      }
+      breadcrumb={pending && updatedTitle ? updatedTitle : video.title || video.id}
       breadcrumbEllipsis
       accessory={
         <div className="flex gap-2">
-          {hasAiTextGeneration && (
-            <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />
-          )}
+          {hasAiTextGeneration && <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />}
           <ExifSyncButton videoUrl={video.url} onSync={setUpdatedExifData} />
         </div>
       }

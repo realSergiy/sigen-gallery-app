@@ -1,13 +1,5 @@
-import {
-  Photo,
-  PhotoDateRange,
-  descriptionForPhotoSet,
-  photoQuantityText,
-} from '@/photo';
-import {
-  absolutePathForFilmSimulation,
-  absolutePathForFilmSimulationImage,
-} from '@/site/paths';
+import { Photo, PhotoDateRange, descriptionForPhotoSet, photoQuantityText } from '@/photo';
+import { absolutePathForFilmSimulation, absolutePathForFilmSimulationImage } from '@/site/paths';
 import { FujifilmSimulation, labelForFilmSimulation } from '@/vendors/fujifilm';
 
 export type FilmSimulation = FujifilmSimulation;
@@ -46,14 +38,7 @@ export const descriptionForFilmSimulationPhotos = (
   dateBased?: boolean,
   explicitCount?: number,
   explicitDateRange?: PhotoDateRange,
-) =>
-  descriptionForPhotoSet(
-    photos,
-    undefined,
-    dateBased,
-    explicitCount,
-    explicitDateRange,
-  );
+) => descriptionForPhotoSet(photos, undefined, dateBased, explicitCount, explicitDateRange);
 
 export const generateMetaForFilmSimulation = (
   simulation: FilmSimulation,
@@ -63,11 +48,6 @@ export const generateMetaForFilmSimulation = (
 ) => ({
   url: absolutePathForFilmSimulation(simulation),
   title: titleForFilmSimulation(simulation, photos, explicitCount),
-  description: descriptionForFilmSimulationPhotos(
-    photos,
-    true,
-    explicitCount,
-    explicitDateRange,
-  ),
+  description: descriptionForFilmSimulationPhotos(photos, true, explicitCount, explicitDateRange),
   images: absolutePathForFilmSimulationImage(simulation),
 });

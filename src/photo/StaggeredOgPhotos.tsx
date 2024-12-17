@@ -43,10 +43,7 @@ export default function StaggeredOgPhotos({
         Object.entries(initialLoadingState).forEach(([id, state]) => {
           if (state === 'loading') {
             imagesLoadingCount++;
-          } else if (
-            imagesLoadingCount < maxConcurrency &&
-            state === 'unloaded'
-          ) {
+          } else if (imagesLoadingCount < maxConcurrency && state === 'unloaded') {
             updatedLoadingState[id] = 'loading';
             imagesLoadingCount++;
           }
@@ -70,9 +67,7 @@ export default function StaggeredOgPhotos({
           loadingState={loadingState[photo.id]}
           onLoad={() => recomputeLoadingState({ [photo.id]: 'loaded' })}
           onFail={() => recomputeLoadingState({ [photo.id]: 'failed' })}
-          onVisible={
-            index === photos.length - 1 ? onLastPhotoVisible : undefined
-          }
+          onVisible={index === photos.length - 1 ? onLastPhotoVisible : undefined}
           riseOnHover
         />
       ))}

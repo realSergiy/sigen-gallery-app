@@ -16,22 +16,19 @@ const INFINITE_SCROLL_INITIAL_ADMIN = 25;
 const INFINITE_SCROLL_MULTIPLE_ADMIN = 50;
 
 export default async function AdminPhotosPage() {
-  const [videos, videosCount, videosCountOutdated, blobVideoUrls] =
-    await Promise.all([
-      getVideos({
-        sort: desc(tb.video.createdAt),
-        limit: INFINITE_SCROLL_INITIAL_ADMIN,
-      }).catch(() => []),
-      getVideosMetaCached()
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getVideosMetaCached(
-        lt(tb.video.updatedAt, OUTDATED_THRESHOLD.toISOString()),
-      )
-        .then(({ count }) => count)
-        .catch(() => 0),
-      DEBUG_PHOTO_BLOBS ? getStorageVideoUrlsNoStore() : [],
-    ]);
+  const [videos, videosCount, videosCountOutdated, blobVideoUrls] = await Promise.all([
+    getVideos({
+      sort: desc(tb.video.createdAt),
+      limit: INFINITE_SCROLL_INITIAL_ADMIN,
+    }).catch(() => []),
+    getVideosMetaCached()
+      .then(({ count }) => count)
+      .catch(() => 0),
+    getVideosMetaCached(lt(tb.video.updatedAt, OUTDATED_THRESHOLD.toISOString()))
+      .then(({ count }) => count)
+      .catch(() => 0),
+    DEBUG_PHOTO_BLOBS ? getStorageVideoUrlsNoStore() : [],
+  ]);
 
   return (
     <AdminVideosClient

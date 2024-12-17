@@ -35,9 +35,7 @@ export default function AdminOutdatedClient({
       backPath={PATH_ADMIN_PHOTOS}
       breadcrumb={
         <>
-          <span className="hidden sm:inline-block">
-            Outdated ({photos.length})
-          </span>
+          <span className="hidden sm:inline-block">Outdated ({photos.length})</span>
           <span className="sm:hidden">Outdated</span>
         </>
       }
@@ -53,9 +51,7 @@ export default function AdminOutdatedClient({
                 `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`,
               )
             ) {
-              const photosToSync = photos
-                .slice(0, updateBatchSize)
-                .map(photo => photo.id);
+              const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
               const isFinalBatch = photosToSync.length >= photos.length;
               setPhotoIdsSyncing(photosToSync);
               syncPhotosAction(photosToSync).finally(() => {
@@ -84,10 +80,8 @@ export default function AdminOutdatedClient({
         <Note>
           <div className="space-y-1.5">
             {photos.length} {photos.length === 1 ? 'photo' : 'photos'}
-            {' ('}last updated before{' '}
-            {new Date(OUTDATED_THRESHOLD).toLocaleDateString()}
-            {')'} may have: missing EXIF fields, inaccurate blur data, undesired
-            privacy settings
+            {' ('}last updated before {new Date(OUTDATED_THRESHOLD).toLocaleDateString()}
+            {')'} may have: missing EXIF fields, inaccurate blur data, undesired privacy settings
             {hasAiTextGeneration && ', missing AI-generated text'}
           </div>
         </Note>

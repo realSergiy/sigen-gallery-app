@@ -16,10 +16,7 @@ import { useAppState } from '@/state/AppState';
 import { useMemo } from 'react';
 import HiddenTag from '@/tag/HiddenTag';
 import { SITE_ABOUT } from '@/site/config';
-import {
-  htmlHasBrParagraphBreaks,
-  safelyParseFormattedHtml,
-} from '@/utility/html';
+import { htmlHasBrParagraphBreaks, safelyParseFormattedHtml } from '@/utility/html';
 import { clsx } from 'clsx/lite';
 
 export default function VideoGridSidebar({
@@ -109,41 +106,35 @@ export default function VideoGridSidebar({
       {cameras.length > 0 && (
         <HeaderList
           title="Cameras"
-          icon={
-            <IoMdCamera size={13} className="text-icon translate-y-[-0.25px]" />
-          }
-          items={cameras
-            .sort(sortCamerasWithCount)
-            .map(({ cameraKey, camera, count }) => (
-              <VideoCamera
-                key={cameraKey}
-                camera={camera}
-                type="text-only"
-                countOnHover={count}
-                prefetch={false}
-                contrast="low"
-                hideAppleIcon
-                badged
-              />
-            ))}
+          icon={<IoMdCamera size={13} className="text-icon translate-y-[-0.25px]" />}
+          items={cameras.sort(sortCamerasWithCount).map(({ cameraKey, camera, count }) => (
+            <VideoCamera
+              key={cameraKey}
+              camera={camera}
+              type="text-only"
+              countOnHover={count}
+              prefetch={false}
+              contrast="low"
+              hideAppleIcon
+              badged
+            />
+          ))}
         />
       )}
       {simulations.length > 0 && (
         <HeaderList
           title="Films"
           icon={<VideoFilmSimulationIcon className="translate-y-[0.5px]" />}
-          items={simulations
-            .sort(sortFilmSimulationsWithCount)
-            .map(({ simulation, count }) => (
-              <div key={simulation} className="translate-x-[-2px]">
-                <VideoFilmSimulation
-                  simulation={simulation}
-                  countOnHover={count}
-                  type="text-only"
-                  prefetch={false}
-                />
-              </div>
-            ))}
+          items={simulations.sort(sortFilmSimulationsWithCount).map(({ simulation, count }) => (
+            <div key={simulation} className="translate-x-[-2px]">
+              <VideoFilmSimulation
+                simulation={simulation}
+                countOnHover={count}
+                type="text-only"
+                prefetch={false}
+              />
+            </div>
+          ))}
         />
       )}
       {videosCount > 0 && start ? (

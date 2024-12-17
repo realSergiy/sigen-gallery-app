@@ -1,12 +1,6 @@
-import {
-  getExtensionFromStorageUrl,
-  getPhotoIdFromStorageUrl,
-} from '@/services/storage';
+import { getExtensionFromStorageUrl, getPhotoIdFromStorageUrl } from '@/services/storage';
 import { convertExifToFormData } from '@/photo/form';
-import {
-  getFujifilmSimulationFromMakerNote,
-  isExifForFujifilm,
-} from '@/vendors/fujifilm';
+import { getFujifilmSimulationFromMakerNote, isExifForFujifilm } from '@/vendors/fujifilm';
 import { ExifData, ExifParserFactory } from 'ts-exif-parser';
 import { PhotoFormData } from './form';
 import { FilmSimulation } from '@/simulation';
@@ -30,8 +24,7 @@ export const extractImageDataFromBlobPath = async (
   shouldStripGpsData?: boolean;
   fileBytes?: ArrayBuffer;
 }> => {
-  const { includeInitialPhotoFields, generateBlurData, generateResizedImage } =
-    options ?? {};
+  const { includeInitialPhotoFields, generateBlurData, generateResizedImage } = options ?? {};
 
   const url = decodeURIComponent(blobPath);
 
@@ -78,8 +71,7 @@ export const extractImageDataFromBlobPath = async (
 
     shouldStripGpsData =
       GEO_PRIVACY_ENABLED &&
-      (Boolean(exifData.tags?.GPSLatitude) ||
-        Boolean(exifData.tags?.GPSLongitude));
+      (Boolean(exifData.tags?.GPSLatitude) || Boolean(exifData.tags?.GPSLongitude));
   }
 
   return {
@@ -102,10 +94,7 @@ export const extractImageDataFromBlobPath = async (
   };
 };
 
-const generateBase64 = async (
-  image: ArrayBuffer,
-  middleware: (sharp: Sharp) => Sharp,
-) =>
+const generateBase64 = async (image: ArrayBuffer, middleware: (sharp: Sharp) => Sharp) =>
   middleware(sharp(image))
     .withMetadata()
     .toFormat('jpeg', { quality: 90 })

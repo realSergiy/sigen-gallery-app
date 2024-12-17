@@ -43,8 +43,7 @@ export default function InfiniteVideoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Photo[]) =>
-      prev && prev.length === 0 ? null : [key, size],
+    (size: number, prev: Photo[]) => (prev && prev.length === 0 ? null : [key, size]),
     [key],
   );
 
@@ -71,13 +70,16 @@ export default function InfiniteVideoScroll({
     ],
   );
 
-  const { data, isLoading, isValidating, error, mutate, setSize } =
-    useSwrInfinite<Photo[]>(keyGenerator, fetcher, {
+  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[]>(
+    keyGenerator,
+    fetcher,
+    {
       initialSize: 2,
       revalidateFirstPage: false,
       revalidateOnFocus: Boolean(isUserSignedIn),
       revalidateOnReconnect: Boolean(isUserSignedIn),
-    });
+    },
+  );
 
   const buttonContainerRef = useRef<HTMLDivElement>(null);
 
@@ -100,9 +102,7 @@ export default function InfiniteVideoScroll({
     (videoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
         revalidate: (_data: Photo[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(videos =>
-            videos.some(video => video.id === videoId),
-          );
+          const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
           return revalidateRemainingPhotos ? size >= i : size === i;
         },
       } as any),
@@ -114,18 +114,9 @@ export default function InfiniteVideoScroll({
       <button
         onClick={() => (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
-        className={clsx(
-          'flex w-full justify-center',
-          isLoadingOrValidating && 'subtle',
-        )}
+        className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >
-        {error ? (
-          'Try Again'
-        ) : isLoadingOrValidating ? (
-          <Spinner size={20} />
-        ) : (
-          'Load More'
-        )}
+        {error ? 'Try Again' : isLoadingOrValidating ? <Spinner size={20} /> : 'Load More'}
       </button>
     </div>
   );
@@ -138,11 +129,7 @@ export default function InfiniteVideoScroll({
         revalidatePhoto,
       })}
       {!isFinished &&
-        (wrapMoreButtonInGrid ? (
-          <SiteGrid contentMain={renderMoreButton()} />
-        ) : (
-          renderMoreButton()
-        ))}
+        (wrapMoreButtonInGrid ? <SiteGrid contentMain={renderMoreButton()} /> : renderMoreButton())}
     </div>
   );
 }

@@ -10,10 +10,7 @@ export default function ClearCacheButton() {
 
   return (
     <form action={clearCacheAction}>
-      <SubmitButtonWithStatus
-        icon={<BiTrash size={16} />}
-        onFormSubmit={invalidateSwr}
-      >
+      <SubmitButtonWithStatus icon={<BiTrash size={16} />} onFormSubmit={invalidateSwr}>
         Clear Cache
       </SubmitButtonWithStatus>
     </form>

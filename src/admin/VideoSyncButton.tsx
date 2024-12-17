@@ -42,9 +42,7 @@ export default function VideoSyncButton({
             .then(() => {
               onSyncComplete?.();
               if (shouldToast) {
-                toastSuccess(
-                  photoTitle ? `"${photoTitle}" data synced` : 'Data synced',
-                );
+                toastSuccess(photoTitle ? `"${photoTitle}" data synced` : 'Data synced');
               }
             })
             .finally(() => setIsSyncing(false));

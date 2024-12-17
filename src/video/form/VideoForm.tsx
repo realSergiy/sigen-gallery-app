@@ -48,8 +48,7 @@ export default function VideoForm({
   onTextContentChange?: (hasContent: boolean) => void;
   onFormStatusChange?: (pending: boolean) => void;
 }) {
-  const [formData, setFormData] =
-    useState<Partial<VideoFormData>>(initialPhotoForm);
+  const [formData, setFormData] = useState<Partial<VideoFormData>>(initialPhotoForm);
   const [formErrors, setFormErrors] = useState(getFormErrors(initialPhotoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
@@ -65,8 +64,7 @@ export default function VideoForm({
 
   usePreventNavigation(formHasChanged && !onlyChangedFieldIsBlurData);
 
-  const canFormBeSubmitted =
-    (type === 'create' || formHasChanged) && isFormValid(formData);
+  const canFormBeSubmitted = (type === 'create' || formHasChanged) && isFormValid(formData);
 
   // Update form when EXIF data
   // is refreshed by parent
@@ -96,18 +94,13 @@ export default function VideoForm({
     }
   }, [updatedExifData]);
 
-  const { width, height } = getDimensionsFromSize(
-    THUMBNAIL_SIZE,
-    formData.aspectRatio,
-  );
+  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE, formData.aspectRatio);
 
   const url = formData.url ?? '';
 
   useEffect(() => {
     if (updatedBlurData) {
-      setFormData(data =>
-        updatedBlurData ? { ...data, blurData: updatedBlurData } : data,
-      );
+      setFormData(data => (updatedBlurData ? { ...data, blurData: updatedBlurData } : data));
     } else if (!BLUR_ENABLED) {
       setFormData(data => ({ ...data, blurData: '' }));
     }
@@ -122,12 +115,7 @@ export default function VideoForm({
     hideIfEmpty?: boolean,
     shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
   ) => {
-    if (
-      key === 'blurData' &&
-      type === 'create' &&
-      !BLUR_ENABLED &&
-      !shouldDebugImageFallbacks
-    ) {
+    if (key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks) {
       return true;
     } else {
       return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
@@ -151,11 +139,7 @@ export default function VideoForm({
             height={height}
             priority
           />
-          <div
-            className={clsx(
-              'absolute left-2 top-2 opacity-0 transition-opacity duration-500',
-            )}
-          >
+          <div className={clsx('absolute left-2 top-2 opacity-0 transition-opacity duration-500')}>
             <div
               className={clsx(
                 'text-xs font-medium uppercase leading-none tracking-wide',
@@ -169,24 +153,19 @@ export default function VideoForm({
               <Spinner
                 color="text"
                 size={9}
-                className={clsx(
-                  'text-extra-dim',
-                  'translate-x-[1px] translate-y-[0.5px]',
-                )}
+                className={clsx('text-extra-dim', 'translate-x-[1px] translate-y-[0.5px]')}
               />
               Analyzing image
             </div>
           </div>
         </div>
       </div>
-      {formActionErrorMessage && (
-        <ErrorNote>{formActionErrorMessage}</ErrorNote>
-      )}
+      {formActionErrorMessage && <ErrorNote>{formActionErrorMessage}</ErrorNote>}
       <form
         action={data =>
-          (type === 'create' ? createPhotoAction : updatePhotoAction)(
-            data,
-          ).catch(e => setFormActionErrorMessage(e.message))
+          (type === 'create' ? createPhotoAction : updatePhotoAction)(data).catch(e =>
+            setFormActionErrorMessage(e.message),
+          )
         }
         onSubmit={() => {
           setFormActionErrorMessage('');
@@ -253,11 +232,7 @@ export default function VideoForm({
                   required={required}
                   readOnly={readOnly}
                   capitalize={capitalize}
-                  placeholder={
-                    loadingMessage && !formData[key]
-                      ? loadingMessage
-                      : undefined
-                  }
+                  placeholder={loadingMessage && !formData[key] ? loadingMessage : undefined}
                   loading={loadingMessage && !formData[key] ? true : false}
                   type={type}
                 />
@@ -271,14 +246,10 @@ export default function VideoForm({
           />
         </div>
         {/* Actions */}
-        <div
-          className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}
-        >
+        <div className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}>
           <Link
             className="button"
-            href={
-              type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_PHOTO_UPLOADS
-            }
+            href={type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_PHOTO_UPLOADS}
           >
             Cancel
           </Link>

@@ -10,11 +10,7 @@ import {
 } from '@/photo/db/query';
 import { insertPhoto, updatePhoto } from '@/db/photo_orm';
 import { GetPhotosOptions, areOptionsSensitive } from './db';
-import {
-  PhotoFormData,
-  convertFormDataToPhotoDbInsert,
-  convertPhotoToFormData,
-} from './form';
+import { PhotoFormData, convertFormDataToPhotoDbInsert, convertPhotoToFormData } from './form';
 import { redirect } from 'next/navigation';
 import { deleteFile } from '@/services/storage';
 import {
@@ -26,12 +22,7 @@ import {
   revalidatePhotosKey,
   revalidateTagsKey,
 } from '@/photo/cache';
-import {
-  PATH_ADMIN_PHOTOS,
-  PATH_ADMIN_TAGS,
-  PATH_ROOT,
-  pathForPhoto,
-} from '@/site/paths';
+import { PATH_ADMIN_PHOTOS, PATH_ADMIN_TAGS, PATH_ROOT, pathForPhoto } from '@/site/paths';
 import { blurImageFromUrl, extractImageDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
 import { convertPhotoToPhotoDbInsert, Photo } from '.';
@@ -91,10 +82,7 @@ export const addAllUploadsAction = async ({
 
     const stream = createStreamableValue<UrlAddStatus>();
 
-    const streamUpdate = (
-      statusMessage: string,
-      status: UrlAddStatus['status'] = 'adding',
-    ) =>
+    const streamUpdate = (statusMessage: string, status: UrlAddStatus['status'] = 'adding') =>
       stream.update({
         url: currentUploadUrl,
         status,
@@ -109,16 +97,12 @@ export const addAllUploadsAction = async ({
           progress = 0;
           streamUpdate('Parsing EXIF data');
 
-          const {
-            photoFormExif,
-            imageResizedBase64,
-            shouldStripGpsData,
-            fileBytes,
-          } = await extractImageDataFromBlobPath(url, {
-            includeInitialPhotoFields: true,
-            generateBlurData: BLUR_ENABLED,
-            generateResizedImage: AI_TEXT_GENERATION_ENABLED,
-          });
+          const { photoFormExif, imageResizedBase64, shouldStripGpsData, fileBytes } =
+            await extractImageDataFromBlobPath(url, {
+              includeInitialPhotoFields: true,
+              generateBlurData: BLUR_ENABLED,
+              generateResizedImage: AI_TEXT_GENERATION_ENABLED,
+            });
 
           if (photoFormExif) {
             if (AI_TEXT_GENERATION_ENABLED) {
@@ -130,10 +114,7 @@ export const addAllUploadsAction = async ({
               caption,
               tags: aiTags,
               semanticDescription,
-            } = await generateAiImageQueries(
-              imageResizedBase64,
-              AI_TEXT_AUTO_GENERATED_FIELDS,
-            );
+            } = await generateAiImageQueries(imageResizedBase64, AI_TEXT_AUTO_GENERATED_FIELDS);
 
             const form: Partial<PhotoFormData> = {
               ...photoFormExif,
@@ -213,10 +194,7 @@ export const tagMultiplePhotosAction = (tags: string, photoIds: string[]) =>
     revalidateAllKeysAndPaths();
   });
 
-export const toggleFavoritePhotoAction = async (
-  photoId: string,
-  shouldRedirect?: boolean,
-) =>
+export const toggleFavoritePhotoAction = async (photoId: string, shouldRedirect?: boolean) =>
   runAuthenticatedAdminServerAction(async () => {
     const photo = await getPhoto(photoId);
     if (photo) {
@@ -287,9 +265,7 @@ export const deleteUploadAction = async (url: string) =>
 
 // Accessed from admin photo edit page
 // will not update blur data
-export const getExifDataAction = async (
-  url: string,
-): Promise<Partial<PhotoFormData>> =>
+export const getExifDataAction = async (url: string): Promise<Partial<PhotoFormData>> =>
   runAuthenticatedAdminServerAction(async () => {
     const { photoFormExif } = await extractImageDataFromBlobPath(url);
     if (photoFormExif) {
@@ -310,16 +286,12 @@ export const syncPhotoAction = async (photoId: string) =>
     const photo = await getPhoto(photoId ?? '', true);
 
     if (photo) {
-      const {
-        photoFormExif,
-        imageResizedBase64,
-        shouldStripGpsData,
-        fileBytes,
-      } = await extractImageDataFromBlobPath(photo.url, {
-        includeInitialPhotoFields: false,
-        generateBlurData: BLUR_ENABLED,
-        generateResizedImage: AI_TEXT_GENERATION_ENABLED,
-      });
+      const { photoFormExif, imageResizedBase64, shouldStripGpsData, fileBytes } =
+        await extractImageDataFromBlobPath(photo.url, {
+          includeInitialPhotoFields: false,
+          generateBlurData: BLUR_ENABLED,
+          generateResizedImage: AI_TEXT_GENERATION_ENABLED,
+        });
 
       let urlToDelete: string | undefined;
       if (photoFormExif) {
@@ -343,10 +315,7 @@ export const syncPhotoAction = async (photoId: string) =>
           caption: aiCaption,
           tags: aiTags,
           semanticDescription: aiSemanticDescription,
-        } = await generateAiImageQueries(
-          imageResizedBase64,
-          AI_TEXT_AUTO_GENERATED_FIELDS,
-        );
+        } = await generateAiImageQueries(imageResizedBase64, AI_TEXT_AUTO_GENERATED_FIELDS);
 
         const photoFormDbInsert = convertFormDataToPhotoDbInsert({
           ...convertPhotoToFormData(photo),
@@ -382,10 +351,7 @@ export const syncPhotosAction = async (photoIds: string[]) =>
 export const clearCacheAction = async () =>
   runAuthenticatedAdminServerAction(revalidateAllKeysAndPaths);
 
-export const streamAiImageQueryAction = async (
-  imageBase64: string,
-  query: AiImageQuery,
-) =>
+export const streamAiImageQueryAction = async (imageBase64: string, query: AiImageQuery) =>
   runAuthenticatedAdminServerAction(() =>
     streamOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES[query]),
   );
@@ -394,9 +360,7 @@ export const getImageBlurAction = async (url: string) =>
   runAuthenticatedAdminServerAction(() => blurImageFromUrl(url));
 
 export const getPhotosHiddenMetaCachedAction = async () =>
-  runAuthenticatedAdminServerAction(() =>
-    getPhotosMetaCached({ hidden: 'only' }),
-  );
+  runAuthenticatedAdminServerAction(() => getPhotosMetaCached({ hidden: 'only' }));
 
 // Public/Private actions
 

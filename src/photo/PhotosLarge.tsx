@@ -31,9 +31,7 @@ export default function PhotosLarge({
           priority={index <= 1}
           prefetchRelatedLinks={prefetchFirstPhotoLinks && index === 0}
           revalidatePhoto={revalidatePhoto}
-          onVisible={
-            index === photos.length - 1 ? onLastPhotoVisible : undefined
-          }
+          onVisible={index === photos.length - 1 ? onLastPhotoVisible : undefined}
         />
       ))}
       itemKeys={photos.map(photo => photo.id)}

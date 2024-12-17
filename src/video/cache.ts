@@ -1,9 +1,4 @@
-import {
-  revalidatePath,
-  revalidateTag,
-  unstable_cache,
-  unstable_noStore,
-} from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache, unstable_noStore } from 'next/cache';
 import {
   PATHS_ADMIN,
   PATHS_TO_CACHE,
@@ -64,8 +59,7 @@ export const revalidateTagsKey = () => revalidateTag(KEY_TAGS);
 
 export const revalidateCamerasKey = () => revalidateTag(KEY_CAMERAS);
 
-export const revalidateFilmSimulationsKey = () =>
-  revalidateTag(KEY_FILM_SIMULATIONS);
+export const revalidateFilmSimulationsKey = () => revalidateTag(KEY_FILM_SIMULATIONS);
 
 export const revalidateAllKeys = () => {
   revalidateVideosKey();
@@ -99,35 +93,26 @@ export const revalidateVideo = (videoId: string) => {
 // Cache
 
 export const getVideosCached = (...args: Parameters<typeof getVideos>) =>
-  unstable_cache(getVideos, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(
-    ...args,
+  unstable_cache(getVideos, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(...args);
+
+export const getVideosNearIdCached = (...args: Parameters<typeof getVideosNearId>) =>
+  unstable_cache(getVideosNearId, [KEY_VIDEOS, ...getVideosCacheKeys(args[1])])(...args).then(
+    ({ videos, indexNumber }) => {
+      const [videoId, { limit }] = args;
+      const video = videos.find(({ id }) => id === videoId);
+      const isVideoFirst = videos.findIndex(p => p.id === videoId) === 0;
+      return {
+        video: video,
+        videos: videos,
+        ...(limit && {
+          videosGrid: videos.slice(isVideoFirst ? 1 : 2, isVideoFirst ? limit - 1 : limit),
+        }),
+        indexNumber,
+      };
+    },
   );
 
-export const getVideosNearIdCached = (
-  ...args: Parameters<typeof getVideosNearId>
-) =>
-  unstable_cache(getVideosNearId, [KEY_VIDEOS, ...getVideosCacheKeys(args[1])])(
-    ...args,
-  ).then(({ videos, indexNumber }) => {
-    const [videoId, { limit }] = args;
-    const video = videos.find(({ id }) => id === videoId);
-    const isVideoFirst = videos.findIndex(p => p.id === videoId) === 0;
-    return {
-      video: video,
-      videos: videos,
-      ...(limit && {
-        videosGrid: videos.slice(
-          isVideoFirst ? 1 : 2,
-          isVideoFirst ? limit - 1 : limit,
-        ),
-      }),
-      indexNumber,
-    };
-  });
-
-export const getVideosMetaCached = (
-  ...args: Parameters<typeof getVideosMeta>
-) =>
+export const getVideosMetaCached = (...args: Parameters<typeof getVideosMeta>) =>
   unstable_cache(getVideosMeta, [
     KEY_VIDEOS,
     KEY_COUNT,
@@ -143,10 +128,7 @@ export const getVideosMostRecentUpdateCached = unstable_cache(
 export const getVideCached = (...args: Parameters<typeof getVideo>) =>
   unstable_cache(getVideo, [KEY_VIDEOS, KEY_VIDEO])(...args);
 
-export const getUniqueTagsCached = unstable_cache(getUniqueTags, [
-  KEY_VIDEOS,
-  KEY_TAGS,
-]);
+export const getUniqueTagsCached = unstable_cache(getUniqueTags, [KEY_VIDEOS, KEY_TAGS]);
 
 export const getUniqueTagsHiddenCached = unstable_cache(getUniqueTagsHidden, [
   KEY_VIDEOS,

@@ -30,27 +30,15 @@ export default function SignInForm() {
   useEffect(() => {
     return () => {
       // Capture user email before unmounting
-      getAuthAction().then(auth =>
-        setUserEmail?.(auth?.user?.email ?? undefined),
-      );
+      getAuthAction().then(auth => setUserEmail?.(auth?.user?.email ?? undefined));
     };
   }, [setUserEmail]);
 
   const isFormValid = email.length > 0 && password.length > 0;
 
   return (
-    <Container
-      className={clsx(
-        'w-[calc(100vw-1.5rem)] sm:w-[min(360px,90vw)]',
-        'px-6 py-5',
-      )}
-    >
-      <h1
-        className={clsx(
-          'flex items-center justify-center gap-3',
-          'mb-3.5 self-start text-2xl',
-        )}
-      >
+    <Container className={clsx('w-[calc(100vw-1.5rem)] sm:w-[min(360px,90vw)]', 'px-6 py-5')}>
+      <h1 className={clsx('flex items-center justify-center gap-3', 'mb-3.5 self-start text-2xl')}>
         <FiLock className="text-main translate-y-[0.5px]" />
         <span className="text-main">Sign in</span>
       </h1>
@@ -81,9 +69,7 @@ export default function SignInForm() {
               value={params.get(KEY_CALLBACK_URL) ?? ''}
             />
           </div>
-          <SubmitButtonWithStatus disabled={!isFormValid}>
-            Sign in
-          </SubmitButtonWithStatus>
+          <SubmitButtonWithStatus disabled={!isFormValid}>Sign in</SubmitButtonWithStatus>
         </div>
       </form>
     </Container>

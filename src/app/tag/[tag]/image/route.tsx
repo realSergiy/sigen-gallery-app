@@ -1,8 +1,5 @@
 import { getPhotosCached } from '@/photo/cache';
-import {
-  IMAGE_OG_DIMENSION_SMALL,
-  MAX_PHOTOS_TO_SHOW_PER_TAG,
-} from '@/image-response';
+import { IMAGE_OG_DIMENSION_SMALL, MAX_PHOTOS_TO_SHOW_PER_TAG } from '@/image-response';
 import TagImageResponse from '@/image-response/TagImageResponse';
 import { getIBMPlexMonoMedium } from '@/site/font';
 import { ImageResponse } from 'next/og';

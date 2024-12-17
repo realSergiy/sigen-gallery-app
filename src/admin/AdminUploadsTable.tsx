@@ -48,16 +48,11 @@ export default function AdminUploadsTable({
                   src={url}
                   alt={url}
                   aspectRatio={3.0 / 2.0}
-                  className={clsx(
-                    'overflow-hidden rounded-[3px]',
-                    'border-subtle',
-                  )}
+                  className={clsx('overflow-hidden rounded-[3px]', 'border-subtle')}
                 />
               </div>
               <span className="min-w-0 grow">
-                <div className="overflow-hidden text-ellipsis">
-                  {getPhotoIdFromStorageUrl(url)}
-                </div>
+                <div className="overflow-hidden text-ellipsis">{getPhotoIdFromStorageUrl(url)}</div>
                 <div className="text-dim overflow-hidden text-ellipsis">
                   {isAdding || isComplete ? (
                     status === 'added' ? (
@@ -94,9 +89,7 @@ export default function AdminUploadsTable({
                     shouldRedirectToAdminPhotos={urlAddStatuses.length <= 1}
                     onDelete={() =>
                       setUrlAddStatuses?.(
-                        urlAddStatuses.filter(
-                          ({ url: urlToRemove }) => urlToRemove !== url,
-                        ),
+                        urlAddStatuses.filter(({ url: urlToRemove }) => urlToRemove !== url),
                       )
                     }
                   />

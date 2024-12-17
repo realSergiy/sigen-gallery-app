@@ -57,17 +57,8 @@ export default function ImageInput({
           <ProgressButton
             type="button"
             isLoading={loading}
-            progress={
-              filesLength > 1
-                ? ((fileUploadIndex + 1) / filesLength) * 0.95
-                : undefined
-            }
-            icon={
-              <FiUploadCloud
-                size={18}
-                className="translate-x-[-0.5px] translate-y-[0.5px]"
-              />
-            }
+            progress={filesLength > 1 ? ((fileUploadIndex + 1) / filesLength) * 0.95 : undefined}
+            icon={<FiUploadCloud size={18} className="translate-x-[-0.5px] translate-y-[0.5px]" />}
             aria-disabled={loading}
             onClick={() => inputRef.current?.click()}
             hideTextOnMobile={false}
@@ -119,8 +110,7 @@ export default function ImageInput({
 
                     ctx.save();
 
-                    let orientation =
-                      (await exifr.orientation(file).catch(() => 1)) ?? 1;
+                    let orientation = (await exifr.orientation(file).catch(() => 1)) ?? 1;
 
                     // Preserve EXIF data for PNGs
                     if (!isPng) {
@@ -156,12 +146,8 @@ export default function ImageInput({
 
                     const ratio = image.width / image.height;
 
-                    const width = Math.round(
-                      ratio >= 1 ? maxSize : maxSize * ratio,
-                    );
-                    const height = Math.round(
-                      ratio >= 1 ? maxSize / ratio : maxSize,
-                    );
+                    const width = Math.round(ratio >= 1 ? maxSize : maxSize * ratio);
+                    const height = Math.round(ratio >= 1 ? maxSize / ratio : maxSize);
 
                     canvas.width = width;
                     canvas.height = height;
@@ -243,9 +229,7 @@ export default function ImageInput({
           />
         </label>
         {showUploadStatus && filesLength > 0 && (
-          <div className="max-w-full truncate text-ellipsis">
-            {fileUploadName}
-          </div>
+          <div className="max-w-full truncate text-ellipsis">{fileUploadName}</div>
         )}
       </div>
       <canvas

@@ -3,10 +3,7 @@
 import { useState } from 'react';
 import { uploadPhotoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
-import {
-  PATH_ADMIN_PHOTO_UPLOADS,
-  pathForAdminPhotoUploadUrl,
-} from '@/site/paths';
+import { PATH_ADMIN_PHOTO_UPLOADS, pathForAdminPhotoUploadUrl } from '@/site/paths';
 import ImageInput from '../components/ImageInput';
 import { clsx } from 'clsx/lite';
 
@@ -44,12 +41,7 @@ export default function PhotoUpload({
               setIsUploading(true);
               setUploadError('');
             }}
-            onBlobReady={async ({
-              blob,
-              extension,
-              hasMultipleUploads,
-              isLastBlob,
-            }) => {
+            onBlobReady={async ({ blob, extension, hasMultipleUploads, isLastBlob }) => {
               if (debug) {
                 setDebugDownload({
                   href: URL.createObjectURL(blob),
@@ -83,11 +75,7 @@ export default function PhotoUpload({
         </form>
       </div>
       {debug && debugDownload && (
-        <a
-          className="block"
-          href={debugDownload.href}
-          download={debugDownload.fileName}
-        >
+        <a className="block" href={debugDownload.href} download={debugDownload.fileName}>
           Download
         </a>
       )}

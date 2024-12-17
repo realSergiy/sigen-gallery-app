@@ -13,8 +13,7 @@ const getPhotosCameraDataCachedCached = cache((make: string, model: string) =>
 export async function generateMetadata({
   params: { make, model },
 }: CameraProps): Promise<Metadata> {
-  const [photos, { count, dateRange }, camera] =
-    await getPhotosCameraDataCachedCached(make, model);
+  const [photos, { count, dateRange }, camera] = await getPhotosCameraDataCachedCached(make, model);
 
   const { url, title, description, images } = generateMetaForCamera(
     camera,
@@ -40,11 +39,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function CameraPage({
-  params: { make, model },
-}: CameraProps) {
-  const [photos, { count, dateRange }, camera] =
-    await getPhotosCameraDataCachedCached(make, model);
+export default async function CameraPage({ params: { make, model } }: CameraProps) {
+  const [photos, { count, dateRange }, camera] = await getPhotosCameraDataCachedCached(make, model);
 
   return <CameraOverview {...{ camera, photos, count, dateRange }} />;
 }

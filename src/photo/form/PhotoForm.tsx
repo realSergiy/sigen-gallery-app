@@ -56,8 +56,7 @@ export default function PhotoForm({
   onTextContentChange?: (hasContent: boolean) => void;
   onFormStatusChange?: (pending: boolean) => void;
 }) {
-  const [formData, setFormData] =
-    useState<Partial<PhotoFormData>>(initialPhotoForm);
+  const [formData, setFormData] = useState<Partial<PhotoFormData>>(initialPhotoForm);
   const [formErrors, setFormErrors] = useState(getFormErrors(initialPhotoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
@@ -74,9 +73,7 @@ export default function PhotoForm({
   usePreventNavigation(formHasChanged && !onlyChangedFieldIsBlurData);
 
   const canFormBeSubmitted =
-    (type === 'create' || formHasChanged) &&
-    isFormValid(formData) &&
-    !aiContent?.isLoading;
+    (type === 'create' || formHasChanged) && isFormValid(formData) && !aiContent?.isLoading;
 
   // Update form when EXIF data
   // is refreshed by parent
@@ -106,44 +103,31 @@ export default function PhotoForm({
     }
   }, [updatedExifData]);
 
-  const { width, height } = getDimensionsFromSize(
-    THUMBNAIL_SIZE,
-    formData.aspectRatio,
-  );
+  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE, formData.aspectRatio);
 
   const url = formData.url ?? '';
 
   useEffect(() => {
     if (updatedBlurData) {
-      setFormData(data =>
-        updatedBlurData ? { ...data, blurData: updatedBlurData } : data,
-      );
+      setFormData(data => (updatedBlurData ? { ...data, blurData: updatedBlurData } : data));
     } else if (!BLUR_ENABLED) {
       setFormData(data => ({ ...data, blurData: '' }));
     }
   }, [updatedBlurData]);
 
   useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.title ? { ...data, title: aiContent?.title } : data,
-      ),
+    () => setFormData(data => (aiContent?.title ? { ...data, title: aiContent?.title } : data)),
     [aiContent?.title],
   );
 
   useEffect(
     () =>
-      setFormData(data =>
-        aiContent?.caption ? { ...data, caption: aiContent?.caption } : data,
-      ),
+      setFormData(data => (aiContent?.caption ? { ...data, caption: aiContent?.caption } : data)),
     [aiContent?.caption],
   );
 
   useEffect(
-    () =>
-      setFormData(data =>
-        aiContent?.tags ? { ...data, tags: aiContent?.tags } : data,
-      ),
+    () => setFormData(data => (aiContent?.tags ? { ...data, tags: aiContent?.tags } : data)),
     [aiContent?.tags],
   );
 
@@ -215,14 +199,10 @@ export default function PhotoForm({
             />
           );
         case 'blurData':
-          return shouldDebugImageFallbacks &&
-            type === 'edit' &&
-            formData.url ? (
+          return shouldDebugImageFallbacks && type === 'edit' && formData.url ? (
             <UpdateBlurDataButton
               photoUrl={getNextImageUrlForManipulation(formData.url)}
-              onUpdatedBlurData={blurData =>
-                setFormData(data => ({ ...data, blurData }))
-              }
+              onUpdatedBlurData={blurData => setFormData(data => ({ ...data, blurData }))}
             />
           ) : null;
       }
@@ -234,12 +214,7 @@ export default function PhotoForm({
     hideIfEmpty?: boolean,
     shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
   ) => {
-    if (
-      key === 'blurData' &&
-      type === 'create' &&
-      !BLUR_ENABLED &&
-      !shouldDebugImageFallbacks
-    ) {
+    if (key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks) {
       return true;
     } else {
       return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
@@ -282,24 +257,19 @@ export default function PhotoForm({
               <Spinner
                 color="text"
                 size={9}
-                className={clsx(
-                  'text-extra-dim',
-                  'translate-x-[1px] translate-y-[0.5px]',
-                )}
+                className={clsx('text-extra-dim', 'translate-x-[1px] translate-y-[0.5px]')}
               />
               Analyzing image
             </div>
           </div>
         </div>
       </div>
-      {formActionErrorMessage && (
-        <ErrorNote>{formActionErrorMessage}</ErrorNote>
-      )}
+      {formActionErrorMessage && <ErrorNote>{formActionErrorMessage}</ErrorNote>}
       <form
         action={data =>
-          (type === 'create' ? createPhotoAction : updatePhotoAction)(
-            data,
-          ).catch(e => setFormActionErrorMessage(e.message))
+          (type === 'create' ? createPhotoAction : updatePhotoAction)(data).catch(e =>
+            setFormActionErrorMessage(e.message),
+          )
         }
         onSubmit={() => {
           setFormActionErrorMessage('');
@@ -308,10 +278,7 @@ export default function PhotoForm({
       >
         {/* Fields */}
         <div className="space-y-6">
-          {FORM_METADATA_ENTRIES(
-            convertTagsForForm(uniqueTags),
-            aiContent !== undefined,
-          ).map(
+          {FORM_METADATA_ENTRIES(convertTagsForForm(uniqueTags), aiContent !== undefined).map(
             ([
               key,
               {
@@ -369,14 +336,9 @@ export default function PhotoForm({
                   required={required}
                   readOnly={readOnly}
                   capitalize={capitalize}
-                  placeholder={
-                    loadingMessage && !formData[key]
-                      ? loadingMessage
-                      : undefined
-                  }
+                  placeholder={loadingMessage && !formData[key] ? loadingMessage : undefined}
                   loading={
-                    (loadingMessage && !formData[key] ? true : false) ||
-                    isFieldGeneratingAi(key)
+                    (loadingMessage && !formData[key] ? true : false) || isFieldGeneratingAi(key)
                   }
                   type={type}
                   accessory={accessoryForField(key)}
@@ -391,14 +353,10 @@ export default function PhotoForm({
           />
         </div>
         {/* Actions */}
-        <div
-          className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}
-        >
+        <div className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}>
           <Link
             className="button"
-            href={
-              type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_PHOTO_UPLOADS
-            }
+            href={type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_PHOTO_UPLOADS}
           >
             Cancel
           </Link>

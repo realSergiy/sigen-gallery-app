@@ -1,17 +1,11 @@
-import CommandKClient, {
-  CommandKSection,
-} from '@/components/cmdk/CommandKClient';
+import CommandKClient, { CommandKSection } from '@/components/cmdk/CommandKClient';
 import {
   getPhotosMetaCached,
   getUniqueCamerasCached,
   getUniqueFilmSimulationsCached,
   getUniqueTagsCached,
 } from '@/photo/cache';
-import {
-  pathForCamera,
-  pathForFilmSimulation,
-  pathForFocalLength,
-} from './paths';
+import { pathForCamera, pathForFilmSimulation, pathForFocalLength } from './paths';
 import { formatCameraText } from '@/camera';
 import { photoQuantityText } from '@/photo';
 import { formatCount, formatCountDescriptive } from '@/utility/string';
@@ -24,18 +18,15 @@ import { formatFocalLength } from '@/focal';
 import { TbCone } from 'react-icons/tb';
 
 export default async function CommandK() {
-  const [count, tags, cameras, filmSimulations, focalLengths] =
-    await Promise.all([
-      getPhotosMetaCached()
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getUniqueTagsCached().catch(() => []),
-      getUniqueCamerasCached().catch(() => []),
-      SHOW_FILM_SIMULATIONS
-        ? getUniqueFilmSimulationsCached().catch(() => [])
-        : [],
-      getUniqueFocalLengths().catch(() => []),
-    ]);
+  const [count, tags, cameras, filmSimulations, focalLengths] = await Promise.all([
+    getPhotosMetaCached()
+      .then(({ count }) => count)
+      .catch(() => 0),
+    getUniqueTagsCached().catch(() => []),
+    getUniqueCamerasCached().catch(() => []),
+    SHOW_FILM_SIMULATIONS ? getUniqueFilmSimulationsCached().catch(() => []) : [],
+    getUniqueFocalLengths().catch(() => []),
+  ]);
 
   const SECTION_CAMERAS: CommandKSection = {
     heading: 'Cameras',

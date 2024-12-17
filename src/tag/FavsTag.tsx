@@ -2,9 +2,7 @@ import { FaStar } from 'react-icons/fa';
 import { TAG_FAVS } from '.';
 import { pathForTag } from '@/site/paths';
 import { clsx } from 'clsx/lite';
-import EntityLink, {
-  EntityLinkExternalProps,
-} from '@/components/primitives/EntityLink';
+import EntityLink, { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 
 export default function FavsTag({
   type,
@@ -32,10 +30,7 @@ export default function FavsTag({
         !badged && (
           <FaStar
             size={12}
-            className={clsx(
-              'text-amber-500',
-              'translate-x-[-1px] translate-y-[-0.5px]',
-            )}
+            className={clsx('text-amber-500', 'translate-x-[-1px] translate-y-[-0.5px]')}
           />
         )
       }

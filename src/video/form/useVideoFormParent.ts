@@ -18,10 +18,7 @@ export default function useVideoFormParent({
     videoForm ? formHasTextContent(videoForm) : false,
   );
 
-  const aiContent = useAiImageQueries(
-    textFieldsToAutoGenerate,
-    imageThumbnailBase64,
-  );
+  const aiContent = useAiImageQueries(textFieldsToAutoGenerate, imageThumbnailBase64);
 
   return {
     pending,

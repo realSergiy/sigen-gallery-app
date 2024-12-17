@@ -56,9 +56,7 @@ export default function UploadPageClient({
       breadcrumb={pending && updatedTitle ? updatedTitle : blobId}
       breadcrumbEllipsis
       accessory={
-        hasAiTextGeneration && (
-          <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />
-        )
+        hasAiTextGeneration && <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />
       }
       isLoading={pending}
     >

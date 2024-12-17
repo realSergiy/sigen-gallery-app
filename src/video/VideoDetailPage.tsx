@@ -60,9 +60,7 @@ export default function VideoDetailPage({
     <div>
       <SiteGrid
         className="mb-6 mt-1.5"
-        contentMain={
-          customHeader ?? <VideoHeader selectedVideo={video} videos={videos} />
-        }
+        contentMain={customHeader ?? <VideoHeader selectedVideo={video} videos={videos} />}
       />
       <AnimateItems
         className="md:mb-8"

@@ -1,7 +1,4 @@
-import {
-  INFINITE_SCROLL_FEED_INITIAL,
-  generateOgImageMetaForPhotos,
-} from '@/photo';
+import { INFINITE_SCROLL_FEED_INITIAL, generateOgImageMetaForPhotos } from '@/photo';
 import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
 import { cache } from 'react';
@@ -30,9 +27,5 @@ export default async function FeedPage() {
       .catch(() => 0),
   ]);
 
-  return photos.length > 0 ? (
-    <PhotoFeedPage {...{ photos, photosCount }} />
-  ) : (
-    <PhotosEmptyState />
-  );
+  return photos.length > 0 ? <PhotoFeedPage {...{ photos, photosCount }} /> : <PhotosEmptyState />;
 }

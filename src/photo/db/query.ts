@@ -11,11 +11,7 @@ import { Cameras, createCameraKey } from '@/camera';
 import { Tags } from '@/tag';
 import { FilmSimulation, FilmSimulations } from '@/simulation';
 import { SHOULD_DEBUG_SQL } from '@/site/config';
-import {
-  GetPhotosOptions,
-  getLimitAndOffsetFromOptions,
-  getOrderByFromOptions,
-} from '.';
+import { GetPhotosOptions, getLimitAndOffsetFromOptions, getOrderByFromOptions } from '.';
 import { getWheresFromOptions } from '.';
 import { FocalLengths } from '@/focal';
 import { Lenses, createLensKey } from '@/lens';
@@ -87,10 +83,7 @@ const safelyQueryPhotos = async <T>(
   } catch (e: any) {
     if (
       MIGRATION_FIELDS_01.some(field =>
-        new RegExp(
-          `column "${field}" of relation "photos" does not exist`,
-          'i',
-        ).test(e.message),
+        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(e.message),
       )
     ) {
       console.log('Running migration 01 ...');
@@ -98,10 +91,7 @@ const safelyQueryPhotos = async <T>(
       result = await callback();
     } else if (
       MIGRATION_FIELDS_02.some(field =>
-        new RegExp(
-          `column "${field}" of relation "photos" does not exist`,
-          'i',
-        ).test(e.message),
+        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(e.message),
       )
     ) {
       console.log('Running migration 02 ...');
@@ -279,10 +269,7 @@ export const addTagsToPhotos = (tags: string[], photoIds: string[]) =>
     )
     WHERE id = ANY($2)
   `,
-        [
-          convertArrayToPostgresString(tags),
-          convertArrayToPostgresString(photoIds),
-        ],
+        [convertArrayToPostgresString(tags), convertArrayToPostgresString(photoIds)],
       ),
     'addTagsToPhotos',
   );
@@ -429,8 +416,7 @@ export const getPhotos = async (options: GetPhotosOptions = {}) =>
     const sql = ['SELECT * FROM photos'];
     const values = [] as (string | number)[];
 
-    const { wheres, wheresValues, lastValuesIndex } =
-      getWheresFromOptions(options);
+    const { wheres, wheresValues, lastValuesIndex } = getWheresFromOptions(options);
 
     const valuesIndex = lastValuesIndex;
 
@@ -441,27 +427,23 @@ export const getPhotos = async (options: GetPhotosOptions = {}) =>
 
     sql.push(getOrderByFromOptions(options));
 
-    const { limitAndOffset, limitAndOffsetValues } =
-      getLimitAndOffsetFromOptions(options, valuesIndex);
+    const { limitAndOffset, limitAndOffsetValues } = getLimitAndOffsetFromOptions(
+      options,
+      valuesIndex,
+    );
 
     // LIMIT + OFFSET
     sql.push(limitAndOffset);
     values.push(...limitAndOffsetValues);
 
-    return query(sql.join(' '), values).then(({ rows }) =>
-      rows.map(parsePhotoFromDb),
-    );
+    return query(sql.join(' '), values).then(({ rows }) => rows.map(parsePhotoFromDb));
   }, 'getPhotos');
 
-export const getPhotosNearId = async (
-  photoId: string,
-  options: GetPhotosOptions,
-) =>
+export const getPhotosNearId = async (photoId: string, options: GetPhotosOptions) =>
   safelyQueryPhotos(async () => {
     const { limit } = options;
 
-    const { wheres, wheresValues, lastValuesIndex } =
-      getWheresFromOptions(options);
+    const { wheres, wheresValues, lastValuesIndex } = getWheresFromOptions(options);
 
     let valuesIndex = lastValuesIndex;
 
@@ -501,26 +483,20 @@ export const getPhotosMeta = (options: GetPhotosOptions = {}) =>
     }
     return query(sql, wheresValues).then(({ rows }) => ({
       count: parseInt(rows[0].count, 10),
-      ...(rows[0]?.start && rows[0]?.end
-        ? { dateRange: rows[0] as PhotoDateRange }
-        : undefined),
+      ...(rows[0]?.start && rows[0]?.end ? { dateRange: rows[0] as PhotoDateRange } : undefined),
     }));
   }, 'getPhotosMeta');
 
 export const getPhotoIds = async ({ limit }: { limit?: number }) =>
   safelyQueryPhotos(
     () =>
-      (limit
-        ? sql`SELECT id FROM photos LIMIT ${limit}`
-        : sql`SELECT id FROM photos`
-      ).then(({ rows }) => rows.map(({ id }) => id as string)),
+      (limit ? sql`SELECT id FROM photos LIMIT ${limit}` : sql`SELECT id FROM photos`).then(
+        ({ rows }) => rows.map(({ id }) => id as string),
+      ),
     'getPhotoIds',
   );
 
-export const getPhoto = async (
-  id: string,
-  includeHidden?: boolean,
-): Promise<Photo | undefined> =>
+export const getPhoto = async (id: string, includeHidden?: boolean): Promise<Photo | undefined> =>
   safelyQueryPhotos(async () => {
     // Check for photo id forwarding and convert short ids to uuids
     const photoId = translatePhotoId(id);

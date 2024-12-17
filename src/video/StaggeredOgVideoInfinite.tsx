@@ -18,10 +18,7 @@ export default function StaggeredOgVideosInfinite({
       itemsPerPage={itemsPerPage}
     >
       {({ videos, onLastVideoVisible }) => (
-        <StaggeredOgVideos
-          videos={videos}
-          onLastVideoVisible={onLastVideoVisible}
-        />
+        <StaggeredOgVideos videos={videos} onLastVideoVisible={onLastVideoVisible} />
       )}
     </InfiniteVideoScroll>
   );

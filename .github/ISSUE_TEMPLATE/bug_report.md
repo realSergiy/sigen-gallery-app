@@ -8,8 +8,7 @@ assignees: ''
 
 **Describe the bug** A clear and concise description of what the bug is.
 
-**Does your template use custom code?** If so, what features/customizations have
-you added?
+**Does your template use custom code?** If so, what features/customizations have you added?
 
 **Steps to Reproduce**
 

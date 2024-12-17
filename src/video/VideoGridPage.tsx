@@ -25,10 +25,7 @@ export default function VideoGridPage({
 }) {
   const { setSelectedVideoIds } = useAppState();
 
-  useEffect(
-    () => () => setSelectedVideoIds?.(undefined),
-    [setSelectedVideoIds],
-  );
+  useEffect(() => () => setSelectedVideoIds?.(undefined), [setSelectedVideoIds]);
 
   return (
     <VideoGridContainer

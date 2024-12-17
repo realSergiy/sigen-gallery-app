@@ -41,9 +41,7 @@ const checkRateLimitAndBailIfNecessary = async () => {
 const getImageTextArgs = (
   imageBase64: string,
   query: string,
-):
-  | (Parameters<typeof streamText>[0] & Parameters<typeof generateText>[0])
-  | undefined =>
+): (Parameters<typeof streamText>[0] & Parameters<typeof generateText>[0]) | undefined =>
   openai
     ? {
         model: openai('gpt-4o'),
@@ -65,10 +63,7 @@ const getImageTextArgs = (
       }
     : undefined;
 
-export const streamOpenAiImageQuery = async (
-  imageBase64: string,
-  query: string,
-) => {
+export const streamOpenAiImageQuery = async (imageBase64: string, query: string) => {
   await checkRateLimitAndBailIfNecessary();
 
   const stream = createStreamableValue('');
@@ -88,10 +83,7 @@ export const streamOpenAiImageQuery = async (
   return stream.value;
 };
 
-export const generateOpenAiImageQuery = async (
-  imageBase64: string,
-  query: string,
-) => {
+export const generateOpenAiImageQuery = async (imageBase64: string, query: string) => {
   await checkRateLimitAndBailIfNecessary();
 
   const args = getImageTextArgs(imageBase64, query);

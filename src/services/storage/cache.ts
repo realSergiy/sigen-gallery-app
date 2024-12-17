@@ -6,28 +6,22 @@ import {
   getStorageVideoUploadUrls,
 } from '@/services/storage';
 
-export const getStoragePhotoUploadUrlsNoStore: typeof getStoragePhotoUploadUrls =
-  (...args) => {
-    unstable_noStore();
-    return getStoragePhotoUploadUrls(...args);
-  };
+export const getStoragePhotoUploadUrlsNoStore: typeof getStoragePhotoUploadUrls = (...args) => {
+  unstable_noStore();
+  return getStoragePhotoUploadUrls(...args);
+};
 
-export const getStorageVideoUploadUrlsNoStore: typeof getStorageVideoUploadUrls =
-  (...args) => {
-    unstable_noStore();
-    return getStorageVideoUploadUrls(...args);
-  };
+export const getStorageVideoUploadUrlsNoStore: typeof getStorageVideoUploadUrls = (...args) => {
+  unstable_noStore();
+  return getStorageVideoUploadUrls(...args);
+};
 
-export const getStoragePhotoUrlsNoStore: typeof getStoragePhotoUrls = (
-  ...args
-) => {
+export const getStoragePhotoUrlsNoStore: typeof getStoragePhotoUrls = (...args) => {
   unstable_noStore();
   return getStoragePhotoUrls(...args);
 };
 
-export const getStorageVideoUrlsNoStore: typeof getStorageVideoUrls = (
-  ...args
-) => {
+export const getStorageVideoUrlsNoStore: typeof getStorageVideoUrls = (...args) => {
   unstable_noStore();
   return getStorageVideoUrls(...args);
 };

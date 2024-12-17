@@ -1,23 +1,14 @@
-export const convertStringToArray = (
-  string?: string,
-  shouldParameterize = true,
-) =>
+export const convertStringToArray = (string?: string, shouldParameterize = true) =>
   string
-    ? string
-        .split(',')
-        .map(item => (shouldParameterize ? parameterize(item) : item.trim()))
+    ? string.split(',').map(item => (shouldParameterize ? parameterize(item) : item.trim()))
     : undefined;
 
 export const capitalize = (string: string) =>
   string.charAt(0).toLocaleUpperCase() + string.slice(1);
 
-export const capitalizeWords = (string = '') =>
-  string.split(' ').map(capitalize).join(' ');
+export const capitalizeWords = (string = '') => string.split(' ').map(capitalize).join(' ');
 
-export const parameterize = (
-  string: string,
-  shouldRemoveNonAlphanumeric?: boolean,
-) =>
+export const parameterize = (string: string, shouldRemoveNonAlphanumeric?: boolean) =>
   string
     .trim()
     // Replaces spaces, underscores, and dashes with dashes

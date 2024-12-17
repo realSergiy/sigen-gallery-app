@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 import { Photo } from '@/photo';
-import {
-  NextImageSize,
-  getNextImageUrlForRequest,
-} from '@/services/next-image';
+import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';
 
 export default function ImagePhotoGrid({
   photos,
@@ -47,8 +44,7 @@ export default function ImagePhotoGrid({
   const imagesPerRow = count / rows;
 
   const cellWidth =
-    (width ?? widthArbitrary) / imagesPerRow -
-    ((imagesPerRow - 1) * gap) / imagesPerRow;
+    (width ?? widthArbitrary) / imagesPerRow - ((imagesPerRow - 1) * gap) / imagesPerRow;
   const cellHeight = height / rows - ((rows - 1) * gap) / rows;
 
   return (

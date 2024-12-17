@@ -51,9 +51,7 @@ export default function AdminVideosClient({
             {videosCountOutdated > 0 && (
               <PathLoaderButton
                 path={PATH_ADMIN_OUTDATED}
-                icon={
-                  <LiaBroomSolid size={18} className="translate-y-[-1px]" />
-                }
+                icon={<LiaBroomSolid size={18} className="translate-y-[-1px]" />}
                 title={`${videosCountOutdated} Outdated Videos`}
                 className={clsx(isUploading && 'hidden md:inline-flex')}
                 hideTextOnMobile={false}
@@ -64,24 +62,15 @@ export default function AdminVideosClient({
           </div>
           {blobVideoUrls.length > 0 && (
             <div
-              className={clsx(
-                'border-b pb-6',
-                'border-gray-200 dark:border-gray-700',
-                'space-y-4',
-              )}
+              className={clsx('border-b pb-6', 'border-gray-200 dark:border-gray-700', 'space-y-4')}
             >
-              <div className="font-bold">
-                Video Blobs ({blobVideoUrls.length})
-              </div>
+              <div className="font-bold">Video Blobs ({blobVideoUrls.length})</div>
               <AdminUploadsTable urlAddStatuses={blobVideoUrls} />
             </div>
           )}
           {/* Use custom spacing to address gap/space-y compatibility quirks */}
           <div className="space-y-[6px] sm:space-y-[10px]">
-            <AdminVideosTable
-              videos={videos}
-              hasAiTextGeneration={AI_TEXT_GENERATION_ENABLED}
-            />
+            <AdminVideosTable videos={videos} hasAiTextGeneration={AI_TEXT_GENERATION_ENABLED} />
             {videosCount > videos.length && (
               <AdminPhotosTableInfinite
                 initialOffset={infiniteScrollInitial}

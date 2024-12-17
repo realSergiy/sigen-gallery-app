@@ -14,8 +14,7 @@ export default function VideoLightbox({
   maxVideosToShow?: number;
   moreLink: string;
 }) {
-  const videoCountToShow =
-    maxVideosToShow < count ? maxVideosToShow - 1 : maxVideosToShow;
+  const videoCountToShow = maxVideosToShow < count ? maxVideosToShow - 1 : maxVideosToShow;
 
   const countNotShown = count - videoCountToShow;
 
@@ -35,14 +34,9 @@ export default function VideoLightbox({
           showOverageTile ? (
             <Link
               href={moreLink}
-              className={clsx(
-                'flex flex-col items-center justify-center',
-                'gap-0.5 lg:gap-1',
-              )}
+              className={clsx('flex flex-col items-center justify-center', 'gap-0.5 lg:gap-1')}
             >
-              <div className="text-[1.1rem] lg:text-[1.5rem]">
-                +{countNotShown}
-              </div>
+              <div className="text-[1.1rem] lg:text-[1.5rem]">+{countNotShown}</div>
               <div className="text-dim">More</div>
             </Link>
           ) : undefined

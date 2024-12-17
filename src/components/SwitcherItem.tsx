@@ -37,9 +37,7 @@ export default function SwitcherItem({
     noPadding ? (
       icon
     ) : (
-      <div className="flex h-[24px] w-[28px] items-center justify-center">
-        {icon}
-      </div>
+      <div className="flex h-[24px] w-[28px] items-center justify-center">{icon}</div>
     );
 
   return href ? (

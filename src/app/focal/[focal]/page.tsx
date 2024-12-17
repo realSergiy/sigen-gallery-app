@@ -23,8 +23,7 @@ export async function generateMetadata({
 }: FocalLengthProps): Promise<Metadata> {
   const focal = getFocalLengthFromString(focalString);
 
-  const [photos, { count, dateRange }] =
-    await getPhotosFocalDataCachedCached(focal);
+  const [photos, { count, dateRange }] = await getPhotosFocalDataCachedCached(focal);
 
   if (photos.length === 0) {
     return {};
@@ -54,13 +53,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function TagPage({
-  params: { focal: focalString },
-}: FocalLengthProps) {
+export default async function TagPage({ params: { focal: focalString } }: FocalLengthProps) {
   const focal = getFocalLengthFromString(focalString);
 
-  const [photos, { count, dateRange }] =
-    await getPhotosFocalDataCachedCached(focal);
+  const [photos, { count, dateRange }] = await getPhotosFocalDataCachedCached(focal);
 
   if (photos.length === 0) {
     redirect(PATH_ROOT);

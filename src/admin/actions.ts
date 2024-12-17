@@ -7,10 +7,7 @@ import { testDatabaseConnection } from '@/services/postgres';
 import { testStorageConnection } from '@/services/storage';
 import { CONFIG_CHECKLIST_STATUS } from '@/site/config';
 
-const scanForError = (
-  shouldCheck: boolean,
-  promise: () => Promise<any>,
-): Promise<string> =>
+const scanForError = (shouldCheck: boolean, promise: () => Promise<any>): Promise<string> =>
   shouldCheck
     ? promise()
         .then(() => '')
@@ -19,12 +16,8 @@ const scanForError = (
 
 export const testConnectionsAction = async () =>
   runAuthenticatedAdminServerAction(async () => {
-    const {
-      hasDatabase,
-      hasStorageProvider,
-      hasVercelKv,
-      isAiTextGenerationEnabled,
-    } = CONFIG_CHECKLIST_STATUS;
+    const { hasDatabase, hasStorageProvider, hasVercelKv, isAiTextGenerationEnabled } =
+      CONFIG_CHECKLIST_STATUS;
 
     const [databaseError, storageError, kvError, aiError] = await Promise.all([
       scanForError(hasDatabase, testDatabaseConnection),

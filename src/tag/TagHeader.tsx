@@ -23,13 +23,7 @@ export default function TagHeader({
   return (
     <PhotoHeader
       tag={tag}
-      entity={
-        isTagFavs(tag) ? (
-          <FavsTag contrast="high" />
-        ) : (
-          <PhotoTag tag={tag} contrast="high" />
-        )
-      }
+      entity={isTagFavs(tag) ? <FavsTag contrast="high" /> : <PhotoTag tag={tag} contrast="high" />}
       entityVerb="Tagged"
       entityDescription={descriptionForTaggedPhotos(photos, undefined, count)}
       photos={photos}

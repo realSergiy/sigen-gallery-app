@@ -44,12 +44,7 @@ export default function VideoLink({
       {children ?? titleForVideo(video)}
     </Link>
   ) : (
-    <span
-      className={clsx(
-        'cursor-default text-gray-300 dark:text-gray-700',
-        className,
-      )}
-    >
+    <span className={clsx('cursor-default text-gray-300 dark:text-gray-700', className)}>
       {children ?? (video ? titleForVideo(video) : undefined)}
     </span>
   );

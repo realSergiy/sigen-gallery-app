@@ -1,8 +1,4 @@
-import {
-  BiSolidCheckboxChecked,
-  BiSolidCheckboxMinus,
-  BiSolidXSquare,
-} from 'react-icons/bi';
+import { BiSolidCheckboxChecked, BiSolidCheckboxMinus, BiSolidXSquare } from 'react-icons/bi';
 import Spinner from './Spinner';
 
 export default function StatusIcon({

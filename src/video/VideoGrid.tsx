@@ -41,12 +41,8 @@ export default function VideoGrid({
   onLastVideoVisible?: () => void;
   onAnimationComplete?: () => void;
 } & VideoSetAttributes) {
-  const {
-    isUserSignedIn,
-    selectedVideoIds,
-    setSelectedVideoIds,
-    isGridHighDensity,
-  } = useAppState();
+  const { isUserSignedIn, selectedVideoIds, setSelectedVideoIds, isGridHighDensity } =
+    useAppState();
 
   return (
     <AnimateItems
@@ -73,10 +69,7 @@ export default function VideoGrid({
           return (
             <div
               key={video.id}
-              className={clsx(
-                GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden',
-                'group',
-              )}
+              className={clsx(GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden', 'group')}
               style={{
                 ...(GRID_ASPECT_RATIO !== 0 && {
                   aspectRatio: GRID_ASPECT_RATIO,
@@ -87,8 +80,7 @@ export default function VideoGrid({
                 className={clsx(
                   'flex h-full w-full',
                   // Prevent video navigation when selecting
-                  selectedVideoIds?.length !== undefined &&
-                    'pointer-events-none',
+                  selectedVideoIds?.length !== undefined && 'pointer-events-none',
                 )}
                 {...{
                   video,
@@ -98,35 +90,26 @@ export default function VideoGrid({
                   focal,
                   selected: video.id === selectedVideo?.id,
                   priority: videoPriority,
-                  onVisible:
-                    index === videos.length - 1
-                      ? onLastVideoVisible
-                      : undefined,
+                  onVisible: index === videos.length - 1 ? onLastVideoVisible : undefined,
                 }}
               />
-              {isUserSignedIn &&
-                canSelect &&
-                selectedVideoIds !== undefined && (
-                  <SelectTileOverlay
-                    isSelected={isSelected}
-                    onSelectChange={() =>
-                      setSelectedVideoIds?.(
-                        isSelected
-                          ? (selectedVideoIds ?? []).filter(
-                              id => id !== video.id,
-                            )
-                          : (selectedVideoIds ?? []).concat(video.id),
-                      )
-                    }
-                  />
-                )}
+              {isUserSignedIn && canSelect && selectedVideoIds !== undefined && (
+                <SelectTileOverlay
+                  isSelected={isSelected}
+                  onSelectChange={() =>
+                    setSelectedVideoIds?.(
+                      isSelected
+                        ? (selectedVideoIds ?? []).filter(id => id !== video.id)
+                        : (selectedVideoIds ?? []).concat(video.id),
+                    )
+                  }
+                />
+              )}
             </div>
           );
         })
         .concat(additionalTile ?? [])}
-      itemKeys={videos
-        .map(video => video.id)
-        .concat(additionalTile ? ['more'] : [])}
+      itemKeys={videos.map(video => video.id).concat(additionalTile ? ['more'] : [])}
     />
   );
 }

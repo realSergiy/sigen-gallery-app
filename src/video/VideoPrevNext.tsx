@@ -1,12 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import {
-  Video,
-  VideoSetAttributes,
-  getNextVideo,
-  getPreviousVideo,
-} from '@/video';
+import { Video, VideoSetAttributes, getNextVideo, getPreviousVideo } from '@/video';
 import VideoLink from './VideoLink';
 import { useRouter } from 'next/navigation';
 import { pathForVideo } from '@/site/paths';
@@ -35,8 +30,7 @@ export default function VideoPrevNext({
 } & VideoSetAttributes) {
   const router = useRouter();
 
-  const { setNextVideoAnimation, shouldRespondToKeyboardCommands } =
-    useAppState();
+  const { setNextVideoAnimation, shouldRespondToKeyboardCommands } = useAppState();
 
   const previousVideo = video ? getPreviousVideo(video, videos) : undefined;
   const nextVideo = video ? getNextVideo(video, videos) : undefined;

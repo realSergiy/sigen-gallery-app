@@ -23,11 +23,7 @@ export default function FocalLengthHeader({
     <PhotoHeader
       focal={focal}
       entity={<PhotoFocalLength focal={focal} contrast="high" />}
-      entityDescription={descriptionForFocalLengthPhotos(
-        photos,
-        undefined,
-        count,
-      )}
+      entityDescription={descriptionForFocalLengthPhotos(photos, undefined, count)}
       photos={photos}
       selectedPhoto={selectedPhoto}
       sharePath={pathForFocalLengthShare(focal)}

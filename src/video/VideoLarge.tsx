@@ -1,20 +1,11 @@
 'use client';
 
-import {
-  Video,
-  altTextForVideo,
-  doesVideoNeedBlurCompatibility,
-  titleForVideo,
-} from '.';
+import { Video, altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
-import {
-  pathForFocalLength,
-  pathForVideo,
-  pathForVideoShare,
-} from '@/site/paths';
+import { pathForFocalLength, pathForVideo, pathForVideoShare } from '@/site/paths';
 import VideoTags from '@/tag/VideoTags';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
@@ -23,10 +14,7 @@ import VideoFilmSimulation from '@/simulation/VideoFilmSimulation';
 import { sortTags } from '@/tag';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
-import {
-  SHOULD_PREFETCH_ALL_LINKS,
-  ALLOW_PUBLIC_DOWNLOADS,
-} from '@/site/config';
+import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
 import { RevalidateVideo } from './InfiniteVideoScroll';
 import { useRef } from 'react';
@@ -86,11 +74,7 @@ export default function VideoLarge({
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const renderVideoLink = () => (
-    <VideoLink
-      video={video}
-      className="flex-grow font-bold uppercase"
-      prefetch={prefetch}
-    />
+    <VideoLink video={video} className="flex-grow font-bold uppercase" prefetch={prefetch} />
   );
 
   return (
@@ -100,9 +84,7 @@ export default function VideoLarge({
       contentMain={
         <Link
           href={pathForVideo({ video })}
-          className={clsx(
-            areVideosMatted && 'flex aspect-[3/2] items-center bg-gray-100',
-          )}
+          className={clsx(areVideosMatted && 'flex aspect-[3/2] items-center bg-gray-100')}
           prefetch={prefetch}
         >
           <div
@@ -113,9 +95,7 @@ export default function VideoLarge({
           >
             <VideoLarge
               className={clsx(areVideosMatted && 'h-full')}
-              imgClassName={clsx(
-                areVideosMatted && 'object-contain w-full h-full',
-              )}
+              imgClassName={clsx(areVideosMatted && 'object-contain w-full h-full')}
               alt={altTextForVideo(video)}
               src={video.url}
               aspectRatio={video.aspectRatio}
@@ -139,12 +119,7 @@ export default function VideoLarge({
           {/* Meta */}
           <div className="pr-2 md:pr-0">
             <div className="flex items-start gap-2 md:relative">
-              {hasTitle &&
-                (showTitleAsH1 ? (
-                  <h1>{renderVideoLink()}</h1>
-                ) : (
-                  renderVideoLink()
-                ))}
+              {hasTitle && (showTitleAsH1 ? <h1>{renderVideoLink()}</h1> : renderVideoLink())}
               <div className="absolute right-0 z-10 translate-y-[-4px]">
                 <AdminVideoMenuClient
                   {...{
@@ -171,23 +146,14 @@ export default function VideoLarge({
               {(showCameraContent || showTagsContent) && (
                 <div>
                   {showTagsContent && (
-                    <VideoTags
-                      tags={tags}
-                      contrast="medium"
-                      prefetch={prefetchRelatedLinks}
-                    />
+                    <VideoTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
                   )}
                 </div>
               )}
             </div>
           </div>
           {/* EXIF Data */}
-          <div
-            className={clsx(
-              'space-y-baseline',
-              !hasTitleContent && 'md:-mt-baseline',
-            )}
-          >
+          <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
             {showExifContent && (
               <>
                 <ul className="text-medium">
@@ -203,10 +169,7 @@ export default function VideoLarge({
                     {video.focalLengthIn35MmFormatFormatted && (
                       <>
                         {' '}
-                        <span
-                          title="35mm equivalent"
-                          className="text-extra-dim"
-                        >
+                        <span title="35mm equivalent" className="text-extra-dim">
                           {video.focalLengthIn35MmFormatFormatted}
                         </span>
                       </>
@@ -243,9 +206,7 @@ export default function VideoLarge({
               <div
                 className={clsx(
                   'flex translate-y-[0.5px] gap-1',
-                  ALLOW_PUBLIC_DOWNLOADS
-                    ? 'translate-x-[-2.5px]'
-                    : 'md:translate-x-[-2.5px]',
+                  ALLOW_PUBLIC_DOWNLOADS ? 'translate-x-[-2.5px]' : 'md:translate-x-[-2.5px]',
                 )}
               >
                 {shouldShare && (
@@ -255,13 +216,9 @@ export default function VideoLarge({
                       tag: shouldShareTag ? primaryTag : undefined,
                       camera: shouldShareCamera ? camera : undefined,
                       // eslint-disable-next-line max-len
-                      simulation: shouldShareSimulation
-                        ? video.filmSimulation
-                        : undefined,
+                      simulation: shouldShareSimulation ? video.filmSimulation : undefined,
                       // eslint-disable-next-line max-len
-                      focal: shouldShareFocalLength
-                        ? video.focalLength
-                        : undefined,
+                      focal: shouldShareFocalLength ? video.focalLength : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}
                     shouldScroll={shouldScrollOnShare}

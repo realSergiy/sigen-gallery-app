@@ -3,8 +3,7 @@ import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 export const KEY_CREDENTIALS_SIGN_IN_ERROR = 'CredentialsSignin';
-export const KEY_CREDENTIALS_SIGN_IN_ERROR_URL =
-  'https://errors.authjs.dev#credentialssignin';
+export const KEY_CREDENTIALS_SIGN_IN_ERROR_URL = 'https://errors.authjs.dev#credentialssignin';
 export const KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL =
   'https://errors.authjs.dev#callbackrouteerror';
 export const KEY_CALLBACK_URL = 'callbackUrl';
@@ -48,9 +47,7 @@ export const {
   },
 });
 
-export const runAuthenticatedAdminServerAction = async <T>(
-  callback: () => T,
-): Promise<T> => {
+export const runAuthenticatedAdminServerAction = async <T>(callback: () => T): Promise<T> => {
   const session = await auth();
   if (session?.user) {
     return callback();
@@ -60,6 +57,4 @@ export const runAuthenticatedAdminServerAction = async <T>(
 };
 
 export const generateAuthSecret = () =>
-  fetch('https://generate-secret.vercel.app/32', { cache: 'no-cache' }).then(
-    res => res.text(),
-  );
+  fetch('https://generate-secret.vercel.app/32', { cache: 'no-cache' }).then(res => res.text());

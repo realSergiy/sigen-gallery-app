@@ -21,10 +21,8 @@ import type { Metadata } from 'next';
 export const OUTDATED_THRESHOLD = new Date('2024-06-16');
 
 // INFINITE SCROLL: FEED
-export const INFINITE_SCROLL_FEED_INITIAL =
-  process.env.NODE_ENV === 'development' ? 2 : 12;
-export const INFINITE_SCROLL_FEED_MULTIPLE =
-  process.env.NODE_ENV === 'development' ? 2 : 24;
+export const INFINITE_SCROLL_FEED_INITIAL = process.env.NODE_ENV === 'development' ? 2 : 12;
+export const INFINITE_SCROLL_FEED_MULTIPLE = process.env.NODE_ENV === 'development' ? 2 : 24;
 
 // INFINITE SCROLL: GRID
 export const INFINITE_SCROLL_GRID_INITIAL = HIGH_DENSITY_GRID
@@ -47,11 +45,7 @@ export const RELATED_GRID_PHOTOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
-export const ACCEPTED_PHOTO_FILE_TYPES = [
-  'image/jpg',
-  'image/jpeg',
-  'image/png',
-];
+export const ACCEPTED_PHOTO_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png'];
 
 export const MAX_PHOTO_UPLOAD_SIZE_IN_BYTES = 50_000_000;
 
@@ -127,15 +121,11 @@ export const parsePhotoFromDb = (photoDbRaw: PhotoDb): Photo => {
     ...photoDb,
     tags: photoDb.tags ?? [],
     focalLengthFormatted: formatFocalLength(photoDb.focalLength),
-    focalLengthIn35MmFormatFormatted: formatFocalLength(
-      photoDb.focalLengthIn35MmFormat,
-    ),
+    focalLengthIn35MmFormatFormatted: formatFocalLength(photoDb.focalLengthIn35MmFormat),
     fNumberFormatted: formatAperture(photoDb.fNumber),
     isoFormatted: formatIso(photoDb.iso),
     exposureTimeFormatted: formatExposureTime(photoDb.exposureTime),
-    exposureCompensationFormatted: formatExposureCompensation(
-      photoDb.exposureCompensation,
-    ),
+    exposureCompensationFormatted: formatExposureCompensation(photoDb.exposureCompensation),
     takenAtNaiveFormatted: formatDateFromPostgresString(photoDb.takenAtNaive),
   };
 };
@@ -148,8 +138,7 @@ export const parseCachedPhotoDates = (photo: Photo) =>
     createdAt: new Date(photo.createdAt),
   }) as Photo;
 
-export const parseCachedPhotosDates = (photos: Photo[]) =>
-  photos.map(parseCachedPhotoDates);
+export const parseCachedPhotosDates = (photos: Photo[]) => photos.map(parseCachedPhotoDates);
 
 export const convertPhotoToPhotoDbInsert = (photo: Photo): PhotoDbUpd => ({
   ...photo,
@@ -177,15 +166,9 @@ export const convertPhotoToPhotoDbInsert = (photo: Photo): PhotoDbUpd => ({
 });
 
 export const photoStatsAsString = (photo: Photo) =>
-  [
-    photo.model,
-    photo.focalLengthFormatted,
-    photo.fNumberFormatted,
-    photo.isoFormatted,
-  ].join(' ');
+  [photo.model, photo.focalLengthFormatted, photo.fNumberFormatted, photo.isoFormatted].join(' ');
 
-export const descriptionForPhoto = (photo: Photo) =>
-  photo.takenAtNaiveFormatted?.toUpperCase();
+export const descriptionForPhoto = (photo: Photo) => photo.takenAtNaiveFormatted?.toUpperCase();
 
 export const getPreviousPhoto = (photo: Photo, photos: Photo[]) => {
   const index = photos.findIndex(p => p.id === photo.id);
@@ -218,13 +201,9 @@ const PHOTO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
   process.env.PHOTO_ID_FORWARDING_TABLE || '{}',
 );
 
-export const translatePhotoId = (id: string) =>
-  PHOTO_ID_FORWARDING_TABLE[id] || id;
+export const translatePhotoId = (id: string) => PHOTO_ID_FORWARDING_TABLE[id] || id;
 
-export const titleForPhoto = (
-  photo: Photo,
-  preferDateOverUntitled?: boolean,
-) => {
+export const titleForPhoto = (photo: Photo, preferDateOverUntitled?: boolean) => {
   if (photo.title) {
     return photo.title;
   } else if (preferDateOverUntitled && (photo.takenAt || photo.createdAt)) {
@@ -234,17 +213,10 @@ export const titleForPhoto = (
   }
 };
 
-export const altTextForPhoto = (photo: Photo) =>
-  photo.semanticDescription || titleForPhoto(photo);
+export const altTextForPhoto = (photo: Photo) => photo.semanticDescription || titleForPhoto(photo);
 
 export const photoLabelForCount = (count: number, capitalize = true) =>
-  capitalize
-    ? count === 1
-      ? 'Photo'
-      : 'Photos'
-    : count === 1
-      ? 'photo'
-      : 'photos';
+  capitalize ? (count === 1 ? 'Photo' : 'Photos') : count === 1 ? 'photo' : 'photos';
 
 export const photoQuantityText = (
   count: number,
@@ -282,10 +254,7 @@ const sortPhotosByDate = (photos: Photo[], order: 'ASC' | 'DESC' = 'DESC') =>
       : a.takenAt.getTime() - b.takenAt.getTime(),
   );
 
-export const dateRangeForPhotos = (
-  photos: Photo[] = [],
-  explicitDateRange?: PhotoDateRange,
-) => {
+export const dateRangeForPhotos = (photos: Photo[] = [], explicitDateRange?: PhotoDateRange) => {
   let start = '';
   let end = '';
   let description = '';
@@ -306,8 +275,7 @@ export const dateRangeForPhotos = (
   return { start, end, description };
 };
 
-const photoHasCameraData = (photo: Photo) =>
-  Boolean(photo.make) && Boolean(photo.model);
+const photoHasCameraData = (photo: Photo) => Boolean(photo.make) && Boolean(photo.model);
 
 const photoHasExifData = (photo: Photo) =>
   Boolean(photo.focalLength) ||

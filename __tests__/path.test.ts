@@ -104,15 +104,11 @@ describe('Paths', () => {
     expect(isPathFilmSimulation(PATH_FILM_SIMULATION)).toBe(true);
     expect(isPathFilmSimulationShare(PATH_FILM_SIMULATION_SHARE)).toBe(true);
     expect(isPathFilmSimulationPhoto(PATH_FILM_SIMULATION_PHOTO)).toBe(true);
-    expect(
-      isPathFilmSimulationPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE),
-    ).toBe(true);
+    expect(isPathFilmSimulationPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(true);
     expect(isPathFocalLength(PATH_FOCAL_LENGTH)).toBe(true);
     expect(isPathFocalLengthShare(PATH_FOCAL_LENGTH_SHARE)).toBe(true);
     expect(isPathFocalLengthPhoto(PATH_FOCAL_LENGTH_PHOTO)).toBe(true);
-    expect(isPathFocalLengthPhotoShare(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toBe(
-      true,
-    );
+    expect(isPathFocalLengthPhotoShare(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toBe(true);
     // Negative
     expect(isPathPhoto(PATH_TAG_PHOTO_SHARE)).toBe(false);
     expect(isPathPhotoShare(PATH_TAG_PHOTO)).toBe(false);
@@ -131,9 +127,7 @@ describe('Paths', () => {
     expect(isPathFocalLength(PATH_FILM_SIMULATION)).toBe(false);
     expect(isPathFocalLengthShare(PATH_FILM_SIMULATION_SHARE)).toBe(false);
     expect(isPathFocalLengthPhoto(PATH_FILM_SIMULATION_PHOTO)).toBe(false);
-    expect(isPathFocalLengthPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(
-      false,
-    );
+    expect(isPathFocalLengthPhotoShare(PATH_FILM_SIMULATION_PHOTO_SHARE)).toBe(false);
   });
   it('can be parsed', () => {
     // Core
@@ -226,21 +220,13 @@ describe('Paths', () => {
     expect(getEscapePath(PATH_CAMERA_PHOTO_SHARE)).toEqual(PATH_CAMERA_PHOTO);
     // Film Simulation
     expect(getEscapePath(PATH_FILM_SIMULATION)).toEqual(PATH_ROOT);
-    expect(getEscapePath(PATH_FILM_SIMULATION_SHARE)).toEqual(
-      PATH_FILM_SIMULATION,
-    );
-    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO)).toEqual(
-      PATH_FILM_SIMULATION,
-    );
-    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO_SHARE)).toEqual(
-      PATH_FILM_SIMULATION_PHOTO,
-    );
+    expect(getEscapePath(PATH_FILM_SIMULATION_SHARE)).toEqual(PATH_FILM_SIMULATION);
+    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO)).toEqual(PATH_FILM_SIMULATION);
+    expect(getEscapePath(PATH_FILM_SIMULATION_PHOTO_SHARE)).toEqual(PATH_FILM_SIMULATION_PHOTO);
     // Focal Length
     expect(getEscapePath(PATH_FOCAL_LENGTH)).toEqual(PATH_ROOT);
     expect(getEscapePath(PATH_FOCAL_LENGTH_SHARE)).toEqual(PATH_FOCAL_LENGTH);
     expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO)).toEqual(PATH_FOCAL_LENGTH);
-    expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toEqual(
-      PATH_FOCAL_LENGTH_PHOTO,
-    );
+    expect(getEscapePath(PATH_FOCAL_LENGTH_PHOTO_SHARE)).toEqual(PATH_FOCAL_LENGTH_PHOTO);
   });
 });

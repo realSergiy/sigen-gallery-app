@@ -5,13 +5,7 @@ import LoaderButton from './primitives/LoaderButton';
 import { useState } from 'react';
 import { downloadFileFromBrowser } from '@/utility/url';
 
-export default function DownloadButton({
-  photo,
-  className,
-}: {
-  photo: Photo;
-  className?: string;
-}) {
+export default function DownloadButton({ photo, className }: { photo: Photo; className?: string }) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -24,10 +18,9 @@ export default function DownloadButton({
       isLoading={isLoading}
       onClick={async () => {
         setIsLoading(true);
-        downloadFileFromBrowser(
-          photo.url,
-          downloadFileNameForPhoto(photo),
-        ).finally(() => setIsLoading(false));
+        downloadFileFromBrowser(photo.url, downloadFileNameForPhoto(photo)).finally(() =>
+          setIsLoading(false),
+        );
       }}
     />
   );

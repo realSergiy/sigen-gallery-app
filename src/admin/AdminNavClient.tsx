@@ -37,24 +37,16 @@ export default function AdminNavClient({
   const { adminUpdateTimes = [] } = useAppState();
 
   const updateTimes = useMemo(
-    () =>
-      (mostRecentPhotoUpdateTime ? [mostRecentPhotoUpdateTime] : []).concat(
-        adminUpdateTimes,
-      ),
+    () => (mostRecentPhotoUpdateTime ? [mostRecentPhotoUpdateTime] : []).concat(adminUpdateTimes),
     [mostRecentPhotoUpdateTime, adminUpdateTimes],
   );
 
-  const [hasRecentUpdates, setHasRecentUpdates] = useState(
-    areTimesRecent(updateTimes),
-  );
+  const [hasRecentUpdates, setHasRecentUpdates] = useState(areTimesRecent(updateTimes));
 
   useEffect(() => {
     // Check every 5 seconds if update times are recent
     setHasRecentUpdates(areTimesRecent(updateTimes));
-    const interval = setInterval(
-      () => setHasRecentUpdates(areTimesRecent(updateTimes)),
-      5_000,
-    );
+    const interval = setInterval(() => setHasRecentUpdates(areTimesRecent(updateTimes)), 5_000);
     return () => clearInterval(interval);
   }, [updateTimes]);
 
@@ -70,12 +62,7 @@ export default function AdminNavClient({
               'border-b border-gray-200 pb-3 dark:border-gray-800',
             )}
           >
-            <div
-              className={clsx(
-                'flex gap-2 md:gap-4',
-                'flex-grow overflow-x-auto',
-              )}
-            >
+            <div className={clsx('flex gap-2 md:gap-4', 'flex-grow overflow-x-auto')}>
               {items.map(({ label, href, count }) => (
                 <Link
                   key={label}
@@ -93,21 +80,14 @@ export default function AdminNavClient({
             </div>
             <Link
               href={PATH_ADMIN_CONFIGURATION}
-              className={
-                isPathAdminConfiguration(pathname) ? 'font-bold' : 'text-dim'
-              }
+              className={isPathAdminConfiguration(pathname) ? 'font-bold' : 'text-dim'}
             >
-              <BiCog
-                size={18}
-                className="inline-block"
-                aria-label="App Configuration"
-              />
+              <BiCog size={18} className="inline-block" aria-label="App Configuration" />
             </Link>
           </div>
           {shouldShowBanner && (
             <Note icon={<FaRegClock className="flex-shrink-0" />}>
-              Photo updates detected—they may take several minutes to show up
-              for visitors
+              Photo updates detected—they may take several minutes to show up for visitors
             </Note>
           )}
         </div>

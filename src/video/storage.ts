@@ -24,10 +24,7 @@ export const convertUploadToVideo = async ({
   const videoPath = `${fileName}.${fileExtension || 'jpg'}`;
   if (shouldStripGpsData) {
     const fileWithoutGps = await removeGpsData(
-      fileBytes ??
-        (await fetch(urlOrigin, { cache: 'no-store' }).then(res =>
-          res.arrayBuffer(),
-        )),
+      fileBytes ?? (await fetch(urlOrigin, { cache: 'no-store' }).then(res => res.arrayBuffer())),
     );
     return putFile(fileWithoutGps, videoPath).then(async url => {
       if (url && shouldDeleteOrigin) {
@@ -36,8 +33,6 @@ export const convertUploadToVideo = async ({
       return url;
     });
   } else {
-    return shouldDeleteOrigin
-      ? moveFile(urlOrigin, videoPath)
-      : copyFile(urlOrigin, videoPath);
+    return shouldDeleteOrigin ? moveFile(urlOrigin, videoPath) : copyFile(urlOrigin, videoPath);
   }
 };

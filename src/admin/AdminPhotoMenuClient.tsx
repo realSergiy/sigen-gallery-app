@@ -4,11 +4,7 @@ import { ComponentProps, useMemo } from 'react';
 import { pathForAdminPhotoEdit, pathForPhoto } from '@/site/paths';
 import { deletePhotoAction, toggleFavoritePhotoAction } from '@/photo/actions';
 import { FaRegEdit, FaRegStar, FaStar } from 'react-icons/fa';
-import {
-  Photo,
-  deleteConfirmationTextForPhoto,
-  downloadFileNameForPhoto,
-} from '@/photo';
+import { Photo, deleteConfirmationTextForPhoto, downloadFileNameForPhoto } from '@/photo';
 import { isPathFavs, isPhotoFav } from '@/tag';
 import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
@@ -62,10 +58,7 @@ export default function AdminPhotoMenuClient({
     items.push({
       label: 'Download',
       icon: (
-        <MdOutlineFileDownload
-          size={17}
-          className="translate-x-[-1.5px] translate-y-[-0.5px]"
-        />
+        <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
       ),
       href: photo.url,
       hrefDownloadName: downloadFileNameForPhoto(photo),
@@ -75,11 +68,7 @@ export default function AdminPhotoMenuClient({
       icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
       action: () => {
         if (confirm(deleteConfirmationTextForPhoto(photo))) {
-          return deletePhotoAction(
-            photo.id,
-            photo.url,
-            shouldRedirectDelete,
-          ).then(() => {
+          return deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
             revalidatePhoto?.(photo.id, true);
             registerAdminUpdate?.();
           });

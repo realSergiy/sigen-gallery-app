@@ -10,10 +10,8 @@ import type { Metadata } from 'next';
 export const OUTDATED_THRESHOLD = new Date('2024-06-16');
 
 // INFINITE SCROLL: FEED
-export const INFINITE_SCROLL_FEED_INITIAL =
-  process.env.NODE_ENV === 'development' ? 2 : 12;
-export const INFINITE_SCROLL_FEED_MULTIPLE =
-  process.env.NODE_ENV === 'development' ? 2 : 24;
+export const INFINITE_SCROLL_FEED_INITIAL = process.env.NODE_ENV === 'development' ? 2 : 12;
+export const INFINITE_SCROLL_FEED_MULTIPLE = process.env.NODE_ENV === 'development' ? 2 : 24;
 
 // INFINITE SCROLL: GRID
 export const INFINITE_SCROLL_GRID_INITIAL = HIGH_DENSITY_GRID
@@ -56,8 +54,7 @@ export const convertVideoToVideoDbInsert = (video: Video): VideoDbNew => ({
   takenAt: video.takenAt,
 });
 
-export const descriptionForVideo = (video: Video) =>
-  formatDate(video.takenAt)?.toUpperCase();
+export const descriptionForVideo = (video: Video) => formatDate(video.takenAt)?.toUpperCase();
 
 export const getPreviousVideo = (video: Video, videos: Video[]) => {
   const index = videos.findIndex(p => p.id === video.id);
@@ -90,13 +87,9 @@ const PHOTO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
   process.env.PHOTO_ID_FORWARDING_TABLE || '{}',
 );
 
-export const translateVideoId = (id: string) =>
-  PHOTO_ID_FORWARDING_TABLE[id] || id;
+export const translateVideoId = (id: string) => PHOTO_ID_FORWARDING_TABLE[id] || id;
 
-export const titleForVideo = (
-  video: Video,
-  preferDateOverUntitled?: boolean,
-) => {
+export const titleForVideo = (video: Video, preferDateOverUntitled?: boolean) => {
   if (video.title) {
     return video.title;
   } else if (preferDateOverUntitled && (video.takenAt || video.createdAt)) {
@@ -109,13 +102,7 @@ export const titleForVideo = (
 export const altTextForVideo = (video: Video) => titleForVideo(video);
 
 export const videoLabelForCount = (count: number, capitalize = true) =>
-  capitalize
-    ? count === 1
-      ? 'Video'
-      : 'Videos'
-    : count === 1
-      ? 'video'
-      : 'videos';
+  capitalize ? (count === 1 ? 'Video' : 'Videos') : count === 1 ? 'video' : 'videos';
 
 export const videoQuantityText = (
   count: number,
@@ -153,10 +140,7 @@ const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') =>
       : a.takenAt.getTime() - b.takenAt.getTime(),
   );
 
-export const dateRangeForVideos = (
-  videos: Video[] = [],
-  explicitDateRange?: VideoDateRange,
-) => {
+export const dateRangeForVideos = (videos: Video[] = [], explicitDateRange?: VideoDateRange) => {
   let start = '';
   let end = '';
   let description = '';
@@ -167,10 +151,7 @@ export const dateRangeForVideos = (
       explicitDateRange?.start ?? videosSorted[videos.length - 1].takenAt,
       'short',
     );
-    end = formatDate(
-      explicitDateRange?.end ?? videosSorted[0].takenAt,
-      'short',
-    );
+    end = formatDate(explicitDateRange?.end ?? videosSorted[0].takenAt, 'short');
     description = start === end ? start : `${start}–${end}`;
   }
 

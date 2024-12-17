@@ -18,11 +18,7 @@ import { photoQuantityText } from '@/photo';
 import { FaArrowDown, FaCheck, FaRegStar } from 'react-icons/fa6';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 
-export default function AdminBatchEditPanelClient({
-  uniqueTags,
-}: {
-  uniqueTags: Tags;
-}) {
+export default function AdminBatchEditPanelClient({ uniqueTags }: { uniqueTags: Tags }) {
   const pathname = usePathname();
 
   const {
@@ -43,11 +39,7 @@ export default function AdminBatchEditPanelClient({
     setTagErrorMessage('');
   };
 
-  const photosText = photoQuantityText(
-    selectedPhotoIds?.length ?? 0,
-    false,
-    false,
-  );
+  const photosText = photoQuantityText(selectedPhotoIds?.length ?? 0, false, false);
 
   const renderPhotoCTA = () =>
     selectedPhotoIds?.length === 0 ? (
@@ -56,9 +48,7 @@ export default function AdminBatchEditPanelClient({
         Select photos below
       </>
     ) : (
-      <ResponsiveText shortText={photosText}>
-        {photosText} selected
-      </ResponsiveText>
+      <ResponsiveText shortText={photosText}>{photosText} selected</ResponsiveText>
     );
 
   const renderActions = () =>
@@ -125,10 +115,7 @@ export default function AdminBatchEditPanelClient({
                   .finally(() => setIsPerformingSelectEdit?.(false));
               }}
             />
-            <LoaderButton
-              onClick={() => setTags('')}
-              disabled={isPerformingSelectEdit}
-            >
+            <LoaderButton onClick={() => setTags('')} disabled={isPerformingSelectEdit}>
               <ResponsiveText shortText="Tag">Tag ...</ResponsiveText>
             </LoaderButton>
           </>
@@ -140,9 +127,7 @@ export default function AdminBatchEditPanelClient({
       </>
     );
 
-  return isUserSignedIn &&
-    pathname === PATH_GRID_INFERRED &&
-    selectedPhotoIds !== undefined ? (
+  return isUserSignedIn && pathname === PATH_GRID_INFERRED && selectedPhotoIds !== undefined ? (
     <SiteGrid
       className="sticky top-0 z-10 -mt-2 mb-5 pt-2"
       contentMain={
@@ -158,11 +143,7 @@ export default function AdminBatchEditPanelClient({
               '[&>*>*:first-child]:gap-1.5 [&>*>*:first-child]:sm:gap-2.5',
             )}
             padding={isInTagMode ? 'tight-cta-right-left' : 'tight-cta-right'}
-            cta={
-              <div className="flex items-center gap-1.5 sm:gap-2.5">
-                {renderActions()}
-              </div>
-            }
+            cta={<div className="flex items-center gap-1.5 sm:gap-2.5">{renderActions()}</div>}
             spaceChildren={false}
             hideIcon
           >
@@ -178,14 +159,10 @@ export default function AdminBatchEditPanelClient({
                 hideLabel
               />
             ) : (
-              <div className="flex items-center gap-2 text-base">
-                {renderPhotoCTA()}
-              </div>
+              <div className="flex items-center gap-2 text-base">{renderPhotoCTA()}</div>
             )}
           </Note>
-          {tagErrorMessage && (
-            <div className="text-error pl-4">{tagErrorMessage}</div>
-          )}
+          {tagErrorMessage && <div className="text-error pl-4">{tagErrorMessage}</div>}
         </div>
       }
     />

@@ -53,13 +53,8 @@ export const convertArrayToPostgresString = (
         : `(${array.map(i => `'${i}'`).join(',')})`
     : null;
 
-const isTemplateStringsArray = (
-  strings: unknown,
-): strings is TemplateStringsArray => {
-  return (
-    Array.isArray(strings) && 'raw' in strings && Array.isArray(strings.raw)
-  );
+const isTemplateStringsArray = (strings: unknown): strings is TemplateStringsArray => {
+  return Array.isArray(strings) && 'raw' in strings && Array.isArray(strings.raw);
 };
 
-export const testDatabaseConnection = async () =>
-  query('SELECt COUNT(*) FROM pg_stat_user_tables');
+export const testDatabaseConnection = async () => query('SELECt COUNT(*) FROM pg_stat_user_tables');

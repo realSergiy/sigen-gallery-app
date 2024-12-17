@@ -1,9 +1,6 @@
 import { auth } from '@/auth';
 import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
-import {
-  ACCEPTED_PHOTO_FILE_TYPES,
-  MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
-} from '@/photo';
+import { ACCEPTED_PHOTO_FILE_TYPES, MAX_PHOTO_UPLOAD_SIZE_IN_BYTES } from '@/photo';
 import { isPhotoUploadPathnameValid } from '@/services/storage';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
@@ -40,9 +37,6 @@ export async function POST(request: Request): Promise<NextResponse> {
     revalidateAdminPaths();
     return NextResponse.json(jsonResponse);
   } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
 }

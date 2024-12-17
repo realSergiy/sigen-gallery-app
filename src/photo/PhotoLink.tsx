@@ -44,12 +44,7 @@ export default function PhotoLink({
       {children ?? titleForPhoto(photo)}
     </Link>
   ) : (
-    <span
-      className={clsx(
-        'cursor-default text-gray-300 dark:text-gray-700',
-        className,
-      )}
-    >
+    <span className={clsx('cursor-default text-gray-300 dark:text-gray-700', className)}>
       {children ?? (photo ? titleForPhoto(photo) : undefined)}
     </span>
   );

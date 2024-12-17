@@ -3,10 +3,7 @@ import { streamAiImageQueryAction } from '../actions';
 import { readStreamableValue } from 'ai/rsc';
 import { AiImageQuery } from '.';
 
-export default function useAiImageQuery(
-  imageBase64: string | undefined,
-  query: AiImageQuery,
-) {
+export default function useAiImageQuery(imageBase64: string | undefined, query: AiImageQuery) {
   const [text, setText] = useState('');
   const [error, setError] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);

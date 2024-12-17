@@ -19,27 +19,29 @@ export default function useAiImageQueries(
     resetCaption,
   ] = useTitleCaptionAiImageQuery(imageBase64);
 
-  const [requestTitle, titleSolo, isLoadingTitleSolo, resetTitleSolo] =
-    useAiImageQuery(imageBase64, 'title');
-
-  const [requestCaption, captionSolo, isLoadingCaptionSolo, resetCaptionSolo] =
-    useAiImageQuery(imageBase64, 'caption');
-
-  const [requestTags, tags, isLoadingTags] = useAiImageQuery(
+  const [requestTitle, titleSolo, isLoadingTitleSolo, resetTitleSolo] = useAiImageQuery(
     imageBase64,
-    'tags',
+    'title',
   );
 
-  const [requestSemantic, semanticDescription, isLoadingSemantic] =
-    useAiImageQuery(imageBase64, 'description-small');
+  const [requestCaption, captionSolo, isLoadingCaptionSolo, resetCaptionSolo] = useAiImageQuery(
+    imageBase64,
+    'caption',
+  );
+
+  const [requestTags, tags, isLoadingTags] = useAiImageQuery(imageBase64, 'tags');
+
+  const [requestSemantic, semanticDescription, isLoadingSemantic] = useAiImageQuery(
+    imageBase64,
+    'description-small',
+  );
 
   const title = _title || titleSolo;
   const caption = _caption || captionSolo;
   const isLoadingTitle = _isLoadingTitle || isLoadingTitleSolo;
   const isLoadingCaption = _isLoadingCaption || isLoadingCaptionSolo;
 
-  const isLoading =
-    isLoadingTitle || isLoadingCaption || isLoadingTags || isLoadingSemantic;
+  const isLoading = isLoadingTitle || isLoadingCaption || isLoadingTags || isLoadingSemantic;
 
   const hasRunAllQueriesOnce = useRef(false);
 

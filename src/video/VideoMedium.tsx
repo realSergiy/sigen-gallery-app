@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Video,
-  VideoSetAttributes,
-  altTextForVideo,
-  doesVideoNeedBlurCompatibility,
-} from '.';
+import { Video, VideoSetAttributes, altTextForVideo, doesVideoNeedBlurCompatibility } from '.';
 import ImageMedium from '@/components/image/ImageMedium';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
@@ -41,11 +36,7 @@ export default function VideoMedium({
     <Link
       ref={ref}
       href={pathForVideo({ video, tag, camera, simulation, focal })}
-      className={clsx(
-        'active:brightness-75',
-        selected && 'brightness-50',
-        className,
-      )}
+      className={clsx('active:brightness-75', selected && 'brightness-50', className)}
       prefetch={prefetch}
     >
       <ImageMedium

@@ -28,16 +28,12 @@ export const awsS3Client = () =>
 
 const urlForKey = (key?: string) => `${AWS_S3_BASE_URL}/${key}`;
 
-export const isUrlFromAwsS3 = (url?: string) =>
-  AWS_S3_BASE_URL && url?.startsWith(AWS_S3_BASE_URL);
+export const isUrlFromAwsS3 = (url?: string) => AWS_S3_BASE_URL && url?.startsWith(AWS_S3_BASE_URL);
 
 export const awsS3PutObjectCommandForKey = (Key: string) =>
   new PutObjectCommand({ Bucket: AWS_S3_BUCKET, Key, ACL: 'public-read' });
 
-export const awsS3Put = async (
-  file: Buffer,
-  fileName: string,
-): Promise<string> =>
+export const awsS3Put = async (file: Buffer, fileName: string): Promise<string> =>
   awsS3Client()
     .send(
       new PutObjectCommand({
@@ -56,9 +52,7 @@ export const awsS3Copy = async (
 ) => {
   const name = fileNameSource.split('.')[0];
   const extension = fileNameSource.split('.')[1];
-  const Key = addRandomSuffix
-    ? `${name}-${generateStorageId()}.${extension}`
-    : fileNameDestination;
+  const Key = addRandomSuffix ? `${name}-${generateStorageId()}.${extension}` : fileNameDestination;
   return awsS3Client()
     .send(
       new CopyObjectCommand({

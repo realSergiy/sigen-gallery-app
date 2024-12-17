@@ -3,10 +3,7 @@ import { db } from '@/db';
 import { count, and, eq, max, min, desc, sql } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
 
-export type VideoDbNew = Omit<
-  typeof tb.video.$inferInsert,
-  'createdAt' | 'updatedAt'
->;
+export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
 export type VideoDb = typeof tb.video.$inferSelect;
 export type VideoDbUpd = Omit<VideoDb, 'createdAt' | 'updatedAt'>;
 
@@ -57,27 +54,18 @@ const getUniqueTagsCore = async (includeHidden: boolean) => {
   const video = tb.video;
   const { tags, hidden } = tb.video;
 
-  const query = includeHidden
-    ? sql`
-      select distinct unnest(tags) as tag, count(*)
-      from ${video._.name}
-      group by tag
-      order by tag asc`
-    : sql`
-      select distinct unnest(${video}) as tag, count(*)
-      from ${video}
-      where not ${hidden}
-      group by tag
-      order by tag asc`;
+  const query = sql`
+    select distinct unnest(${tags}) as tag, count(*)
+    from ${video._.name}
+    ${includeHidden ? `` : `where not ${hidden}`}
+    group by tag
+    order by tag asc`;
 
   const qw = await db.execute<TagInfo>(query);
   return qw.rows;
 };
 
-export const getVideosNearId = async (
-  videoId: string,
-  { limit }: VideoQueryOptions,
-) => {
+export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOptions) => {
   const video = tb.video;
   const { takenAt, id } = tb.video;
 
@@ -135,9 +123,7 @@ const metaQuery = db
 export type VideosMetaFilter = Parameters<typeof metaQuery.where>[0];
 
 export const getVideosMeta = async (options: VideoQueryOptions) => {
-  const sq = db
-    .$with('sq')
-    .as(db.select().from(tb.video).where(options.filter));
+  const sq = db.$with('sq').as(db.select().from(tb.video).where(options.filter));
 
   const query = db
     .with(sq)
@@ -153,7 +139,6 @@ export const getVideosMeta = async (options: VideoQueryOptions) => {
 
   return {
     count: row.count,
-    dateRange:
-      row.start && row.end ? { start: row.start, end: row.end } : undefined,
+    dateRange: row.start && row.end ? { start: row.start, end: row.end } : undefined,
   };
 };

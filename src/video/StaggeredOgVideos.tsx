@@ -43,10 +43,7 @@ export default function StaggeredOgVideos({
         Object.entries(initialLoadingState).forEach(([id, state]) => {
           if (state === 'loading') {
             imagesLoadingCount++;
-          } else if (
-            imagesLoadingCount < maxConcurrency &&
-            state === 'unloaded'
-          ) {
+          } else if (imagesLoadingCount < maxConcurrency && state === 'unloaded') {
             updatedLoadingState[id] = 'loading';
             imagesLoadingCount++;
           }
@@ -70,9 +67,7 @@ export default function StaggeredOgVideos({
           loadingState={loadingState[video.id]}
           onLoad={() => recomputeLoadingState({ [video.id]: 'loaded' })}
           onFail={() => recomputeLoadingState({ [video.id]: 'failed' })}
-          onVisible={
-            index === videos.length - 1 ? onLastVideoVisible : undefined
-          }
+          onVisible={index === videos.length - 1 ? onLastVideoVisible : undefined}
           riseOnHover
         />
       ))}

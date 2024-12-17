@@ -19,10 +19,7 @@ export type GetPhotosOptions = {
 export const areOptionsSensitive = (options: GetPhotosOptions) =>
   options.hidden === 'include' || options.hidden === 'only';
 
-export const getWheresFromOptions = (
-  options: GetPhotosOptions,
-  initialValuesIndex = 1,
-) => {
+export const getWheresFromOptions = (options: GetPhotosOptions, initialValuesIndex = 1) => {
   const {
     hidden = 'exclude',
     takenBefore,
@@ -63,9 +60,7 @@ export const getWheresFromOptions = (
   }
   if (query) {
     // eslint-disable-next-line max-len
-    wheres.push(
-      `CONCAT(title, ' ', caption, ' ', semantic_description) ILIKE $${valuesIndex++}`,
-    );
+    wheres.push(`CONCAT(title, ' ', caption, ' ', semantic_description) ILIKE $${valuesIndex++}`);
     wheresValues.push(`%${query.toLocaleLowerCase()}%`);
   }
   if (tag) {
@@ -115,10 +110,7 @@ export const getOrderByFromOptions = (options: GetPhotosOptions) => {
   }
 };
 
-export const getLimitAndOffsetFromOptions = (
-  options: GetPhotosOptions,
-  initialValuesIndex = 1,
-) => {
+export const getLimitAndOffsetFromOptions = (options: GetPhotosOptions, initialValuesIndex = 1) => {
   const { limit = PHOTO_DEFAULT_LIMIT, offset = 0 } = options;
 
   let valuesIndex = initialValuesIndex;

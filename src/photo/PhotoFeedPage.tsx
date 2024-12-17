@@ -1,8 +1,4 @@
-import {
-  INFINITE_SCROLL_FEED_INITIAL,
-  INFINITE_SCROLL_FEED_MULTIPLE,
-  Photo,
-} from '.';
+import { INFINITE_SCROLL_FEED_INITIAL, INFINITE_SCROLL_FEED_MULTIPLE, Photo } from '.';
 import PhotosLarge from './PhotosLarge';
 import PhotosLargeInfinite from './PhotosLargeInfinite';
 

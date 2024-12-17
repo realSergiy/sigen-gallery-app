@@ -12,11 +12,7 @@ import SiteGrid from '@/components/SiteGrid';
 import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
-import {
-  pathForFocalLength,
-  pathForPhoto,
-  pathForPhotoShare,
-} from '@/site/paths';
+import { pathForFocalLength, pathForPhoto, pathForPhotoShare } from '@/site/paths';
 import PhotoTags from '@/tag/PhotoTags';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
@@ -26,10 +22,7 @@ import PhotoFilmSimulation from '@/simulation/PhotoFilmSimulation';
 import { sortTags } from '@/tag';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import PhotoLink from './PhotoLink';
-import {
-  SHOULD_PREFETCH_ALL_LINKS,
-  ALLOW_PUBLIC_DOWNLOADS,
-} from '@/site/config';
+import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminPhotoMenuClient from '@/admin/AdminPhotoMenuClient';
 import { RevalidatePhoto } from './InfinitePhotoScroll';
 import { useRef } from 'react';
@@ -96,17 +89,12 @@ export default function PhotoLarge({
 
   const hasTitleContent = hasTitle || Boolean(photo.caption);
 
-  const hasMetaContent =
-    showCameraContent || showTagsContent || showExifContent;
+  const hasMetaContent = showCameraContent || showTagsContent || showExifContent;
 
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const renderPhotoLink = () => (
-    <PhotoLink
-      photo={photo}
-      className="flex-grow font-bold uppercase"
-      prefetch={prefetch}
-    />
+    <PhotoLink photo={photo} className="flex-grow font-bold uppercase" prefetch={prefetch} />
   );
 
   return (
@@ -116,9 +104,7 @@ export default function PhotoLarge({
       contentMain={
         <Link
           href={pathForPhoto({ photo })}
-          className={clsx(
-            arePhotosMatted && 'flex aspect-[3/2] items-center bg-gray-100',
-          )}
+          className={clsx(arePhotosMatted && 'flex aspect-[3/2] items-center bg-gray-100')}
           prefetch={prefetch}
         >
           <div
@@ -129,9 +115,7 @@ export default function PhotoLarge({
           >
             <ImageLarge
               className={clsx(arePhotosMatted && 'h-full')}
-              imgClassName={clsx(
-                arePhotosMatted && 'object-contain w-full h-full',
-              )}
+              imgClassName={clsx(arePhotosMatted && 'object-contain w-full h-full')}
               alt={altTextForPhoto(photo)}
               src={photo.url}
               aspectRatio={photo.aspectRatio}
@@ -155,12 +139,7 @@ export default function PhotoLarge({
           {/* Meta */}
           <div className="pr-2 md:pr-0">
             <div className="flex items-start gap-2 md:relative">
-              {hasTitle &&
-                (showTitleAsH1 ? (
-                  <h1>{renderPhotoLink()}</h1>
-                ) : (
-                  renderPhotoLink()
-                ))}
+              {hasTitle && (showTitleAsH1 ? <h1>{renderPhotoLink()}</h1> : renderPhotoLink())}
               <div className="absolute right-0 z-10 translate-y-[-4px]">
                 <AdminPhotoMenuClient
                   {...{
@@ -194,23 +173,14 @@ export default function PhotoLarge({
                     />
                   )}
                   {showTagsContent && (
-                    <PhotoTags
-                      tags={tags}
-                      contrast="medium"
-                      prefetch={prefetchRelatedLinks}
-                    />
+                    <PhotoTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
                   )}
                 </div>
               )}
             </div>
           </div>
           {/* EXIF Data */}
-          <div
-            className={clsx(
-              'space-y-baseline',
-              !hasTitleContent && 'md:-mt-baseline',
-            )}
-          >
+          <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
             {showExifContent && (
               <>
                 <ul className="text-medium">
@@ -226,10 +196,7 @@ export default function PhotoLarge({
                     {photo.focalLengthIn35MmFormatFormatted && (
                       <>
                         {' '}
-                        <span
-                          title="35mm equivalent"
-                          className="text-extra-dim"
-                        >
+                        <span title="35mm equivalent" className="text-extra-dim">
                           {photo.focalLengthIn35MmFormatFormatted}
                         </span>
                       </>
@@ -266,9 +233,7 @@ export default function PhotoLarge({
               <div
                 className={clsx(
                   'flex translate-y-[0.5px] gap-1',
-                  ALLOW_PUBLIC_DOWNLOADS
-                    ? 'translate-x-[-2.5px]'
-                    : 'md:translate-x-[-2.5px]',
+                  ALLOW_PUBLIC_DOWNLOADS ? 'translate-x-[-2.5px]' : 'md:translate-x-[-2.5px]',
                 )}
               >
                 {shouldShare && (
@@ -278,13 +243,9 @@ export default function PhotoLarge({
                       tag: shouldShareTag ? primaryTag : undefined,
                       camera: shouldShareCamera ? camera : undefined,
                       // eslint-disable-next-line max-len
-                      simulation: shouldShareSimulation
-                        ? photo.filmSimulation
-                        : undefined,
+                      simulation: shouldShareSimulation ? photo.filmSimulation : undefined,
                       // eslint-disable-next-line max-len
-                      focal: shouldShareFocalLength
-                        ? photo.focalLength
-                        : undefined,
+                      focal: shouldShareFocalLength ? photo.focalLength : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}
                     shouldScroll={shouldScrollOnShare}

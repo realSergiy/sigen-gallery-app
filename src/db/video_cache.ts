@@ -10,9 +10,7 @@ const KEY_COUNT = 'count';
 const KEY_HIDDEN = 'hidden';
 const KEY_DATE_RANGE = 'date-range';
 
-export const getVideosMetaCached = (
-  ...args: Parameters<typeof getVideosMeta>
-) =>
+export const getVideosMetaCached = (...args: Parameters<typeof getVideosMeta>) =>
   unstable_cache(getVideosMeta, [
     KEY_VIDEOS,
     KEY_COUNT,

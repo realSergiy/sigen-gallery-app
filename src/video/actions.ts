@@ -59,12 +59,10 @@ export const addAllUploadsAction = async ({
   uploadUrls,
   tags,
   takenAtLocal,
-  takenAtNaiveLocal,
 }: {
   uploadUrls: string[];
   tags?: string;
   takenAtLocal: string;
-  takenAtNaiveLocal: string;
 }) =>
   runAuthenticatedAdminServerAction(async () => {
     const PROGRESS_TASK_COUNT = 4;
@@ -119,10 +117,8 @@ export const addAllUploadsAction = async ({
               ...videoFormExif,
               title,
               caption,
-              tags: tags || aiTags,
-              semanticDescription,
+              tags,
               takenAt: videoFormExif.takenAt || takenAtLocal,
-              takenAtNaive: videoFormExif.takenAtNaive || takenAtNaiveLocal,
             };
 
             streamUpdate('Transferring to video storage');

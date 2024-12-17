@@ -45,9 +45,7 @@ function AdminChildPage({
                 {backPath && (
                   <Link href={backPath} className="flex items-center gap-1.5">
                     <FiArrowLeft size={16} />
-                    <span className="hidden xs:inline-block">
-                      {backLabel || 'Back'}
-                    </span>
+                    <span className="hidden xs:inline-block">{backLabel || 'Back'}</span>
                   </Link>
                 )}
                 {breadcrumb && (

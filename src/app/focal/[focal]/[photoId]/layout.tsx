@@ -1,15 +1,7 @@
-import {
-  RELATED_GRID_PHOTOS_TO_SHOW,
-  descriptionForPhoto,
-  titleForPhoto,
-} from '@/photo';
+import { RELATED_GRID_PHOTOS_TO_SHOW, descriptionForPhoto, titleForPhoto } from '@/photo';
 import { Metadata } from 'next/types';
 import { redirect } from 'next/navigation';
-import {
-  PATH_ROOT,
-  absolutePathForPhoto,
-  absolutePathForPhotoImage,
-} from '@/site/paths';
+import { PATH_ROOT, absolutePathForPhoto, absolutePathForPhotoImage } from '@/site/paths';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
 import { getPhotosNearIdCached } from '@/photo/cache';
 import { ReactNode, cache } from 'react';
@@ -67,8 +59,10 @@ export default async function PhotoFocalLengthPage({
 }: PhotoFocalLengthProps & { children: ReactNode }) {
   const focal = getFocalLengthFromString(focalString);
 
-  const { photo, photos, photosGrid, indexNumber } =
-    await getPhotosNearIdCachedCached(photoId, focal);
+  const { photo, photos, photosGrid, indexNumber } = await getPhotosNearIdCachedCached(
+    photoId,
+    focal,
+  );
 
   if (!photo) {
     redirect(PATH_ROOT);

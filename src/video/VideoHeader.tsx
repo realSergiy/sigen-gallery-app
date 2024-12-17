@@ -1,13 +1,7 @@
 'use client';
 
 import { clsx } from 'clsx/lite';
-import {
-  Video,
-  VideoDateRange,
-  VideoSetAttributes,
-  dateRangeForVideos,
-  titleForVideo,
-} from '.';
+import { Video, VideoDateRange, VideoSetAttributes, dateRangeForVideos, titleForVideo } from '.';
 import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
@@ -51,9 +45,7 @@ export default function VideoHeader({
     : undefined;
 
   const paginationLabel =
-    (indexNumber || (selectedVideoIndex ?? 0 + 1)) +
-    ' of ' +
-    (count ?? videos.length);
+    (indexNumber || (selectedVideoIndex ?? 0 + 1)) + ' of ' + (count ?? videos.length);
 
   const headerType =
     selectedVideoIndex === undefined
@@ -91,10 +83,7 @@ export default function VideoHeader({
   const renderContentA = () =>
     entity ??
     (selectedVideo !== undefined && (
-      <VideoLink
-        video={selectedVideo}
-        className="truncate text-ellipsis font-bold uppercase"
-      >
+      <VideoLink video={selectedVideo} className="truncate text-ellipsis font-bold uppercase">
         {titleForVideo(selectedVideo, true)}
       </VideoLink>
     ));
@@ -110,9 +99,7 @@ export default function VideoHeader({
           className={clsx(
             'grid items-start gap-0.5 sm:gap-1',
             'grid-cols-4',
-            isGridHighDensity
-              ? 'lg:grid-cols-6'
-              : 'md:grid-cols-3 lg:grid-cols-4',
+            isGridHighDensity ? 'lg:grid-cols-6' : 'md:grid-cols-3 lg:grid-cols-4',
           )}
         >
           {/* Content A: Filter Set or Video Title */}
@@ -161,11 +148,7 @@ export default function VideoHeader({
                   <>
                     {entityDescription}
                     {sharePath && (
-                      <ShareButton
-                        className="translate-y-[1.5px]"
-                        path={sharePath}
-                        dim
-                      />
+                      <ShareButton className="translate-y-[1.5px]" path={sharePath} dim />
                     )}
                   </>
                 ) : (
@@ -178,10 +161,7 @@ export default function VideoHeader({
           </div>
           {/* Content C: Nav */}
           <div
-            className={clsx(
-              headerType === 'video-set' ? 'hidden sm:flex' : 'flex',
-              'justify-end',
-            )}
+            className={clsx(headerType === 'video-set' ? 'hidden sm:flex' : 'flex', 'justify-end')}
           >
             {selectedVideo ? renderPrevNext() : renderDateRange()}
           </div>

@@ -27,11 +27,7 @@ export default function Icon({
         className,
       )}
     >
-      {loading ? (
-        <Spinner />
-      ) : (
-        <span className={iconClassName}>{children}</span>
-      )}
+      {loading ? <Spinner /> : <span className={iconClassName}>{children}</span>}
     </span>
   );
 }

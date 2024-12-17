@@ -1,19 +1,11 @@
 import { Video, VideoDbNew } from '@/db/video_orm';
-import {
-  generateLocalNaivePostgresString,
-  generateLocalPostgresString,
-} from '@/utility/date';
+import { generateLocalNaivePostgresString, generateLocalPostgresString } from '@/utility/date';
 import { convertStringToArray } from '@/utility/string';
 import { generateNanoid } from '@/utility/nanoid';
 import { FilmSimulation } from '@/simulation';
 import { TAG_FAVS, getValidationMessageForTags } from '@/tag';
 
-export type FieldSetType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'checkbox'
-  | 'textarea';
+export type FieldSetType = 'text' | 'email' | 'password' | 'checkbox' | 'textarea';
 
 export type AnnotatedTag = {
   value: string;
@@ -80,12 +72,10 @@ const FORM_METADATA = (
   hidden: { label: 'hidden', type: 'checkbox' },
 });
 
-export const FORM_METADATA_ENTRIES = (
-  ...args: Parameters<typeof FORM_METADATA>
-) =>
-  (
-    Object.entries(FORM_METADATA(...args)) as [keyof VideoFormData, FormMeta][]
-  ).filter(([_, meta]) => !meta.hide);
+export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
+  (Object.entries(FORM_METADATA(...args)) as [keyof VideoFormData, FormMeta][]).filter(
+    ([_, meta]) => !meta.hide,
+  );
 
 export const convertFormKeysToLabels = (keys: (keyof VideoFormData)[]) =>
   keys.map(key => FORM_METADATA()[key].label.toUpperCase());
@@ -109,15 +99,11 @@ export const isFormValid = (formData: Partial<VideoFormData>) =>
       (!required || Boolean(formData[key])) &&
       !validate?.(formData[key]) &&
       // eslint-disable-next-line max-len
-      (!validateStringMaxLength ||
-        (formData[key]?.length ?? 0) <= validateStringMaxLength),
+      (!validateStringMaxLength || (formData[key]?.length ?? 0) <= validateStringMaxLength),
   );
 
-export const formHasTextContent = ({
-  title,
-  caption,
-  tags,
-}: Partial<VideoFormData>) => Boolean(title || caption || tags);
+export const formHasTextContent = ({ title, caption, tags }: Partial<VideoFormData>) =>
+  Boolean(title || caption || tags);
 
 // CREATE FORM DATA: FROM PHOTO
 
@@ -125,17 +111,13 @@ export const convertVideoToFormData = (video: Video): VideoFormData => {
   const valueForKey = (key: keyof Video, value: any) => {
     switch (key) {
       case 'tags':
-        return (value ?? [])
-          .filter((tag: string) => tag !== TAG_FAVS)
-          .join(', ');
+        return (value ?? []).filter((tag: string) => tag !== TAG_FAVS).join(', ');
       case 'takenAt':
         return value?.toISOString ? value.toISOString() : value;
       case 'hidden':
         return value ? 'true' : 'false';
       default:
-        return value !== undefined && value !== null
-          ? value.toString()
-          : undefined;
+        return value !== undefined && value !== null ? value.toString() : undefined;
     }
   };
   return Object.entries(video).reduce(
@@ -155,9 +137,7 @@ export const convertFormDataToVideoDbInsert = (
   formData: FormData | Partial<VideoFormData>,
 ): VideoDbNew => {
   const videoForm =
-    formData instanceof FormData
-      ? (Object.fromEntries(formData) as VideoFormData)
-      : formData;
+    formData instanceof FormData ? (Object.fromEntries(formData) as VideoFormData) : formData;
 
   const tags = convertStringToArray(videoForm.tags) ?? [];
   if (videoForm.favorite === 'true') {
@@ -185,9 +165,7 @@ export const convertFormDataToVideoDbInsert = (
     tags: tags.length > 0 ? tags : [],
     latitude: videoForm.latitude ? parseFloat(videoForm.latitude) : null,
     longitude: videoForm.longitude ? parseFloat(videoForm.longitude) : null,
-    priorityOrder: videoForm.priorityOrder
-      ? parseFloat(videoForm.priorityOrder)
-      : null,
+    priorityOrder: videoForm.priorityOrder ? parseFloat(videoForm.priorityOrder) : null,
     hidden: videoForm.hidden === 'true',
     ...generateTakenAtFields(videoForm),
   };
@@ -199,8 +177,7 @@ export const getChangedFormFields = (
 ) => {
   return Object.keys(current).filter(
     key =>
-      (original[key as keyof VideoFormData] ?? '') !==
-      (current[key as keyof VideoFormData] ?? ''),
+      (original[key as keyof VideoFormData] ?? '') !== (current[key as keyof VideoFormData] ?? ''),
   ) as (keyof VideoFormData)[];
 };
 
