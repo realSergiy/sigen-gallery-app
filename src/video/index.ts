@@ -1,4 +1,4 @@
-import { Video, VideoDb, VideoDbNew } from '@/db/video_orm';
+import { Video, VideoDb, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
 import { getNextImageUrlForRequest } from '@/services/next-image';
 import { HIGH_DENSITY_GRID } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
@@ -42,11 +42,8 @@ export type VideoSetAttributes = {
   tag?: string;
 };
 
-export const convertVideoToVideoDbInsert = (video: Video): VideoDbNew => ({
+export const convertVideoToVideoDbUpdate = (video: Video): VideoDbUpd => ({
   ...video,
-
-  longitude: video.longitude ?? null,
-  latitude: video.latitude ?? null,
   locationName: video.locationName ?? null,
   hidden: video.hidden ?? false,
   caption: video.caption ?? null,

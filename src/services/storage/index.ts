@@ -106,6 +106,7 @@ export const fileNameForStorageUrl = (url: string) => {
 export const getExtensionFromStorageUrl = (url: string) => url.match(/.([a-z]{1,4})$/i)?.[1];
 
 export const getPhotoIdFromStorageUrl = (url: string) => url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
+export const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_UPLOAD_ID)?.[1];
 
 export const isPhotoUploadPathnameValid = (pathname?: string) =>
   pathname?.match(REGEX_PHOTO_UPLOAD_PATH);

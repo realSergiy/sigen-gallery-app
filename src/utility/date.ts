@@ -29,7 +29,7 @@ export const formatDateFromPostgresString = (date: string, length?: Length) =>
 export const formatDateForPostgres = (date: Date) =>
   date.toISOString().replace(/(\d{4}):(\d{2}):(\d{2}) (\d{2}:\d{2}:\d{2})/, '$1-$2-$3 $4');
 
-const dateFromTimestamp = (timestamp?: AmbiguousTimestamp): Date => {
+export const dateFromTimestamp = (timestamp?: AmbiguousTimestamp): Date => {
   const date =
     typeof timestamp === 'number'
       ? new Date(timestamp * 1000)

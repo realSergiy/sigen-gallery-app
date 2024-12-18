@@ -1,95 +1,37 @@
-import { getExtensionFromStorageUrl, getVideoIdFromStorageUrl } from '@/services/storage';
-import { convertExifToFormData } from '@/video/form';
-import { getFujifilmSimulationFromMakerNote, isExifForFujifilm } from '@/vendors/fujifilm';
-import { ExifData, ExifParserFactory } from 'ts-exif-parser';
-import { VideoFormData } from './form';
-import { FilmSimulation } from '@/simulation';
+import { getVideoIdFromStorageUrl } from '@/services/storage';
 import sharp, { Sharp } from 'sharp';
-import { GEO_PRIVACY_ENABLED, PRO_MODE_ENABLED } from '@/site/config';
+import { PRO_MODE_ENABLED } from '@/site/config';
 
 const IMAGE_WIDTH_RESIZE = 200;
 const IMAGE_WIDTH_BLUR = 200;
 
-export const extractImageDataFromBlobPath = async (
+export const extractVideoDataFromBlobPath = async (
   blobPath: string,
   options?: {
-    includeInitialVideoFields?: boolean;
-    generateBlurData?: boolean;
     generateResizedImage?: boolean;
   },
-): Promise<{
-  blobId?: string;
-  videoFormExif?: Partial<VideoFormData>;
-  imageResizedBase64?: string;
-  shouldStripGpsData?: boolean;
-  fileBytes?: ArrayBuffer;
-}> => {
-  const { includeInitialVideoFields, generateBlurData, generateResizedImage } = options ?? {};
+) => {
+  const { generateResizedImage } = options ?? {};
 
   const url = decodeURIComponent(blobPath);
 
   const blobId = getVideoIdFromStorageUrl(url);
 
-  const extension = getExtensionFromStorageUrl(url);
-
   const fileBytes = blobPath
     ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer())
     : undefined;
 
-  let exifData: ExifData | undefined;
-  let filmSimulation: FilmSimulation | undefined;
-  let blurData: string | undefined;
   let imageResizedBase64: string | undefined;
-  let shouldStripGpsData = false;
 
   if (fileBytes) {
-    const parser = ExifParserFactory.create(Buffer.from(fileBytes));
-
-    // Data for form
-    parser.enableBinaryFields(false);
-    exifData = parser.parse();
-
-    // Capture film simulation for Fujifilm cameras
-    if (isExifForFujifilm(exifData)) {
-      // Parse exif data again with binary fields
-      // in order to access MakerNote tag
-      parser.enableBinaryFields(true);
-      const exifDataBinary = parser.parse();
-      const makerNote = exifDataBinary.tags?.MakerNote;
-      if (Buffer.isBuffer(makerNote)) {
-        filmSimulation = getFujifilmSimulationFromMakerNote(makerNote);
-      }
-    }
-
-    if (generateBlurData) {
-      blurData = await blurImage(fileBytes);
-    }
-
     if (generateResizedImage) {
       imageResizedBase64 = await resizeImage(fileBytes);
     }
-
-    shouldStripGpsData =
-      GEO_PRIVACY_ENABLED &&
-      (Boolean(exifData.tags?.GPSLatitude) || Boolean(exifData.tags?.GPSLongitude));
   }
 
   return {
     blobId,
-    ...(exifData && {
-      videoFormExif: {
-        ...(includeInitialVideoFields && {
-          hidden: 'false',
-          favorite: 'false',
-          extension,
-          url,
-        }),
-        ...(generateBlurData && { blurData }),
-        ...convertExifToFormData(exifData, filmSimulation),
-      },
-    }),
     imageResizedBase64,
-    shouldStripGpsData,
     fileBytes,
   };
 };

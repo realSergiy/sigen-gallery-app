@@ -1,5 +1,9 @@
-import { Video, VideoDbNew } from '@/db/video_orm';
-import { generateLocalNaivePostgresString, generateLocalPostgresString } from '@/utility/date';
+import { Video, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
+import {
+  dateFromTimestamp,
+  generateLocalNaivePostgresString,
+  generateLocalPostgresString,
+} from '@/utility/date';
 import { convertStringToArray } from '@/utility/string';
 import { generateNanoid } from '@/utility/nanoid';
 import { FilmSimulation } from '@/simulation';
@@ -24,7 +28,7 @@ type FormMeta = {
   capitalize?: boolean;
   hide?: boolean;
   hideIfEmpty?: boolean;
-  shouldHide?: (formData: Video) => boolean;
+  shouldHide?: (formData: Partial<VideoFormData>) => boolean;
   loadingMessage?: string;
   type?: FieldSetType;
   selectOptions?: { value: string; label: string }[];
@@ -63,11 +67,7 @@ const FORM_METADATA = (
   thumbnailUrl: { label: 'thumbnail', readOnly: true },
   extension: { label: 'extension', readOnly: true },
   locationName: { label: 'location name', hide: true },
-  latitude: { label: 'latitude' },
-  longitude: { label: 'longitude' },
   takenAt: { label: 'taken at' },
-  takenAtNaive: { label: 'taken at (naive)' },
-  priorityOrder: { label: 'priority order' },
   favorite: { label: 'favorite', type: 'checkbox', excludeFromInsert: true },
   hidden: { label: 'hidden', type: 'checkbox' },
 });
@@ -135,7 +135,7 @@ export const convertVideoToFormData = (video: Video): VideoFormData => {
 
 export const convertFormDataToVideoDbInsert = (
   formData: FormData | Partial<VideoFormData>,
-): VideoDbNew => {
+): VideoDbUpd => {
   const videoForm =
     formData instanceof FormData ? (Object.fromEntries(formData) as VideoFormData) : formData;
 
@@ -143,6 +143,8 @@ export const convertFormDataToVideoDbInsert = (
   if (videoForm.favorite === 'true') {
     tags.push(TAG_FAVS);
   }
+
+  const locationName = videoForm.locationName || '';
 
   // Parse FormData:
   // - remove server action ID
@@ -163,10 +165,8 @@ export const convertFormDataToVideoDbInsert = (
     ...(!videoForm.id && { id: generateNanoid() }),
     // Convert form strings to arrays
     tags: tags.length > 0 ? tags : [],
-    latitude: videoForm.latitude ? parseFloat(videoForm.latitude) : null,
-    longitude: videoForm.longitude ? parseFloat(videoForm.longitude) : null,
-    priorityOrder: videoForm.priorityOrder ? parseFloat(videoForm.priorityOrder) : null,
     hidden: videoForm.hidden === 'true',
+    locationName,
     ...generateTakenAtFields(videoForm),
   };
 };
@@ -181,9 +181,6 @@ export const getChangedFormFields = (
   ) as (keyof VideoFormData)[];
 };
 
-export const generateTakenAtFields = (
-  form?: Partial<VideoFormData>,
-): { takenAt: string; takenAtNaive: string } => ({
-  takenAt: form?.takenAt || generateLocalPostgresString(),
-  takenAtNaive: form?.takenAtNaive || generateLocalNaivePostgresString(),
+export const generateTakenAtFields = (form?: Partial<VideoFormData>): { takenAt: Date } => ({
+  takenAt: dateFromTimestamp(form?.takenAt),
 });

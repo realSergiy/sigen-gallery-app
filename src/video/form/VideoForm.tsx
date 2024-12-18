@@ -4,26 +4,26 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   FORM_METADATA_ENTRIES,
   VideoFormData,
-  convertFormKeysToLabels,
   formHasTextContent,
   getChangedFormFields,
   getFormErrors,
   isFormValid,
 } from '.';
-import FieldSetWithStatus from '@/components/FieldSetWithStatus';
-import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import Link from 'next/link';
-import { clsx } from 'clsx/lite';
-import { PATH_ADMIN_VIDEOS, PATH_ADMIN_VIDEO_UPLOADS } from '@/site/paths';
-import { toastSuccess, toastWarning } from '@/toast';
 import { getDimensionsFromSize } from '@/utility/size';
-import ImageWithFallback from '@/components/image/ImageWithFallback';
-import { Tags, convertTagsForForm } from '@/tag';
-import Spinner from '@/components/Spinner';
+import { convertTagsForForm, Tags } from '@/tag';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
 import { BLUR_ENABLED } from '@/site/config';
+import { VideoDbUpd } from '@/db/video_orm';
+import ImageWithFallback from '@/components/image/ImageWithFallback';
+import clsx from 'clsx';
+import Spinner from '@/components/Spinner';
 import ErrorNote from '@/components/ErrorNote';
+import { createVideoAction, updateVideoAction } from '../actions';
+import FieldSetWithStatus from '@/components/FieldSetWithStatus';
+import Link from 'next/link';
+import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
+import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 
 const THUMBNAIL_SIZE = 300;
 
@@ -33,7 +33,6 @@ export default function VideoForm({
   updatedExifData,
   updatedBlurData,
   uniqueTags,
-  shouldStripGpsData,
   onTitleChange,
   onTextContentChange,
   onFormStatusChange,
@@ -59,42 +58,12 @@ export default function VideoForm({
     [initialPhotoForm, formData],
   );
   const formHasChanged = changedFormKeys.length > 0;
-  const onlyChangedFieldIsBlurData =
-    changedFormKeys.length === 1 && changedFormKeys[0] === 'blurData';
 
-  usePreventNavigation(formHasChanged && !onlyChangedFieldIsBlurData);
+  usePreventNavigation(formHasChanged);
 
   const canFormBeSubmitted = (type === 'create' || formHasChanged) && isFormValid(formData);
 
-  // Update form when EXIF data
-  // is refreshed by parent
-  useEffect(() => {
-    if (Object.keys(updatedExifData ?? {}).length > 0) {
-      const changedKeys: (keyof VideoFormData)[] = [];
-
-      setFormData(currentForm => {
-        Object.entries(updatedExifData ?? {}).forEach(([key, value]) => {
-          if (currentForm[key as keyof VideoFormData] !== value) {
-            changedKeys.push(key as keyof VideoFormData);
-          }
-        });
-
-        return {
-          ...currentForm,
-          ...updatedExifData,
-        };
-      });
-
-      if (changedKeys.length > 0) {
-        const fields = convertFormKeysToLabels(changedKeys);
-        toastSuccess(`Updated EXIF fields: ${fields.join(', ')}`, 8000);
-      } else {
-        toastWarning('No new EXIF data found');
-      }
-    }
-  }, [updatedExifData]);
-
-  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE, formData.aspectRatio);
+  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE);
 
   const url = formData.url ?? '';
 
@@ -111,15 +80,11 @@ export default function VideoForm({
   }, [onTextContentChange, formData]);
 
   const shouldHideField = (
-    key: keyof PhotoDbInsert | 'favorite',
+    key: keyof VideoDbUpd | 'favorite',
     hideIfEmpty?: boolean,
-    shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
+    shouldHide?: (formData: Partial<VideoFormData>) => boolean,
   ) => {
-    if (key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks) {
-      return true;
-    } else {
-      return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
-    }
+    return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
   };
 
   return (
@@ -133,8 +98,6 @@ export default function VideoForm({
               'overflow-hidden rounded-md border',
               'border-gray-200 dark:border-gray-700',
             )}
-            blurDataURL={formData.blurData}
-            blurCompatibilityLevel="none"
             width={width}
             height={height}
             priority
@@ -163,7 +126,7 @@ export default function VideoForm({
       {formActionErrorMessage && <ErrorNote>{formActionErrorMessage}</ErrorNote>}
       <form
         action={data =>
-          (type === 'create' ? createPhotoAction : updatePhotoAction)(data).catch(e =>
+          (type === 'create' ? createVideoAction : updateVideoAction)(data).catch(e =>
             setFormActionErrorMessage(e.message),
           )
         }
@@ -198,12 +161,7 @@ export default function VideoForm({
                 <FieldSetWithStatus
                   key={key}
                   id={key}
-                  label={
-                    label +
-                    (key === 'blurData' && shouldDebugImageFallbacks
-                      ? ` (${(formData[key] ?? '').length} chars.)`
-                      : '')
-                  }
+                  label={label}
                   note={note}
                   error={formErrors[key]}
                   value={formData[key] ?? ''}
@@ -238,18 +196,12 @@ export default function VideoForm({
                 />
               ),
           )}
-          <input
-            type="hidden"
-            name="shouldStripGpsData"
-            value={shouldStripGpsData ? 'true' : 'false'}
-            readOnly
-          />
         </div>
         {/* Actions */}
         <div className={clsx('sticky bottom-0 flex gap-3', 'mt-12 pb-4 md:pb-8')}>
           <Link
             className="button"
-            href={type === 'edit' ? PATH_ADMIN_PHOTOS : PATH_ADMIN_PHOTO_UPLOADS}
+            href={type === 'edit' ? PATH_ADMIN_VIDEOS : PATH_ADMIN_VIDEO_UPLOADS}
           >
             Cancel
           </Link>

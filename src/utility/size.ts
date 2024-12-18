@@ -1,4 +1,4 @@
-const DEFAULT_ASPECT_RATIO = 3.0 / 2.0;
+const DEFAULT_ASPECT_RATIO = 16.0 / 9.0;
 
 export const getDimensionsFromSize = (
   size: number,

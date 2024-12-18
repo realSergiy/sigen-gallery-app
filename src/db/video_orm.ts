@@ -1,7 +1,9 @@
 import { tb } from '@/db/generated/schema';
 import { db } from '@/db';
-import { count, and, eq, max, min, desc, sql } from 'drizzle-orm';
+import { count, and, eq, ne, max, min, desc, sql } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
+import { convertArrayToPostgresString } from '@/services/postgres';
+import { get } from 'http';
 
 export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
 export type VideoDb = typeof tb.video.$inferSelect;
@@ -13,8 +15,13 @@ type ReplaceNullWithUndefined<T> = {
 
 export type Video = ReplaceNullWithUndefined<VideoDb>;
 
-const videosWhereQuery = db.select().from(tb.video).where;
-const videosSortQuery = db.select().from(tb.video).orderBy;
+const sqNeHidden = db.$with('sq').as(db.select().from(tb.video).where(ne(tb.video.hidden, true)));
+
+const sqAll = db.$with('sq').as(db.select().from(tb.video));
+const sqHidden = db.$with('sq').as(db.select().from(tb.video).where(eq(tb.video.hidden, true)));
+
+const videosWhereQuery = db.with(sqNeHidden).select().from(sqNeHidden).where;
+const videosSortQuery = db.with(sqNeHidden).select().from(sqNeHidden).orderBy;
 
 export type VideosFilter = Parameters<typeof videosWhereQuery>[0];
 export type VideosOrderBy = Parameters<typeof videosSortQuery>[1];
@@ -24,18 +31,25 @@ export type VideoQueryOptions = {
   sort?: VideosOrderBy;
   limit?: number;
   offset?: number;
+  hidden?: 'exclude' | 'include' | 'only';
+};
+
+const getSq = (options: VideoQueryOptions) => {
+  const hidden = options.hidden ?? 'exclude';
+  return hidden === 'exclude' ? sqNeHidden : hidden === 'include' ? sqAll : sqHidden;
 };
 
 export const getVideos = async (options: VideoQueryOptions) => {
-  const query = db
+  const sq = getSq(options);
+
+  return db
+    .with(sq)
     .select()
-    .from(tb.video)
+    .from(sq)
     .where(options.filter)
     .orderBy(options.sort ?? desc(tb.video.takenAt))
     .limit(options.limit ?? 1000)
     .offset(options.offset ?? 0);
-
-  return query;
 };
 
 export const getVideosMostRecentUpdate = async () => {
@@ -95,6 +109,10 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
 };
 
 export const getVideo = async (id: string, includeHidden = false) => {
+  if (!id) {
+    return undefined;
+  }
+
   const filter = includeHidden
     ? eq(tb.video.id, id)
     : and(eq(tb.video.id, id), eq(tb.video.hidden, false));
@@ -123,7 +141,7 @@ const metaQuery = db
 export type VideosMetaFilter = Parameters<typeof metaQuery.where>[0];
 
 export const getVideosMeta = async (options: VideoQueryOptions) => {
-  const sq = db.$with('sq').as(db.select().from(tb.video).where(options.filter));
+  const sq = getSq(options);
 
   const query = db
     .with(sq)
@@ -141,4 +159,37 @@ export const getVideosMeta = async (options: VideoQueryOptions) => {
     count: row.count,
     dateRange: row.start && row.end ? { start: row.start, end: row.end } : undefined,
   };
+};
+
+export const deleteVideo = async (id: string) => {
+  return db.delete(tb.video).where(eq(tb.video.id, id));
+};
+
+export const addTagsToVideos = async (videoIds: string[], tags: string[]) => {
+  const tagsArray = convertArrayToPostgresString(tags);
+
+  return db
+    .update(tb.video)
+    .set({
+      tags: sql`select array_agg(distinct elem) from unnest(array_cat(${tb.video.tags}, ${tagsArray})) elem`,
+    })
+    .where(sql`${tb.video.id} = any(${videoIds})`);
+};
+
+export const deleteVideoTagGlobally = async (tag: string) => {
+  return db
+    .update(tb.video)
+    .set({
+      tags: sql`array_remove(${tb.video.tags}, ${tag})`,
+    })
+    .where(sql`${tag}=ANY(${tb.video.tags})`);
+};
+
+export const renameVideoTagGlobally = async (oldTag: string, newTag: string) => {
+  return db
+    .update(tb.video)
+    .set({
+      tags: sql`array_replace(${tb.video.tags}, ${oldTag}, ${newTag})`,
+    })
+    .where(sql`${oldTag}=ANY(${tb.video.tags})`);
 };

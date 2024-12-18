@@ -36,20 +36,15 @@ const photos = pgTable('photos', {
   longitude: doublePrecision(),
   filmSimulation: varchar('film_simulation', { length: 255 }),
   priorityOrder: real('priority_order'),
-  takenAt: timestamp('taken_at', {
-    withTimezone: true,
-    mode: 'string',
-  }).notNull(),
+  takenAt: timestamp('taken_at', { withTimezone: true, mode: 'string' }).notNull(),
   takenAtNaive: varchar('taken_at_naive', { length: 255 }).notNull(),
   hidden: boolean(),
-  updatedAt: timestamp('updated_at', {
-    withTimezone: true,
-    mode: 'string',
-  }).default(sql`CURRENT_TIMESTAMP`),
-  createdAt: timestamp('created_at', {
-    withTimezone: true,
-    mode: 'string',
-  }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).default(
+    sql`CURRENT_TIMESTAMP`,
+  ),
 });
 
 const video = pgTable(
@@ -62,12 +57,7 @@ const video = pgTable(
     caption: text().notNull(),
     tags: varchar({ length: 255 }).array().notNull(),
     locationName: varchar('location_name', { length: 255 }).default('').notNull(),
-    latitude: doublePrecision(),
-    longitude: doublePrecision(),
-    takenAt: timestamp('taken_at', {
-      withTimezone: true,
-      mode: 'date',
-    }).notNull(),
+    takenAt: timestamp('taken_at', { withTimezone: true, mode: 'date' }).notNull(),
     hidden: boolean().default(false).notNull(),
     updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' })
       .default(sql`CURRENT_TIMESTAMP`)
