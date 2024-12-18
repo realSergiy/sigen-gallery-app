@@ -1,4 +1,4 @@
-import PhotoTag from '@/tag/PhotoTag';
+import EntityLinkTag from '@/tag/EntityLinkTag';
 import { photoLabelForCount } from '@/photo';
 import { clsx } from 'clsx/lite';
 import FavsTag from '@/tag/FavsTag';
@@ -22,7 +22,7 @@ export default function AdminTagBadge({
         '[&>*>*:first-child]:items-center',
       )}
     >
-      {isTagFavs(tag) ? <FavsTag /> : <PhotoTag {...{ tag }} />}
+      {isTagFavs(tag) ? <FavsTag /> : <EntityLinkTag {...{ tag }} />}
       <div className="text-dim uppercase">
         <span>{count}</span>
         <span className="hidden xs:inline-block">

@@ -1,36 +1,36 @@
 'use client';
 
 import { ComponentProps, useMemo } from 'react';
-import { pathForAdminPhotoEdit, pathForPhoto } from '@/site/paths';
-import { deletePhotoAction, toggleFavoritePhotoAction } from '@/photo/actions';
+import { pathForAdminVideoEdit, pathForVideo } from '@/site/paths';
+import { deleteVideoAction, toggleFavoriteVideoAction } from '@/video/actions';
 import { FaRegEdit, FaRegStar, FaStar } from 'react-icons/fa';
-import { Photo, deleteConfirmationTextForPhoto } from '@/photo';
-import { isPathFavs, isPhotoFav } from '@/tag';
+import { deleteConfirmationTextForVideo, downloadFileNameForVideo } from '@/video';
+import { isPathFavs, isVideoFav } from '@/tag';
 import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
 import MoreMenu from '@/components/more/MoreMenu';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
+import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
-import { downloadFileName } from '@/media';
+import { Video } from '@/db/video_orm';
 
-export default function AdminPhotoMenuClient({
-  photo,
-  revalidatePhoto,
+export default function AdminVideoMenuClient({
+  video,
+  revalidateVideo,
   includeFavorite = true,
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
-  photo: Photo;
-  revalidatePhoto?: RevalidatePhoto;
+  video: Video;
+  revalidateVideo?: RevalidateVideo;
   includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();
 
-  const isFav = isPhotoFav(photo);
+  const isFav = isVideoFav(video);
   const path = usePathname();
   const shouldRedirectFav = isPathFavs(path) && isFav;
-  const shouldRedirectDelete = pathForPhoto({ photo: photo.id }) === path;
+  const shouldRedirectDelete = pathForVideo({ video: video.id }) === path;
 
   const favIconClass = 'translate-x-[-1px] translate-y-[0.5px]';
 
@@ -39,7 +39,7 @@ export default function AdminPhotoMenuClient({
       {
         label: 'Edit',
         icon: <FaRegEdit size={14} />,
-        href: pathForAdminPhotoEdit(photo.id),
+        href: pathForAdminVideoEdit(video.id),
       },
     ];
     if (includeFavorite) {
@@ -51,8 +51,8 @@ export default function AdminPhotoMenuClient({
           <FaRegStar size={14} className={favIconClass} />
         ),
         action: () =>
-          toggleFavoritePhotoAction(photo.id, shouldRedirectFav).then(() =>
-            revalidatePhoto?.(photo.id),
+          toggleFavoriteVideoAction(video.id, shouldRedirectFav).then(() =>
+            revalidateVideo?.(video.id),
           ),
       });
     }
@@ -61,16 +61,16 @@ export default function AdminPhotoMenuClient({
       icon: (
         <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
       ),
-      href: photo.url,
-      hrefDownloadName: downloadFileName(photo),
+      href: video.url,
+      hrefDownloadName: downloadFileNameForVideo(video),
     });
     items.push({
       label: 'Delete',
       icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
       action: () => {
-        if (confirm(deleteConfirmationTextForPhoto(photo))) {
-          return deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
-            revalidatePhoto?.(photo.id, true);
+        if (confirm(deleteConfirmationTextForVideo(video))) {
+          return deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
+            revalidateVideo?.(video.id, true);
             registerAdminUpdate?.();
           });
         }
@@ -78,11 +78,11 @@ export default function AdminPhotoMenuClient({
     });
     return items;
   }, [
-    photo,
+    video,
     includeFavorite,
     isFav,
     shouldRedirectFav,
-    revalidatePhoto,
+    revalidateVideo,
     shouldRedirectDelete,
     registerAdminUpdate,
   ]);

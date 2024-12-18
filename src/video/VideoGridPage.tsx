@@ -1,27 +1,21 @@
 'use client';
 
 import { Tags } from '@/tag';
-import { Video } from '.';
-import { Cameras } from '@/camera';
-import { FilmSimulations } from '@/simulation';
 import { PATH_GRID } from '@/site/paths';
 import VideoGridSidebar from './VideoGridSidebar';
 import VideoGridContainer from './VideoGridContainer';
 import { useEffect } from 'react';
 import { useAppState } from '@/state/AppState';
+import { Video } from '@/db/video_orm';
 
 export default function VideoGridPage({
   videos,
   videosCount,
   tags,
-  cameras,
-  simulations,
 }: {
   videos: Video[];
   videosCount: number;
   tags: Tags;
-  cameras: Cameras;
-  simulations: FilmSimulations;
 }) {
   const { setSelectedVideoIds } = useAppState();
 
@@ -37,8 +31,6 @@ export default function VideoGridPage({
           <VideoGridSidebar
             {...{
               tags,
-              cameras,
-              simulations,
               videosCount,
             }}
           />

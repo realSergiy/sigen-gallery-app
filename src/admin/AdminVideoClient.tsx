@@ -5,24 +5,15 @@ import { clsx } from 'clsx/lite';
 import SiteGrid from '@/components/SiteGrid';
 import { AI_TEXT_GENERATION_ENABLED, PRO_MODE_ENABLED } from '@/site/config';
 import AdminVideosTable from '@/admin/AdminVideosTable';
-import AdminVideosTableInfinite from '@/admin/AdminVideosTableInfinite';
+import AdminVideosTableInfinite from './AdminVideosTableInfinite';
 import PathLoaderButton from '@/components/primitives/PathLoaderButton';
 import { PATH_ADMIN_OUTDATED } from '@/site/paths';
-import { Video } from '@/db/video_orm';
 import { StorageListResponse } from '@/services/storage';
 import { useState } from 'react';
 import { LiaBroomSolid } from 'react-icons/lia';
 import AdminUploadsTable from './AdminUploadsTable';
 
-type AdminVideosClientProps = {
-  videos: Video[];
-  videosCount: number;
-  videosCountOutdated: number;
-  onLastVideoUpload: () => Promise<void>;
-  blobVideoUrls: StorageListResponse;
-  infiniteScrollInitial: number;
-  infiniteScrollMultiple: number;
-};
+import { Video } from '@/db/video_orm';
 
 export default function AdminVideosClient({
   videos,
@@ -32,7 +23,15 @@ export default function AdminVideosClient({
   blobVideoUrls,
   infiniteScrollInitial,
   infiniteScrollMultiple,
-}: AdminVideosClientProps) {
+}: {
+  videos: Video[];
+  videosCount: number;
+  videosCountOutdated: number;
+  onLastVideoUpload: () => Promise<void>;
+  blobVideoUrls: StorageListResponse;
+  infiniteScrollInitial: number;
+  infiniteScrollMultiple: number;
+}) {
   const [isUploading, setIsUploading] = useState(false);
 
   return (

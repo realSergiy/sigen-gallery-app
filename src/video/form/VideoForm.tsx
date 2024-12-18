@@ -13,7 +13,6 @@ import { getDimensionsFromSize } from '@/utility/size';
 import { convertTagsForForm, Tags } from '@/tag';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
-import { BLUR_ENABLED } from '@/site/config';
 import { VideoDbUpd } from '@/db/video_orm';
 import ImageWithFallback from '@/components/image/ImageWithFallback';
 import clsx from 'clsx';
@@ -29,33 +28,28 @@ const THUMBNAIL_SIZE = 300;
 
 export default function VideoForm({
   type = 'create',
-  initialPhotoForm,
-  updatedExifData,
-  updatedBlurData,
+  initialVideoForm,
   uniqueTags,
   onTitleChange,
   onTextContentChange,
   onFormStatusChange,
 }: {
   type?: 'create' | 'edit';
-  initialPhotoForm: Partial<VideoFormData>;
-  updatedExifData?: Partial<VideoFormData>;
-  updatedBlurData?: string;
+  initialVideoForm: Partial<VideoFormData>;
   uniqueTags?: Tags;
-  shouldStripGpsData?: boolean;
   onTitleChange?: (updatedTitle: string) => void;
   onTextContentChange?: (hasContent: boolean) => void;
   onFormStatusChange?: (pending: boolean) => void;
 }) {
-  const [formData, setFormData] = useState<Partial<VideoFormData>>(initialPhotoForm);
-  const [formErrors, setFormErrors] = useState(getFormErrors(initialPhotoForm));
+  const [formData, setFormData] = useState<Partial<VideoFormData>>(initialVideoForm);
+  const [formErrors, setFormErrors] = useState(getFormErrors(initialVideoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
   const { invalidateSwr, shouldDebugImageFallbacks } = useAppState();
 
   const changedFormKeys = useMemo(
-    () => getChangedFormFields(initialPhotoForm, formData),
-    [initialPhotoForm, formData],
+    () => getChangedFormFields(initialVideoForm, formData),
+    [initialVideoForm, formData],
   );
   const formHasChanged = changedFormKeys.length > 0;
 
@@ -66,14 +60,6 @@ export default function VideoForm({
   const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE);
 
   const url = formData.url ?? '';
-
-  useEffect(() => {
-    if (updatedBlurData) {
-      setFormData(data => (updatedBlurData ? { ...data, blurData: updatedBlurData } : data));
-    } else if (!BLUR_ENABLED) {
-      setFormData(data => ({ ...data, blurData: '' }));
-    }
-  }, [updatedBlurData]);
 
   useEffect(() => {
     onTextContentChange?.(formHasTextContent(formData));

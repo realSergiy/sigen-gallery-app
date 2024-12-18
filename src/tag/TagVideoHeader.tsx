@@ -1,35 +1,36 @@
-import { Photo, PhotoDateRange } from '@/photo';
-import EntityLinkTag from './EntityLinkTag';
-import { descriptionForTaggedPhotos, isTagFavs } from '.';
+import { descriptionForTaggedVideos, isTagFavs } from '.';
 import { pathForTagShare } from '@/site/paths';
-import PhotoHeader from '@/photo/PhotoHeader';
 import FavsTag from './FavsTag';
+import { VideoDateRange } from '@/video';
+import { Video } from '@/db/video_orm';
+import EntityLinkTag from './EntityLinkTag';
+import VideoHeader from '@/video/VideoHeader';
 
 export default function TagHeader({
   tag,
-  photos,
-  selectedPhoto,
+  videos,
+  selectedVideo,
   indexNumber,
   count,
   dateRange,
 }: {
   tag: string;
-  photos: Photo[];
-  selectedPhoto?: Photo;
+  videos: Video[];
+  selectedVideo?: Video;
   indexNumber?: number;
   count?: number;
-  dateRange?: PhotoDateRange;
+  dateRange?: VideoDateRange;
 }) {
   return (
-    <PhotoHeader
+    <VideoHeader
       tag={tag}
       entity={
         isTagFavs(tag) ? <FavsTag contrast="high" /> : <EntityLinkTag tag={tag} contrast="high" />
       }
       entityVerb="Tagged"
-      entityDescription={descriptionForTaggedPhotos(photos, undefined, count)}
-      photos={photos}
-      selectedPhoto={selectedPhoto}
+      entityDescription={descriptionForTaggedVideos(videos, undefined, count)}
+      videos={videos}
+      selectedVideo={selectedVideo}
       sharePath={pathForTagShare(tag)}
       indexNumber={indexNumber}
       count={count}

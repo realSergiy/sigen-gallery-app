@@ -98,6 +98,9 @@ export const pathForAdminPhotoUploadUrl = (url: string) =>
 export const pathForAdminPhotoEdit = (photo: PhotoOrPhotoId) =>
   `${PATH_ADMIN_PHOTOS}/${getPhotoId(photo)}/${EDIT}`;
 
+export const pathForAdminVideoEdit = (video: VideoOrVideoId) =>
+  `${PATH_ADMIN_VIDEOS}/${getVideoId(video)}/${EDIT}`;
+
 export const pathForAdminTagEdit = (tag: string) => `${PATH_ADMIN_TAGS}/${tag}/${EDIT}`;
 
 type PhotoOrPhotoId = Photo | string;
@@ -131,6 +134,7 @@ export const pathForVideo = ({ video, tag }: VideoPathParams) =>
       : `${PREFIX_VIDEO}/${getVideoId(video)}`;
 
 export const pathForPhotoShare = (params: PhotoPathParams) => `${pathForPhoto(params)}/${SHARE}`;
+export const pathForVideoShare = (params: VideoPathParams) => `${pathForVideo(params)}/${SHARE}`;
 
 export const pathForTag = (tag: string) => `${PREFIX_TAG}/${tag}`;
 
@@ -153,6 +157,8 @@ export const pathForFocalLengthShare = (focal: number) => `${pathForFocalLength(
 
 export const absolutePathForPhoto = (params: PhotoPathParams) =>
   `${BASE_URL}${pathForPhoto(params)}`;
+export const absolutePathForVideo = (params: VideoPathParams) =>
+  `${BASE_URL}${pathForVideo(params)}`;
 
 export const absolutePathForTag = (tag: string) => `${BASE_URL}${pathForTag(tag)}`;
 
@@ -166,6 +172,9 @@ export const absolutePathForFocalLength = (focal: number) =>
 
 export const absolutePathForPhotoImage = (photo: PhotoOrPhotoId) =>
   `${absolutePathForPhoto({ photo })}/image`;
+
+export const absolutePathForVideoImage = (video: VideoOrVideoId) =>
+  `${absolutePathForVideo({ video })}/image`;
 
 export const absolutePathForTagImage = (tag: string) => `${absolutePathForTag(tag)}/image`;
 

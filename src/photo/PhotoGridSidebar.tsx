@@ -3,7 +3,7 @@
 import { Cameras, sortCamerasWithCount } from '@/camera';
 import PhotoCamera from '@/camera/PhotoCamera';
 import HeaderList from '@/components/HeaderList';
-import PhotoTag from '@/tag/PhotoTag';
+import EntityLinkTag from '@/tag/EntityLinkTag';
 import { FaTag } from 'react-icons/fa';
 import { IoMdCamera } from 'react-icons/io';
 import { PhotoDateRange, dateRangeForPhotos, photoQuantityText } from '.';
@@ -89,7 +89,7 @@ export default function PhotoGridSidebar({
                 );
               default:
                 return (
-                  <PhotoTag
+                  <EntityLinkTag
                     key={tag}
                     tag={tag}
                     type="text-only"

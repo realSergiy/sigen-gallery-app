@@ -16,8 +16,6 @@ import {
   PATH_ADMIN_VIDEO_UPLOADS,
 } from '@/site/paths';
 import AdminNavClient from './AdminNavClient';
-import { eq } from 'drizzle-orm';
-import { photosTable } from '@/db/generated/schema';
 
 export default async function AdminNav() {
   const [
@@ -31,7 +29,7 @@ export default async function AdminNav() {
     getPhotosMetaCached({ hidden: 'include' })
       .then(({ count }) => count)
       .catch(() => 0),
-    getVideosMetaCached(eq(photosTable.hidden, false))
+    getVideosMetaCached({ hidden: 'include' })
       .then(({ count }) => count)
       .catch(() => 0),
     getStoragePhotoUploadUrlsNoStore()

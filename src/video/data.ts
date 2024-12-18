@@ -1,5 +1,6 @@
-import { SHOW_FILM_SIMULATIONS } from '@/site/config';
+import { getUniqueTags } from '@/db/video_orm';
 import { sortTagsObject } from '@/tag';
+import { getUniqueTagsCached } from './cache';
 
 export const getVideoSidebarData = () =>
   [

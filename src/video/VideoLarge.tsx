@@ -1,16 +1,13 @@
 'use client';
 
-import { Video, altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
+import { altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import { pathForFocalLength, pathForVideo, pathForVideoShare } from '@/site/paths';
-import VideoTags from '@/tag/VideoTags';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
-import { cameraFromVideo } from '@/camera';
-import VideoFilmSimulation from '@/simulation/VideoFilmSimulation';
 import { sortTags } from '@/tag';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
@@ -21,6 +18,8 @@ import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
+import { Video } from '@/db/video_orm';
+import MediaTags from '@/tag/MediaTags';
 
 export default function VideoLarge({
   video,
@@ -57,8 +56,6 @@ export default function VideoLarge({
 
   const tags = sortTags(video.tags, primaryTag);
 
-  const camera = cameraFromVideo(video);
-
   const showTagsContent = tags.length > 0;
 
   useOnVisible(ref, onVisible);
@@ -77,6 +74,8 @@ export default function VideoLarge({
     <VideoLink video={video} className="flex-grow font-bold uppercase" prefetch={prefetch} />
   );
 
+  // ToDo: aspectRatio may be needed, compore with PhotoLarge.tsx
+
   return (
     <SiteGrid
       containerRef={ref}
@@ -90,16 +89,15 @@ export default function VideoLarge({
           <div
             className={clsx(
               areVideosMatted && 'flex w-full items-center justify-center',
-              areVideosMatted && video.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
+              areVideosMatted ? 'h-[80%]' : 'h-[90%]',
             )}
           >
-            <VideoLarge
+            <ImageLarge
+              aspectRatio={16 / 9}
               className={clsx(areVideosMatted && 'h-full')}
               imgClassName={clsx(areVideosMatted && 'object-contain w-full h-full')}
               alt={altTextForVideo(video)}
               src={video.url}
-              aspectRatio={video.aspectRatio}
-              blurDataURL={video.blurData}
               blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
               priority={priority}
             />
@@ -143,10 +141,10 @@ export default function VideoLarge({
                   {video.caption}
                 </div>
               )}
-              {(showCameraContent || showTagsContent) && (
+              {showTagsContent && (
                 <div>
                   {showTagsContent && (
-                    <VideoTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
+                    <MediaTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
                   )}
                 </div>
               )}
@@ -154,40 +152,6 @@ export default function VideoLarge({
           </div>
           {/* EXIF Data */}
           <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
-            {showExifContent && (
-              <>
-                <ul className="text-medium">
-                  <li>
-                    {video.focalLength && (
-                      <Link
-                        href={pathForFocalLength(video.focalLength)}
-                        className="hover:text-main active:text-medium"
-                      >
-                        {video.focalLengthFormatted}
-                      </Link>
-                    )}
-                    {video.focalLengthIn35MmFormatFormatted && (
-                      <>
-                        {' '}
-                        <span title="35mm equivalent" className="text-extra-dim">
-                          {video.focalLengthIn35MmFormatFormatted}
-                        </span>
-                      </>
-                    )}
-                  </li>
-                  <li>{video.fNumberFormatted}</li>
-                  <li>{video.exposureTimeFormatted}</li>
-                  <li>{video.isoFormatted}</li>
-                  <li>{video.exposureCompensationFormatted ?? '0ev'}</li>
-                </ul>
-                {showSimulation && video.filmSimulation && (
-                  <VideoFilmSimulation
-                    simulation={video.filmSimulation}
-                    prefetch={prefetchRelatedLinks}
-                  />
-                )}
-              </>
-            )}
             <div
               className={clsx(
                 'gap-y-baseline flex gap-x-2.5',
@@ -214,11 +178,6 @@ export default function VideoLarge({
                     path={pathForVideoShare({
                       video,
                       tag: shouldShareTag ? primaryTag : undefined,
-                      camera: shouldShareCamera ? camera : undefined,
-                      // eslint-disable-next-line max-len
-                      simulation: shouldShareSimulation ? video.filmSimulation : undefined,
-                      // eslint-disable-next-line max-len
-                      focal: shouldShareFocalLength ? video.focalLength : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}
                     shouldScroll={shouldScrollOnShare}
@@ -227,7 +186,7 @@ export default function VideoLarge({
                 {ALLOW_PUBLIC_DOWNLOADS && (
                   <DownloadButton
                     className={clsx('translate-y-[0.5px] md:translate-y-0')}
-                    video={video}
+                    media={video}
                   />
                 )}
               </div>

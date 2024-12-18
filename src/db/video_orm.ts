@@ -3,7 +3,6 @@ import { db } from '@/db';
 import { count, and, eq, ne, max, min, desc, sql } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
-import { get } from 'http';
 
 export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
 export type VideoDb = typeof tb.video.$inferSelect;
@@ -23,7 +22,7 @@ const sqHidden = db.$with('sq').as(db.select().from(tb.video).where(eq(tb.video.
 const videosWhereQuery = db.with(sqNeHidden).select().from(sqNeHidden).where;
 const videosSortQuery = db.with(sqNeHidden).select().from(sqNeHidden).orderBy;
 
-export type VideosFilter = Parameters<typeof videosWhereQuery>[0];
+export type VideosFilter = Parameters<typeof videosWhereQuery>[0]; //ToDo: replace with json object
 export type VideosOrderBy = Parameters<typeof videosSortQuery>[1];
 
 export type VideoQueryOptions = {

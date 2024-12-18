@@ -19,6 +19,7 @@ const config = {
   tabWidth: 2,
   trailingComma: 'all',
   useTabs: false,
+  tailwindFunctions: ['clsx'],
 };
 
 export default config;

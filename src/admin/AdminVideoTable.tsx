@@ -13,9 +13,8 @@ import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
 import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import VideoSyncButton from './VideoSyncButton';
-
-import { Video } from '@/db/video_orm';
 import DeleteVideoButton from './DeleteVideoButton';
+import { Video } from '@/db/video_orm';
 
 export default function AdminVideosTable({
   videos,

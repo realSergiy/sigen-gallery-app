@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Video, VideoSetAttributes, getNextVideo, getPreviousVideo } from '@/video';
+import { VideoSetAttributes, getNextVideo, getPreviousVideo } from '@/video';
 import VideoLink from './VideoLink';
 import { useRouter } from 'next/navigation';
 import { pathForVideo } from '@/site/paths';
@@ -9,6 +9,7 @@ import { useAppState } from '@/state/AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import { clsx } from 'clsx/lite';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { Video } from '@/db/video_orm';
 
 const LISTENER_KEYUP = 'keyup';
 
@@ -20,9 +21,6 @@ export default function VideoPrevNext({
   videos = [],
   className,
   tag,
-  camera,
-  simulation,
-  focal,
 }: {
   video?: Video;
   videos?: Video[];
@@ -47,9 +45,6 @@ export default function VideoPrevNext({
                 pathForVideo({
                   video: previousVideo,
                   tag,
-                  camera,
-                  simulation,
-                  focal,
                 }),
                 { scroll: false },
               );
@@ -63,9 +58,6 @@ export default function VideoPrevNext({
                 pathForVideo({
                   video: nextVideo,
                   tag,
-                  camera,
-                  simulation,
-                  focal,
                 }),
                 { scroll: false },
               );
@@ -83,9 +75,6 @@ export default function VideoPrevNext({
     previousVideo,
     nextVideo,
     tag,
-    camera,
-    simulation,
-    focal,
   ]);
 
   return (
@@ -96,9 +85,6 @@ export default function VideoPrevNext({
           className="h-[1rem] select-none"
           nextVideoAnimation={ANIMATION_RIGHT}
           tag={tag}
-          camera={camera}
-          simulation={simulation}
-          focal={focal}
           scroll={false}
           prefetch
         >
@@ -111,9 +97,6 @@ export default function VideoPrevNext({
           className="h-[1rem] select-none"
           nextVideoAnimation={ANIMATION_LEFT}
           tag={tag}
-          camera={camera}
-          simulation={simulation}
-          focal={focal}
           scroll={false}
           prefetch
         >

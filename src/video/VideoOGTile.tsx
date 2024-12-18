@@ -1,6 +1,7 @@
-import { Video, descriptionForVideo, titleForVideo } from '@/video';
+import { descriptionForVideo, titleForVideo } from '@/video';
 import { absolutePathForVideoImage, pathForVideo } from '@/site/paths';
 import OGTile from '@/components/OGTile';
+import { Video } from '@/db/video_orm';
 
 export type OGLoadingState = 'unloaded' | 'loading' | 'loaded' | 'failed';
 

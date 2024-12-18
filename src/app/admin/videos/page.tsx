@@ -21,10 +21,13 @@ export default async function AdminPhotosPage() {
       sort: desc(tb.video.createdAt),
       limit: INFINITE_SCROLL_INITIAL_ADMIN,
     }).catch(() => []),
-    getVideosMetaCached()
+    getVideosMetaCached({ hidden: 'include' })
       .then(({ count }) => count)
       .catch(() => 0),
-    getVideosMetaCached(lt(tb.video.updatedAt, OUTDATED_THRESHOLD.toISOString()))
+    getVideosMetaCached({
+      hidden: 'include',
+      filter: lt(tb.video.updatedAt, OUTDATED_THRESHOLD),
+    })
       .then(({ count }) => count)
       .catch(() => 0),
     DEBUG_PHOTO_BLOBS ? getStorageVideoUrlsNoStore() : [],

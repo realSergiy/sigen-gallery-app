@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Video } from '@/video';
 import VideoOGTile, { OGLoadingState } from './VideoOGTile';
+import { Video } from '@/db/video_orm';
 
 const DEFAULT_MAX_CONCURRENCY = 3;
 

@@ -1,4 +1,4 @@
-import { altTextForVideo, doesVideoNeedBlurCompatibility } from '.';
+import { altTextForVideo, doesVideoNeedBlurCompatibility, VideoSetAttributes } from '.';
 import ImageSmall from '@/components/image/ImageSmall';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
@@ -26,6 +26,8 @@ export default function VideoSmall({
 
   useOnVisible(ref, onVisible);
 
+  // ToDo: aspect ratio field may be needed
+
   return (
     <Link
       ref={ref}
@@ -42,8 +44,7 @@ export default function VideoSmall({
     >
       <ImageSmall
         src={video.url}
-        aspectRatio={video.aspectRatio}
-        blurDataURL={video.blurData}
+        aspectRatio={16 / 9}
         blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
         alt={altTextForVideo(video)}
       />

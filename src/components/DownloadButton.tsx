@@ -1,11 +1,22 @@
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { clsx } from 'clsx/lite';
-import { downloadFileNameForPhoto, Photo } from '@/photo';
+import { Photo } from '@/photo';
 import LoaderButton from './primitives/LoaderButton';
 import { useState } from 'react';
 import { downloadFileFromBrowser } from '@/utility/url';
+import { downloadFileName } from '@/media';
 
-export default function DownloadButton({ photo, className }: { photo: Photo; className?: string }) {
+export default function DownloadButton({
+  media,
+  className,
+}: {
+  media: {
+    url: string;
+    title?: string;
+    extension: string;
+  };
+  className?: string;
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -18,7 +29,7 @@ export default function DownloadButton({ photo, className }: { photo: Photo; cla
       isLoading={isLoading}
       onClick={async () => {
         setIsLoading(true);
-        downloadFileFromBrowser(photo.url, downloadFileNameForPhoto(photo)).finally(() =>
+        downloadFileFromBrowser(media.url, downloadFileName(media)).finally(() =>
           setIsLoading(false),
         );
       }}

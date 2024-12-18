@@ -10,9 +10,6 @@ export default function VideoGridInfinite({
   initialOffset,
   canStart,
   tag,
-  camera,
-  simulation,
-  focal,
   animateOnFirstLoadOnly,
   canSelect,
 }: {
@@ -25,8 +22,6 @@ export default function VideoGridInfinite({
       initialOffset={initialOffset}
       itemsPerPage={INFINITE_SCROLL_GRID_MULTIPLE}
       tag={tag}
-      camera={camera}
-      simulation={simulation}
     >
       {({ videos, onLastVideoVisible }) => (
         <VideoGrid
@@ -34,9 +29,6 @@ export default function VideoGridInfinite({
             videos,
             canStart,
             tag,
-            camera,
-            simulation,
-            focal,
             onLastVideoVisible,
             animateOnFirstLoadOnly,
             canSelect,

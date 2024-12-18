@@ -1,7 +1,7 @@
 import { clsx } from 'clsx/lite';
-import { Video } from '.';
 import VideoGrid from './VideoGrid';
 import Link from 'next/link';
+import { Video } from '@/db/video_orm';
 
 export default function VideoLightbox({
   count,

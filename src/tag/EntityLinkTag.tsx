@@ -3,7 +3,7 @@ import { FaTag } from 'react-icons/fa';
 import { formatTag } from '.';
 import EntityLink, { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 
-export default function PhotoTag({
+export default function EntityLinkTag({
   tag,
   type,
   badged,

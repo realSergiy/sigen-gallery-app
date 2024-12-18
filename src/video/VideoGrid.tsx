@@ -1,20 +1,18 @@
 'use client';
 
-import { Video, VideoSetAttributes } from '.';
 import VideoMedium from './VideoMedium';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
 import { GRID_ASPECT_RATIO } from '@/site/config';
 import { useAppState } from '@/state/AppState';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
+import { Video } from '@/db/video_orm';
+import { VideoSetAttributes } from '.';
 
 export default function VideoGrid({
   videos,
   selectedVideo,
   tag,
-  camera,
-  simulation,
-  focal,
   videoPriority,
   fast,
   animate = true,
@@ -85,9 +83,6 @@ export default function VideoGrid({
                 {...{
                   video,
                   tag,
-                  camera,
-                  simulation,
-                  focal,
                   selected: video.id === selectedVideo?.id,
                   priority: videoPriority,
                   onVisible: index === videos.length - 1 ? onLastVideoVisible : undefined,

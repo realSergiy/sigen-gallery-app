@@ -24,7 +24,7 @@ export default function VideoSyncButton({
   const [isSyncing, setIsSyncing] = useState(false);
 
   const confirmText = ['Overwrite'];
-  if (videoTitleTitle) {
+  if (videoTitle) {
     confirmText.push(`"${videoTitle}"`);
   }
   confirmText.push('data from original file?');
@@ -38,11 +38,11 @@ export default function VideoSyncButton({
       onClick={() => {
         if (!shouldConfirm || window.confirm(confirmText.join(' '))) {
           setIsSyncing(true);
-          syncVideoAction(photoId)
+          syncVideoAction(videoId)
             .then(() => {
               onSyncComplete?.();
               if (shouldToast) {
-                toastSuccess(photoTitle ? `"${photoTitle}" data synced` : 'Data synced');
+                toastSuccess(videoTitle ? `"${videoTitle}" data synced` : 'Data synced');
               }
             })
             .finally(() => setIsSyncing(false));

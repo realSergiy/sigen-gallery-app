@@ -6,6 +6,9 @@ import SiteGrid from '@/components/SiteGrid';
 import Spinner from '@/components/Spinner';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
+import { Video, VideoQueryOptions } from '@/db/video_orm';
+import { VideoSetAttributes } from '.';
+import { getVideosAction, getVideosCachedAction } from './actions';
 
 export type RevalidateVideo = (
   videoId: string,
@@ -16,61 +19,48 @@ export default function InfiniteVideoScroll({
   cacheKey,
   initialOffset,
   itemsPerPage,
-  sortBy,
+  sort,
   tag,
-  camera,
-  simulation,
   wrapMoreButtonInGrid,
-  useCachedPhotos = true,
-  includeHiddenPhotos,
+  useCachedVideos = true,
+  includeHiddenVideos,
   children,
 }: {
   initialOffset: number;
   itemsPerPage: number;
-  sortBy?: GetPhotosOptions['sortBy'];
+  sort?: VideoQueryOptions['sort'];
   cacheKey: string;
   wrapMoreButtonInGrid?: boolean;
-  useCachedPhotos?: boolean;
-  includeHiddenPhotos?: boolean;
+  useCachedVideos?: boolean;
+  includeHiddenVideos?: boolean;
   children: (props: {
-    videos: Photo[];
-    onLastPhotoVisible: () => void;
-    revalidatePhoto?: RevalidatePhoto;
+    videos: Video[];
+    onLastVideoVisible: () => void;
+    revalidateVideo?: RevalidateVideo;
   }) => ReactNode;
-} & PhotoSetAttributes) {
+} & VideoSetAttributes) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
 
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Photo[]) => (prev && prev.length === 0 ? null : [key, size]),
+    (size: number, prev: Video[]) => (prev && prev.length === 0 ? null : [key, size]),
     [key],
   );
 
   const fetcher = useCallback(
     ([_key, size]: [string, number]) =>
-      (useCachedPhotos ? getPhotosCachedAction : getPhotosAction)({
+      (useCachedVideos ? getVideosCachedAction : getVideosAction)({
         offset: initialOffset + size * itemsPerPage,
-        sortBy,
+        sort,
         limit: itemsPerPage,
-        hidden: includeHiddenPhotos ? 'include' : 'exclude',
-        tag,
-        camera,
-        simulation,
+        hidden: includeHiddenVideos ? 'include' : 'exclude',
+        filter: undefined, //add tag filter here
       }),
-    [
-      useCachedPhotos,
-      sortBy,
-      initialOffset,
-      itemsPerPage,
-      includeHiddenPhotos,
-      tag,
-      camera,
-      simulation,
-    ],
+    [useCachedVideos, sort, initialOffset, itemsPerPage, includeHiddenVideos],
   );
 
-  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[]>(
+  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Video[]>(
     keyGenerator,
     fetcher,
     {
@@ -98,12 +88,12 @@ export default function InfiniteVideoScroll({
 
   const videos = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidatePhoto: RevalidatePhoto = useCallback(
-    (videoId: string, revalidateRemainingPhotos?: boolean) =>
+  const revalidateVideo: RevalidateVideo = useCallback(
+    (videoId: string, revalidateRemainingVideos?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Photo[], [_, size]: [string, number]) => {
+        revalidate: (_data: Video[], [_, size]: [string, number]) => {
           const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
-          return revalidateRemainingPhotos ? size >= i : size === i;
+          return revalidateRemainingVideos ? size >= i : size === i;
         },
       } as any),
     [data, mutate],
@@ -125,8 +115,8 @@ export default function InfiniteVideoScroll({
     <div className="space-y-4">
       {children({
         videos,
-        onLastPhotoVisible: advance,
-        revalidatePhoto,
+        onLastVideoVisible: advance,
+        revalidateVideo,
       })}
       {!isFinished &&
         (wrapMoreButtonInGrid ? <SiteGrid contentMain={renderMoreButton()} /> : renderMoreButton())}

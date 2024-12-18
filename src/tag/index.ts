@@ -1,3 +1,4 @@
+import { Video } from '@/db/video_orm';
 import { Photo, PhotoDateRange, descriptionForPhotoSet, photoQuantityText } from '@/photo';
 import { absolutePathForTag, absolutePathForTagImage, getPathComponents } from '@/site/paths';
 import {
@@ -6,6 +7,7 @@ import {
   formatCount,
   formatCountDescriptive,
 } from '@/utility/string';
+import { descriptionForVideoSet, VideoDateRange } from '@/video';
 
 // Reserved tags
 export const TAG_FAVS = 'favs';
@@ -54,6 +56,13 @@ export const descriptionForTaggedPhotos = (
   explicitDateRange?: PhotoDateRange,
 ) => descriptionForPhotoSet(photos, 'tagged', dateBased, explicitCount, explicitDateRange);
 
+export const descriptionForTaggedVideos = (
+  videos: Video[] = [],
+  dateBased?: boolean,
+  explicitCount?: number,
+  explicitDateRange?: VideoDateRange,
+) => descriptionForVideoSet(videos, 'tagged', dateBased, explicitCount, explicitDateRange);
+
 export const generateMetaForTag = (
   tag: string,
   photos: Photo[],
@@ -69,6 +78,7 @@ export const generateMetaForTag = (
 export const isTagFavs = (tag: string) => tag.toLocaleLowerCase() === TAG_FAVS;
 
 export const isPhotoFav = ({ tags }: Photo) => tags.some(isTagFavs);
+export const isVideoFav = ({ tags }: Video) => tags.some(isTagFavs);
 
 export const isPathFavs = (pathname?: string) => getPathComponents(pathname).tag === TAG_FAVS;
 

@@ -3,14 +3,12 @@ import VideoLarge from './VideoLarge';
 import SiteGrid from '@/components/SiteGrid';
 import VideoGrid from './VideoGrid';
 import TagHeader from '@/tag/TagHeader';
-import CameraHeader from '@/camera/CameraHeader';
-import FilmSimulationHeader from '@/simulation/FilmSimulationHeader';
 import { TAG_HIDDEN } from '@/tag';
-import HiddenHeader from '@/tag/HiddenHeader';
-import FocalLengthHeader from '@/focal/FocalLengthHeader';
 import VideoHeader from './VideoHeader';
 import { Video } from '@/db/video_orm';
 import { VideoDateRange, VideoSetAttributes } from '.';
+import HiddenVideoHeader from '@/tag/HiddenVideoHeader';
+import TagVideoHeader from '@/tag/TagVideoHeader';
 
 export default function VideoDetailPage({
   video,
@@ -37,14 +35,14 @@ export default function VideoDetailPage({
   if (tag) {
     customHeader =
       tag === TAG_HIDDEN ? (
-        <HiddenHeader
+        <HiddenVideoHeader
           videos={videos}
           selectedVideo={video}
           indexNumber={indexNumber}
           count={count ?? 0}
         />
       ) : (
-        <TagHeader
+        <TagVideoHeader
           key={tag}
           tag={tag}
           videos={videos}
@@ -74,12 +72,8 @@ export default function VideoDetailPage({
             prefetchRelatedLinks
             showTitle={Boolean(customHeader)}
             showTitleAsH1
-            showCamera={!camera}
-            showSimulation={!simulation}
             shouldShare={shouldShare}
             shouldShareTag={tag !== undefined}
-            shouldShareCamera={camera !== undefined}
-            shouldShareSimulation={simulation !== undefined}
             shouldScrollOnShare={false}
             includeFavoriteInAdminMenu={includeFavoriteInAdminMenu}
           />,
@@ -92,9 +86,6 @@ export default function VideoDetailPage({
             videos={videosGrid ?? videos}
             selectedVideo={video}
             tag={tag}
-            camera={camera}
-            simulation={simulation}
-            focal={focal}
             animateOnFirstLoadOnly
           />
         }

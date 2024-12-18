@@ -1,7 +1,8 @@
 import VideoOGTile from '@/video/VideoOGTile';
 import { absolutePathForVideo, pathForVideo } from '@/site/paths';
-import { Video, VideoSetAttributes } from '.';
+import { VideoSetAttributes } from '.';
 import ShareModal from '@/components/ShareModal';
+import { Video } from '@/db/video_orm';
 
 export default function VideoShareModal(
   props: {

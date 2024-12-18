@@ -1,7 +1,7 @@
 'use client';
 
 import { clsx } from 'clsx/lite';
-import { Video, VideoDateRange, VideoSetAttributes, dateRangeForVideos, titleForVideo } from '.';
+import { VideoDateRange, VideoSetAttributes, dateRangeForVideos, titleForVideo } from '.';
 import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
@@ -10,12 +10,10 @@ import VideoPrevNext from './VideoPrevNext';
 import VideoLink from './VideoLink';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 import { useAppState } from '@/state/AppState';
+import { Video } from '@/db/video_orm';
 
 export default function VideoHeader({
   tag,
-  camera,
-  simulation,
-  focal,
   videos,
   selectedVideo,
   entity,
@@ -60,9 +58,6 @@ export default function VideoHeader({
         video: selectedVideo,
         videos,
         tag,
-        camera,
-        simulation,
-        focal,
       }}
     />
   );

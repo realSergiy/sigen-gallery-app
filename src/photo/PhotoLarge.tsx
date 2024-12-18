@@ -13,7 +13,7 @@ import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import { pathForFocalLength, pathForPhoto, pathForPhotoShare } from '@/site/paths';
-import PhotoTags from '@/tag/PhotoTags';
+import MediaTags from '@/tag/MediaTags';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
 import PhotoCamera from '../camera/PhotoCamera';
@@ -173,7 +173,7 @@ export default function PhotoLarge({
                     />
                   )}
                   {showTagsContent && (
-                    <PhotoTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
+                    <MediaTags tags={tags} contrast="medium" prefetch={prefetchRelatedLinks} />
                   )}
                 </div>
               )}
@@ -254,7 +254,7 @@ export default function PhotoLarge({
                 {ALLOW_PUBLIC_DOWNLOADS && (
                   <DownloadButton
                     className={clsx('translate-y-[0.5px] md:translate-y-0')}
-                    photo={photo}
+                    media={photo}
                   />
                 )}
               </div>
