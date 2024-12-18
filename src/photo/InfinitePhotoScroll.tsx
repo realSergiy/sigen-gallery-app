@@ -46,8 +46,7 @@ export default function InfinitePhotoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Photo[]) =>
-      prev && prev.length === 0 ? null : [key, size],
+    (size: number, prev: Photo[]) => (prev && prev.length === 0 ? null : [key, size]),
     [key],
   );
 
@@ -74,13 +73,16 @@ export default function InfinitePhotoScroll({
     ],
   );
 
-  const { data, isLoading, isValidating, error, mutate, setSize } =
-    useSwrInfinite<Photo[]>(keyGenerator, fetcher, {
+  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[]>(
+    keyGenerator,
+    fetcher,
+    {
       initialSize: 2,
       revalidateFirstPage: false,
       revalidateOnFocus: Boolean(isUserSignedIn),
       revalidateOnReconnect: Boolean(isUserSignedIn),
-    });
+    },
+  );
 
   const buttonContainerRef = useRef<HTMLDivElement>(null);
 
@@ -103,9 +105,7 @@ export default function InfinitePhotoScroll({
     (photoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
         revalidate: (_data: Photo[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(photos =>
-            photos.some(photo => photo.id === photoId),
-          );
+          const i = (data ?? []).findIndex(photos => photos.some(photo => photo.id === photoId));
           return revalidateRemainingPhotos ? size >= i : size === i;
         },
       } as any),
@@ -117,18 +117,9 @@ export default function InfinitePhotoScroll({
       <button
         onClick={() => (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
-        className={clsx(
-          'flex w-full justify-center',
-          isLoadingOrValidating && 'subtle',
-        )}
+        className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >
-        {error ? (
-          'Try Again'
-        ) : isLoadingOrValidating ? (
-          <Spinner size={20} />
-        ) : (
-          'Load More'
-        )}
+        {error ? 'Try Again' : isLoadingOrValidating ? <Spinner size={20} /> : 'Load More'}
       </button>
     </div>
   );
@@ -141,11 +132,7 @@ export default function InfinitePhotoScroll({
         revalidatePhoto,
       })}
       {!isFinished &&
-        (wrapMoreButtonInGrid ? (
-          <SiteGrid contentMain={renderMoreButton()} />
-        ) : (
-          renderMoreButton()
-        ))}
+        (wrapMoreButtonInGrid ? <SiteGrid contentMain={renderMoreButton()} /> : renderMoreButton())}
     </div>
   );
 }

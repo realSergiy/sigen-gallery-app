@@ -21,9 +21,7 @@ export default function FilmPage() {
       contentMain={
         <div className={clsx('flex min-h-[30rem] items-center justify-center')}>
           <div className="w-[250px] scale-[2.5]">
-            <div className="uppercase dark:text-gray-500/50">
-              Film Simulation:
-            </div>
+            <div className="uppercase dark:text-gray-500/50">Film Simulation:</div>
             <PhotoFilmSimulation
               simulation={FILM_SIMULATION_FORM_INPUT_OPTIONS[index].value}
               type="icon-first"

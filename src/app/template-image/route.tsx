@@ -1,8 +1,5 @@
 import { getPhotosCached } from '@/photo/cache';
-import {
-  GRID_OG_DIMENSION,
-  MAX_PHOTOS_TO_SHOW_TEMPLATE,
-} from '@/image-response';
+import { GRID_OG_DIMENSION, MAX_PHOTOS_TO_SHOW_TEMPLATE } from '@/image-response';
 import TemplateImageResponse from '@/image-response/TemplateImageResponse';
 import { getIBMPlexMonoMedium } from '@/site/font';
 import { ImageResponse } from 'next/og';

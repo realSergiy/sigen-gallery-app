@@ -24,24 +24,14 @@ export type LensWithCount = {
 
 export type Lenses = LensWithCount[];
 
-export const createLensKey = ({ make, model }: Lens) =>
-  parameterize(`${make}-${model}`, true);
+export const createLensKey = ({ make, model }: Lens) => parameterize(`${make}-${model}`, true);
 
-export const getLensFromParams = ({
-  make,
-  model,
-}: {
-  make: string;
-  model: string;
-}): Lens => ({
+export const getLensFromParams = ({ make, model }: { make: string; model: string }): Lens => ({
   make: parameterize(make, true),
   model: parameterize(model, true),
 });
 
-export const lensFromPhoto = (
-  photo: Photo | undefined,
-  fallback?: Lens,
-): Lens =>
+export const lensFromPhoto = (photo: Photo | undefined, fallback?: Lens): Lens =>
   photo?.lensMake && photo?.lensModel
     ? { make: photo.lensMake, model: photo.lensModel }
     : (fallback ?? LENS_PLACEHOLDER);

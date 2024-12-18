@@ -3,11 +3,7 @@ import {
   getUniqueFilmSimulationsCached,
   getUniqueTagsCached,
 } from '@/photo/cache';
-import {
-  getUniqueCameras,
-  getUniqueFilmSimulations,
-  getUniqueTags,
-} from '@/photo/db/query';
+import { getUniqueCameras, getUniqueFilmSimulations, getUniqueTags } from '@/photo/db/query';
 import { SHOW_FILM_SIMULATIONS } from '@/site/config';
 import { sortTagsObject } from '@/tag';
 

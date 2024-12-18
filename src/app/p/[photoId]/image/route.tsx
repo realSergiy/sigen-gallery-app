@@ -9,9 +9,7 @@ import { getPhotoIds } from '@/photo/db/query';
 import { GENERATE_STATIC_PARAMS_LIMIT } from '@/photo/db';
 import { isNextImageReadyBasedOnPhotos } from '@/photo';
 
-export let generateStaticParams:
-  | (() => Promise<{ photoId: string }[]>)
-  | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined = undefined;
 
 if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {
@@ -20,10 +18,7 @@ if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   };
 }
 
-export async function GET(
-  _: Request,
-  context: { params: { photoId: string } },
-) {
+export async function GET(_: Request, context: { params: { photoId: string } }) {
   const [photo, { fontFamily, fonts }, headers] = await Promise.all([
     getPhotoCached(context.params.photoId),
     getIBMPlexMonoMedium(),

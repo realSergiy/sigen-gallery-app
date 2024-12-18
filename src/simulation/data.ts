@@ -7,8 +7,4 @@ export const getPhotosFilmSimulationDataCached = ({
 }: {
   simulation: FilmSimulation;
   limit?: number;
-}) =>
-  Promise.all([
-    getPhotosCached({ simulation, limit }),
-    getPhotosMetaCached({ simulation }),
-  ]);
+}) => Promise.all([getPhotosCached({ simulation, limit }), getPhotosMetaCached({ simulation })]);

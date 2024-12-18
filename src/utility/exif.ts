@@ -29,9 +29,7 @@ export const getAspectRatioFromExif = (data: ExifData): number => {
   }
 };
 
-export const convertApertureValueToFNumber = (
-  apertureValue?: string,
-): string | undefined => {
+export const convertApertureValueToFNumber = (apertureValue?: string): string | undefined => {
   if (apertureValue) {
     const aperture = parseInt(apertureValue);
     if (aperture <= 10) {
@@ -71,8 +69,7 @@ export const convertApertureValueToFNumber = (
 export const formatAperture = (aperture?: number) =>
   aperture ? `ƒ/${roundToString(aperture)}` : undefined;
 
-export const formatIso = (iso?: number) =>
-  iso ? `ISO ${iso.toLocaleString()}` : undefined;
+export const formatIso = (iso?: number) => (iso ? `ISO ${iso.toLocaleString()}` : undefined);
 
 export const formatExposureTime = (exposureTime = 0) =>
   exposureTime > 0

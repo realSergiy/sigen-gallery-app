@@ -11,12 +11,7 @@ export default function DeleteFormButton(
     clearLocalState?: boolean;
   },
 ) {
-  const {
-    onFormSubmit: onFormSubmitProps,
-    clearLocalState,
-    className,
-    ...rest
-  } = props;
+  const { onFormSubmit: onFormSubmitProps, clearLocalState, className, ...rest } = props;
 
   const { invalidateSwr, registerAdminUpdate } = useAppState();
 

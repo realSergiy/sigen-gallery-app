@@ -23,12 +23,7 @@ export default function FilmSimulationHeader({
     <PhotoHeader
       simulation={simulation}
       entity={<PhotoFilmSimulation {...{ simulation }} />}
-      entityDescription={descriptionForFilmSimulationPhotos(
-        photos,
-        undefined,
-        count,
-        dateRange,
-      )}
+      entityDescription={descriptionForFilmSimulationPhotos(photos, undefined, count, dateRange)}
       photos={photos}
       selectedPhoto={selectedPhoto}
       sharePath={pathForFilmSimulationShare(simulation)}

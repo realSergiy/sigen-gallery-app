@@ -61,18 +61,12 @@ export default function LoaderButton(
         <span
           className={clsx(
             'max-h-5 min-w-[1.25rem] overflow-hidden',
-            styleAs === 'button'
-              ? 'translate-y-[-0.5px]'
-              : 'translate-y-[0.5px]',
+            styleAs === 'button' ? 'translate-y-[-0.5px]' : 'translate-y-[0.5px]',
             'inline-flex shrink-0 justify-center',
           )}
         >
           {isLoading ? (
-            <Spinner
-              size={14}
-              color={spinnerColor}
-              className="translate-y-[0.5px]"
-            />
+            <Spinner size={14} color={spinnerColor} className="translate-y-[0.5px]" />
           ) : (
             icon
           )}

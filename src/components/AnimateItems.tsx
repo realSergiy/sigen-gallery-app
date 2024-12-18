@@ -45,8 +45,7 @@ function AnimateItems({
   staggerOnFirstLoadOnly,
   onAnimationComplete,
 }: Props) {
-  const { hasLoaded, nextPhotoAnimation, clearNextPhotoAnimation } =
-    useAppState();
+  const { hasLoaded, nextPhotoAnimation, clearNextPhotoAnimation } = useAppState();
 
   const prefersReducedMotion = usePrefersReducedMotion();
 

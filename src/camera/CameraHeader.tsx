@@ -25,12 +25,7 @@ export default function CameraHeader({
     <PhotoHeader
       camera={camera}
       entity={<PhotoCamera {...{ camera }} contrast="high" hideAppleIcon />}
-      entityDescription={descriptionForCameraPhotos(
-        photos,
-        undefined,
-        count,
-        dateRange,
-      )}
+      entityDescription={descriptionForCameraPhotos(photos, undefined, count, dateRange)}
       photos={photos}
       selectedPhoto={selectedPhoto}
       sharePath={pathForCameraShare(camera)}

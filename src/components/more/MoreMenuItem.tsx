@@ -56,9 +56,7 @@ export default function MoreMenuItem({
         if (href && href !== pathname) {
           if (hrefDownloadName) {
             setIsLoading(true);
-            downloadFileFromBrowser(href, hrefDownloadName).finally(() =>
-              setIsLoading(false),
-            );
+            downloadFileFromBrowser(href, hrefDownloadName).finally(() => setIsLoading(false));
           } else {
             startTransition(() => router.push(href));
           }

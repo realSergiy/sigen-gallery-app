@@ -42,12 +42,9 @@ type FujifilmMode =
   | 'nostalgic-neg'
   | 'reala';
 
-export type FujifilmSimulation =
-  | FujifilmSimulationFromSaturation
-  | FujifilmMode;
+export type FujifilmSimulation = FujifilmSimulationFromSaturation | FujifilmMode;
 
-export const isExifForFujifilm = (data: ExifData) =>
-  data.tags?.Make === MAKE_FUJIFILM;
+export const isExifForFujifilm = (data: ExifData) => data.tags?.Make === MAKE_FUJIFILM;
 
 const getFujifilmSimulationFromSaturation = (
   value?: number,
@@ -116,10 +113,7 @@ interface FujifilmSimulationLabel {
   large: string;
 }
 
-const FILM_SIMULATION_LABELS: Record<
-  FujifilmSimulation,
-  FujifilmSimulationLabel
-> = {
+const FILM_SIMULATION_LABELS: Record<FujifilmSimulation, FujifilmSimulationLabel> = {
   monochrome: {
     small: 'Monochrome',
     medium: 'Monochrome',
@@ -242,9 +236,7 @@ const FILM_SIMULATION_LABELS: Record<
   },
 };
 
-export const FILM_SIMULATION_FORM_INPUT_OPTIONS = Object.entries(
-  FILM_SIMULATION_LABELS,
-)
+export const FILM_SIMULATION_FORM_INPUT_OPTIONS = Object.entries(FILM_SIMULATION_LABELS)
   .map(
     ([value, label]) =>
       ({ value, label: label.large }) as {
@@ -270,17 +262,11 @@ const parseFujifilmMakerNote = (
       switch (tagType) {
         // UInt16
         case 3:
-          valueForTagUInt(
-            tagId,
-            bytes.readUInt16LE(index + BYTE_OFFSET_TAG_VALUE),
-          );
+          valueForTagUInt(tagId, bytes.readUInt16LE(index + BYTE_OFFSET_TAG_VALUE));
           break;
         // UInt32
         case 4:
-          valueForTagUInt(
-            tagId,
-            bytes.readUInt32LE(index + BYTE_OFFSET_TAG_VALUE),
-          );
+          valueForTagUInt(tagId, bytes.readUInt32LE(index + BYTE_OFFSET_TAG_VALUE));
           break;
       }
     }

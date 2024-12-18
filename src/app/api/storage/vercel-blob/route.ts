@@ -1,10 +1,7 @@
 import { auth } from '@/auth';
 import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
-import {
-  ACCEPTED_PHOTO_FILE_TYPES,
-  MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
-} from '@/photo';
-import { isUploadPathnameValid } from '@/services/storage';
+import { ACCEPTED_PHOTO_FILE_TYPES, MAX_PHOTO_UPLOAD_SIZE_IN_BYTES } from '@/photo';
+import { isPhotoUploadPathnameValid } from '@/services/storage';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
@@ -18,7 +15,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       onBeforeGenerateToken: async pathname => {
         const session = await auth();
         if (session?.user) {
-          if (isUploadPathnameValid(pathname)) {
+          if (isPhotoUploadPathnameValid(pathname)) {
             return {
               maximumSizeInBytes: MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
               allowedContentTypes: ACCEPTED_PHOTO_FILE_TYPES,
@@ -40,9 +37,6 @@ export async function POST(request: Request): Promise<NextResponse> {
     revalidateAdminPaths();
     return NextResponse.json(jsonResponse);
   } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
 }

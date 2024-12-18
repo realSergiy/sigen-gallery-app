@@ -29,10 +29,7 @@ export default function ExifSyncButton({
       }}
       icon={
         <IconGrSync
-          className={clsx(
-            'translate-x-[0.5px] translate-y-[0.5px]',
-            'sm:translate-x-[-0.5px]',
-          )}
+          className={clsx('translate-x-[0.5px] translate-y-[0.5px]', 'sm:translate-x-[-0.5px]')}
         />
       }
     >

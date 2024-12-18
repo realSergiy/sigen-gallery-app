@@ -1,8 +1,4 @@
-export const roundToString = (
-  number: number,
-  place = 1,
-  includeZero?: boolean,
-) => {
+export const roundToString = (number: number, place = 1, includeZero?: boolean) => {
   const precision = Math.pow(10, place);
   const result = Math.round(number * precision) / precision;
   return includeZero ? result.toFixed(place) : result.toString();
@@ -65,13 +61,11 @@ export const formatNumberToFraction = (number: number) => {
     integer += 1;
   }
 
-  const fraction =
-    decimal !== 0 ? formatDecimalToFraction(Math.abs(decimal)) : '';
+  const fraction = decimal !== 0 ? formatDecimalToFraction(Math.abs(decimal)) : '';
 
   // Ensure fractions aren't too long
   if (!fraction || fraction.length <= MAX_FRACTION_LENGTH) {
-    const integerString =
-      integer > 0 ? (fraction ? `${integer} ` : integer) : fraction ? '' : '0';
+    const integerString = integer > 0 ? (fraction ? `${integer} ` : integer) : fraction ? '' : '0';
     return `${sign}${integerString}${fraction}`;
   } else {
     const decimalFormatted = decimal.toPrecision(2).replace(/^-*0+/, '');

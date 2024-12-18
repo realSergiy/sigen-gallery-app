@@ -24,8 +24,7 @@ module.exports = {
         mono: ['var(--font-ibm-plex-mono)', ...defaultTheme.fontFamily.mono],
       },
       animation: {
-        'rotate-pulse':
-          'rotate-pulse 0.75s linear infinite normal both running',
+        'rotate-pulse': 'rotate-pulse 0.75s linear infinite normal both running',
         'hover-drift': 'hover-drift 8s linear infinite',
         'hover-wobble': 'hover-wobble 6s linear infinite normal both running',
       },
@@ -57,8 +56,5 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/container-queries'),
-  ],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],
 };

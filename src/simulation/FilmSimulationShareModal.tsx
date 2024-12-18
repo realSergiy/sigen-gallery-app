@@ -1,7 +1,4 @@
-import {
-  absolutePathForFilmSimulation,
-  pathForFilmSimulation,
-} from '@/site/paths';
+import { absolutePathForFilmSimulation, pathForFilmSimulation } from '@/site/paths';
 import { Photo, PhotoDateRange } from '../photo';
 import ShareModal from '@/components/ShareModal';
 import FilmSimulationOGTile from './FilmSimulationOGTile';

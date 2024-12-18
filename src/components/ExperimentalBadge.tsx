@@ -1,11 +1,7 @@
 import { clsx } from 'clsx/lite';
 import Badge from './Badge';
 
-export default function ExperimentalBadge({
-  className,
-}: {
-  className?: string;
-}) {
+export default function ExperimentalBadge({ className }: { className?: string }) {
   return (
     <Badge
       type="small"

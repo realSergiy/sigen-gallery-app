@@ -3,11 +3,7 @@ import Icon from './Icon';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 
-export type LabeledIconType =
-  | 'icon-first'
-  | 'icon-last'
-  | 'icon-only'
-  | 'text-only';
+export type LabeledIconType = 'icon-first' | 'icon-last' | 'icon-only' | 'text-only';
 
 export default function LabeledIcon({
   icon,
@@ -46,9 +42,7 @@ export default function LabeledIcon({
         </Icon>
       )}
       {children && type !== 'icon-only' && (
-        <span className={clsx('uppercase', debug && 'bg-gray-700')}>
-          {children}
-        </span>
+        <span className={clsx('uppercase', debug && 'bg-gray-700')}>{children}</span>
       )}
     </>
   );

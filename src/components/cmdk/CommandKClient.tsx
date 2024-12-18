@@ -1,20 +1,13 @@
 'use client';
 
 import { Command } from 'cmdk';
-import {
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import {
   PATH_ADMIN_BASELINE,
   PATH_ADMIN_CONFIGURATION,
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_TAGS,
-  PATH_ADMIN_UPLOADS,
+  PATH_ADMIN_PHOTO_UPLOADS,
   PATH_FEED_INFERRED,
   PATH_GRID_INFERRED,
   PATH_ROOT,
@@ -122,10 +115,7 @@ export default function CommandKClient({
   const isPlaceholderVisible = queryLiveRaw === '';
 
   // Parameterized query values
-  const queryLive = useMemo(
-    () => queryLiveRaw.trim().toLocaleLowerCase(),
-    [queryLiveRaw],
-  );
+  const queryLive = useMemo(() => queryLiveRaw.trim().toLocaleLowerCase(), [queryLiveRaw]);
   const queryDebounced = useMemo(
     () => queryDebouncedRaw.trim().toLocaleLowerCase(),
     [queryDebouncedRaw],
@@ -217,9 +207,7 @@ export default function CommandKClient({
 
   const SECTION_TAGS: CommandKSection = {
     heading: 'Tags',
-    accessory: (
-      <FaTag size={10} className="translate-x-[1px] translate-y-[0.75px]" />
-    ),
+    accessory: <FaTag size={10} className="translate-x-[1px] translate-y-[0.75px]" />,
     items: tagsIncludingHidden.map(({ tag, count }) => ({
       label: formatTag(tag),
       annotation: formatCount(count),
@@ -231,12 +219,7 @@ export default function CommandKClient({
   const clientSections: CommandKSection[] = [
     {
       heading: 'Theme',
-      accessory: (
-        <IoInvertModeSharp
-          size={14}
-          className="translate-x-[-1px] translate-y-[0.5px]"
-        />
-      ),
+      accessory: <IoInvertModeSharp size={14} className="translate-x-[-1px] translate-y-[0.5px]" />,
       items: [
         {
           label: 'Use System',
@@ -275,16 +258,12 @@ export default function CommandKClient({
         {
           label: 'Toggle Image Fallbacks',
           action: () => setShouldDebugImageFallbacks?.(prev => !prev),
-          annotation: shouldDebugImageFallbacks ? (
-            <FaCheck size={12} />
-          ) : undefined,
+          annotation: shouldDebugImageFallbacks ? <FaCheck size={12} /> : undefined,
         },
         {
           label: 'Toggle Baseline Grid',
           action: () => setShouldShowBaselineGrid?.(prev => !prev),
-          annotation: shouldShowBaselineGrid ? (
-            <FaCheck size={12} />
-          ) : undefined,
+          annotation: shouldShowBaselineGrid ? <FaCheck size={12} /> : undefined,
         },
       ],
     });
@@ -329,7 +308,7 @@ export default function CommandKClient({
             {
               label: 'Manage Uploads',
               annotation: <BiLockAlt />,
-              path: PATH_ADMIN_UPLOADS,
+              path: PATH_ADMIN_PHOTO_UPLOADS,
             },
             {
               label: 'Manage Tags',
@@ -347,8 +326,7 @@ export default function CommandKClient({
                   ? 'Select Multiple Photos'
                   : 'Exit Select Multiple Photos',
               annotation: <BiLockAlt />,
-              path:
-                selectedPhotoIds === undefined ? PATH_GRID_INFERRED : undefined,
+              path: selectedPhotoIds === undefined ? PATH_GRID_INFERRED : undefined,
               action:
                 selectedPhotoIds === undefined
                   ? () => setSelectedPhotoIds?.([])
@@ -423,9 +401,7 @@ export default function CommandKClient({
               </span>
             )}
           </div>
-          <Command.List
-            className={clsx('relative overflow-y-auto', 'max-h-48 sm:max-h-72')}
-          >
+          <Command.List className={clsx('relative overflow-y-auto', 'max-h-48 sm:max-h-72')}>
             <Command.Empty className="text-dim mt-1 pl-3">
               {isLoading ? 'Searching ...' : 'No results found'}
             </Command.Empty>
@@ -440,13 +416,7 @@ export default function CommandKClient({
                 <Command.Group
                   key={heading}
                   heading={
-                    <div
-                      className={clsx(
-                        'flex items-center',
-                        'px-2',
-                        isPending && 'opacity-20',
-                      )}
-                    >
+                    <div className={clsx('flex items-center', 'px-2', isPending && 'opacity-20')}>
                       {accessory && <div className="w-5">{accessory}</div>}
                       {heading}
                     </div>
@@ -462,15 +432,7 @@ export default function CommandKClient({
                   )}
                 >
                   {items.map(
-                    ({
-                      label,
-                      keywords,
-                      accessory,
-                      annotation,
-                      annotationAria,
-                      path,
-                      action,
-                    }) => {
+                    ({ label, keywords, accessory, annotation, annotationAria, path, action }) => {
                       const key = `${heading} ${label}`;
                       return (
                         <CommandKItem

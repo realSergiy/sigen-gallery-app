@@ -10,9 +10,7 @@ import HiddenHeader from '@/tag/HiddenHeader';
 import { Metadata } from 'next';
 import { cache } from 'react';
 
-const getPhotosHiddenMetaCached = cache(() =>
-  getPhotosMeta({ hidden: 'only' }),
-);
+const getPhotosHiddenMetaCached = cache(() => getPhotosMeta({ hidden: 'only' }));
 
 export async function generateMetadata(): Promise<Metadata> {
   const { count, dateRange } = await getPhotosHiddenMetaCached();
@@ -22,12 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const title = titleForTag(TAG_HIDDEN, undefined, count);
-  const description = descriptionForTaggedPhotos(
-    undefined,
-    undefined,
-    count,
-    dateRange,
-  );
+  const description = descriptionForTaggedPhotos(undefined, undefined, count, dateRange);
   const url = absolutePathForTag(TAG_HIDDEN);
 
   return {
@@ -57,12 +50,7 @@ export default async function HiddenTagPage() {
         <div className="mt-4 space-y-4">
           <AnimateItems
             type="bottom"
-            items={[
-              <HiddenHeader
-                key="HiddenHeader"
-                {...{ photos, count, dateRange }}
-              />,
-            ]}
+            items={[<HiddenHeader key="HiddenHeader" {...{ photos, count, dateRange }} />]}
             animateOnFirstLoadOnly
           />
           <div className="space-y-6">

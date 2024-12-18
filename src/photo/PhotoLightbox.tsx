@@ -14,8 +14,7 @@ export default function PhotoLightbox({
   maxPhotosToShow?: number;
   moreLink: string;
 }) {
-  const photoCountToShow =
-    maxPhotosToShow < count ? maxPhotosToShow - 1 : maxPhotosToShow;
+  const photoCountToShow = maxPhotosToShow < count ? maxPhotosToShow - 1 : maxPhotosToShow;
 
   const countNotShown = count - photoCountToShow;
 
@@ -35,14 +34,9 @@ export default function PhotoLightbox({
           showOverageTile ? (
             <Link
               href={moreLink}
-              className={clsx(
-                'flex flex-col items-center justify-center',
-                'gap-0.5 lg:gap-1',
-              )}
+              className={clsx('flex flex-col items-center justify-center', 'gap-0.5 lg:gap-1')}
             >
-              <div className="text-[1.1rem] lg:text-[1.5rem]">
-                +{countNotShown}
-              </div>
+              <div className="text-[1.1rem] lg:text-[1.5rem]">+{countNotShown}</div>
               <div className="text-dim">More</div>
             </Link>
           ) : undefined

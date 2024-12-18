@@ -14,8 +14,7 @@ export default function usePreventNavigation(
       const targets = [target, parent, grandParent];
       if (
         targets.some(target => target?.tagName === 'A') &&
-        (!includeButtons ||
-          targets.some(target => target?.tagName === 'BUTTON'))
+        (!includeButtons || targets.some(target => target?.tagName === 'BUTTON'))
       ) {
         if (enabled && !confirm(confirmation)) {
           e.stopPropagation();

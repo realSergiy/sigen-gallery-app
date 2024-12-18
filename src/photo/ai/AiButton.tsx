@@ -47,10 +47,7 @@ export default function AiButton({
       icon={<HiSparkles size={16} />}
       className={className}
       onClick={e => {
-        if (
-          !shouldConfirm ||
-          confirm('Are you sure you want to overwrite existing content?')
-        ) {
+        if (!shouldConfirm || confirm('Are you sure you want to overwrite existing content?')) {
           aiContent.request(requestFields);
         } else {
           e.preventDefault();

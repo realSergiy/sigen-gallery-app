@@ -36,15 +36,9 @@ export default function TagInput({
   const [inputText, setInputText] = useState('');
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number>();
 
-  const optionValues = useMemo(
-    () => options.map(({ value }) => value),
-    [options],
-  );
+  const optionValues = useMemo(() => options.map(({ value }) => value), [options]);
 
-  const selectedOptions = useMemo(
-    () => convertStringToArray(value) ?? [],
-    [value],
-  );
+  const selectedOptions = useMemo(() => convertStringToArray(value) ?? [], [value]);
 
   const inputTextFormatted = parameterize(inputText);
   const isInputTextUnique =
@@ -54,10 +48,7 @@ export default function TagInput({
 
   const optionsFiltered = useMemo<AnnotatedTag[]>(
     () =>
-      (isInputTextUnique
-        ? [{ value: `${CREATE_LABEL} "${inputTextFormatted}"` }]
-        : []
-      ).concat(
+      (isInputTextUnique ? [{ value: `${CREATE_LABEL} "${inputTextFormatted}"` }] : []).concat(
         options.filter(
           ({ value }) =>
             !selectedOptions.includes(value) &&
@@ -80,8 +71,7 @@ export default function TagInput({
       const optionsToAdd = (options.filter(Boolean) as string[])
         .map(option =>
           option.startsWith(CREATE_LABEL)
-            ? (option.match(new RegExp(`^${CREATE_LABEL} "(.+)"$`))?.[1] ??
-              option)
+            ? (option.match(new RegExp(`^${CREATE_LABEL} "(.+)"$`))?.[1] ?? option)
             : option,
         )
         .map(option => parameterize(option))
@@ -99,9 +89,7 @@ export default function TagInput({
 
   const removeOption = useCallback(
     (option: string) => {
-      onChange?.(
-        selectedOptions.filter(o => o !== parameterize(option)).join(','),
-      );
+      onChange?.(selectedOptions.filter(o => o !== parameterize(option)).join(','));
       setSelectedOptionIndex(undefined);
       inputRef.current?.focus();
     },
@@ -170,10 +158,7 @@ export default function TagInput({
           break;
         case 'ArrowUp':
           setSelectedOptionIndex(i => {
-            if (
-              document.activeElement === inputRef.current &&
-              optionsFiltered.length > 0
-            ) {
+            if (document.activeElement === inputRef.current && optionsFiltered.length > 0) {
               return optionsFiltered.length - 1;
             } else if (i === undefined || i === 0) {
               inputRef.current?.focus();
@@ -228,8 +213,7 @@ export default function TagInput({
       >
         {selectedOptions.length === 0
           ? 'No tags selected'
-          : selectedOptions.join(', ') +
-            ` tag${selectedOptions.length !== 1 ? 's' : ''} selected`}
+          : selectedOptions.join(', ') + ` tag${selectedOptions.length !== 1 ? 's' : ''} selected`}
       </div>
       <div
         aria-controls={ARIA_ID_TAG_CONTROL}
@@ -302,49 +286,42 @@ export default function TagInput({
               'text-xl shadow-lg dark:shadow-xl',
             )}
           >
-            {optionsFiltered.map(
-              ({ value, annotation, annotationAria }, index) => (
-                <div
-                  key={value}
-                  role="option"
-                  aria-selected={
-                    index === selectedOptionIndex ||
-                    (index === 0 && selectedOptionIndex === undefined)
-                  }
-                  tabIndex={0}
-                  className={clsx(
-                    'text-base',
-                    'group flex items-center gap-1',
-                    'cursor-pointer select-none',
-                    'rounded-sm px-1.5 py-1',
-                    'hover:bg-gray-100 dark:hover:bg-gray-800',
-                    'active:bg-gray-50 dark:active:bg-gray-900',
-                    'focus:bg-gray-100 dark:focus:bg-gray-800',
-                    index === 0 &&
-                      selectedOptionIndex === undefined &&
-                      'bg-gray-100 dark:bg-gray-800',
-                    'outline-none',
-                  )}
-                  onClick={() => {
-                    addOptions([value]);
-                    setInputText('');
-                  }}
-                  onFocus={() => setSelectedOptionIndex(index)}
-                >
-                  <span className="min-w-0 grow truncate">{value}</span>
-                  {annotation && (
-                    <span
-                      className="text-dim whitespace-nowrap text-sm"
-                      aria-label={annotationAria}
-                    >
-                      <span aria-hidden={Boolean(annotationAria)}>
-                        {annotation}
-                      </span>
-                    </span>
-                  )}
-                </div>
-              ),
-            )}
+            {optionsFiltered.map(({ value, annotation, annotationAria }, index) => (
+              <div
+                key={value}
+                role="option"
+                aria-selected={
+                  index === selectedOptionIndex ||
+                  (index === 0 && selectedOptionIndex === undefined)
+                }
+                tabIndex={0}
+                className={clsx(
+                  'text-base',
+                  'group flex items-center gap-1',
+                  'cursor-pointer select-none',
+                  'rounded-sm px-1.5 py-1',
+                  'hover:bg-gray-100 dark:hover:bg-gray-800',
+                  'active:bg-gray-50 dark:active:bg-gray-900',
+                  'focus:bg-gray-100 dark:focus:bg-gray-800',
+                  index === 0 &&
+                    selectedOptionIndex === undefined &&
+                    'bg-gray-100 dark:bg-gray-800',
+                  'outline-none',
+                )}
+                onClick={() => {
+                  addOptions([value]);
+                  setInputText('');
+                }}
+                onFocus={() => setSelectedOptionIndex(index)}
+              >
+                <span className="min-w-0 grow truncate">{value}</span>
+                {annotation && (
+                  <span className="text-dim whitespace-nowrap text-sm" aria-label={annotationAria}>
+                    <span aria-hidden={Boolean(annotationAria)}>{annotation}</span>
+                  </span>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}

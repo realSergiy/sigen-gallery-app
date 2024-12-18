@@ -13,10 +13,7 @@ import { PATH_ADMIN_PHOTOS, PATH_ROOT } from '@/site/paths';
 import type { Session } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-export const signInAction = async (
-  _prevState: string | undefined,
-  formData: FormData,
-) => {
+export const signInAction = async (_prevState: string | undefined, formData: FormData) => {
   try {
     await signIn('credentials', Object.fromEntries(formData));
   } catch (error) {
@@ -40,8 +37,7 @@ export const signInAction = async (
   redirect((formData.get(KEY_CALLBACK_URL) as string) || PATH_ADMIN_PHOTOS);
 };
 
-export const signOutAndRedirectAction = async () =>
-  signOut({ redirectTo: PATH_ROOT });
+export const signOutAndRedirectAction = async () => signOut({ redirectTo: PATH_ROOT });
 
 export const getAuthAction = () => auth();
 

@@ -10,8 +10,7 @@ export default function useMetaThemeColor({
 }) {
   const { resolvedTheme } = useTheme();
 
-  const preferredThemeColor =
-    resolvedTheme === 'light' ? colorLight : colorDark;
+  const preferredThemeColor = resolvedTheme === 'light' ? colorLight : colorDark;
 
   useEffect(() => {
     if (preferredThemeColor) {

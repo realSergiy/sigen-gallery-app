@@ -59,9 +59,7 @@ export default function Modal({
         anchor === 'top' ? 'items-start pt-4 sm:pt-24' : 'items-center',
         'bg-black',
       )}
-      initial={
-        !prefersReducedMotion ? { backgroundColor: 'rgba(0, 0, 0, 0)' } : false
-      }
+      initial={!prefersReducedMotion ? { backgroundColor: 'rgba(0, 0, 0, 0)' } : false}
       animate={{ backgroundColor: 'rgba(0, 0, 0, 0.80)' }}
       transition={{ duration: 0.3, easing: 'easeOut' }}
     >

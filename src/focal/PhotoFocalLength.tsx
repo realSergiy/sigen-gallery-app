@@ -1,7 +1,5 @@
 import { pathForFocalLength } from '@/site/paths';
-import EntityLink, {
-  EntityLinkExternalProps,
-} from '@/components/primitives/EntityLink';
+import EntityLink, { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 import { TbCone } from 'react-icons/tb';
 import { formatFocalLength } from '.';
 

@@ -1,24 +1,12 @@
-import {
-  Photo,
-  PhotoDateRange,
-  descriptionForPhotoSet,
-  photoQuantityText,
-} from '@/photo';
+import { Photo, PhotoDateRange, descriptionForPhotoSet, photoQuantityText } from '@/photo';
 import { Camera, cameraFromPhoto, formatCameraText } from '.';
-import {
-  absolutePathForCamera,
-  absolutePathForCameraImage,
-} from '@/site/paths';
+import { absolutePathForCamera, absolutePathForCameraImage } from '@/site/paths';
 
 // Meta functions moved to separate file to avoid
 // dependencies (camelcase-keys) found in photo/index.ts
 // which cause Jest to crash
 
-export const titleForCamera = (
-  camera: Camera,
-  photos: Photo[],
-  explicitCount?: number,
-) =>
+export const titleForCamera = (camera: Camera, photos: Photo[], explicitCount?: number) =>
   [
     'Shot on',
     formatCameraText(cameraFromPhoto(photos[0], camera)),
@@ -26,23 +14,14 @@ export const titleForCamera = (
   ].join(' ');
 
 export const shareTextForCamera = (camera: Camera, photos: Photo[]) =>
-  ['Photos shot on', formatCameraText(cameraFromPhoto(photos[0], camera))].join(
-    ' ',
-  );
+  ['Photos shot on', formatCameraText(cameraFromPhoto(photos[0], camera))].join(' ');
 
 export const descriptionForCameraPhotos = (
   photos: Photo[],
   dateBased?: boolean,
   explicitCount?: number,
   explicitDateRange?: PhotoDateRange,
-) =>
-  descriptionForPhotoSet(
-    photos,
-    undefined,
-    dateBased,
-    explicitCount,
-    explicitDateRange,
-  );
+) => descriptionForPhotoSet(photos, undefined, dateBased, explicitCount, explicitDateRange);
 
 export const generateMetaForCamera = (
   camera: Camera,
@@ -52,11 +31,6 @@ export const generateMetaForCamera = (
 ) => ({
   url: absolutePathForCamera(camera),
   title: titleForCamera(camera, photos, explicitCount),
-  description: descriptionForCameraPhotos(
-    photos,
-    true,
-    explicitCount,
-    explicitDateRange,
-  ),
+  description: descriptionForCameraPhotos(photos, true, explicitCount, explicitDateRange),
   images: absolutePathForCameraImage(camera),
 });

@@ -95,9 +95,7 @@ export default function PhotoDetailPage({
     <div>
       <SiteGrid
         className="mb-6 mt-1.5"
-        contentMain={
-          customHeader ?? <PhotoHeader selectedPhoto={photo} photos={photos} />
-        }
+        contentMain={customHeader ?? <PhotoHeader selectedPhoto={photo} photos={photos} />}
       />
       <AnimateItems
         className="md:mb-8"

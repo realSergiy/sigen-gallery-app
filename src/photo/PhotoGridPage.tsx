@@ -25,10 +25,7 @@ export default function PhotoGridPage({
 }) {
   const { setSelectedPhotoIds } = useAppState();
 
-  useEffect(
-    () => () => setSelectedPhotoIds?.(undefined),
-    [setSelectedPhotoIds],
-  );
+  useEffect(() => () => setSelectedPhotoIds?.(undefined), [setSelectedPhotoIds]);
 
   return (
     <PhotoGridContainer

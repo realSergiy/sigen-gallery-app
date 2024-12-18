@@ -37,9 +37,7 @@ export default function AdminPhotosTable({
   const { invalidateSwr } = useAppState();
 
   const opacityForPhotoId = (photoId: string) =>
-    photoIdsSyncing.length > 0 && !photoIdsSyncing.includes(photoId)
-      ? 'opacity-40'
-      : undefined;
+    photoIdsSyncing.length > 0 && !photoIdsSyncing.includes(photoId) ? 'opacity-40' : undefined;
 
   return (
     <AdminTable>
@@ -47,17 +45,10 @@ export default function AdminPhotosTable({
         <Fragment key={photo.id}>
           <PhotoSmall
             photo={photo}
-            onVisible={
-              index === photos.length - 1 ? onLastPhotoVisible : undefined
-            }
+            onVisible={index === photos.length - 1 ? onLastPhotoVisible : undefined}
             className={opacityForPhotoId(photo.id)}
           />
-          <div
-            className={clsx(
-              'flex flex-col lg:flex-row',
-              opacityForPhotoId(photo.id),
-            )}
-          >
+          <div className={clsx('flex flex-col lg:flex-row', opacityForPhotoId(photo.id))}>
             <Link
               key={photo.id}
               href={pathForPhoto({ photo })}
@@ -69,10 +60,7 @@ export default function AdminPhotosTable({
                 {photo.hidden && (
                   <span className="whitespace-nowrap">
                     {' '}
-                    <AiOutlineEyeInvisible
-                      className="inline translate-y-[-0.5px]"
-                      size={16}
-                    />
+                    <AiOutlineEyeInvisible className="inline translate-y-[-0.5px]" size={16} />
                   </span>
                 )}
               </span>
@@ -97,9 +85,7 @@ export default function AdminPhotosTable({
               />
             </div>
           </div>
-          <div
-            className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}
-          >
+          <div className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}>
             {canEdit && <EditButton path={pathForAdminPhotoEdit(photo)} />}
             <PhotoSyncButton
               photoId={photo.id}
@@ -113,10 +99,7 @@ export default function AdminPhotosTable({
               shouldToast
             />
             {canDelete && (
-              <DeletePhotoButton
-                photo={photo}
-                onDelete={() => revalidatePhoto?.(photo.id, true)}
-              />
+              <DeletePhotoButton photo={photo} onDelete={() => revalidatePhoto?.(photo.id, true)} />
             )}
           </div>
         </Fragment>

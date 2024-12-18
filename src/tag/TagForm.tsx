@@ -9,21 +9,12 @@ import { renamePhotoTagGloballyAction } from '@/photo/actions';
 import { parameterize } from '@/utility/string';
 import { useAppState } from '@/state/AppState';
 
-export default function TagForm({
-  tag,
-  children,
-}: {
-  tag: string;
-  children?: ReactNode;
-}) {
+export default function TagForm({ tag, children }: { tag: string; children?: ReactNode }) {
   const { invalidateSwr } = useAppState();
 
   const [updatedTagRaw, setUpdatedTagRaw] = useState(tag);
 
-  const updatedTag = useMemo(
-    () => parameterize(updatedTagRaw),
-    [updatedTagRaw],
-  );
+  const updatedTag = useMemo(() => parameterize(updatedTagRaw), [updatedTagRaw]);
 
   const isFormValid = updatedTag && updatedTag !== tag;
 
@@ -44,10 +35,7 @@ export default function TagForm({
         <Link className="button" href={PATH_ADMIN_TAGS}>
           Cancel
         </Link>
-        <SubmitButtonWithStatus
-          disabled={!isFormValid}
-          onFormSubmit={invalidateSwr}
-        >
+        <SubmitButtonWithStatus disabled={!isFormValid} onFormSubmit={invalidateSwr}>
           Update
         </SubmitButtonWithStatus>
       </div>

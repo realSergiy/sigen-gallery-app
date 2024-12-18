@@ -24,9 +24,7 @@ const useClickInsideOutside = ({
     (event: MouseEvent) => {
       const target = event.target as HTMLElement;
 
-      const htmlElementsContainTarget = htmlElements.some(element =>
-        element?.contains(target),
-      );
+      const htmlElementsContainTarget = htmlElements.some(element => element?.contains(target));
 
       // On click
       onClick?.(event);

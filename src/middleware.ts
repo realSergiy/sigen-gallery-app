@@ -20,21 +20,14 @@ export default function middleware(req: NextRequest, res: NextResponse) {
   } else if (/^\/photos\/(.)+$/.test(pathname)) {
     // Accept /photos/* paths, but serve /p/*
     const matches = pathname.match(/^\/photos\/(.+)$/);
-    return NextResponse.rewrite(
-      new URL(`${PREFIX_PHOTO}/${matches?.[1]}`, req.url),
-    );
+    return NextResponse.rewrite(new URL(`${PREFIX_PHOTO}/${matches?.[1]}`, req.url));
   } else if (/^\/t\/(.)+$/.test(pathname)) {
     // Accept /t/* paths, but serve /tag/*
     const matches = pathname.match(/^\/t\/(.+)$/);
-    return NextResponse.rewrite(
-      new URL(`${PREFIX_TAG}/${matches?.[1]}`, req.url),
-    );
+    return NextResponse.rewrite(new URL(`${PREFIX_TAG}/${matches?.[1]}`, req.url));
   }
 
-  return auth(
-    req as unknown as NextApiRequest,
-    res as unknown as NextApiResponse,
-  );
+  return auth(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 }
 
 export const config = {
@@ -46,7 +39,5 @@ export const config = {
   // - /grid
   // - / (root)
   // eslint-disable-next-line max-len
-  matcher: [
-    '/((?!api$|api/auth|_next/static|_next/image|favicon.ico$|favicons/|grid$|$).*)',
-  ],
+  matcher: ['/((?!api$|api/auth|_next/static|_next/image|favicon.ico$|favicons/|grid$|$).*)'],
 };

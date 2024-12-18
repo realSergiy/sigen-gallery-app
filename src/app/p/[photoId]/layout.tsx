@@ -1,15 +1,7 @@
-import {
-  RELATED_GRID_PHOTOS_TO_SHOW,
-  descriptionForPhoto,
-  titleForPhoto,
-} from '@/photo';
+import { RELATED_GRID_PHOTOS_TO_SHOW, descriptionForPhoto, titleForPhoto } from '@/photo';
 import { Metadata } from 'next/types';
 import { redirect } from 'next/navigation';
-import {
-  PATH_ROOT,
-  absolutePathForPhoto,
-  absolutePathForPhotoImage,
-} from '@/site/paths';
+import { PATH_ROOT, absolutePathForPhoto, absolutePathForPhotoImage } from '@/site/paths';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
 import { getPhotosNearIdCached } from '@/photo/cache';
 import { IS_PRODUCTION, STATICALLY_OPTIMIZED_PAGES } from '@/site/config';
@@ -23,9 +15,7 @@ const getPhotosNearIdCachedCached = cache((photoId: string) =>
   getPhotosNearIdCached(photoId, { limit: RELATED_GRID_PHOTOS_TO_SHOW + 2 }),
 );
 
-export let generateStaticParams:
-  | (() => Promise<{ photoId: string }[]>)
-  | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined = undefined;
 
 if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {
@@ -38,9 +28,7 @@ interface PhotoProps {
   params: { photoId: string };
 }
 
-export async function generateMetadata({
-  params: { photoId },
-}: PhotoProps): Promise<Metadata> {
+export async function generateMetadata({ params: { photoId } }: PhotoProps): Promise<Metadata> {
   const { photo } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {
@@ -74,8 +62,7 @@ export default async function PhotoPage({
   params: { photoId },
   children,
 }: PhotoProps & { children: ReactNode }) {
-  const { photo, photos, photosGrid } =
-    await getPhotosNearIdCachedCached(photoId);
+  const { photo, photos, photosGrid } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {
     redirect(PATH_ROOT);

@@ -23,10 +23,7 @@ export const vercelBlobUploadFromClient = async (
     handleUploadUrl: PATH_API_VERCEL_BLOB_UPLOAD,
   }).then(({ url }) => url);
 
-export const vercelBlobPut = (
-  file: Buffer,
-  fileName: string,
-): Promise<string> =>
+export const vercelBlobPut = (file: Buffer, fileName: string): Promise<string> =>
   put(fileName, file, {
     addRandomSuffix: false,
     access: 'public',

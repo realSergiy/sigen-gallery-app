@@ -21,9 +21,7 @@ export default function PhotoImageResponse({
   isNextImageReady: boolean;
 }) {
   const caption = [
-    photo.model
-      ? formatCameraModelTextShort(cameraFromPhoto(photo))
-      : undefined,
+    photo.model ? formatCameraModelTextShort(cameraFromPhoto(photo)) : undefined,
     photo.focalLengthFormatted,
     photo.fNumberFormatted,
     photo.isoFormatted,

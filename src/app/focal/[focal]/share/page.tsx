@@ -22,8 +22,7 @@ export async function generateMetadata({
 }: FocalLengthProps): Promise<Metadata> {
   const focal = getFocalLengthFromString(focalString);
 
-  const [photos, { count, dateRange }] =
-    await getPhotosFocalLengthDataCachedCached(focal);
+  const [photos, { count, dateRange }] = await getPhotosFocalLengthDataCachedCached(focal);
 
   const { url, title, description, images } = generateMetaForFocalLength(
     focal,
@@ -49,21 +48,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function Share({
-  params: { focal: focalString },
-}: FocalLengthProps) {
+export default async function Share({ params: { focal: focalString } }: FocalLengthProps) {
   const focal = getFocalLengthFromString(focalString);
 
-  const [photos, { count, dateRange }] =
-    await getPhotosFocalLengthDataCachedCached(focal);
+  const [photos, { count, dateRange }] = await getPhotosFocalLengthDataCachedCached(focal);
 
   return (
     <>
       <FocalLengthShareModal {...{ focal, photos, count, dateRange }} />
-      <FocalLengthOverview
-        {...{ focal, photos, count, dateRange }}
-        animateOnFirstLoadOnly
-      />
+      <FocalLengthOverview {...{ focal, photos, count, dateRange }} animateOnFirstLoadOnly />
     </>
   );
 }

@@ -6,10 +6,7 @@ import Container from '@/components/Container';
 import { addAllUploadsAction } from '@/photo/actions';
 import { PATH_ADMIN_PHOTOS } from '@/site/paths';
 import { Tags } from '@/tag';
-import {
-  generateLocalNaivePostgresString,
-  generateLocalPostgresString,
-} from '@/utility/date';
+import { generateLocalNaivePostgresString, generateLocalPostgresString } from '@/utility/date';
 import sleep from '@/utility/sleep';
 import { readStreamableValue } from 'ai/rsc';
 import { clsx } from 'clsx/lite';
@@ -72,15 +69,12 @@ export default function AdminAddAllUploads({
                 }
               : status,
           );
-          addedUploadCount.current = update.filter(
-            ({ status }) => status === 'added',
-          ).length;
+          addedUploadCount.current = update.filter(({ status }) => status === 'added').length;
           return update;
         });
         setAddingProgress((current = 0) => {
           const updatedProgress =
-            (((addedUploadCount.current || 1) - 1 + (data?.progress ?? 0)) /
-              storageUrls.length) *
+            (((addedUploadCount.current || 1) - 1 + (data?.progress ?? 0)) / storageUrls.length) *
             0.95;
           // Prevent out-of-order updates causing progress to go backwards
           return Math.max(current, updatedProgress);
@@ -100,12 +94,7 @@ export default function AdminAddAllUploads({
       <Container padding="tight">
         <div className="w-full space-y-4 py-1">
           <div className="flex">
-            <div
-              className={clsx(
-                'flex-grow',
-                tagErrorMessage ? 'text-error' : 'text-main',
-              )}
-            >
+            <div className={clsx('flex-grow', tagErrorMessage ? 'text-error' : 'text-main')}>
               {showTags
                 ? tagErrorMessage || 'Add tags to all uploads'
                 : `Found ${storageUrls.length} uploads`}
@@ -146,11 +135,7 @@ export default function AdminAddAllUploads({
               }
               onClick={async () => {
                 // eslint-disable-next-line max-len
-                if (
-                  confirm(
-                    `Are you sure you want to add all ${storageUrls.length} uploads?`,
-                  )
-                ) {
+                if (confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
                   setIsAdding(true);
                   setUrlAddStatuses(current =>
                     current.map((url, index) => ({
@@ -161,17 +146,13 @@ export default function AdminAddAllUploads({
                   const uploadsToAdd = storageUrls.slice();
                   try {
                     while (uploadsToAdd.length > 0) {
-                      await addUploadUrls(
-                        uploadsToAdd.splice(0, UPLOAD_BATCH_SIZE),
-                      );
+                      await addUploadUrls(uploadsToAdd.splice(0, UPLOAD_BATCH_SIZE));
                     }
                     setButtonText('Complete');
                     setAddingProgress(1);
                     setIsAdding(false);
                     setIsAddingComplete(true);
-                    await sleep(1000).then(() =>
-                      router.push(PATH_ADMIN_PHOTOS),
-                    );
+                    await sleep(1000).then(() => router.push(PATH_ADMIN_PHOTOS));
                   } catch (e: any) {
                     setAddingProgress(undefined);
                     setIsAdding(false);

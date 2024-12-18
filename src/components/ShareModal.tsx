@@ -24,11 +24,7 @@ export default function ShareModal({
   socialText: string;
   children: ReactNode;
 }) {
-  const renderIcon = (
-    icon: JSX.Element,
-    action: () => void,
-    embedded?: boolean,
-  ) => (
+  const renderIcon = (icon: JSX.Element, action: () => void, embedded?: boolean) => (
     <div
       className={clsx(
         'px-3.5 py-3',
@@ -48,12 +44,7 @@ export default function ShareModal({
     <Modal onClosePath={pathClose}>
       <div className="w-full space-y-3 md:space-y-4">
         {title && (
-          <div
-            className={clsx(
-              'flex items-center gap-x-3',
-              'text-2xl leading-snug',
-            )}
-          >
+          <div className={clsx('flex items-center gap-x-3', 'text-2xl leading-snug')}>
             <TbPhotoShare size={22} className="hidden xs:block" />
             <div className="flex-grow">{title}</div>
           </div>

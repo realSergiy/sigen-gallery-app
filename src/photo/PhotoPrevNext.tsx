@@ -1,12 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import {
-  Photo,
-  PhotoSetAttributes,
-  getNextPhoto,
-  getPreviousPhoto,
-} from '@/photo';
+import { Photo, PhotoSetAttributes, getNextPhoto, getPreviousPhoto } from '@/photo';
 import PhotoLink from './PhotoLink';
 import { useRouter } from 'next/navigation';
 import { pathForPhoto } from '@/site/paths';
@@ -35,8 +30,7 @@ export default function PhotoPrevNext({
 } & PhotoSetAttributes) {
   const router = useRouter();
 
-  const { setNextPhotoAnimation, shouldRespondToKeyboardCommands } =
-    useAppState();
+  const { setNextPhotoAnimation, shouldRespondToKeyboardCommands } = useAppState();
 
   const previousPhoto = photo ? getPreviousPhoto(photo, photos) : undefined;
   const nextPhoto = photo ? getNextPhoto(photo, photos) : undefined;

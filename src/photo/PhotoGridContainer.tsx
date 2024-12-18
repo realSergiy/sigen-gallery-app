@@ -25,13 +25,9 @@ export default function PhotoGridContainer({
   header?: JSX.Element;
   sidebar?: JSX.Element;
 } & ComponentProps<typeof PhotoGrid>) {
-  const [shouldAnimateDynamicItems, setShouldAnimateDynamicItems] =
-    useState(false);
+  const [shouldAnimateDynamicItems, setShouldAnimateDynamicItems] = useState(false);
 
-  const onAnimationComplete = useCallback(
-    () => setShouldAnimateDynamicItems(true),
-    [],
-  );
+  const onAnimationComplete = useCallback(() => setShouldAnimateDynamicItems(true), []);
 
   const initialOffset = photos.length;
 
@@ -39,13 +35,7 @@ export default function PhotoGridContainer({
     <SiteGrid
       contentMain={
         <div className={clsx(header && 'mt-1.5 space-y-8')}>
-          {header && (
-            <AnimateItems
-              type="bottom"
-              items={[header]}
-              animateOnFirstLoadOnly
-            />
-          )}
+          {header && <AnimateItems type="bottom" items={[header]} animateOnFirstLoadOnly />}
           <div className="space-y-0.5 sm:space-y-1">
             <PhotoGrid
               {...{

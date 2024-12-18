@@ -1,7 +1,4 @@
-import {
-  INFINITE_SCROLL_GRID_INITIAL,
-  INFINITE_SCROLL_GRID_MULTIPLE,
-} from '@/photo';
+import { INFINITE_SCROLL_GRID_INITIAL, INFINITE_SCROLL_GRID_MULTIPLE } from '@/photo';
 import { getPhotosCached } from '@/photo/cache';
 import { getPhotosMeta } from '@/photo/db/query';
 import StaggeredOgPhotos from '@/photo/StaggeredOgPhotos';

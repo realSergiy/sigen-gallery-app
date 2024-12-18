@@ -1,9 +1,6 @@
 type SimpleObject = Record<string, string>;
 
-export const areSimpleObjectsEqual = (
-  obj1: SimpleObject,
-  obj2: SimpleObject,
-): boolean => {
+export const areSimpleObjectsEqual = (obj1: SimpleObject, obj2: SimpleObject): boolean => {
   const obj1Keys = Object.keys(obj1);
   const obj2Keys = Object.keys(obj2);
 

@@ -1,13 +1,5 @@
-import {
-  Photo,
-  PhotoDateRange,
-  descriptionForPhotoSet,
-  photoQuantityText,
-} from '@/photo';
-import {
-  absolutePathForFocalLength,
-  absolutePathForFocalLengthImage,
-} from '@/site/paths';
+import { Photo, PhotoDateRange, descriptionForPhotoSet, photoQuantityText } from '@/photo';
+import { absolutePathForFocalLength, absolutePathForFocalLengthImage } from '@/site/paths';
 
 export type FocalLengths = {
   focal: number;
@@ -19,35 +11,22 @@ export const getFocalLengthFromString = (focalString?: string) => {
   return focal ? parseInt(focal, 10) : 0;
 };
 
-export const formatFocalLength = (focal?: number) =>
-  focal ? `${focal}mm` : undefined;
+export const formatFocalLength = (focal?: number) => (focal ? `${focal}mm` : undefined);
 
-export const titleForFocalLength = (
-  focal: number,
-  photos: Photo[],
-  explicitCount?: number,
-) =>
+export const titleForFocalLength = (focal: number, photos: Photo[], explicitCount?: number) =>
   [
     `${formatFocalLength(focal)} Focal Length`,
     photoQuantityText(explicitCount ?? photos.length),
   ].join(' ');
 
-export const shareTextFocalLength = (focal: number) =>
-  `Photos shot at ${formatFocalLength(focal)}`;
+export const shareTextFocalLength = (focal: number) => `Photos shot at ${formatFocalLength(focal)}`;
 
 export const descriptionForFocalLengthPhotos = (
   photos: Photo[],
   dateBased?: boolean,
   explicitCount?: number,
   explicitDateRange?: PhotoDateRange,
-) =>
-  descriptionForPhotoSet(
-    photos,
-    undefined,
-    dateBased,
-    explicitCount,
-    explicitDateRange,
-  );
+) => descriptionForPhotoSet(photos, undefined, dateBased, explicitCount, explicitDateRange);
 
 export const generateMetaForFocalLength = (
   focal: number,
@@ -57,11 +36,6 @@ export const generateMetaForFocalLength = (
 ) => ({
   url: absolutePathForFocalLength(focal),
   title: titleForFocalLength(focal, photos, explicitCount),
-  description: descriptionForFocalLengthPhotos(
-    photos,
-    true,
-    explicitCount,
-    explicitDateRange,
-  ),
+  description: descriptionForFocalLengthPhotos(photos, true, explicitCount, explicitDateRange),
   images: absolutePathForFocalLengthImage(focal),
 });

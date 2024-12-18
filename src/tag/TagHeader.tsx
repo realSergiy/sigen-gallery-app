@@ -1,5 +1,5 @@
 import { Photo, PhotoDateRange } from '@/photo';
-import PhotoTag from './PhotoTag';
+import EntityLinkTag from './EntityLinkTag';
 import { descriptionForTaggedPhotos, isTagFavs } from '.';
 import { pathForTagShare } from '@/site/paths';
 import PhotoHeader from '@/photo/PhotoHeader';
@@ -24,11 +24,7 @@ export default function TagHeader({
     <PhotoHeader
       tag={tag}
       entity={
-        isTagFavs(tag) ? (
-          <FavsTag contrast="high" />
-        ) : (
-          <PhotoTag tag={tag} contrast="high" />
-        )
+        isTagFavs(tag) ? <FavsTag contrast="high" /> : <EntityLinkTag tag={tag} contrast="high" />
       }
       entityVerb="Tagged"
       entityDescription={descriptionForTaggedPhotos(photos, undefined, count)}

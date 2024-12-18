@@ -1,13 +1,7 @@
 import { clsx } from 'clsx/lite';
 import { ReactNode } from 'react';
 
-export default function AdminTable({
-  title,
-  children,
-}: {
-  title?: string;
-  children: ReactNode;
-}) {
+export default function AdminTable({ title, children }: { title?: string; children: ReactNode }) {
   return (
     <div className="space-y-4">
       {title && <div className="font-bold">{title}</div>}

@@ -24,10 +24,7 @@ export const convertUploadToPhoto = async ({
   const photoPath = `${fileName}.${fileExtension || 'jpg'}`;
   if (shouldStripGpsData) {
     const fileWithoutGps = await removeGpsData(
-      fileBytes ??
-        (await fetch(urlOrigin, { cache: 'no-store' }).then(res =>
-          res.arrayBuffer(),
-        )),
+      fileBytes ?? (await fetch(urlOrigin, { cache: 'no-store' }).then(res => res.arrayBuffer())),
     );
     return putFile(fileWithoutGps, photoPath).then(async url => {
       if (url && shouldDeleteOrigin) {
@@ -36,8 +33,6 @@ export const convertUploadToPhoto = async ({
       return url;
     });
   } else {
-    return shouldDeleteOrigin
-      ? moveFile(urlOrigin, photoPath)
-      : copyFile(urlOrigin, photoPath);
+    return shouldDeleteOrigin ? moveFile(urlOrigin, photoPath) : copyFile(urlOrigin, photoPath);
   }
 };

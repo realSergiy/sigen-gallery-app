@@ -30,9 +30,7 @@ export default function Badge({
           'h-max-baseline',
           'px-[5px] py-[2.75px]',
           'text-[0.7rem] font-medium rounded-[0.25rem]',
-          highContrast
-            ? 'text-invert bg-invert'
-            : 'text-medium bg-gray-300/30 dark:bg-gray-700/50',
+          highContrast ? 'text-invert bg-invert' : 'text-medium bg-gray-300/30 dark:bg-gray-700/50',
           interactive && highContrast
             ? 'hover:opacity-70'
             : 'hover:text-gray-900 dark:hover:text-gray-100',

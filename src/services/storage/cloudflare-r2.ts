@@ -8,13 +8,10 @@ import {
 import { StorageListResponse, generateStorageId } from '.';
 
 const CLOUDFLARE_R2_BUCKET = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_BUCKET ?? '';
-const CLOUDFLARE_R2_ACCOUNT_ID =
-  process.env.NEXT_PUBLIC_CLOUDFLARE_R2_ACCOUNT_ID ?? '';
-const CLOUDFLARE_R2_PUBLIC_DOMAIN =
-  process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_DOMAIN ?? '';
+const CLOUDFLARE_R2_ACCOUNT_ID = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_ACCOUNT_ID ?? '';
+const CLOUDFLARE_R2_PUBLIC_DOMAIN = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_DOMAIN ?? '';
 const CLOUDFLARE_R2_ACCESS_KEY = process.env.CLOUDFLARE_R2_ACCESS_KEY ?? '';
-const CLOUDFLARE_R2_SECRET_ACCESS_KEY =
-  process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ?? '';
+const CLOUDFLARE_R2_SECRET_ACCESS_KEY = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY ?? '';
 const CLOUDFLARE_R2_ENDPOINT = CLOUDFLARE_R2_ACCOUNT_ID
   ? `https://${CLOUDFLARE_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
   : undefined;
@@ -38,23 +35,16 @@ export const cloudflareR2Client = () =>
   });
 
 const urlForKey = (key?: string, isPublic = true) =>
-  isPublic
-    ? `${CLOUDFLARE_R2_BASE_URL_PUBLIC}/${key}`
-    : `${CLOUDFLARE_R2_BASE_URL_PRIVATE}/${key}`;
+  isPublic ? `${CLOUDFLARE_R2_BASE_URL_PUBLIC}/${key}` : `${CLOUDFLARE_R2_BASE_URL_PRIVATE}/${key}`;
 
 export const isUrlFromCloudflareR2 = (url?: string) =>
-  (CLOUDFLARE_R2_BASE_URL_PRIVATE &&
-    url?.startsWith(CLOUDFLARE_R2_BASE_URL_PRIVATE)) ||
-  (CLOUDFLARE_R2_BASE_URL_PUBLIC &&
-    url?.startsWith(CLOUDFLARE_R2_BASE_URL_PUBLIC));
+  (CLOUDFLARE_R2_BASE_URL_PRIVATE && url?.startsWith(CLOUDFLARE_R2_BASE_URL_PRIVATE)) ||
+  (CLOUDFLARE_R2_BASE_URL_PUBLIC && url?.startsWith(CLOUDFLARE_R2_BASE_URL_PUBLIC));
 
 export const cloudflareR2PutObjectCommandForKey = (Key: string) =>
   new PutObjectCommand({ Bucket: CLOUDFLARE_R2_BUCKET, Key });
 
-export const cloudflareR2Put = async (
-  file: Buffer,
-  fileName: string,
-): Promise<string> =>
+export const cloudflareR2Put = async (file: Buffer, fileName: string): Promise<string> =>
   cloudflareR2Client()
     .send(
       new PutObjectCommand({
@@ -72,9 +62,7 @@ export const cloudflareR2Copy = async (
 ) => {
   const name = fileNameSource.split('.')[0];
   const extension = fileNameSource.split('.')[1];
-  const Key = addRandomSuffix
-    ? `${name}-${generateStorageId()}.${extension}`
-    : fileNameDestination;
+  const Key = addRandomSuffix ? `${name}-${generateStorageId()}.${extension}` : fileNameDestination;
   return cloudflareR2Client()
     .send(
       new CopyObjectCommand({
@@ -86,9 +74,7 @@ export const cloudflareR2Copy = async (
     .then(() => urlForKey(fileNameDestination));
 };
 
-export const cloudflareR2List = async (
-  Prefix: string,
-): Promise<StorageListResponse> =>
+export const cloudflareR2List = async (Prefix: string): Promise<StorageListResponse> =>
   cloudflareR2Client()
     .send(
       new ListObjectsCommand({

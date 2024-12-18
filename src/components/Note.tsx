@@ -12,16 +12,7 @@ export default function Note(
     hideIcon?: boolean;
   } & ComponentProps<typeof Container>,
 ) {
-  const {
-    icon,
-    animate,
-    cta,
-    hideIcon,
-    color = 'blue',
-    padding,
-    children,
-    ...rest
-  } = props;
+  const { icon, animate, cta, hideIcon, color = 'blue', padding, children, ...rest } = props;
 
   return (
     <AnimateItems
@@ -35,12 +26,7 @@ export default function Note(
         >
           <div className={clsx('flex w-full items-center gap-2.5')}>
             {!hideIcon && (
-              <span
-                className={clsx(
-                  'flex w-5 shrink-0 justify-center',
-                  'opacity-90',
-                )}
-              >
+              <span className={clsx('flex w-5 shrink-0 justify-center', 'opacity-90')}>
                 {icon ?? (
                   <IoInformationCircleOutline
                     size={19}

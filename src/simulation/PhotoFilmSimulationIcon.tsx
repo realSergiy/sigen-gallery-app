@@ -21,11 +21,7 @@ export default function PhotoFilmSimulationIcon({
     <svg
       className={className}
       style={style}
-      aria-description={
-        simulation
-          ? labelForFilmSimulation(simulation).large
-          : 'Film Simulation'
-      }
+      aria-description={simulation ? labelForFilmSimulation(simulation).large : 'Film Simulation'}
       width={(INTRINSIC_WIDTH * height) / INTRINSIC_HEIGHT}
       height={height}
       viewBox="0 0 28 16"

@@ -10,7 +10,7 @@ const config = {
   insertPragma: false,
   jsxSingleQuote: false,
   plugins: ['prettier-plugin-tailwindcss'],
-  printWidth: 80,
+  printWidth: 100,
   proseWrap: 'always',
   quoteProps: 'as-needed',
   requirePragma: false,
@@ -19,6 +19,7 @@ const config = {
   tabWidth: 2,
   trailingComma: 'all',
   useTabs: false,
+  tailwindFunctions: ['clsx'],
 };
 
 export default config;

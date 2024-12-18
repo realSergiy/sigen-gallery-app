@@ -1,7 +1,4 @@
-import {
-  htmlHasBrParagraphBreaks,
-  safelyParseFormattedHtml,
-} from '@/utility/html';
+import { htmlHasBrParagraphBreaks, safelyParseFormattedHtml } from '@/utility/html';
 import { parameterize } from '@/utility/string';
 
 describe('HTML', () => {

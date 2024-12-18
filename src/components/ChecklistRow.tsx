@@ -23,15 +23,7 @@ export default function ChecklistRow({
   return (
     <div className={clsx('flex gap-2.5', 'px-4 pb-2.5 pt-2')}>
       <StatusIcon
-        type={
-          status
-            ? 'checked'
-            : showWarning
-              ? 'warning'
-              : optional
-                ? 'optional'
-                : 'missing'
-        }
+        type={status ? 'checked' : showWarning ? 'warning' : optional ? 'optional' : 'missing'}
         loading={isPending}
       />
       <div className="flex min-w-0 grow flex-col">
@@ -42,9 +34,7 @@ export default function ChecklistRow({
           )}
         >
           {title}
-          {experimental && (
-            <ExperimentalBadge className="translate-y-[-0.5px]" />
-          )}
+          {experimental && <ExperimentalBadge className="translate-y-[-0.5px]" />}
         </div>
         <div>{children}</div>
       </div>

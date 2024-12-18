@@ -14,9 +14,7 @@ export default function Switcher({
         'flex divide-x overflow-hidden',
         'divide-gray-300 dark:divide-gray-800',
         'rounded-md border',
-        type === 'regular'
-          ? 'border-gray-300 dark:border-gray-800'
-          : 'border-transparent',
+        type === 'regular' ? 'border-gray-300 dark:border-gray-800' : 'border-transparent',
         type === 'regular' && 'shadow-sm',
       )}
     >
