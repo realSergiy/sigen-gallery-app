@@ -30,7 +30,6 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   ...(BASE_URL && { metadataBase: new URL(BASE_URL) }),

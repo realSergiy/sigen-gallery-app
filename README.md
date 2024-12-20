@@ -1,4 +1,4 @@
-# 📷 EXIF Photo Blog
+# 📷 Sigen Video Gallery
 
 ## Features
 
@@ -13,18 +13,6 @@
 - Support for Fujifilm simulations
 
 ![OG Image Preview](/readme/og-image-share.png)
-
-## How to
-
-### Make changes to postgres database
-
-1. Connect to a dev pg instance. Can be local or remote, but should be yours only
-2. Make all the changes in the dev pg as necessary: add columns, tables etc
-3. ensure .env is in the root with POSTGRES_URL connection string pointing to your dev pg instance.
-   (You can copy POSTGRES_URL from the .env.development.local)
-4. `pnpm pull:db`
-5. copy the contents of `./drizzle` to the `src/db/generated` and apply sanity check
-6. `./drizzle` folder can be deleted
 
 ## Installation
 
@@ -45,12 +33,22 @@
 4. Add an optional title.
 5. Click "Create"
 
-## Develop Locally
+## How to
 
-1. Clone the repository.
-2. Run `pnpm install` to install dependencies.
-3. Set up the required environment variables in a `.env.local` file.
-4. Run `pnpm dev` to start the development server.
+### Setub environment variables for local development
+
+- `pnpm pull:env` to set up environment variables in `.env`. Will prompt vercel authentication on
+  first attempt
+
+### Make changes to postgres database schema
+
+1. Connect to the dev pg instance with your favourite database IDE. Can be local or remote, but
+   should be yours only
+2. Make all the changes in the dev pg as necessary: add columns, tables etc
+3. `pnpm pull:db`
+4. copy the contents of `./drizzle` to the `src/db/generated`
+5. restore necessary manual modifications to `src/db/generated/schema.ts`
+6. delete the `./drizzle` folder
 
 ## Further Customization
 
