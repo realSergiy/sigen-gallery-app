@@ -12,7 +12,7 @@ import ProgressButton from './primitives/ProgressButton';
 
 const INPUT_ID = 'file';
 
-export default function ImageInput({
+export default function PhotoInput({
   onStart,
   onBlobReady,
   shouldResize,

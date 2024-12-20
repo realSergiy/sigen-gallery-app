@@ -1,6 +1,8 @@
-import { getVideoIdFromStorageUrl } from '@/services/storage';
+import { getExtensionFromStorageUrl, getVideoIdFromStorageUrl } from '@/services/storage';
 import sharp, { Sharp } from 'sharp';
 import { PRO_MODE_ENABLED } from '@/site/config';
+import { VideoFormData } from './form';
+import { convertExifToFormData } from '@/photo/form';
 
 const IMAGE_WIDTH_RESIZE = 200;
 const IMAGE_WIDTH_BLUR = 200;
@@ -10,28 +12,42 @@ export const extractVideoDataFromBlobPath = async (
   options?: {
     generateResizedImage?: boolean;
   },
-) => {
+): Promise<{
+  blobId?: string;
+  videoFormData?: Partial<VideoFormData>;
+  imageThumbnailBase64?: string;
+  shouldStripGpsData?: boolean;
+  fileBytes?: ArrayBuffer;
+}> => {
   const { generateResizedImage } = options ?? {};
 
   const url = decodeURIComponent(blobPath);
 
   const blobId = getVideoIdFromStorageUrl(url);
 
+  const extension = getExtensionFromStorageUrl(url);
+
   const fileBytes = blobPath
     ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer())
     : undefined;
 
-  let imageResizedBase64: string | undefined;
+  let imageThumbnailBase64: string | undefined;
 
   if (fileBytes) {
     if (generateResizedImage) {
-      imageResizedBase64 = await resizeImage(fileBytes);
+      imageThumbnailBase64 = await resizeImage(fileBytes);
     }
   }
 
   return {
     blobId,
-    imageResizedBase64,
+    videoFormData: {
+      hidden: 'false',
+      favorite: 'false',
+      extension,
+      url,
+    },
+    imageThumbnailBase64,
     fileBytes,
   };
 };

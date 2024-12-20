@@ -31,6 +31,20 @@ import {
 } from './cloudflare-r2';
 import { PATH_API_PRESIGNED_URL } from '@/site/paths';
 
+const logger = console;
+const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): Promise<T> => {
+  logger.info(`[${operationName}] Starting: ${detail}`);
+  return promise
+    .then(result => {
+      logger.info(`[${operationName}] Success: ${detail}`);
+      return result;
+    })
+    .catch(error => {
+      logger.error(`[${operationName}] Error: ${detail}`, error);
+      throw error;
+    });
+};
+
 export const generateStorageId = () => generateNanoid(16);
 
 export type StorageListResponse = {
@@ -111,6 +125,9 @@ export const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_U
 export const isPhotoUploadPathnameValid = (pathname?: string) =>
   pathname?.match(REGEX_PHOTO_UPLOAD_PATH);
 
+export const isVideoUploadPathnameValid = (pathname?: string) =>
+  pathname?.match(REGEX_VIDEO_UPLOAD_PATH);
+
 const getFileNameFromStorageUrl = (url: string) =>
   new URL(url).pathname.match(/\/(.+)$/)?.[1] ?? '';
 
@@ -120,14 +137,18 @@ export const uploadFromClientViaPresignedUrl = async (
   extension: string,
   addRandomSuffix?: boolean,
 ) => {
-  const key = addRandomSuffix
-    ? `${fileName}-${generateStorageId()}.${extension}`
-    : `${fileName}.${extension}`;
+  return logOp(
+    'uploadFromClientViaPresignedUrl',
+    `file "${fileName}" in ${CURRENT_STORAGE}`,
+    (async () => {
+      const key = addRandomSuffix
+        ? `${fileName}-${generateStorageId()}.${extension}`
+        : `${fileName}.${extension}`;
 
-  const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`).then(response => response.text());
-
-  return fetch(url, { method: 'PUT', body: file }).then(
-    () => `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`,
+      const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`).then(response => response.text());
+      await fetch(url, { method: 'PUT', body: file });
+      return `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`;
+    })(),
   );
 };
 
@@ -138,50 +159,77 @@ export const uploadVideoFromClient = async (file: File | Blob, extension = 'mp4'
   uploadBlobFromClient(PREFIX_VIDEO_UPLOAD, file, extension);
 
 const uploadBlobFromClient = async (prefix: string, file: File | Blob, extension: string) =>
-  CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
-    ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
-    : vercelBlobUploadFromClient(file, `${prefix}.${extension}`);
+  logOp(
+    'uploadBlobFromClient',
+    `prefix: "${prefix}", file: ${'name' in file ? file.name : 'Blob'}, extension "${extension}" in ${CURRENT_STORAGE}`,
+    CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
+      ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
+      : vercelBlobUploadFromClient(file, `${prefix}.${extension}`),
+  );
 
-export const putFile = (file: Buffer, fileName: string) => {
-  switch (CURRENT_STORAGE) {
-    case 'vercel-blob':
-      return vercelBlobPut(file, fileName);
-    case 'cloudflare-r2':
-      return cloudflareR2Put(file, fileName);
-    case 'aws-s3':
-      return awsS3Put(file, fileName);
-  }
-};
+export const putFile = (file: Buffer, fileName: string) =>
+  logOp(
+    'putFile',
+    `file "${fileName}" in ${CURRENT_STORAGE}`,
+    (() => {
+      switch (CURRENT_STORAGE) {
+        case 'vercel-blob':
+          return vercelBlobPut(file, fileName);
+        case 'cloudflare-r2':
+          return cloudflareR2Put(file, fileName);
+        case 'aws-s3':
+          return awsS3Put(file, fileName);
+      }
+    })(),
+  );
 
 export const copyFile = (originUrl: string, destinationFileName: string): Promise<string> => {
-  switch (storageTypeFromUrl(originUrl)) {
-    case 'vercel-blob':
-      return vercelBlobCopy(originUrl, destinationFileName, false);
-    case 'cloudflare-r2':
-      return cloudflareR2Copy(getFileNameFromStorageUrl(originUrl), destinationFileName, false);
-    case 'aws-s3':
-      return awsS3Copy(originUrl, destinationFileName, false);
-  }
+  const currentStorage = storageTypeFromUrl(originUrl);
+  return logOp(
+    'copyFile',
+    `from "${originUrl}" to "${destinationFileName}" in ${currentStorage}`,
+    (() => {
+      switch (currentStorage) {
+        case 'vercel-blob':
+          return vercelBlobCopy(originUrl, destinationFileName, false);
+        case 'cloudflare-r2':
+          return cloudflareR2Copy(getFileNameFromStorageUrl(originUrl), destinationFileName, false);
+        case 'aws-s3':
+          return awsS3Copy(originUrl, destinationFileName, false);
+      }
+    })(),
+  );
 };
 
 export const deleteFile = (url: string) => {
-  switch (storageTypeFromUrl(url)) {
-    case 'vercel-blob':
-      return vercelBlobDelete(url);
-    case 'cloudflare-r2':
-      return cloudflareR2Delete(getFileNameFromStorageUrl(url));
-    case 'aws-s3':
-      return awsS3Delete(getFileNameFromStorageUrl(url));
-  }
+  const currentStorage = storageTypeFromUrl(url);
+  return logOp(
+    'deleteFile',
+    `file "${url}" in ${currentStorage}`,
+    (() => {
+      switch (currentStorage) {
+        case 'vercel-blob':
+          return vercelBlobDelete(url);
+        case 'cloudflare-r2':
+          return cloudflareR2Delete(getFileNameFromStorageUrl(url));
+        case 'aws-s3':
+          return awsS3Delete(getFileNameFromStorageUrl(url));
+      }
+    })(),
+  );
 };
 
 export const moveFile = async (originUrl: string, destinationFileName: string) => {
-  const url = await copyFile(originUrl, destinationFileName);
-  // If successful, delete original file
-  if (url) {
-    await deleteFile(originUrl);
-  }
-  return url;
+  return logOp(
+    'moveFile',
+    `from "${originUrl}" to "${destinationFileName}"`,
+    copyFile(originUrl, destinationFileName).then(async url => {
+      if (url) {
+        await deleteFile(originUrl);
+      }
+      return url;
+    }),
+  );
 };
 
 const getStorageUrlsForPrefix = async (prefix = '') => {

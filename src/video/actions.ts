@@ -44,7 +44,6 @@ export const createVideoAction = async (formData: FormData) =>
 
     const updatedUrl = await convertUploadToVideo({
       urlOrigin: video.url,
-      shouldStripGpsData,
     });
 
     if (updatedUrl) {

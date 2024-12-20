@@ -67,12 +67,18 @@ const getUniqueTagsCore = async (includeHidden: boolean) => {
   const video = tb.video;
   const { tags, hidden } = tb.video;
 
-  const query = sql`
-    select distinct unnest(${tags}) as tag, count(*)
-    from ${video._.name}
-    ${includeHidden ? `` : `where not ${hidden}`}
-    group by tag
-    order by tag asc`;
+  const query = includeHidden
+    ? sql`
+      select distinct unnest(${tags}) as tag, count(*)
+      from ${video}
+      group by tag
+      order by tag asc`
+    : sql`
+      select distinct unnest(${tags}) as tag, count(*)
+      from ${video}
+      where not ${hidden}
+      group by tag
+      order by tag asc`;
 
   const qw = await db.execute<TagInfo>(query);
   return qw.rows;

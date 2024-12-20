@@ -1,8 +1,8 @@
-import { Video, VideoDb, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
+import { Video, VideoDbUpd } from '@/db/video_orm';
 import { getNextImageUrlForRequest } from '@/services/next-image';
 import { HIGH_DENSITY_GRID } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
-import { formatDate, formatDateFromPostgresString } from '@/utility/date';
+import { formatDate } from '@/utility/date';
 import { parameterize } from '@/utility/string';
 import { isBefore } from 'date-fns';
 import type { Metadata } from 'next';

@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { uploadVideoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
 import { PATH_ADMIN_VIDEO_UPLOADS, pathForAdminVideoUploadUrl } from '@/site/paths';
-import ImageInput from '../components/ImageInput';
 import { clsx } from 'clsx/lite';
+import VideoInput from '@/components/VideoInput';
 
 export default function VideoUpload({
   shouldResize,
@@ -34,7 +34,7 @@ export default function VideoUpload({
     <div className={clsx('space-y-4', isUploading && 'cursor-not-allowed')}>
       <div className="flex items-center gap-8">
         <form className="flex min-w-0 items-center">
-          <ImageInput
+          <VideoInput
             loading={isUploading}
             shouldResize={shouldResize}
             onStart={() => {

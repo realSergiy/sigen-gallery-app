@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { uploadPhotoFromClient } from '@/services/storage';
 import { useRouter } from 'next/navigation';
 import { PATH_ADMIN_PHOTO_UPLOADS, pathForAdminPhotoUploadUrl } from '@/site/paths';
-import ImageInput from '../components/ImageInput';
+import PhotoInput from '../components/PhotoInput';
 import { clsx } from 'clsx/lite';
 
 export default function PhotoUpload({
@@ -34,7 +34,7 @@ export default function PhotoUpload({
     <div className={clsx('space-y-4', isUploading && 'cursor-not-allowed')}>
       <div className="flex items-center gap-8">
         <form className="flex min-w-0 items-center">
-          <ImageInput
+          <PhotoInput
             loading={isUploading}
             shouldResize={shouldResize}
             onStart={() => {
