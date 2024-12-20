@@ -36,10 +36,7 @@ export default function ImageWithFallback(
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const timeout = setTimeout(
-      () => setWasCached(imgRef.current?.complete ?? false),
-      100,
-    );
+    const timeout = setTimeout(() => setWasCached(imgRef.current?.complete ?? false), 100);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -74,9 +71,7 @@ export default function ImageWithFallback(
             'overflow-hidden',
             'transition-opacity duration-300 ease-in',
             !(BLUR_ENABLED && blurDataURL) && 'bg-main',
-            isLoading || shouldDebugImageFallbacks
-              ? 'opacity-100'
-              : 'opacity-0',
+            isLoading || shouldDebugImageFallbacks ? 'opacity-100' : 'opacity-0',
           )}
         >
           {BLUR_ENABLED && blurDataURL ? (
@@ -88,12 +83,7 @@ export default function ImageWithFallback(
               }}
             />
           ) : (
-            <div
-              className={clsx(
-                'h-full w-full',
-                'bg-gray-100/50 dark:bg-gray-900/50',
-              )}
-            />
+            <div className={clsx('h-full w-full', 'bg-gray-100/50 dark:bg-gray-900/50')} />
           )}
         </div>
       )}

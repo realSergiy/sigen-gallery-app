@@ -41,10 +41,7 @@ export default function SiteGrid({
       )}
     >
       <div
-        className={clsx(
-          'col-span-1 md:col-span-9',
-          sideFirstOnMobile && 'order-2 md:order-none',
-        )}
+        className={clsx('col-span-1 md:col-span-9', sideFirstOnMobile && 'order-2 md:order-none')}
       >
         {contentMain}
       </div>

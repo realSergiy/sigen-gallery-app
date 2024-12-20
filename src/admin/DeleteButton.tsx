@@ -3,10 +3,7 @@ import { clsx } from 'clsx/lite';
 import { ComponentProps } from 'react';
 import { BiTrash } from 'react-icons/bi';
 
-export default function DeleteButton({
-  className,
-  ...rest
-}: ComponentProps<typeof LoaderButton>) {
+export default function DeleteButton({ className, ...rest }: ComponentProps<typeof LoaderButton>) {
   return (
     <LoaderButton
       {...rest}

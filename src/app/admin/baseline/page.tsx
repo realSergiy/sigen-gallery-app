@@ -57,10 +57,7 @@ export default function ComponentsPage() {
           <DivDebugBaselineGrid className="flex gap-8">
             <div className="[&>*]:flex">
               <div>
-                <LabeledIcon
-                  icon={<FaCamera size={12} />}
-                  debug={debugComponents}
-                >
+                <LabeledIcon icon={<FaCamera size={12} />} debug={debugComponents}>
                   Camera
                   <br />
                   Line two
@@ -117,11 +114,7 @@ export default function ComponentsPage() {
                 </LabeledIcon>
               </div>
               <div>
-                <EntityLink
-                  icon={<FaHandSparkles />}
-                  label="Image"
-                  debug={debugComponents}
-                />
+                <EntityLink icon={<FaHandSparkles />} label="Image" debug={debugComponents} />
               </div>
               <div>
                 <EntityLink
@@ -132,10 +125,7 @@ export default function ComponentsPage() {
                 />
               </div>
               <div>
-                <LabeledIcon
-                  icon={<IoMdCamera size={12} />}
-                  debug={debugComponents}
-                >
+                <LabeledIcon icon={<IoMdCamera size={12} />} debug={debugComponents}>
                   Canon Mark III
                 </LabeledIcon>
               </div>
@@ -179,12 +169,7 @@ export default function ComponentsPage() {
                 </LabeledIcon>
               </div>
             </div>
-            <div
-              className={clsx(
-                debugComponents && '[&>*]:bg-gray-800',
-                '[&>*]:flex',
-              )}
-            >
+            <div className={clsx(debugComponents && '[&>*]:bg-gray-800', '[&>*]:flex')}>
               {DEBUG_LINES.map((_, i) => (
                 <div key={i}>Line {(i + 1).toString().padStart(2, '0')}</div>
               ))}

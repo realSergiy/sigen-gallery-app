@@ -12,12 +12,7 @@ export default function Container({
   children: ReactNode;
   className?: string;
   color?: 'gray' | 'blue' | 'red' | 'yellow';
-  padding?:
-    | 'loose'
-    | 'normal'
-    | 'tight'
-    | 'tight-cta-right'
-    | 'tight-cta-right-left';
+  padding?: 'loose' | 'normal' | 'tight' | 'tight-cta-right' | 'tight-cta-right-left';
   centered?: boolean;
   spaceChildren?: boolean;
 }) {

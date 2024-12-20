@@ -13,8 +13,7 @@ export default function PhotoTagFieldset(
     openOnLoad?: boolean;
   } & Partial<Omit<ComponentProps<typeof FieldSetWithStatus>, 'tagOptions'>>,
 ) {
-  const { id, tags, tagOptions, onChange, onError, openOnLoad, ...rest } =
-    props;
+  const { id, tags, tagOptions, onChange, onError, openOnLoad, ...rest } = props;
 
   const ref = useRef<HTMLInputElement>(null);
 

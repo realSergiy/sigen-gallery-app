@@ -2,11 +2,7 @@ import Switcher from '@/components/Switcher';
 import SwitcherItem from '@/components/SwitcherItem';
 import IconFeed from '@/site/IconFeed';
 import IconGrid from '@/site/IconGrid';
-import {
-  PATH_ADMIN_PHOTOS,
-  PATH_FEED_INFERRED,
-  PATH_GRID_INFERRED,
-} from '@/site/paths';
+import { PATH_ADMIN_PHOTOS, PATH_FEED_INFERRED, PATH_GRID_INFERRED } from '@/site/paths';
 import { BiLockAlt } from 'react-icons/bi';
 import IconSearch from './IconSearch';
 import { useAppState } from '@/state/AppState';
@@ -55,10 +51,7 @@ export default function ViewSwitcher({
         )}
       </Switcher>
       <Switcher type="borderless">
-        <SwitcherItem
-          icon={<IconSearch />}
-          onClick={() => setIsCommandKOpen?.(true)}
-        />
+        <SwitcherItem icon={<IconSearch />} onClick={() => setIsCommandKOpen?.(true)} />
       </Switcher>
     </div>
   );

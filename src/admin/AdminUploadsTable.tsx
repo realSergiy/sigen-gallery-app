@@ -2,10 +2,10 @@
 
 import ImageSmall from '@/components/image/ImageSmall';
 import Spinner from '@/components/Spinner';
-import { getIdFromStorageUrl } from '@/services/storage';
+import { getPhotoIdFromStorageUrl } from '@/services/storage';
 import { clsx } from 'clsx/lite';
 import { FaRegCircleCheck } from 'react-icons/fa6';
-import { pathForAdminUploadUrl } from '@/site/paths';
+import { pathForAdminPhotoUploadUrl } from '@/site/paths';
 import AddButton from './AddButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import ResponsiveDate from '@/components/ResponsiveDate';
@@ -48,16 +48,11 @@ export default function AdminUploadsTable({
                   src={url}
                   alt={url}
                   aspectRatio={3.0 / 2.0}
-                  className={clsx(
-                    'overflow-hidden rounded-[3px]',
-                    'border-subtle',
-                  )}
+                  className={clsx('overflow-hidden rounded-[3px]', 'border-subtle')}
                 />
               </div>
               <span className="min-w-0 grow">
-                <div className="overflow-hidden text-ellipsis">
-                  {getIdFromStorageUrl(url)}
-                </div>
+                <div className="overflow-hidden text-ellipsis">{getPhotoIdFromStorageUrl(url)}</div>
                 <div className="text-dim overflow-hidden text-ellipsis">
                   {isAdding || isComplete ? (
                     status === 'added' ? (
@@ -88,15 +83,13 @@ export default function AdminUploadsTable({
                 </>
               ) : (
                 <>
-                  <AddButton path={pathForAdminUploadUrl(url)} />
+                  <AddButton path={pathForAdminPhotoUploadUrl(url)} />
                   <DeleteBlobButton
                     url={url}
                     shouldRedirectToAdminPhotos={urlAddStatuses.length <= 1}
                     onDelete={() =>
                       setUrlAddStatuses?.(
-                        urlAddStatuses.filter(
-                          ({ url: urlToRemove }) => urlToRemove !== url,
-                        ),
+                        urlAddStatuses.filter(({ url: urlToRemove }) => urlToRemove !== url),
                       )
                     }
                   />

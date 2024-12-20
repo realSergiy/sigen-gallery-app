@@ -34,14 +34,8 @@ export default function CommandKItem({
         'cursor-pointer rounded-md tracking-wide',
         'active:!bg-gray-200/75 active:dark:!bg-gray-800/55',
         ...(loading
-          ? [
-              'data-[selected=true]:dark:bg-gray-900/50',
-              'data-[selected=true]:bg-gray-100/50',
-            ]
-          : [
-              'data-[selected=true]:dark:bg-gray-900/75',
-              'data-[selected=true]:bg-gray-100',
-            ]),
+          ? ['data-[selected=true]:dark:bg-gray-900/50', 'data-[selected=true]:bg-gray-100/50']
+          : ['data-[selected=true]:dark:bg-gray-900/75', 'data-[selected=true]:bg-gray-100']),
         disabled && 'opacity-15',
       )}
       onSelect={onSelect}
@@ -51,10 +45,7 @@ export default function CommandKItem({
         {accessory}
         <span className="grow truncate text-ellipsis">{label}</span>
         {annotation && !loading && (
-          <span
-            className="text-dim whitespace-nowrap"
-            aria-label={annotationAria}
-          >
+          <span className="text-dim whitespace-nowrap" aria-label={annotationAria}>
             <span aria-hidden={Boolean(annotationAria)}>{annotation}</span>
           </span>
         )}

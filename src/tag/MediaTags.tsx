@@ -1,10 +1,10 @@
-import PhotoTag from '@/tag/PhotoTag';
+import EntityLinkTag from '@/tag/EntityLinkTag';
 import { isTagFavs } from '.';
 import FavsTag from './FavsTag';
 import { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 import { Fragment } from 'react';
 
-export default function PhotoTags({
+export default function MediaTags({
   tags,
   contrast,
   prefetch,
@@ -18,7 +18,7 @@ export default function PhotoTags({
           {isTagFavs(tag) ? (
             <FavsTag {...{ contrast, prefetch }} />
           ) : (
-            <PhotoTag {...{ tag, contrast, prefetch }} />
+            <EntityLinkTag {...{ tag, contrast, prefetch }} />
           )}
         </Fragment>
       ))}

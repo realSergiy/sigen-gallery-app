@@ -6,12 +6,11 @@ import { getPhotosFilmSimulationDataCached } from '@/simulation/data';
 import { Metadata } from 'next/types';
 import { cache } from 'react';
 
-const getPhotosFilmSimulationDataCachedCached = cache(
-  (simulation: FilmSimulation) =>
-    getPhotosFilmSimulationDataCached({
-      simulation,
-      limit: INFINITE_SCROLL_GRID_INITIAL,
-    }),
+const getPhotosFilmSimulationDataCachedCached = cache((simulation: FilmSimulation) =>
+  getPhotosFilmSimulationDataCached({
+    simulation,
+    limit: INFINITE_SCROLL_GRID_INITIAL,
+  }),
 );
 
 interface FilmSimulationProps {
@@ -21,8 +20,7 @@ interface FilmSimulationProps {
 export async function generateMetadata({
   params: { simulation },
 }: FilmSimulationProps): Promise<Metadata> {
-  const [photos, { count, dateRange }] =
-    await getPhotosFilmSimulationDataCachedCached(simulation);
+  const [photos, { count, dateRange }] = await getPhotosFilmSimulationDataCachedCached(simulation);
 
   const { url, title, description, images } = generateMetaForFilmSimulation(
     simulation,
@@ -48,11 +46,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Share({
-  params: { simulation },
-}: FilmSimulationProps) {
-  const [photos, { count, dateRange }] =
-    await getPhotosFilmSimulationDataCachedCached(simulation);
+export default async function Share({ params: { simulation } }: FilmSimulationProps) {
+  const [photos, { count, dateRange }] = await getPhotosFilmSimulationDataCachedCached(simulation);
 
   return (
     <>

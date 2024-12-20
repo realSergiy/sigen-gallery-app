@@ -2,9 +2,7 @@ import { AiFillApple } from 'react-icons/ai';
 import { pathForCamera } from '@/site/paths';
 import { IoMdCamera } from 'react-icons/io';
 import { Camera, formatCameraText } from '.';
-import EntityLink, {
-  EntityLinkExternalProps,
-} from '@/components/primitives/EntityLink';
+import EntityLink, { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 
 export default function PhotoCamera({
   camera,
@@ -28,11 +26,7 @@ export default function PhotoCamera({
       href={pathForCamera(camera)}
       icon={
         showAppleIcon ? (
-          <AiFillApple
-            title="Apple"
-            className="translate-x-[-0.5px]"
-            size={15}
-          />
+          <AiFillApple title="Apple" className="translate-x-[-0.5px]" size={15} />
         ) : (
           <IoMdCamera size={12} className="translate-x-[-1px]" />
         )

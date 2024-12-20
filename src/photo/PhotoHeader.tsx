@@ -1,13 +1,7 @@
 'use client';
 
 import { clsx } from 'clsx/lite';
-import {
-  Photo,
-  PhotoDateRange,
-  PhotoSetAttributes,
-  dateRangeForPhotos,
-  titleForPhoto,
-} from '.';
+import { Photo, PhotoDateRange, PhotoSetAttributes, dateRangeForPhotos, titleForPhoto } from '.';
 import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
@@ -51,9 +45,7 @@ export default function PhotoHeader({
     : undefined;
 
   const paginationLabel =
-    (indexNumber || (selectedPhotoIndex ?? 0 + 1)) +
-    ' of ' +
-    (count ?? photos.length);
+    (indexNumber || (selectedPhotoIndex ?? 0 + 1)) + ' of ' + (count ?? photos.length);
 
   const headerType =
     selectedPhotoIndex === undefined
@@ -91,10 +83,7 @@ export default function PhotoHeader({
   const renderContentA = () =>
     entity ??
     (selectedPhoto !== undefined && (
-      <PhotoLink
-        photo={selectedPhoto}
-        className="truncate text-ellipsis font-bold uppercase"
-      >
+      <PhotoLink photo={selectedPhoto} className="truncate text-ellipsis font-bold uppercase">
         {titleForPhoto(selectedPhoto, true)}
       </PhotoLink>
     ));
@@ -110,9 +99,7 @@ export default function PhotoHeader({
           className={clsx(
             'grid items-start gap-0.5 sm:gap-1',
             'grid-cols-4',
-            isGridHighDensity
-              ? 'lg:grid-cols-6'
-              : 'md:grid-cols-3 lg:grid-cols-4',
+            isGridHighDensity ? 'lg:grid-cols-6' : 'md:grid-cols-3 lg:grid-cols-4',
           )}
         >
           {/* Content A: Filter Set or Photo Title */}
@@ -161,11 +148,7 @@ export default function PhotoHeader({
                   <>
                     {entityDescription}
                     {sharePath && (
-                      <ShareButton
-                        className="translate-y-[1.5px]"
-                        path={sharePath}
-                        dim
-                      />
+                      <ShareButton className="translate-y-[1.5px]" path={sharePath} dim />
                     )}
                   </>
                 ) : (
@@ -178,10 +161,7 @@ export default function PhotoHeader({
           </div>
           {/* Content C: Nav */}
           <div
-            className={clsx(
-              headerType === 'photo-set' ? 'hidden sm:flex' : 'flex',
-              'justify-end',
-            )}
+            className={clsx(headerType === 'photo-set' ? 'hidden sm:flex' : 'flex', 'justify-end')}
           >
             {selectedPhoto ? renderPrevNext() : renderDateRange()}
           </div>

@@ -14,24 +14,17 @@ import {
 import { roundToNumber } from '@/utility/number';
 import { convertStringToArray } from '@/utility/string';
 import { generateNanoid } from '@/utility/nanoid';
-import {
-  FILM_SIMULATION_FORM_INPUT_OPTIONS,
-  MAKE_FUJIFILM,
-} from '@/vendors/fujifilm';
+import { FILM_SIMULATION_FORM_INPUT_OPTIONS, MAKE_FUJIFILM } from '@/vendors/fujifilm';
 import { FilmSimulation } from '@/simulation';
 import { GEO_PRIVACY_ENABLED } from '@/site/config';
 import { TAG_FAVS, getValidationMessageForTags } from '@/tag';
+import { PhotoDbUpd } from '@/db/photo_orm';
 
 type VirtualFields = 'favorite';
 
 export type PhotoFormData = Record<keyof PhotoDbInsert | VirtualFields, string>;
 
-export type FieldSetType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'checkbox'
-  | 'textarea';
+export type FieldSetType = 'text' | 'email' | 'password' | 'checkbox' | 'textarea';
 
 export type AnnotatedTag = {
   value: string;
@@ -122,12 +115,10 @@ const FORM_METADATA = (
   hidden: { label: 'hidden', type: 'checkbox' },
 });
 
-export const FORM_METADATA_ENTRIES = (
-  ...args: Parameters<typeof FORM_METADATA>
-) =>
-  (
-    Object.entries(FORM_METADATA(...args)) as [keyof PhotoFormData, FormMeta][]
-  ).filter(([_, meta]) => !meta.hide);
+export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
+  (Object.entries(FORM_METADATA(...args)) as [keyof PhotoFormData, FormMeta][]).filter(
+    ([_, meta]) => !meta.hide,
+  );
 
 export const convertFormKeysToLabels = (keys: (keyof PhotoFormData)[]) =>
   keys.map(key => FORM_METADATA()[key].label.toUpperCase());
@@ -151,8 +142,7 @@ export const isFormValid = (formData: Partial<PhotoFormData>) =>
       (!required || Boolean(formData[key])) &&
       !validate?.(formData[key]) &&
       // eslint-disable-next-line max-len
-      (!validateStringMaxLength ||
-        (formData[key]?.length ?? 0) <= validateStringMaxLength),
+      (!validateStringMaxLength || (formData[key]?.length ?? 0) <= validateStringMaxLength),
   );
 
 export const formHasTextContent = ({
@@ -160,8 +150,7 @@ export const formHasTextContent = ({
   caption,
   tags,
   semanticDescription,
-}: Partial<PhotoFormData>) =>
-  Boolean(title || caption || tags || semanticDescription);
+}: Partial<PhotoFormData>) => Boolean(title || caption || tags || semanticDescription);
 
 // CREATE FORM DATA: FROM PHOTO
 
@@ -169,17 +158,13 @@ export const convertPhotoToFormData = (photo: Photo): PhotoFormData => {
   const valueForKey = (key: keyof Photo, value: any) => {
     switch (key) {
       case 'tags':
-        return (value ?? [])
-          .filter((tag: string) => tag !== TAG_FAVS)
-          .join(', ');
+        return (value ?? []).filter((tag: string) => tag !== TAG_FAVS).join(', ');
       case 'takenAt':
         return value?.toISOString ? value.toISOString() : value;
       case 'hidden':
         return value ? 'true' : 'false';
       default:
-        return value !== undefined && value !== null
-          ? value.toString()
-          : undefined;
+        return value !== undefined && value !== null ? value.toString() : undefined;
     }
   };
   return Object.entries(photo).reduce(
@@ -198,10 +183,7 @@ export const convertPhotoToFormData = (photo: Photo): PhotoFormData => {
 export const convertExifToFormData = (
   data: ExifData,
   filmSimulation?: FilmSimulation,
-): Omit<
-  Record<keyof PhotoExif, string | undefined>,
-  'takenAt' | 'takenAtNaive'
-> => ({
+): Omit<Record<keyof PhotoExif, string | undefined>, 'takenAt' | 'takenAtNaive'> => ({
   aspectRatio: getAspectRatioFromExif(data).toString(),
   make: data.tags?.Make,
   model: data.tags?.Model,
@@ -210,26 +192,19 @@ export const convertExifToFormData = (
   lensMake: data.tags?.LensMake,
   lensModel: data.tags?.LensModel,
   fNumber:
-    data.tags?.FNumber?.toString() ||
-    convertApertureValueToFNumber(data.tags?.ApertureValue),
+    data.tags?.FNumber?.toString() || convertApertureValueToFNumber(data.tags?.ApertureValue),
   iso: data.tags?.ISO?.toString() || data.tags?.ISOSpeed?.toString(),
   exposureTime: data.tags?.ExposureTime?.toString(),
   exposureCompensation: data.tags?.ExposureCompensation?.toString(),
-  latitude: !GEO_PRIVACY_ENABLED
-    ? data.tags?.GPSLatitude?.toString()
-    : undefined,
-  longitude: !GEO_PRIVACY_ENABLED
-    ? data.tags?.GPSLongitude?.toString()
-    : undefined,
+  latitude: !GEO_PRIVACY_ENABLED ? data.tags?.GPSLatitude?.toString() : undefined,
+  longitude: !GEO_PRIVACY_ENABLED ? data.tags?.GPSLongitude?.toString() : undefined,
   filmSimulation,
   ...(data.tags?.DateTimeOriginal && {
     takenAt: convertTimestampWithOffsetToPostgresString(
       data.tags.DateTimeOriginal,
       getOffsetFromExif(data),
     ),
-    takenAtNaive: convertTimestampToNaivePostgresString(
-      data.tags.DateTimeOriginal,
-    ),
+    takenAtNaive: convertTimestampToNaivePostgresString(data.tags.DateTimeOriginal),
   }),
 });
 
@@ -237,11 +212,9 @@ export const convertExifToFormData = (
 
 export const convertFormDataToPhotoDbInsert = (
   formData: FormData | Partial<PhotoFormData>,
-): PhotoDbInsert => {
+): PhotoDbUpd => {
   const photoForm =
-    formData instanceof FormData
-      ? (Object.fromEntries(formData) as PhotoFormData)
-      : formData;
+    formData instanceof FormData ? (Object.fromEntries(formData) as PhotoFormData) : formData;
 
   const tags = convertStringToArray(photoForm.tags) ?? [];
   if (photoForm.favorite === 'true') {
@@ -266,32 +239,24 @@ export const convertFormDataToPhotoDbInsert = (
     ...(photoForm as PhotoFormData & { filmSimulation?: FilmSimulation }),
     ...(!photoForm.id && { id: generateNanoid() }),
     // Convert form strings to arrays
-    tags: tags.length > 0 ? tags : undefined,
+    tags: tags.length > 0 ? tags : null,
     // Convert form strings to numbers
     aspectRatio: photoForm.aspectRatio
       ? roundToNumber(parseFloat(photoForm.aspectRatio), 6)
       : DEFAULT_ASPECT_RATIO,
-    focalLength: photoForm.focalLength
-      ? parseInt(photoForm.focalLength)
-      : undefined,
+    focalLength: photoForm.focalLength ? parseInt(photoForm.focalLength) : null,
     focalLengthIn35MmFormat: photoForm.focalLengthIn35MmFormat
       ? parseInt(photoForm.focalLengthIn35MmFormat)
-      : undefined,
-    fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : undefined,
-    latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : undefined,
-    longitude: photoForm.longitude
-      ? parseFloat(photoForm.longitude)
-      : undefined,
-    iso: photoForm.iso ? parseInt(photoForm.iso) : undefined,
-    exposureTime: photoForm.exposureTime
-      ? parseFloat(photoForm.exposureTime)
-      : undefined,
+      : null,
+    fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : null,
+    latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : null,
+    longitude: photoForm.longitude ? parseFloat(photoForm.longitude) : null,
+    iso: photoForm.iso ? parseInt(photoForm.iso) : null,
+    exposureTime: photoForm.exposureTime ? parseFloat(photoForm.exposureTime) : null,
     exposureCompensation: photoForm.exposureCompensation
       ? parseFloat(photoForm.exposureCompensation)
-      : undefined,
-    priorityOrder: photoForm.priorityOrder
-      ? parseFloat(photoForm.priorityOrder)
-      : undefined,
+      : null,
+    priorityOrder: photoForm.priorityOrder ? parseFloat(photoForm.priorityOrder) : null,
     hidden: photoForm.hidden === 'true',
     ...generateTakenAtFields(photoForm),
   };
@@ -303,8 +268,7 @@ export const getChangedFormFields = (
 ) => {
   return Object.keys(current).filter(
     key =>
-      (original[key as keyof PhotoFormData] ?? '') !==
-      (current[key as keyof PhotoFormData] ?? ''),
+      (original[key as keyof PhotoFormData] ?? '') !== (current[key as keyof PhotoFormData] ?? ''),
   ) as (keyof PhotoFormData)[];
 };
 

@@ -39,22 +39,17 @@ export default function PhotoEditPageClient({
     imageThumbnailBase64,
   });
 
-  const [updatedExifData, setUpdatedExifData] =
-    useState<Partial<PhotoFormData>>();
+  const [updatedExifData, setUpdatedExifData] = useState<Partial<PhotoFormData>>();
 
   return (
     <AdminChildPage
       backPath={PATH_ADMIN_PHOTOS}
       backLabel="Photos"
-      breadcrumb={
-        pending && updatedTitle ? updatedTitle : photo.title || photo.id
-      }
+      breadcrumb={pending && updatedTitle ? updatedTitle : photo.title || photo.id}
       breadcrumbEllipsis
       accessory={
         <div className="flex gap-2">
-          {hasAiTextGeneration && (
-            <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />
-          )}
+          {hasAiTextGeneration && <AiButton {...{ aiContent, shouldConfirm: hasTextContent }} />}
           <ExifSyncButton photoUrl={photo.url} onSync={setUpdatedExifData} />
         </div>
       }

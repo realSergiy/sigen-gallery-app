@@ -18,10 +18,7 @@ export default function usePhotoFormParent({
     photoForm ? formHasTextContent(photoForm) : false,
   );
 
-  const aiContent = useAiImageQueries(
-    textFieldsToAutoGenerate,
-    imageThumbnailBase64,
-  );
+  const aiContent = useAiImageQueries(textFieldsToAutoGenerate, imageThumbnailBase64);
 
   return {
     pending,

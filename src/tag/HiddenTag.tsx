@@ -1,8 +1,6 @@
 import { TAG_HIDDEN } from '.';
 import { pathForTag } from '@/site/paths';
-import EntityLink, {
-  EntityLinkExternalProps,
-} from '@/components/primitives/EntityLink';
+import EntityLink, { EntityLinkExternalProps } from '@/components/primitives/EntityLink';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
 
 export default function HiddenTag({

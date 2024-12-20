@@ -1,7 +1,4 @@
-import {
-  INFINITE_SCROLL_GRID_INITIAL,
-  generateOgImageMetaForPhotos,
-} from '@/photo';
+import { INFINITE_SCROLL_GRID_INITIAL, generateOgImageMetaForPhotos } from '@/photo';
 import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
 import { getPhotoSidebarData } from '@/photo/data';

@@ -18,9 +18,7 @@ export default function AdminTagTable({ tags }: { tags: Tags }) {
           <div className="col-span-2 pr-2">
             <AdminTagBadge {...{ tag, count }} />
           </div>
-          <div
-            className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}
-          >
+          <div className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}>
             <EditButton path={pathForAdminTagEdit(tag)} />
             <FormWithConfirm
               action={deletePhotoTagGloballyAction}

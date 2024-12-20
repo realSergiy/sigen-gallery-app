@@ -15,22 +15,14 @@ import {
 } from '@/site/paths';
 import AnimateItems from '../components/AnimateItems';
 import { useAppState } from '@/state/AppState';
-import {
-  GRID_HOMEPAGE_ENABLED,
-  HAS_DEFINED_SITE_DESCRIPTION,
-  SITE_DESCRIPTION,
-} from './config';
+import { GRID_HOMEPAGE_ENABLED, HAS_DEFINED_SITE_DESCRIPTION, SITE_DESCRIPTION } from './config';
 import AdminAppMenu from '@/admin/AdminAppMenu';
 
 const NAV_HEIGHT_CLASS = HAS_DEFINED_SITE_DESCRIPTION
   ? 'min-h-[4rem] sm:min-h-[5rem]'
   : 'min-h-[4rem]';
 
-export default function Nav({
-  siteDomainOrTitle,
-}: {
-  siteDomainOrTitle: string;
-}) {
+export default function Nav({ siteDomainOrTitle }: { siteDomainOrTitle: string }) {
   const pathname = usePathname();
 
   const { isUserSignedIn } = useAppState();
@@ -66,13 +58,7 @@ export default function Nav({
           items={
             showNav
               ? [
-                  <div
-                    key="nav"
-                    className={clsx(
-                      'flex w-full items-center',
-                      NAV_HEIGHT_CLASS,
-                    )}
-                  >
+                  <div key="nav" className={clsx('flex w-full items-center', NAV_HEIGHT_CLASS)}>
                     <ViewSwitcher
                       currentSelection={switcherSelectionForPath()}
                       showAdmin={isUserSignedIn}
@@ -111,12 +97,7 @@ export default function Nav({
       }
       contentSide={
         isUserSignedIn && !isPathAdmin(pathname) ? (
-          <div
-            className={clsx(
-              'flex w-full translate-x-[-6px] items-center',
-              NAV_HEIGHT_CLASS,
-            )}
-          >
+          <div className={clsx('flex w-full translate-x-[-6px] items-center', NAV_HEIGHT_CLASS)}>
             <AdminAppMenu />
           </div>
         ) : undefined

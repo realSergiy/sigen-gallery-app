@@ -1,8 +1,5 @@
 import { Photo, PhotoDateRange } from '@/photo';
-import {
-  absolutePathForFocalLengthImage,
-  pathForFocalLength,
-} from '@/site/paths';
+import { absolutePathForFocalLengthImage, pathForFocalLength } from '@/site/paths';
 import OGTile from '@/components/OGTile';
 import { descriptionForFocalLengthPhotos, titleForFocalLength } from '.';
 
@@ -33,12 +30,7 @@ export default function FocalLengthOGTile({
     <OGTile
       {...{
         title: titleForFocalLength(focal, photos, count),
-        description: descriptionForFocalLengthPhotos(
-          photos,
-          true,
-          count,
-          dateRange,
-        ),
+        description: descriptionForFocalLengthPhotos(photos, true, count, dateRange),
         path: pathForFocalLength(focal),
         pathImageAbsolute: absolutePathForFocalLengthImage(focal),
         loadingState: loadingStateExternal,

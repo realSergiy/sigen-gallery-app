@@ -15,10 +15,7 @@ export default function RepoLink() {
           'hover:underline',
         )}
       >
-        <BiLogoGithub
-          size={16}
-          className="hidden translate-y-[0.5px] xs:inline-block"
-        />
+        <BiLogoGithub size={16} className="hidden translate-y-[0.5px] xs:inline-block" />
         realSergiy
       </Link>
     </span>

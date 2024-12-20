@@ -3,8 +3,8 @@
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "next/typescript",
-    "plugin:tailwindcss/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:tailwindcss/recommended"
   ],
   "plugins": ["@typescript-eslint"],
   "rules": {

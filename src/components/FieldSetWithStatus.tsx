@@ -51,12 +51,7 @@ export default function FieldSetWithStatus({
   const { pending } = useFormStatus();
 
   return (
-    <div
-      className={clsx(
-        'space-y-1',
-        type === 'checkbox' && 'flex items-center gap-2',
-      )}
-    >
+    <div className={clsx('space-y-1', type === 'checkbox' && 'flex items-center gap-2')}>
       {!hideLabel && label && (
         <label
           className={clsx(
@@ -66,22 +61,16 @@ export default function FieldSetWithStatus({
           htmlFor={id}
         >
           {label}
-          {note && !error && (
-            <span className="text-gray-400 dark:text-gray-600">({note})</span>
-          )}
+          {note && !error && <span className="text-gray-400 dark:text-gray-600">({note})</span>}
           {isModified && !error && (
             <span
-              className={clsx(
-                'text-main -ml-1.5 translate-y-[-1px] text-[0.9rem] font-medium',
-              )}
+              className={clsx('text-main -ml-1.5 translate-y-[-1px] text-[0.9rem] font-medium')}
             >
               *
             </span>
           )}
           {error && <span className="text-error">{error}</span>}
-          {required && (
-            <span className="text-gray-400 dark:text-gray-600">Required</span>
-          )}
+          {required && <span className="text-gray-400 dark:text-gray-600">Required</span>}
           {loading && (
             <span className="translate-y-[1.5px]">
               <Spinner />
@@ -103,9 +92,7 @@ export default function FieldSetWithStatus({
               readOnly || (pending && 'disabled-select'),
             )}
           >
-            {selectOptionsDefaultLabel && (
-              <option value="">{selectOptionsDefaultLabel}</option>
-            )}
+            {selectOptionsDefaultLabel && <option value="">{selectOptionsDefaultLabel}</option>}
             {selectOptions.map(({ value: optionValue, label: optionLabel }) => (
               <option key={optionValue} value={optionValue}>
                 {optionLabel}
@@ -131,10 +118,7 @@ export default function FieldSetWithStatus({
             placeholder={placeholder}
             onChange={e => onChange?.(e.target.value)}
             readOnly={readOnly || pending || loading}
-            className={clsx(
-              'h-24 w-full resize-none',
-              Boolean(error) && 'error',
-            )}
+            className={clsx('h-24 w-full resize-none', Boolean(error) && 'error')}
           />
         ) : (
           <input
@@ -159,8 +143,7 @@ export default function FieldSetWithStatus({
             readOnly={readOnly || pending || loading}
             disabled={type === 'checkbox' && (readOnly || pending || loading)}
             className={clsx(
-              (type === 'text' || type === 'email' || type === 'password') &&
-                'w-full',
+              (type === 'text' || type === 'email' || type === 'password') && 'w-full',
               type === 'checkbox' &&
                 (readOnly || pending || loading) &&
                 'cursor-not-allowed opacity-50',

@@ -1,9 +1,4 @@
-import {
-  Photo,
-  PhotoSetAttributes,
-  altTextForPhoto,
-  doesPhotoNeedBlurCompatibility,
-} from '.';
+import { Photo, PhotoSetAttributes, altTextForPhoto, doesPhotoNeedBlurCompatibility } from '.';
 import ImageSmall from '@/components/image/ImageSmall';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';

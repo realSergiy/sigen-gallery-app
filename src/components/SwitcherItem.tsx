@@ -23,7 +23,7 @@ export default function SwitcherItem({
 }) {
   const className = clsx(
     classNameProp,
-    'py-0.5 px-1.5',
+    'px-1.5 py-0.5',
     'cursor-pointer',
     'hover:bg-gray-100/60 active:bg-gray-100',
     'dark:hover:bg-gray-900/75 dark:active:bg-gray-900',
@@ -37,9 +37,7 @@ export default function SwitcherItem({
     noPadding ? (
       icon
     ) : (
-      <div className="flex h-[24px] w-[28px] items-center justify-center">
-        {icon}
-      </div>
+      <div className="flex h-[24px] w-[28px] items-center justify-center">{icon}</div>
     );
 
   return href ? (

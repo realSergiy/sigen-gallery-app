@@ -13,24 +13,23 @@ const INFINITE_SCROLL_INITIAL_ADMIN_PHOTOS = 25;
 const INFINITE_SCROLL_MULTIPLE_ADMIN_PHOTOS = 50;
 
 export default async function AdminPhotosPage() {
-  const [photos, photosCount, photosCountOutdated, blobPhotoUrls] =
-    await Promise.all([
-      getPhotos({
-        hidden: 'include',
-        sortBy: 'createdAt',
-        limit: INFINITE_SCROLL_INITIAL_ADMIN_PHOTOS,
-      }).catch(() => []),
-      getPhotosMetaCached({ hidden: 'include' })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getPhotosMetaCached({
-        hidden: 'include',
-        updatedBefore: OUTDATED_THRESHOLD,
-      })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      DEBUG_PHOTO_BLOBS ? getStoragePhotoUrlsNoStore() : [],
-    ]);
+  const [photos, photosCount, photosCountOutdated, blobPhotoUrls] = await Promise.all([
+    getPhotos({
+      hidden: 'include',
+      sortBy: 'createdAt',
+      limit: INFINITE_SCROLL_INITIAL_ADMIN_PHOTOS,
+    }).catch(() => []),
+    getPhotosMetaCached({ hidden: 'include' })
+      .then(({ count }) => count)
+      .catch(() => 0),
+    getPhotosMetaCached({
+      hidden: 'include',
+      updatedBefore: OUTDATED_THRESHOLD,
+    })
+      .then(({ count }) => count)
+      .catch(() => 0),
+    DEBUG_PHOTO_BLOBS ? getStoragePhotoUrlsNoStore() : [],
+  ]);
 
   return (
     <AdminPhotosClient

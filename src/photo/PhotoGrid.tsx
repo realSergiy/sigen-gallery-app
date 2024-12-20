@@ -41,12 +41,8 @@ export default function PhotoGrid({
   onLastPhotoVisible?: () => void;
   onAnimationComplete?: () => void;
 } & PhotoSetAttributes) {
-  const {
-    isUserSignedIn,
-    selectedPhotoIds,
-    setSelectedPhotoIds,
-    isGridHighDensity,
-  } = useAppState();
+  const { isUserSignedIn, selectedPhotoIds, setSelectedPhotoIds, isGridHighDensity } =
+    useAppState();
 
   return (
     <AnimateItems
@@ -73,10 +69,7 @@ export default function PhotoGrid({
           return (
             <div
               key={photo.id}
-              className={clsx(
-                GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden',
-                'group',
-              )}
+              className={clsx(GRID_ASPECT_RATIO !== 0 && 'relative flex overflow-hidden', 'group')}
               style={{
                 ...(GRID_ASPECT_RATIO !== 0 && {
                   aspectRatio: GRID_ASPECT_RATIO,
@@ -87,8 +80,7 @@ export default function PhotoGrid({
                 className={clsx(
                   'flex h-full w-full',
                   // Prevent photo navigation when selecting
-                  selectedPhotoIds?.length !== undefined &&
-                    'pointer-events-none',
+                  selectedPhotoIds?.length !== undefined && 'pointer-events-none',
                 )}
                 {...{
                   photo,
@@ -98,35 +90,26 @@ export default function PhotoGrid({
                   focal,
                   selected: photo.id === selectedPhoto?.id,
                   priority: photoPriority,
-                  onVisible:
-                    index === photos.length - 1
-                      ? onLastPhotoVisible
-                      : undefined,
+                  onVisible: index === photos.length - 1 ? onLastPhotoVisible : undefined,
                 }}
               />
-              {isUserSignedIn &&
-                canSelect &&
-                selectedPhotoIds !== undefined && (
-                  <SelectTileOverlay
-                    isSelected={isSelected}
-                    onSelectChange={() =>
-                      setSelectedPhotoIds?.(
-                        isSelected
-                          ? (selectedPhotoIds ?? []).filter(
-                              id => id !== photo.id,
-                            )
-                          : (selectedPhotoIds ?? []).concat(photo.id),
-                      )
-                    }
-                  />
-                )}
+              {isUserSignedIn && canSelect && selectedPhotoIds !== undefined && (
+                <SelectTileOverlay
+                  isSelected={isSelected}
+                  onSelectChange={() =>
+                    setSelectedPhotoIds?.(
+                      isSelected
+                        ? (selectedPhotoIds ?? []).filter(id => id !== photo.id)
+                        : (selectedPhotoIds ?? []).concat(photo.id),
+                    )
+                  }
+                />
+              )}
             </div>
           );
         })
         .concat(additionalTile ?? [])}
-      itemKeys={photos
-        .map(photo => photo.id)
-        .concat(additionalTile ? ['more'] : [])}
+      itemKeys={photos.map(photo => photo.id).concat(additionalTile ? ['more'] : [])}
     />
   );
 }

@@ -1,8 +1,4 @@
-import {
-  RELATED_GRID_PHOTOS_TO_SHOW,
-  descriptionForPhoto,
-  titleForPhoto,
-} from '@/photo';
+import { RELATED_GRID_PHOTOS_TO_SHOW, descriptionForPhoto, titleForPhoto } from '@/photo';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
 import { getPhotosNearIdCached } from '@/photo/cache';
 import { getPhotosMeta } from '@/photo/db/query';
@@ -23,9 +19,7 @@ interface PhotoTagProps {
   params: { photoId: string };
 }
 
-export async function generateMetadata({
-  params: { photoId },
-}: PhotoTagProps): Promise<Metadata> {
+export async function generateMetadata({ params: { photoId } }: PhotoTagProps): Promise<Metadata> {
   const { photo } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {
@@ -52,11 +46,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function PhotoTagHiddenPage({
-  params: { photoId },
-}: PhotoTagProps) {
-  const { photo, photos, photosGrid, indexNumber } =
-    await getPhotosNearIdCachedCached(photoId);
+export default async function PhotoTagHiddenPage({ params: { photoId } }: PhotoTagProps) {
+  const { photo, photos, photosGrid, indexNumber } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {
     redirect(PATH_ROOT);

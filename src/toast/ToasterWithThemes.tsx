@@ -13,7 +13,7 @@ export default function ToasterWithThemes() {
         unstyled: true,
         classNames: {
           toast: clsx(
-            'flex items-center gap-x-1.5 p-4 w-full',
+            'flex w-full items-center gap-x-1.5 p-4',
             'font-mono text-sm',
             'bg-white dark:bg-black',
             'text-gray-900 dark:text-gray-100',

@@ -8,5 +8,4 @@ export const safelyParseFormattedHtml = (text: string) =>
   });
 
 // Matches two or more <br> or <br /> tags in a row
-export const htmlHasBrParagraphBreaks = (text: string) =>
-  text.match(/(<br\s*\/?>){2}/i);
+export const htmlHasBrParagraphBreaks = (text: string) => text.match(/(<br\s*\/?>){2}/i);

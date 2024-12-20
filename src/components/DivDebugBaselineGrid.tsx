@@ -14,10 +14,6 @@ export default function DivDebugBaselineGrid({
   const { shouldShowBaselineGrid } = useAppState();
 
   return (
-    <div
-      className={clsx(className, shouldShowBaselineGrid && 'bg-baseline-grid')}
-    >
-      {children}
-    </div>
+    <div className={clsx(className, shouldShowBaselineGrid && 'bg-baseline-grid')}>{children}</div>
   );
 }

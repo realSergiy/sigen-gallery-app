@@ -11,6 +11,9 @@ export interface AppStateContext {
   nextPhotoAnimation?: AnimationConfig;
   setNextPhotoAnimation?: Dispatch<SetStateAction<AnimationConfig | undefined>>;
   clearNextPhotoAnimation?: () => void;
+  nextVideoAnimation?: AnimationConfig;
+  setNextVideoAnimation?: Dispatch<SetStateAction<AnimationConfig | undefined>>;
+  clearNextVideoAnimation?: () => void;
   shouldRespondToKeyboardCommands?: boolean;
   setShouldRespondToKeyboardCommands?: Dispatch<SetStateAction<boolean>>;
   isCommandKOpen?: boolean;
@@ -22,8 +25,12 @@ export interface AppStateContext {
   adminUpdateTimes?: Date[];
   registerAdminUpdate?: () => void;
   hiddenPhotosCount?: number;
+  hiddenVideosCount?: number;
   selectedPhotoIds?: string[];
   setSelectedPhotoIds?: Dispatch<SetStateAction<string[] | undefined>>;
+
+  selectedVideoIds?: string[];
+  setSelectedVideoIds?: Dispatch<SetStateAction<string[] | undefined>>;
   isPerformingSelectEdit?: boolean;
   setIsPerformingSelectEdit?: Dispatch<SetStateAction<boolean>>;
   // DEBUG
@@ -31,6 +38,8 @@ export interface AppStateContext {
   setIsGridHighDensity?: Dispatch<SetStateAction<boolean>>;
   arePhotosMatted?: boolean;
   setArePhotosMatted?: Dispatch<SetStateAction<boolean>>;
+  areVideosMatted?: boolean;
+  setAreVideosMatted?: Dispatch<SetStateAction<boolean>>;
   shouldDebugImageFallbacks?: boolean;
   setShouldDebugImageFallbacks?: Dispatch<SetStateAction<boolean>>;
   shouldShowBaselineGrid?: boolean;

@@ -7,14 +7,12 @@ const FONT_FAMILY_IBM_PLEX_MONO = 'IBMPlexMono';
 const getFontData = async () => {
   let data: ArrayBuffer;
   if (typeof fs !== 'undefined') {
-    const buffer = fs.readFileSync(
-      path.join(cwd(), '/public/fonts/IBMPlexMono-Medium.ttf'),
-    );
+    const buffer = fs.readFileSync(path.join(cwd(), '/public/fonts/IBMPlexMono-Medium.ttf'));
     data = new Uint8Array(buffer).buffer;
   } else {
-    data = await fetch(
-      new URL('/public/fonts/IBMPlexMono-Medium.ttf', import.meta.url),
-    ).then(res => res.arrayBuffer());
+    data = await fetch(new URL('/public/fonts/IBMPlexMono-Medium.ttf', import.meta.url)).then(res =>
+      res.arrayBuffer(),
+    );
   }
   return data;
 };
