@@ -95,7 +95,7 @@ export default function VideoLarge({
             <ImageLarge
               aspectRatio={16 / 9}
               className={clsx(areVideosMatted && 'h-full')}
-              imgClassName={clsx(areVideosMatted && 'object-contain w-full h-full')}
+              imgClassName={clsx(areVideosMatted && 'h-full w-full object-contain')}
               alt={altTextForVideo(video)}
               src={video.url}
               blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}

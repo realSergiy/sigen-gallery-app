@@ -115,7 +115,7 @@ export default function PhotoLarge({
           >
             <ImageLarge
               className={clsx(arePhotosMatted && 'h-full')}
-              imgClassName={clsx(arePhotosMatted && 'object-contain w-full h-full')}
+              imgClassName={clsx(arePhotosMatted && 'h-full w-full object-contain')}
               alt={altTextForPhoto(photo)}
               src={photo.url}
               aspectRatio={photo.aspectRatio}
