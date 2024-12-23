@@ -1,6 +1,6 @@
 import { Photo } from '../photo';
 import ImageCaption from './components/ImageCaption';
-import ImagePhotoGrid from './components/ImagePhotoGrid';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 import ImageContainer from './components/ImageContainer';
 import { Camera, cameraFromPhoto, formatCameraText } from '@/camera';
 import { IoMdCamera } from 'react-icons/io';
@@ -28,9 +28,9 @@ export default function CameraImageResponse({
         ...(photos.length === 0 && { background: 'black' }),
       }}
     >
-      <ImagePhotoGrid
+      <MediaPhotoGrid
         {...{
-          photos,
+          medias: photos,
           width,
           height,
         }}

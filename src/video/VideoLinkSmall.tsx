@@ -1,5 +1,4 @@
 import { altTextForVideo, doesVideoNeedBlurCompatibility, VideoSetAttributes } from '.';
-import ImageSmall from '@/components/image/ImageSmall';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
 import { pathForVideo } from '@/site/paths';
@@ -7,8 +6,9 @@ import { SHOULD_PREFETCH_ALL_LINKS } from '@/site/config';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import { Video } from '@/db/video_orm';
+import VideoSmall from '@/components/video/VideoSmall';
 
-export default function VideoSmall({
+export default function VideoLinkSmall({
   video,
   tag,
   selected,
@@ -42,12 +42,7 @@ export default function VideoSmall({
       )}
       prefetch={prefetch}
     >
-      <ImageSmall
-        src={video.url}
-        aspectRatio={16 / 9}
-        blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
-        alt={altTextForVideo(video)}
-      />
+      <VideoSmall src={video.url} aspectRatio={16 / 9} />
     </Link>
   );
 }

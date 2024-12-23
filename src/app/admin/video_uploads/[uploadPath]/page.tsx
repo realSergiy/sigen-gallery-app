@@ -19,7 +19,7 @@ export default async function VideoUploadPage({ params: { uploadPath } }: Params
     },
   );
 
-  if (!videoFormData || !imageThumbnailBase64) {
+  if (!videoFormData) {
     redirect(PATH_ADMIN);
   }
 

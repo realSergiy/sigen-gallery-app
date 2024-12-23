@@ -1,51 +1,40 @@
-import { Photo, shouldShowExifDataForPhoto } from '../photo';
-import { AiFillApple } from 'react-icons/ai';
-import ImageCaption from './components/ImageCaption';
-import MediaPhotoGrid from './components/ImagePhotoGrid';
 import ImageContainer from './components/ImageContainer';
 import { OG_TEXT_BOTTOM_ALIGNMENT } from '@/site/config';
 import { NextImageSize } from '@/services/next-image';
-import { cameraFromPhoto, formatCameraModelTextShort } from '@/camera';
+import { Video } from '@/db/video_orm';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 
-export default function PhotoImageResponse({
-  photo,
+export default function VideoImageResponse({
+  video,
   width,
   height,
   fontFamily,
   isNextImageReady = true,
 }: {
-  photo: Photo;
+  video: Video;
   width: NextImageSize;
   height: number;
   fontFamily: string;
   isNextImageReady: boolean;
 }) {
-  const caption = [
-    photo.model ? formatCameraModelTextShort(cameraFromPhoto(photo)) : undefined,
-    photo.focalLengthFormatted,
-    photo.fNumberFormatted,
-    photo.isoFormatted,
-  ]
-    .join(' ')
-    .trim();
-
   return (
     <ImageContainer {...{ width, height }}>
       <MediaPhotoGrid
         {...{
-          medias: isNextImageReady ? [photo] : [],
+          medias: isNextImageReady ? [video] : [],
           width,
           height,
           ...(OG_TEXT_BOTTOM_ALIGNMENT && { imagePosition: 'top' }),
         }}
       />
-      {shouldShowExifDataForPhoto(photo) && (
+      {/*
+      shouldShowVideoMetadata(video) && (
         <ImageCaption
           {...{
             width,
             height,
             fontFamily,
-            ...(photo.make === 'Apple' && {
+            ...(video.make === 'Apple' && {
               icon: (
                 <AiFillApple
                   style={{
@@ -58,7 +47,7 @@ export default function PhotoImageResponse({
         >
           {caption}
         </ImageCaption>
-      )}
+      )*/}
     </ImageContainer>
   );
 }

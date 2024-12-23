@@ -30,7 +30,7 @@ export const INFINITE_SCROLL_GRID_MULTIPLE = HIGH_DENSITY_GRID
     : 48;
 
 // Thumbnails below /v/[videoId]
-export const RELATED_GRID_PHOTOS_TO_SHOW = 12;
+export const RELATED_GRID_VIDEOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
@@ -80,11 +80,11 @@ export const generateOgImageMetaForVideos = (videos: Video[]): Metadata => {
   }
 };
 
-const PHOTO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
-  process.env.PHOTO_ID_FORWARDING_TABLE || '{}',
+const VIDEO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
+  process.env.VIDEO_ID_FORWARDING_TABLE || '{}',
 );
 
-export const translateVideoId = (id: string) => PHOTO_ID_FORWARDING_TABLE[id] || id;
+export const translateVideoId = (id: string) => VIDEO_ID_FORWARDING_TABLE[id] || id;
 
 export const titleForVideo = (video: Video, preferDateOverUntitled?: boolean) => {
   if (video.title) {

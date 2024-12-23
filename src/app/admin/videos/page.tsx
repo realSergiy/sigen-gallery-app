@@ -18,9 +18,11 @@ const INFINITE_SCROLL_MULTIPLE_ADMIN = 50;
 export default async function AdminVideosPage() {
   const [videos, videosCount, videosCountOutdated, blobVideoUrls] = await Promise.all([
     getVideos({
-      sort: desc(tb.video.createdAt),
       limit: INFINITE_SCROLL_INITIAL_ADMIN,
-    }).catch(() => []),
+    }).catch(e => {
+      console.error('Failed to get videos', e);
+      return [];
+    }),
     getVideosMetaCached({ hidden: 'include' })
       .then(({ count }) => count)
       .catch(() => 0),

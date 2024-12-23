@@ -2,7 +2,7 @@ import { SITE_DOMAIN_OR_TITLE } from '@/site/config';
 import { Photo } from '../photo';
 import ImageCaption from './components/ImageCaption';
 import ImageContainer from './components/ImageContainer';
-import ImagePhotoGrid from './components/ImagePhotoGrid';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 import { NextImageSize } from '@/services/next-image';
 
 export default function HomeImageResponse({
@@ -18,9 +18,9 @@ export default function HomeImageResponse({
 }) {
   return (
     <ImageContainer {...{ width, height }}>
-      <ImagePhotoGrid
+      <MediaPhotoGrid
         {...{
-          photos,
+          medias: photos,
           width,
           height,
         }}

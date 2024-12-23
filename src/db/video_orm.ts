@@ -41,14 +41,18 @@ const getSq = (options: VideoQueryOptions) => {
 export const getVideos = async (options: VideoQueryOptions) => {
   const sq = getSq(options);
 
-  return db
+  const rows = await db
     .with(sq)
     .select()
     .from(sq)
     .where(options.filter)
-    .orderBy(options.sort ?? desc(tb.video.takenAt))
+    .orderBy(options.sort ?? desc(sq.takenAt))
     .limit(options.limit ?? 1000)
     .offset(options.offset ?? 0);
+
+  console.log('getVideos found:', rows.length);
+
+  return rows;
 };
 
 export const getVideosMostRecentUpdate = async () => {
@@ -105,13 +109,19 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
       limit ${_limit}
     `);
 
-  const photo = qr.rows.find(p => p.id === videoId);
-  const indexNumber = photo ? photo.row_number : undefined;
+  const row = qr.rows.find(p => p.id === videoId);
+  const indexNumber = row ? row.row_number : undefined;
   return {
     videos: qr.rows,
     indexNumber,
   };
 };
+
+export const getVideoIds = async ({ limit }: { limit?: number }) =>
+  db
+    .select({ id: tb.video.id })
+    .from(tb.video)
+    .limit(limit ?? 1000);
 
 export const getVideo = async (id: string, includeHidden = false) => {
   if (!id) {

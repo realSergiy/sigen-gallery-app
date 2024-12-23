@@ -13,7 +13,7 @@ import {
   revalidateTagsKey,
 } from '@/video/cache';
 import { PATH_ADMIN_VIDEOS, PATH_ADMIN_TAGS, PATH_ROOT, pathForVideo } from '@/site/paths';
-import { blurImageFromUrl, extractVideoDataFromBlobPath } from './server';
+import { extractVideoDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
 import { convertVideoToVideoDbUpdate } from '.';
 import { runAuthenticatedAdminServerAction } from '@/auth';
@@ -215,8 +215,10 @@ export const syncVideosAction = async (videoIds: string[]) =>
 export const clearCacheAction = async () =>
   runAuthenticatedAdminServerAction(revalidateAllKeysAndPaths);
 
+/*
 export const getImageBlurAction = async (url: string) =>
   runAuthenticatedAdminServerAction(() => blurImageFromUrl(url));
+*/
 
 export const getVideosHiddenMetaCachedAction = async () =>
   runAuthenticatedAdminServerAction(() => getVideosMetaCached({ hidden: 'only' }));

@@ -70,7 +70,7 @@ const runMigration02 = () =>
   `;
 
 // Wrapper for most queries for JIT table creation/migration running
-const safelyQueryPhotos = async <T>(
+export const safelyQueryPhotos = async <T>(
   callback: () => Promise<T>,
   debugMessage: string,
 ): Promise<T> => {

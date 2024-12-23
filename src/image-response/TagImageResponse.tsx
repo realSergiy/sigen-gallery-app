@@ -1,7 +1,7 @@
 import type { Photo } from '../photo';
 import { FaStar, FaTag } from 'react-icons/fa';
 import ImageCaption from './components/ImageCaption';
-import ImagePhotoGrid from './components/ImagePhotoGrid';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 import ImageContainer from './components/ImageContainer';
 import type { NextImageSize } from '@/services/next-image';
 import { formatTag, isTagFavs } from '@/tag';
@@ -27,9 +27,9 @@ export default function TagImageResponse({
         ...(photos.length === 0 && { background: 'black' }),
       }}
     >
-      <ImagePhotoGrid
+      <MediaPhotoGrid
         {...{
-          photos,
+          medias: photos,
           width,
           height,
         }}

@@ -24,6 +24,7 @@ export default function UploadPageClient({
   const initialVideoForm = useMemo(
     () => ({
       ...videoFormData,
+      thumbnailUrl: videoFormData.url,
       takenAt: videoFormData.takenAt ?? formatDate(new Date()),
     }),
     [videoFormData],

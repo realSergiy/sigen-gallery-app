@@ -3,7 +3,6 @@
 import { titleForVideo } from '@/video';
 import AdminTable from './AdminTable';
 import { Fragment } from 'react';
-import VideoSmall from '@/video/VideoSmall';
 import { clsx } from 'clsx/lite';
 import { pathForAdminVideoEdit, pathForVideo } from '@/site/paths';
 import Link from 'next/link';
@@ -16,6 +15,7 @@ import VideoSyncButton from './VideoSyncButton';
 
 import { Video } from '@/db/video_orm';
 import DeleteVideoButton from './DeleteVideoButton';
+import VideoLinkSmall from '@/video/VideoLinkSmall';
 
 export default function AdminVideosTable({
   videos,
@@ -45,7 +45,7 @@ export default function AdminVideosTable({
     <AdminTable>
       {videos.map((video, index) => (
         <Fragment key={video.id}>
-          <VideoSmall
+          <VideoLinkSmall
             video={video}
             onVisible={index === videos.length - 1 ? onLastVideoVisible : undefined}
             className={opacityForVideoId(video.id)}

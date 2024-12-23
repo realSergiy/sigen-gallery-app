@@ -33,10 +33,10 @@ import { PATH_API_PRESIGNED_URL } from '@/site/paths';
 
 const logger = console;
 const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): Promise<T> => {
-  logger.info(`[${operationName}] Starting: ${detail}`);
+  logger.log(`[${operationName}] Starting: ${detail}`);
   return promise
     .then(result => {
-      logger.info(`[${operationName}] Success: ${detail}`);
+      logger.log(`[${operationName}] Success: ${result}`);
       return result;
     })
     .catch(error => {
@@ -102,9 +102,12 @@ const REGEX_PHOTO_UPLOAD_ID = new RegExp(`.${PREFIX_PHOTO_UPLOAD}-([a-z0-9]+)\.[
 const PREFIX_VIDEO_UPLOAD = 'upload_v';
 const PREFIX_VIDEO = 'video';
 
-const REGEX_VIDEO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_VIDEO_UPLOAD})\.[a-z]{1,4}`, 'i');
+const REGEX_VIDEO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_VIDEO_UPLOAD})\.[a-z0-9]{1,4}`, 'i');
 
-const REGEX_VIDEO_UPLOAD_ID = new RegExp(`.${PREFIX_VIDEO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`, 'i');
+const REGEX_VIDEO_UPLOAD_ID = new RegExp(
+  `.${PREFIX_VIDEO_UPLOAD}-([a-z0-9]+)\.[a-z0-9]{1,4}$`,
+  'i',
+);
 
 export const fileNameForStorageUrl = (url: string) => {
   switch (storageTypeFromUrl(url)) {
@@ -117,7 +120,7 @@ export const fileNameForStorageUrl = (url: string) => {
   }
 };
 
-export const getExtensionFromStorageUrl = (url: string) => url.match(/.([a-z]{1,4})$/i)?.[1];
+export const getExtensionFromStorageUrl = (url: string) => url.match(/.([a-z0-9]{1,4})$/i)?.[1];
 
 export const getPhotoIdFromStorageUrl = (url: string) => url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
 export const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_UPLOAD_ID)?.[1];
@@ -162,9 +165,10 @@ const uploadBlobFromClient = async (prefix: string, file: File | Blob, extension
   logOp(
     'uploadBlobFromClient',
     `prefix: "${prefix}", file: ${'name' in file ? file.name : 'Blob'}, extension "${extension}" in ${CURRENT_STORAGE}`,
-    CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
-      ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
-      : vercelBlobUploadFromClient(file, `${prefix}.${extension}`),
+    (() =>
+      CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
+        ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
+        : vercelBlobUploadFromClient(file, `${prefix}.${extension}`))(),
   );
 
 export const putFile = (file: Buffer, fileName: string) =>
@@ -258,7 +262,7 @@ const getStorageUrlsForPrefix = async (prefix = '') => {
 
 export const getStoragePhotoUploadUrls = () => getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
 
-export const getStorageVideoUploadUrls = () => getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
+export const getStorageVideoUploadUrls = () => getStorageUrlsForPrefix(`${PREFIX_VIDEO_UPLOAD}-`);
 
 export const getStoragePhotoUrls = () => getStorageUrlsForPrefix(`${PREFIX_PHOTO}-`);
 
