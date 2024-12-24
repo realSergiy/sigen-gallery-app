@@ -28,7 +28,6 @@ export default function VideosLarge({
         <VideoLarge
           key={video.id}
           video={video}
-          priority={index <= 1}
           prefetchRelatedLinks={prefetchFirstVideoLinks && index === 0}
           revalidateVideo={revalidateVideo}
           onVisible={index === videos.length - 1 ? onLastVideoVisible : undefined}

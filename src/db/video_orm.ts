@@ -1,6 +1,6 @@
 import { tb } from '@/db/generated/schema';
 import { db } from '@/db';
-import { count, and, eq, ne, max, min, desc, sql } from 'drizzle-orm';
+import { count, and, eq, ne, max, min, desc, sql, inArray } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
 
@@ -94,14 +94,14 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
 
   const _limit = limit ?? 10;
 
-  const qr = await db.execute<VideoDb & { row_number: number }>(sql`
+  const sq = await db.execute<{ id: string; row_number: number }>(sql`
       with WIN as (
-        select *, row_number()
+        select id, row_number()
         over (order by ${takenAt} desc) as row_number
         from ${video}
       ),
       CURR as (
-        select row_number from WIN where ${id} = ${videoId}
+        select row_number from WIN where WIN.id = ${videoId}
       )
       select WIN.*
       from WIN, CURR
@@ -109,10 +109,20 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
       limit ${_limit}
     `);
 
-  const row = qr.rows.find(p => p.id === videoId);
-  const indexNumber = row ? row.row_number : undefined;
+  const rows = await db
+    .select()
+    .from(video)
+    .where(
+      inArray(
+        id,
+        sq.rows.map(p => p.id),
+      ),
+    );
+
+  const row = rows.find(p => p.id === videoId);
+  const indexNumber = row ? sq.rows.find(r => r.id === row.id) : undefined;
   return {
-    videos: qr.rows,
+    videos: rows,
     indexNumber,
   };
 };

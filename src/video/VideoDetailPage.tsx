@@ -68,7 +68,7 @@ export default function VideoDetailPage({
             key={video.id}
             video={video}
             primaryTag={tag}
-            priority
+            showControls={true}
             prefetchRelatedLinks
             showTitle={Boolean(customHeader)}
             showTitleAsH1

@@ -7,6 +7,7 @@ type VideoWithFallbackProps = {
   videoClassName?: string;
   blurCompatibilityLevel?: 'none' | 'low' | 'high';
   poster?: string;
+  showControls?: boolean;
 } & React.VideoHTMLAttributes<HTMLVideoElement>;
 
 export default function VideoWithFallback(props: VideoWithFallbackProps) {
@@ -16,6 +17,7 @@ export default function VideoWithFallback(props: VideoWithFallbackProps) {
     blurCompatibilityLevel = 'low',
     videoClassName = 'object-cover h-full',
     poster,
+    showControls = false,
     ...rest
   } = props;
 
@@ -67,6 +69,7 @@ export default function VideoWithFallback(props: VideoWithFallbackProps) {
       )}
       <video
         ref={videoRef}
+        controls={showControls}
         className={clsx(videoClassName, getBlurClass())}
         onLoadedData={onLoadedData}
         onError={onError}

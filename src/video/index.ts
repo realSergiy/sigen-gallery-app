@@ -51,7 +51,14 @@ export const convertVideoToVideoDbUpdate = (video: Video): VideoDbUpd => ({
   takenAt: video.takenAt,
 });
 
-export const descriptionForVideo = (video: Video) => formatDate(video.takenAt)?.toUpperCase();
+export const descriptionForVideo = (video: Video) => {
+  const result = formatDate(video.takenAt);
+  if (result) {
+    return result.toUpperCase();
+  } else {
+    return '';
+  }
+};
 
 export const getPreviousVideo = (video: Video, videos: Video[]) => {
   const index = videos.findIndex(p => p.id === video.id);
@@ -130,12 +137,14 @@ export const descriptionForVideoSet = (
         videoLabelForCount(explicitCount ?? videos.length, false),
       ].join(' ');
 
-const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') =>
-  [...videos].sort((a, b) =>
-    order === 'DESC'
-      ? b.takenAt.getTime() - a.takenAt.getTime()
-      : a.takenAt.getTime() - b.takenAt.getTime(),
-  );
+const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') => {
+  return [...videos].sort((a, b) => {
+    console.log('comparing dates:', a.takenAt, b.takenAt);
+    return order === 'DESC'
+      ? new Date(b.takenAt).getTime() - new Date(a.takenAt).getTime()
+      : new Date(a.takenAt).getTime() - new Date(b.takenAt).getTime();
+  });
+};
 
 export const dateRangeForVideos = (videos: Video[] = [], explicitDateRange?: VideoDateRange) => {
   let start = '';
