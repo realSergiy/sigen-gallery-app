@@ -1,17 +1,17 @@
 /* eslint-disable jsx-a11y/alt-text */
 
-import { Photo } from '@/photo';
+import { Media } from '@/media';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';
 
-export default function ImagePhotoGrid({
-  photos,
+export default function MediaPhotoGrid({
+  medias,
   width,
   widthArbitrary,
   height,
   imagePosition = 'center',
   gap = 4,
 }: {
-  photos: Photo[];
+  medias: Media[];
   height: number;
   imagePosition?: 'center' | 'top';
   gap?: number;
@@ -20,13 +20,13 @@ export default function ImagePhotoGrid({
   | { width?: undefined; widthArbitrary: number }
 )) {
   let count = 1;
-  if (photos.length >= 12) {
+  if (medias.length >= 12) {
     count = 12;
-  } else if (photos.length >= 6) {
+  } else if (medias.length >= 6) {
     count = 6;
-  } else if (photos.length >= 4) {
+  } else if (medias.length >= 4) {
     count = 4;
-  } else if (photos.length >= 2) {
+  } else if (medias.length >= 2) {
     count = 2;
   }
 
@@ -57,7 +57,7 @@ export default function ImagePhotoGrid({
         gap,
       }}
     >
-      {photos.slice(0, count).map(({ id, url }) => (
+      {medias.slice(0, count).map(({ id, url }) => (
         <div
           key={id}
           style={{

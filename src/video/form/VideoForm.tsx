@@ -14,7 +14,6 @@ import { convertTagsForForm, Tags } from '@/tag';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
 import { VideoDbUpd } from '@/db/video_orm';
-import ImageWithFallback from '@/components/image/ImageWithFallback';
 import clsx from 'clsx';
 import Spinner from '@/components/Spinner';
 import ErrorNote from '@/components/ErrorNote';
@@ -23,6 +22,7 @@ import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import Link from 'next/link';
 import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
+import VideoWithFallback from '@/components/video/VideoWithFallback';
 
 const THUMBNAIL_SIZE = 300;
 
@@ -77,16 +77,13 @@ export default function VideoForm({
     <div className="relative max-w-[38rem] space-y-8">
       <div className="flex gap-2">
         <div className="relative">
-          <ImageWithFallback
-            alt="Upload"
+          <VideoWithFallback
             src={url}
             className={clsx(
               'overflow-hidden rounded-md border',
               'border-gray-200 dark:border-gray-700',
             )}
-            width={width}
-            height={height}
-            priority
+            blurCompatibilityLevel="none"
           />
           <div className={clsx('absolute left-2 top-2 opacity-0 transition-opacity duration-500')}>
             <div

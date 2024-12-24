@@ -11,28 +11,23 @@ import { formatDate } from '@/utility/date';
 
 export default function UploadPageClient({
   blobId,
-  videoFormExif,
+  videoFormData,
   uniqueTags,
 }: {
   blobId?: string;
-  videoFormExif: Partial<VideoFormData>;
+  videoFormData: Partial<VideoFormData>;
   uniqueTags: Tags;
 }) {
-  const {
-    pending,
-    setIsPending,
-    updatedTitle,
-    setUpdatedTitle,
-    hasTextContent,
-    setHasTextContent,
-  } = useVideoFormParent({});
+  const { pending, setIsPending, updatedTitle, setUpdatedTitle, setHasTextContent } =
+    useVideoFormParent({});
 
   const initialVideoForm = useMemo(
     () => ({
-      ...videoFormExif,
-      takenAt: videoFormExif.takenAt ?? formatDate(new Date()),
+      ...videoFormData,
+      thumbnailUrl: videoFormData.url,
+      takenAt: videoFormData.takenAt ?? formatDate(new Date()),
     }),
-    [videoFormExif],
+    [videoFormData],
   );
 
   return (

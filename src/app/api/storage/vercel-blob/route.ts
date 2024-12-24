@@ -1,9 +1,10 @@
 import { auth } from '@/auth';
 import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
 import { ACCEPTED_PHOTO_FILE_TYPES, MAX_PHOTO_UPLOAD_SIZE_IN_BYTES } from '@/photo';
-import { isPhotoUploadPathnameValid } from '@/services/storage';
+import { isPhotoUploadPathnameValid, isVideoUploadPathnameValid } from '@/services/storage';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
+import { ACCEPTED_VIDEO_FILE_TYPES, MAX_VIDEO_UPLOAD_SIZE_IN_BYTES } from '@/video';
 
 export async function POST(request: Request): Promise<NextResponse> {
   const body: HandleUploadBody = await request.json();
@@ -20,8 +21,13 @@ export async function POST(request: Request): Promise<NextResponse> {
               maximumSizeInBytes: MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
               allowedContentTypes: ACCEPTED_PHOTO_FILE_TYPES,
             };
+          } else if (isVideoUploadPathnameValid(pathname)) {
+            return {
+              maximumSizeInBytes: MAX_VIDEO_UPLOAD_SIZE_IN_BYTES,
+              allowedContentTypes: ACCEPTED_VIDEO_FILE_TYPES,
+            };
           } else {
-            throw new Error('Invalid upload');
+            throw new Error('Invalid upload path: ' + pathname);
           }
         } else {
           throw new Error('Unauthenticated upload');
@@ -35,8 +41,11 @@ export async function POST(request: Request): Promise<NextResponse> {
     });
     revalidatePhotosKey();
     revalidateAdminPaths();
+
+    console.log('Upload completed:', jsonResponse);
     return NextResponse.json(jsonResponse);
   } catch (error) {
+    console.error('Error uploading file:', error);
     return NextResponse.json({ error: (error as Error).message }, { status: 400 });
   }
 }

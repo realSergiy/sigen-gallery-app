@@ -1,6 +1,6 @@
 import { Photo } from '../photo';
 import ImageCaption from './components/ImageCaption';
-import ImagePhotoGrid from './components/ImagePhotoGrid';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 import ImageContainer from './components/ImageContainer';
 import { labelForFilmSimulation } from '@/vendors/fujifilm';
 import PhotoFilmSimulationIcon from '@/simulation/PhotoFilmSimulationIcon';
@@ -28,9 +28,9 @@ export default function FilmSimulationImageResponse({
         ...(photos.length === 0 && { background: 'black' }),
       }}
     >
-      <ImagePhotoGrid
+      <MediaPhotoGrid
         {...{
-          photos,
+          medias: photos,
           width,
           height,
         }}

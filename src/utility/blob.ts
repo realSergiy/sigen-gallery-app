@@ -13,3 +13,19 @@ export const blobToImage = (blob: Blob): Promise<HTMLImageElement> =>
 
     reader.readAsDataURL(blob);
   });
+
+export const blobToVideo = (blob: Blob): Promise<HTMLVideoElement> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject('Error reading video');
+
+    const video = document.createElement('video');
+    video.onloadeddata = () => resolve(video);
+    video.onerror = () => reject('Error reading video');
+    reader.onload = e => {
+      const result = (e.currentTarget as any).result as string;
+      video.src = result;
+    };
+
+    reader.readAsDataURL(blob);
+  });

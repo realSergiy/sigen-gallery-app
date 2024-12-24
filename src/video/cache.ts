@@ -25,10 +25,7 @@ const KEY_VIDEOS = 'videos';
 const KEY_VIDEO = 'video';
 // Field keys
 const KEY_TAGS = 'tags';
-const KEY_CAMERAS = 'cameras';
-const KEY_LENSES = 'lenses';
-const KEY_FILM_SIMULATIONS = 'film-simulations';
-const KEY_FOCAL_LENGTHS = 'focal-lengths';
+
 // Type keys
 const KEY_COUNT = 'count';
 const KEY_HIDDEN = 'hidden';
@@ -57,15 +54,9 @@ export const revalidateVideosKey = () => revalidateTag(KEY_VIDEOS);
 
 export const revalidateTagsKey = () => revalidateTag(KEY_TAGS);
 
-export const revalidateCamerasKey = () => revalidateTag(KEY_CAMERAS);
-
-export const revalidateFilmSimulationsKey = () => revalidateTag(KEY_FILM_SIMULATIONS);
-
 export const revalidateAllKeys = () => {
   revalidateVideosKey();
   revalidateTagsKey();
-  revalidateCamerasKey();
-  revalidateFilmSimulationsKey();
 };
 
 export const revalidateAdminPaths = () => {
@@ -125,7 +116,7 @@ export const getVideosMostRecentUpdateCached = unstable_cache(
   [KEY_VIDEOS, KEY_COUNT, KEY_DATE_RANGE],
 );
 
-export const getVideCached = (...args: Parameters<typeof getVideo>) =>
+export const getVideoCached = (...args: Parameters<typeof getVideo>) =>
   unstable_cache(getVideo, [KEY_VIDEOS, KEY_VIDEO])(...args);
 
 export const getUniqueTagsCached = unstable_cache(getUniqueTags, [KEY_VIDEOS, KEY_TAGS]);

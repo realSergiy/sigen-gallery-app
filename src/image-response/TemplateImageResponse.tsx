@@ -1,7 +1,7 @@
 import { Photo } from '../photo';
 import IconFeed from '@/site/IconFeed';
 import IconGrid from '@/site/IconGrid';
-import ImagePhotoGrid from './components/ImagePhotoGrid';
+import MediaPhotoGrid from './components/ImagePhotoGrid';
 import { NextImageSize } from '@/services/next-image';
 
 export default function TemplateImageResponse({
@@ -107,9 +107,9 @@ export default function TemplateImageResponse({
           }),
         }}
       >
-        <ImagePhotoGrid
+        <MediaPhotoGrid
           {...{
-            photos,
+            medias: photos,
             widthArbitrary: innerWidth,
             height: includeHeader ? height - 130 - outerMargin * 2 : height,
             gap: 10,

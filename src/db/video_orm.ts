@@ -1,6 +1,6 @@
 import { tb } from '@/db/generated/schema';
 import { db } from '@/db';
-import { count, and, eq, ne, max, min, desc, sql } from 'drizzle-orm';
+import { count, and, eq, ne, max, min, desc, sql, inArray } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
 
@@ -41,14 +41,18 @@ const getSq = (options: VideoQueryOptions) => {
 export const getVideos = async (options: VideoQueryOptions) => {
   const sq = getSq(options);
 
-  return db
+  const rows = await db
     .with(sq)
     .select()
     .from(sq)
     .where(options.filter)
-    .orderBy(options.sort ?? desc(tb.video.takenAt))
+    .orderBy(options.sort ?? desc(sq.takenAt))
     .limit(options.limit ?? 1000)
     .offset(options.offset ?? 0);
+
+  console.log('getVideos found:', rows.length);
+
+  return rows;
 };
 
 export const getVideosMostRecentUpdate = async () => {
@@ -67,12 +71,18 @@ const getUniqueTagsCore = async (includeHidden: boolean) => {
   const video = tb.video;
   const { tags, hidden } = tb.video;
 
-  const query = sql`
-    select distinct unnest(${tags}) as tag, count(*)
-    from ${video._.name}
-    ${includeHidden ? `` : `where not ${hidden}`}
-    group by tag
-    order by tag asc`;
+  const query = includeHidden
+    ? sql`
+      select distinct unnest(${tags}) as tag, count(*)
+      from ${video}
+      group by tag
+      order by tag asc`
+    : sql`
+      select distinct unnest(${tags}) as tag, count(*)
+      from ${video}
+      where not ${hidden}
+      group by tag
+      order by tag asc`;
 
   const qw = await db.execute<TagInfo>(query);
   return qw.rows;
@@ -84,14 +94,14 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
 
   const _limit = limit ?? 10;
 
-  const qr = await db.execute<VideoDb & { row_number: number }>(sql`
+  const sq = await db.execute<{ id: string; row_number: number }>(sql`
       with WIN as (
-        select *, row_number()
+        select id, row_number()
         over (order by ${takenAt} desc) as row_number
         from ${video}
       ),
       CURR as (
-        select row_number from WIN where ${id} = ${videoId}
+        select row_number from WIN where WIN.id = ${videoId}
       )
       select WIN.*
       from WIN, CURR
@@ -99,13 +109,29 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
       limit ${_limit}
     `);
 
-  const photo = qr.rows.find(p => p.id === videoId);
-  const indexNumber = photo ? photo.row_number : undefined;
+  const rows = await db
+    .select()
+    .from(video)
+    .where(
+      inArray(
+        id,
+        sq.rows.map(p => p.id),
+      ),
+    );
+
+  const row = rows.find(p => p.id === videoId);
+  const indexNumber = row ? sq.rows.find(r => r.id === row.id) : undefined;
   return {
-    videos: qr.rows,
+    videos: rows,
     indexNumber,
   };
 };
+
+export const getVideoIds = async ({ limit }: { limit?: number }) =>
+  db
+    .select({ id: tb.video.id })
+    .from(tb.video)
+    .limit(limit ?? 1000);
 
 export const getVideo = async (id: string, includeHidden = false) => {
   if (!id) {

@@ -1,8 +1,8 @@
-import { Video, VideoDb, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
+import { Video, VideoDbUpd } from '@/db/video_orm';
 import { getNextImageUrlForRequest } from '@/services/next-image';
 import { HIGH_DENSITY_GRID } from '@/site/config';
 import { ABSOLUTE_PATH_FOR_HOME_IMAGE } from '@/site/paths';
-import { formatDate, formatDateFromPostgresString } from '@/utility/date';
+import { formatDate } from '@/utility/date';
 import { parameterize } from '@/utility/string';
 import { isBefore } from 'date-fns';
 import type { Metadata } from 'next';
@@ -30,7 +30,7 @@ export const INFINITE_SCROLL_GRID_MULTIPLE = HIGH_DENSITY_GRID
     : 48;
 
 // Thumbnails below /v/[videoId]
-export const RELATED_GRID_PHOTOS_TO_SHOW = 12;
+export const RELATED_GRID_VIDEOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
@@ -51,7 +51,14 @@ export const convertVideoToVideoDbUpdate = (video: Video): VideoDbUpd => ({
   takenAt: video.takenAt,
 });
 
-export const descriptionForVideo = (video: Video) => formatDate(video.takenAt)?.toUpperCase();
+export const descriptionForVideo = (video: Video) => {
+  const result = formatDate(video.takenAt);
+  if (result) {
+    return result.toUpperCase();
+  } else {
+    return '';
+  }
+};
 
 export const getPreviousVideo = (video: Video, videos: Video[]) => {
   const index = videos.findIndex(p => p.id === video.id);
@@ -80,11 +87,11 @@ export const generateOgImageMetaForVideos = (videos: Video[]): Metadata => {
   }
 };
 
-const PHOTO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
-  process.env.PHOTO_ID_FORWARDING_TABLE || '{}',
+const VIDEO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
+  process.env.VIDEO_ID_FORWARDING_TABLE || '{}',
 );
 
-export const translateVideoId = (id: string) => PHOTO_ID_FORWARDING_TABLE[id] || id;
+export const translateVideoId = (id: string) => VIDEO_ID_FORWARDING_TABLE[id] || id;
 
 export const titleForVideo = (video: Video, preferDateOverUntitled?: boolean) => {
   if (video.title) {
@@ -130,12 +137,14 @@ export const descriptionForVideoSet = (
         videoLabelForCount(explicitCount ?? videos.length, false),
       ].join(' ');
 
-const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') =>
-  [...videos].sort((a, b) =>
-    order === 'DESC'
-      ? b.takenAt.getTime() - a.takenAt.getTime()
-      : a.takenAt.getTime() - b.takenAt.getTime(),
-  );
+const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') => {
+  return [...videos].sort((a, b) => {
+    console.log('comparing dates:', a.takenAt, b.takenAt);
+    return order === 'DESC'
+      ? new Date(b.takenAt).getTime() - new Date(a.takenAt).getTime()
+      : new Date(a.takenAt).getTime() - new Date(b.takenAt).getTime();
+  });
+};
 
 export const dateRangeForVideos = (videos: Video[] = [], explicitDateRange?: VideoDateRange) => {
   let start = '';

@@ -1,5 +1,14 @@
 import { parameterize } from '@/utility/string';
 
+export type Media = {
+  id: string;
+  url: string;
+  title?: string;
+  extension: string;
+};
+
+export const GENERATE_STATIC_PARAMS_LIMIT = 1000;
+
 export const downloadFileName = ({
   title,
   url,
