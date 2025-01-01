@@ -3,8 +3,8 @@ import {
   PATHS_ADMIN,
   PATHS_TO_CACHE,
   PATH_ADMIN,
-  PATH_FEED,
-  PATH_GRID,
+  PATH_VIDEO_FEED,
+  PATH_VIDEO_GRID,
   PATH_ROOT,
   PREFIX_TAG,
   pathForVideo,
@@ -75,8 +75,8 @@ export const revalidateVideo = (videoId: string) => {
   // Paths
   revalidatePath(pathForVideo({ video: videoId }), 'layout');
   revalidatePath(PATH_ROOT, 'layout');
-  revalidatePath(PATH_GRID, 'layout');
-  revalidatePath(PATH_FEED, 'layout');
+  revalidatePath(PATH_VIDEO_GRID, 'layout');
+  revalidatePath(PATH_VIDEO_FEED, 'layout');
   revalidatePath(PREFIX_TAG, 'layout');
   revalidatePath(PATH_ADMIN, 'layout');
 };

@@ -4,7 +4,7 @@ import { Tags } from '@/tag';
 import { Photo } from '.';
 import { Cameras } from '@/camera';
 import { FilmSimulations } from '@/simulation';
-import { PATH_GRID } from '@/site/paths';
+import { PATH_PHOTO_GRID } from '@/site/paths';
 import PhotoGridSidebar from './PhotoGridSidebar';
 import PhotoGridContainer from './PhotoGridContainer';
 import { useEffect } from 'react';
@@ -29,7 +29,7 @@ export default function PhotoGridPage({
 
   return (
     <PhotoGridContainer
-      cacheKey={`page-${PATH_GRID}`}
+      cacheKey={`page-${PATH_PHOTO_GRID}`}
       photos={photos}
       count={photosCount}
       sidebar={

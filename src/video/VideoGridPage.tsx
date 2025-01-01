@@ -1,7 +1,7 @@
 'use client';
 
 import { Tags } from '@/tag';
-import { PATH_GRID } from '@/site/paths';
+import { PATH_VIDEO_GRID } from '@/site/paths';
 import VideoGridSidebar from './VideoGridSidebar';
 import VideoGridContainer from './VideoGridContainer';
 import { useEffect } from 'react';
@@ -23,7 +23,7 @@ export default function VideoGridPage({
 
   return (
     <VideoGridContainer
-      cacheKey={`page-${PATH_GRID}`}
+      cacheKey={`page-${PATH_VIDEO_GRID}`}
       videos={videos}
       count={videosCount}
       sidebar={

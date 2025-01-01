@@ -8,8 +8,8 @@ import {
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_PHOTO_UPLOADS,
-  PATH_FEED_INFERRED,
-  PATH_GRID_INFERRED,
+  PATH_VIDEO_FEED_INFERRED,
+  PATH_VIDEO_GRID_INFERRED,
   PATH_ROOT,
   PATH_SIGN_IN,
   pathForPhoto,
@@ -279,12 +279,12 @@ export default function CommandKClient({
   if (GRID_HOMEPAGE_ENABLED) {
     pagesItems.push({
       label: 'Feed',
-      path: PATH_FEED_INFERRED,
+      path: PATH_VIDEO_FEED_INFERRED,
     });
   } else {
     pagesItems.push({
       label: 'Grid',
-      path: PATH_GRID_INFERRED,
+      path: PATH_VIDEO_GRID_INFERRED,
     });
   }
 
@@ -326,7 +326,7 @@ export default function CommandKClient({
                   ? 'Select Multiple Photos'
                   : 'Exit Select Multiple Photos',
               annotation: <BiLockAlt />,
-              path: selectedPhotoIds === undefined ? PATH_GRID_INFERRED : undefined,
+              path: selectedPhotoIds === undefined ? PATH_VIDEO_GRID_INFERRED : undefined,
               action:
                 selectedPhotoIds === undefined
                   ? () => setSelectedPhotoIds?.([])

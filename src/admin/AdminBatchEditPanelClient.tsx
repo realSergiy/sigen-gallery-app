@@ -9,7 +9,6 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { useState } from 'react';
 import { TAG_FAVS, Tags } from '@/tag';
 import { usePathname } from 'next/navigation';
-import { PATH_GRID_INFERRED } from '@/site/paths';
 import PhotoTagFieldset from './PhotoTagFieldset';
 import { tagMultiplePhotosAction } from '@/photo/actions';
 import { toastSuccess } from '@/toast';
@@ -17,6 +16,7 @@ import DeletePhotosButton from './DeletePhotosButton';
 import { photoQuantityText } from '@/photo';
 import { FaArrowDown, FaCheck, FaRegStar } from 'react-icons/fa6';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
+import { PATH_VIDEO_GRID_INFERRED } from '@/site/paths';
 
 export default function AdminBatchEditPanelClient({ uniqueTags }: { uniqueTags: Tags }) {
   const pathname = usePathname();
@@ -127,7 +127,9 @@ export default function AdminBatchEditPanelClient({ uniqueTags }: { uniqueTags: 
       </>
     );
 
-  return isUserSignedIn && pathname === PATH_GRID_INFERRED && selectedPhotoIds !== undefined ? (
+  return isUserSignedIn &&
+    pathname === PATH_VIDEO_GRID_INFERRED &&
+    selectedPhotoIds !== undefined ? (
     <SiteGrid
       className="sticky top-0 z-10 -mt-2 mb-5 pt-2"
       contentMain={

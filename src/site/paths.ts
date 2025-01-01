@@ -9,16 +9,18 @@ import { VideoSetAttributes } from '@/video';
 
 // Core paths
 export const PATH_ROOT = '/';
-export const PATH_GRID = '/grid';
-export const PATH_FEED = '/feed';
+export const PATH_VIDEO_GRID = '/grid';
+export const PATH_VIDEO_FEED = '/feed';
+export const PATH_PHOTO_GRID = '/photo/grid';
+export const PATH_PHOTO_FEED = '/photo/feed';
 export const PATH_ADMIN = '/admin';
 export const PATH_API = '/api';
 export const PATH_SIGN_IN = '/sign-in';
 export const PATH_OG = '/og';
-// eslint-disable-next-line max-len
-export const PATH_GRID_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_ROOT : PATH_GRID;
-// eslint-disable-next-line max-len
-export const PATH_FEED_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_FEED : PATH_ROOT;
+export const PATH_VIDEO_GRID_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_ROOT : PATH_VIDEO_GRID;
+export const PATH_VIDEO_FEED_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_VIDEO_FEED : PATH_ROOT;
+export const PATH_PHOTO_GRID_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_ROOT : PATH_PHOTO_GRID;
+export const PATH_PHOTO_FEED_INFERRED = GRID_HOMEPAGE_ENABLED ? PATH_PHOTO_FEED : PATH_ROOT;
 
 // Path prefixes
 export const PREFIX_PHOTO = '/p';
@@ -72,8 +74,10 @@ export const PATHS_ADMIN = [
 
 export const PATHS_TO_CACHE = [
   PATH_ROOT,
-  PATH_GRID,
-  PATH_FEED,
+  PATH_VIDEO_GRID,
+  PATH_VIDEO_FEED,
+  PATH_PHOTO_GRID,
+  PATH_PHOTO_FEED,
   PATH_OG,
   PATH_PHOTO_DYNAMIC,
   PATH_TAG_DYNAMIC,
@@ -261,9 +265,9 @@ export const isPathFocalLengthPhotoShare = (pathname = '') =>
 export const checkPathPrefix = (pathname = '', prefix: string) =>
   pathname.toLowerCase().startsWith(prefix);
 
-export const isPathGrid = (pathname?: string) => checkPathPrefix(pathname, PATH_GRID);
+export const isPathGrid = (pathname?: string) => checkPathPrefix(pathname, PATH_VIDEO_GRID);
 
-export const isPathFeed = (pathname?: string) => checkPathPrefix(pathname, PATH_FEED);
+export const isPathFeed = (pathname?: string) => checkPathPrefix(pathname, PATH_VIDEO_FEED);
 
 export const isPathSignIn = (pathname?: string) => checkPathPrefix(pathname, PATH_SIGN_IN);
 
