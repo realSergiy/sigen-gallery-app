@@ -1,12 +1,8 @@
 import { getStorageVideoUrlsNoStore } from '@/services/storage/cache';
 import { getVideos } from '@/db/video_orm';
-import { OUTDATED_THRESHOLD } from '@/photo';
-
 import { revalidatePath } from 'next/cache';
-import { desc, lt } from 'drizzle-orm';
 import { getVideosMetaCached } from '@/db/video_cache';
 import AdminVideosClient from '@/admin/AdminVideosClient';
-import { tb } from '@/db/generated/schema';
 
 export const maxDuration = 60;
 
@@ -28,7 +24,7 @@ export default async function AdminVideosPage() {
       .catch(() => 0),
     getVideosMetaCached({
       hidden: 'include',
-      filter: lt(tb.video.updatedAt, OUTDATED_THRESHOLD),
+      filter: 'outdatedOnly',
     })
       .then(({ count }) => count)
       .catch(() => 0),

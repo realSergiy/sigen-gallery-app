@@ -1,7 +1,6 @@
 'use client';
 
 import { VideoSetAttributes, altTextForVideo, doesVideoNeedBlurCompatibility } from '.';
-import ImageMedium from '@/components/image/ImageMedium';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
 import { pathForVideo } from '@/site/paths';
@@ -15,14 +14,12 @@ export default function VideoMedium({
   video,
   tag,
   selected,
-  priority,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   className,
   onVisible,
 }: {
   video: Video;
   selected?: boolean;
-  priority?: boolean;
   prefetch?: boolean;
   className?: string;
   onVisible?: () => void;

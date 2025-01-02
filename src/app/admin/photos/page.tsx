@@ -1,9 +1,9 @@
 import { getStoragePhotoUrlsNoStore } from '@/services/storage/cache';
 import { getPhotos } from '@/photo/db/query';
 import { getPhotosMetaCached } from '@/photo/cache';
-import { OUTDATED_THRESHOLD } from '@/photo';
 import AdminPhotosClient from '@/admin/AdminPhotosClient';
 import { revalidatePath } from 'next/cache';
+import { OUTDATED_THRESHOLD } from '@/media';
 
 export const maxDuration = 60;
 

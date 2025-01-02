@@ -1,5 +1,7 @@
 import { parameterize } from '@/utility/string';
 
+export const OUTDATED_THRESHOLD = new Date('2024-06-16');
+
 export type Media = {
   id: string;
   url: string;
