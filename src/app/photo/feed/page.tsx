@@ -1,9 +1,9 @@
 import { INFINITE_SCROLL_FEED_INITIAL, generateOgImageMetaForPhotos } from '@/photo';
-import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
 import { cache } from 'react';
 import { getPhotos, getPhotosMeta } from '@/photo/db/query';
 import PhotoFeedPage from '@/photo/PhotoFeedPage';
+import MediaEmptyState from '@/media/MediaEmptyState';
 
 export const dynamic = 'force-static';
 export const maxDuration = 60;
@@ -27,5 +27,9 @@ export default async function FeedPage() {
       .catch(() => 0),
   ]);
 
-  return photos.length > 0 ? <PhotoFeedPage {...{ photos, photosCount }} /> : <PhotosEmptyState />;
+  return photos.length > 0 ? (
+    <PhotoFeedPage {...{ photos, photosCount }} />
+  ) : (
+    <MediaEmptyState message="Add your first photo:" />
+  );
 }

@@ -1,10 +1,10 @@
 import { INFINITE_SCROLL_GRID_INITIAL, generateOgImageMetaForPhotos } from '@/photo';
-import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
 import { getPhotoSidebarData } from '@/photo/data';
 import { getPhotos, getPhotosMeta } from '@/photo/db/query';
 import { cache } from 'react';
 import PhotoGridPage from '@/photo/PhotoGridPage';
+import MediaEmptyState from '@/media/MediaEmptyState';
 
 export const dynamic = 'force-static';
 
@@ -31,6 +31,6 @@ export default async function GridPage() {
   return photos.length > 0 ? (
     <PhotoGridPage {...{ photos, photosCount, tags, cameras, simulations }} />
   ) : (
-    <PhotosEmptyState />
+    <MediaEmptyState message="Add your first photo:" />
   );
 }

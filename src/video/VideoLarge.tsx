@@ -2,10 +2,9 @@
 
 import { altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
 import SiteGrid from '@/components/SiteGrid';
-import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
-import { pathForFocalLength, pathForVideo, pathForVideoShare } from '@/site/paths';
+import { pathForVideo, pathForVideoShare } from '@/site/paths';
 import ShareButton from '@/components/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
 import { sortTags } from '@/tag';

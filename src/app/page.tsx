@@ -13,7 +13,7 @@ import VideoGridPage from '@/video/VideoGridPage';
 import VideoFeedPage from '@/video/VideoFeedPage';
 import { getVideos, getVideosMeta } from '@/db/video_orm';
 import { getVideoSidebarData } from '@/video/data';
-import VideosEmptyState from '@/video/VideoEmptyState';
+import MediaEmptyState from '@/media/MediaEmptyState';
 
 export const dynamic = 'force-static';
 export const maxDuration = 60;
@@ -45,6 +45,6 @@ export default async function HomePage() {
       <VideoFeedPage {...{ videos, videosCount }} />
     )
   ) : (
-    <VideosEmptyState />
+    <MediaEmptyState message="Add your first video:" />
   );
 }

@@ -1,36 +1,36 @@
-import { INFINITE_SCROLL_GRID_INITIAL, generateOgImageMetaForPhotos } from '@/photo';
-import PhotosEmptyState from '@/photo/PhotosEmptyState';
+import { INFINITE_SCROLL_GRID_INITIAL, generateOgImageMetaForVideos } from '@/video';
 import { Metadata } from 'next/types';
-import { getPhotoSidebarData } from '@/photo/data';
-import { getPhotos, getPhotosMeta } from '@/photo/db/query';
+import { getVideoSidebarData } from '@/video/data';
 import { cache } from 'react';
-import PhotoGridPage from '@/photo/PhotoGridPage';
+import VideoGridPage from '@/video/VideoGridPage';
+import MediaEmptyState from '@/media/MediaEmptyState';
+import { getVideos, getVideosMeta } from '@/db/video_orm';
 
 export const dynamic = 'force-static';
 
-const getPhotosCached = cache(() =>
-  getPhotos({
+const getVideosCached = cache(() =>
+  getVideos({
     limit: INFINITE_SCROLL_GRID_INITIAL,
   }),
 );
 
 export async function generateMetadata(): Promise<Metadata> {
-  const photos = await getPhotosCached().catch(() => []);
-  return generateOgImageMetaForPhotos(photos);
+  const videos = await getVideosCached().catch(() => []);
+  return generateOgImageMetaForVideos(videos);
 }
 
 export default async function GridPage() {
-  const [photos, photosCount, tags, cameras, simulations] = await Promise.all([
-    getPhotosCached().catch(() => []),
-    getPhotosMeta()
+  const [videos, videosCount, tags] = await Promise.all([
+    getVideosCached().catch(() => []),
+    getVideosMeta({})
       .then(({ count }) => count)
       .catch(() => 0),
-    ...getPhotoSidebarData(),
+    ...getVideoSidebarData(),
   ]);
 
-  return photos.length > 0 ? (
-    <PhotoGridPage {...{ photos, photosCount, tags, cameras, simulations }} />
+  return videos.length > 0 ? (
+    <VideoGridPage {...{ videos, videosCount, tags }} />
   ) : (
-    <PhotosEmptyState />
+    <MediaEmptyState message="Add your first video:" />
   );
 }

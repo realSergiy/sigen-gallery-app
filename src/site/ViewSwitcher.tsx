@@ -2,7 +2,11 @@ import Switcher from '@/components/Switcher';
 import SwitcherItem from '@/components/SwitcherItem';
 import IconFeed from '@/site/IconFeed';
 import IconGrid from '@/site/IconGrid';
-import { PATH_ADMIN_PHOTOS, PATH_FEED_INFERRED, PATH_GRID_INFERRED } from '@/site/paths';
+import {
+  PATH_ADMIN_VIDEOS,
+  PATH_VIDEO_FEED_INFERRED,
+  PATH_VIDEO_GRID_INFERRED,
+} from '@/site/paths';
 import { BiLockAlt } from 'react-icons/bi';
 import IconSearch from './IconSearch';
 import { useAppState } from '@/state/AppState';
@@ -22,7 +26,7 @@ export default function ViewSwitcher({
   const renderItemFeed = () => (
     <SwitcherItem
       icon={<IconFeed />}
-      href={PATH_FEED_INFERRED}
+      href={PATH_VIDEO_FEED_INFERRED}
       active={currentSelection === 'feed'}
       noPadding
     />
@@ -31,7 +35,7 @@ export default function ViewSwitcher({
   const renderItemGrid = () => (
     <SwitcherItem
       icon={<IconGrid />}
-      href={PATH_GRID_INFERRED}
+      href={PATH_VIDEO_GRID_INFERRED}
       active={currentSelection === 'grid'}
       noPadding
     />
@@ -45,7 +49,7 @@ export default function ViewSwitcher({
         {showAdmin && (
           <SwitcherItem
             icon={<BiLockAlt size={16} className="translate-y-[-0.5px]" />}
-            href={PATH_ADMIN_PHOTOS}
+            href={PATH_ADMIN_VIDEOS}
             active={currentSelection === 'admin'}
           />
         )}

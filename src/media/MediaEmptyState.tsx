@@ -8,7 +8,7 @@ import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
-export default function VideosEmptyState() {
+export default function VideosEmptyState(props: { message: string }) {
   return (
     <SiteGrid
       contentMain={
@@ -22,7 +22,7 @@ export default function VideosEmptyState() {
           ) : (
             <div className="max-w-md space-y-6 text-center">
               <div className="space-y-2">
-                <div>Add your first video:</div>
+                <div>{props.message}</div>
                 <AdminCTA />
               </div>
               <div>
