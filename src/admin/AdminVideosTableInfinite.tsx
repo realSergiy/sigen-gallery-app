@@ -22,7 +22,7 @@ export default function AdminVideosTableInfinite({
       initialOffset={initialOffset}
       itemsPerPage={itemsPerPage}
       useCachedVideos={false}
-      sort={tb.video.createdAt}
+      sort={'createdAt'}
       includeHiddenVideos
     >
       {({ videos, onLastVideoVisible, revalidateVideo }) => (

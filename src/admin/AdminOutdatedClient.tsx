@@ -1,6 +1,6 @@
 'use client';
 
-import { OUTDATED_THRESHOLD, Photo } from '@/photo';
+import { Photo } from '@/photo';
 import AdminPhotosTable from '@/admin/AdminPhotosTable';
 import LoaderButton from '@/components/primitives/LoaderButton';
 import IconGrSync from '@/site/IconGrSync';
@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { syncPhotosAction } from '@/photo/actions';
 import { useRouter } from 'next/navigation';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
+import { OUTDATED_THRESHOLD } from '@/media';
 
 const UPDATE_BATCH_SIZE_MAX = 4;
 

@@ -1,8 +1,9 @@
 import { tb } from '@/db/generated/schema';
 import { db } from '@/db';
-import { count, and, eq, ne, max, min, desc, sql, inArray } from 'drizzle-orm';
+import { count, and, eq, ne, max, min, desc, sql, inArray, lt } from 'drizzle-orm';
 import { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
+import { OUTDATED_THRESHOLD } from '@/media';
 
 export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
 export type VideoDb = typeof tb.video.$inferSelect;
@@ -26,8 +27,8 @@ export type VideosFilter = Parameters<typeof videosWhereQuery>[0]; //ToDo: repla
 export type VideosOrderBy = Parameters<typeof videosSortQuery>[1];
 
 export type VideoQueryOptions = {
-  filter?: VideosFilter;
-  sort?: VideosOrderBy;
+  filter?: 'outdatedOnly';
+  sort?: 'createdAt' | 'updatedAt' | 'takenAt';
   limit?: number;
   offset?: number;
   hidden?: 'exclude' | 'include' | 'only';
@@ -38,15 +39,26 @@ const getSq = (options: VideoQueryOptions) => {
   return hidden === 'exclude' ? sqNeHidden : hidden === 'include' ? sqAll : sqHidden;
 };
 
-export const getVideos = async (options: VideoQueryOptions) => {
+const parseOptions = (options: VideoQueryOptions) => {
   const sq = getSq(options);
+
+  const filter =
+    options.filter === 'outdatedOnly' ? lt(tb.video.updatedAt, OUTDATED_THRESHOLD) : undefined;
+
+  const sort = desc(options.sort ? tb.video[options.sort] : sq.takenAt);
+
+  return { sq, filter, sort };
+};
+
+export const getVideos = async (options: VideoQueryOptions) => {
+  const { sq, filter, sort } = parseOptions(options);
 
   const rows = await db
     .with(sq)
     .select()
     .from(sq)
-    .where(options.filter)
-    .orderBy(options.sort ?? desc(sq.takenAt))
+    .where(filter)
+    .orderBy(sort)
     .limit(options.limit ?? 1000)
     .offset(options.offset ?? 0);
 
@@ -166,7 +178,7 @@ const metaQuery = db
 export type VideosMetaFilter = Parameters<typeof metaQuery.where>[0];
 
 export const getVideosMeta = async (options: VideoQueryOptions) => {
-  const sq = getSq(options);
+  const { sq, filter } = parseOptions(options);
 
   const query = db
     .with(sq)
@@ -175,7 +187,8 @@ export const getVideosMeta = async (options: VideoQueryOptions) => {
       start: min(tb.video.takenAt),
       end: max(tb.video.takenAt),
     })
-    .from(sq);
+    .from(sq)
+    .where(filter);
 
   const rows = await query;
   const row = rows[0];
