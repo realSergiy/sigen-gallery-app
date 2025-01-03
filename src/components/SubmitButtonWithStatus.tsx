@@ -16,7 +16,6 @@ export default function SubmitButtonWithStatus({
   children,
   disabled,
   className,
-  type: _type,
   ...buttonProps
 }: {
   onFormStatusChange?: (pending: boolean) => void;

@@ -1,6 +1,6 @@
 'use server';
 
-import { VideoFormData, convertFormDataToVideoDbInsert, convertVideoToFormData } from './form';
+import { convertFormDataToVideoDbInsert, convertVideoToFormData } from './form';
 import { redirect } from 'next/navigation';
 import { deleteFile } from '@/services/storage';
 import {
@@ -37,7 +37,6 @@ import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 
 export const createVideoAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
-    const shouldStripGpsData = formData.get('shouldStripGpsData') === 'true';
     formData.delete('shouldStripGpsData');
 
     const video = convertFormDataToVideoDbInsert(formData);

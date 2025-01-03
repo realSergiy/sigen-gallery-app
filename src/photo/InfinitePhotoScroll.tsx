@@ -52,7 +52,7 @@ export default function InfinitePhotoScroll({
   );
 
   const fetcher = useCallback(
-    ([_key, size]: [string, number]) =>
+    ([, size]: [string, number]) =>
       (useCachedPhotos ? getPhotosCachedAction : getPhotosAction)({
         offset: initialOffset + size * itemsPerPage,
         sortBy,

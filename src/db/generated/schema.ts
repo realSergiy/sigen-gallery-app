@@ -67,7 +67,7 @@ const video = pgTable(
       .notNull(),
     thumbnailUrl: varchar('thumbnail_url', { length: 255 }).notNull(),
   },
-  table => [
+  () => [
     check('check_thumbnail_url', sql`(thumbnail_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
     check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
   ],

@@ -4,7 +4,6 @@ import { PATH_ADMIN_PHOTOS } from '@/site/paths';
 import InfiniteVideoScroll from '../video/InfiniteVideoScroll';
 import AdminVideosTable from './AdminVideosTable';
 import { ComponentProps } from 'react';
-import { tb } from '@/db/generated/schema';
 
 export default function AdminVideosTableInfinite({
   initialOffset,

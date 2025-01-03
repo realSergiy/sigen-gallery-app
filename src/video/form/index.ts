@@ -70,7 +70,7 @@ const FORM_METADATA = (
 
 export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
   (Object.entries(FORM_METADATA(...args)) as [keyof VideoFormData, FormMeta][]).filter(
-    ([_, meta]) => !meta.hide,
+    ([, meta]) => !meta.hide,
   );
 
 export const convertFormKeysToLabels = (keys: (keyof VideoFormData)[]) =>

@@ -1,4 +1,4 @@
-import { ExifTags, OrientationTypes, type ExifData } from 'ts-exif-parser';
+import { OrientationTypes, type ExifData } from 'ts-exif-parser';
 import { formatNumberToFraction, roundToString } from './number';
 
 const OFFSET_REGEX = /[+-]\d\d:\d\d/;

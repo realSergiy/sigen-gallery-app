@@ -22,7 +22,6 @@ export default function AdminVideosTable({
   onLastVideoVisible,
   revalidateVideo,
   videoIdsSyncing = [],
-  hasAiTextGeneration,
   showUpdatedAt,
   canEdit = true,
   canDelete = true,

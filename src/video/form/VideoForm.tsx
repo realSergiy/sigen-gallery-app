@@ -9,7 +9,6 @@ import {
   getFormErrors,
   isFormValid,
 } from '.';
-import { getDimensionsFromSize } from '@/utility/size';
 import { convertTagsForForm, Tags } from '@/tag';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
@@ -23,8 +22,6 @@ import Link from 'next/link';
 import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 import VideoWithFallback from '@/components/video/VideoWithFallback';
-
-const THUMBNAIL_SIZE = 300;
 
 export default function VideoForm({
   type = 'create',
@@ -45,7 +42,7 @@ export default function VideoForm({
   const [formErrors, setFormErrors] = useState(getFormErrors(initialVideoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
 
-  const { invalidateSwr, shouldDebugImageFallbacks } = useAppState();
+  const { invalidateSwr } = useAppState();
 
   const changedFormKeys = useMemo(
     () => getChangedFormFields(initialVideoForm, formData),
@@ -56,8 +53,6 @@ export default function VideoForm({
   usePreventNavigation(formHasChanged);
 
   const canFormBeSubmitted = (type === 'create' || formHasChanged) && isFormValid(formData);
-
-  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE);
 
   const url = formData.url ?? '';
 

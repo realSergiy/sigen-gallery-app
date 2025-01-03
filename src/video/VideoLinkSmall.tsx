@@ -1,4 +1,4 @@
-import { altTextForVideo, doesVideoNeedBlurCompatibility, VideoSetAttributes } from '.';
+import { VideoSetAttributes } from '.';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
 import { pathForVideo } from '@/site/paths';

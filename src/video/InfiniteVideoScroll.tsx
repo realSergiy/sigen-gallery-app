@@ -21,7 +21,6 @@ export default function InfiniteVideoScroll({
   initialOffset,
   itemsPerPage,
   sort,
-  tag,
   wrapMoreButtonInGrid,
   useCachedVideos = true,
   includeHiddenVideos,
@@ -50,7 +49,7 @@ export default function InfiniteVideoScroll({
   );
 
   const fetcher = useCallback(
-    ([_key, size]: [string, number]) =>
+    ([, size]: [string, number]) =>
       (useCachedVideos ? getVideosCachedAction : getVideosAction)({
         offset: initialOffset + size * itemsPerPage,
         sort,

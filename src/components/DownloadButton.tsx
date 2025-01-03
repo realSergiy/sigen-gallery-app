@@ -1,6 +1,5 @@
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { clsx } from 'clsx/lite';
-import { Photo } from '@/photo';
 import LoaderButton from './primitives/LoaderButton';
 import { useState } from 'react';
 import { downloadFileFromBrowser } from '@/utility/url';

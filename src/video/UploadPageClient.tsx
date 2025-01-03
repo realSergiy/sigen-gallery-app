@@ -2,7 +2,7 @@
 
 import AdminChildPage from '@/components/AdminChildPage';
 import { PATH_ADMIN_PHOTO_UPLOADS } from '@/site/paths';
-import { VideoFormData, generateTakenAtFields } from './form';
+import { VideoFormData } from './form';
 import VideoForm from './form/VideoForm';
 import { Tags } from '@/tag';
 import useVideoFormParent from './form/useVideoFormParent';
