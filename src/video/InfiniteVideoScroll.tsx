@@ -9,11 +9,12 @@ import { useAppState } from '@/state/AppState';
 import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
 import { getVideosAction, getVideosCachedAction } from './actions';
+import { Arguments } from 'swr';
 
 export type RevalidateVideo = (
   videoId: string,
   revalidateRemainingVideos?: boolean,
-) => Promise<any>;
+) => Promise<unknown>;
 
 export default function InfiniteVideoScroll({
   cacheKey,
@@ -91,11 +92,15 @@ export default function InfiniteVideoScroll({
   const revalidateVideo: RevalidateVideo = useCallback(
     (videoId: string, revalidateRemainingVideos?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Video[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
-          return revalidateRemainingVideos ? size >= i : size === i;
+        revalidate: (_data: Video[], key: Arguments) => {
+          if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
+            const size = key[1];
+            const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
+            return revalidateRemainingVideos ? size >= i : size === i;
+          }
+          return false;
         },
-      } as any),
+      }),
     [data, mutate],
   );
 

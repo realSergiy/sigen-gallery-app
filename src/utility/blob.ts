@@ -7,7 +7,7 @@ export const blobToImage = (blob: Blob): Promise<HTMLImageElement> =>
     image.onload = () => resolve(image);
     image.onerror = () => reject('Error reading image');
     reader.onload = e => {
-      const result = (e.currentTarget as any).result as string;
+      const result = (e.currentTarget as FileReader).result as string;
       image.src = result;
     };
 
@@ -23,7 +23,7 @@ export const blobToVideo = (blob: Blob): Promise<HTMLVideoElement> =>
     video.onloadeddata = () => resolve(video);
     video.onerror = () => reject('Error reading video');
     reader.onload = e => {
-      const result = (e.currentTarget as any).result as string;
+      const result = (e.currentTarget as FileReader).result as string;
       video.src = result;
     };
 

@@ -9,11 +9,12 @@ import { Photo, PhotoSetAttributes } from '.';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { GetPhotosOptions } from './db';
+import { Arguments } from 'swr';
 
 export type RevalidatePhoto = (
   photoId: string,
   revalidateRemainingPhotos?: boolean,
-) => Promise<any>;
+) => Promise<unknown>;
 
 export default function InfinitePhotoScroll({
   cacheKey,
@@ -104,11 +105,15 @@ export default function InfinitePhotoScroll({
   const revalidatePhoto: RevalidatePhoto = useCallback(
     (photoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Photo[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(photos => photos.some(photo => photo.id === photoId));
-          return revalidateRemainingPhotos ? size >= i : size === i;
+        revalidate: (_data: Photo[], key: Arguments) => {
+          if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
+            const size = key[1];
+            const i = (data ?? []).findIndex(photos => photos.some(photo => photo.id === photoId));
+            return revalidateRemainingPhotos ? size >= i : size === i;
+          }
+          return false;
         },
-      } as any),
+      }),
     [data, mutate],
   );
 

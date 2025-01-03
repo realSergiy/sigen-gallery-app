@@ -39,6 +39,7 @@ import { createStreamableValue } from 'ai/rsc';
 import { convertUploadToPhoto } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
+import { getMessage } from '@/utility/err';
 
 // Private actions
 
@@ -145,10 +146,10 @@ export const addAllUploadsAction = async ({
             }
           }
         }
-      } catch (error: any) {
-        // eslint-disable-next-line max-len
+      } catch (error) {
+        const msg = getMessage(error);
         stream.error(
-          `${error.message} (${addedUploadUrls.length} of ${uploadUrls.length} photos successfully added)`,
+          `${msg} (${addedUploadUrls.length} of ${uploadUrls.length} photos successfully added)`,
         );
       }
       revalidateAllKeysAndPaths();

@@ -16,6 +16,7 @@ import { BiCheckCircle, BiImageAdd } from 'react-icons/bi';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import PhotoTagFieldset from './PhotoTagFieldset';
+import { getMessage } from '@/utility/err';
 
 const UPLOAD_BATCH_SIZE = 4;
 
@@ -80,11 +81,11 @@ export default function AdminAddAllUploads({
           return Math.max(current, updatedProgress);
         });
       }
-    } catch (e: any) {
+    } catch (e) {
       setIsAdding(false);
       setButtonText('Try Again');
       setAddingProgress(undefined);
-      setActionErrorMessage(e);
+      setActionErrorMessage(getMessage(e));
     }
   };
 
@@ -153,11 +154,11 @@ export default function AdminAddAllUploads({
                     setIsAdding(false);
                     setIsAddingComplete(true);
                     await sleep(1000).then(() => router.push(PATH_ADMIN_PHOTOS));
-                  } catch (e: any) {
+                  } catch (e) {
                     setAddingProgress(undefined);
                     setIsAdding(false);
                     setButtonText('Try Again');
-                    setActionErrorMessage(e);
+                    setActionErrorMessage(getMessage(e));
                   }
                 }
               }}

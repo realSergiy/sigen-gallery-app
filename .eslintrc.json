@@ -15,7 +15,6 @@
     "@typescript-eslint/no-unused-vars": "off",
     "@next/next/no-img-element": "off",
     "tailwindcss/no-unnecessary-arbitrary-value": "off",
-    "tailwindcss/no-contradicting-classname": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "tailwindcss/no-contradicting-classname": "off"
   }
 }

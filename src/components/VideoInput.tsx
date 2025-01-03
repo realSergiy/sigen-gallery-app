@@ -21,7 +21,7 @@ export default function VideoInput({
     extension?: string;
     hasMultipleUploads?: boolean;
     isLastBlob?: boolean;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   shouldResize?: boolean;
   maxSize?: number;
   quality?: number;
