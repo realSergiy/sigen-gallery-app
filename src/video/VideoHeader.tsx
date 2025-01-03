@@ -78,7 +78,7 @@ export default function VideoHeader({
   const renderContentA = () =>
     entity ??
     (selectedVideo !== undefined && (
-      <VideoLink video={selectedVideo} className="truncate text-ellipsis font-bold uppercase">
+      <VideoLink video={selectedVideo} className="truncate font-bold uppercase">
         {titleForVideo(selectedVideo, true)}
       </VideoLink>
     ));

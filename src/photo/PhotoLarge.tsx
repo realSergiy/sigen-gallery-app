@@ -129,7 +129,6 @@ export default function PhotoLarge({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            'relative',
             'sticky top-4 -translate-y-1 self-start',
             'grid grid-cols-2 md:grid-cols-1',
             'gap-y-baseline gap-x-0.5 sm:gap-x-1',

@@ -43,7 +43,7 @@ export default function CommandKItem({
     >
       <div className="flex items-center gap-2 sm:gap-3">
         {accessory}
-        <span className="grow truncate text-ellipsis">{label}</span>
+        <span className="grow truncate">{label}</span>
         {annotation && !loading && (
           <span className="text-dim whitespace-nowrap" aria-label={annotationAria}>
             <span aria-hidden={Boolean(annotationAria)}>{annotation}</span>

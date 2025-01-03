@@ -90,7 +90,7 @@ export default function VideoInput({
           />
         </label>
         {showUploadStatus && filesLength > 0 && (
-          <div className="max-w-full truncate text-ellipsis">{fileUploadName}</div>
+          <div className="max-w-full truncate">{fileUploadName}</div>
         )}
       </div>
     </div>
