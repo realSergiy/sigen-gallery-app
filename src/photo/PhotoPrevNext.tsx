@@ -93,7 +93,7 @@ export default function PhotoPrevNext({
       <div className="flex select-none items-center gap-2">
         <PhotoLink
           photo={previousPhoto}
-          className="h-[1rem] select-none"
+          className="h-4 select-none"
           nextPhotoAnimation={ANIMATION_RIGHT}
           tag={tag}
           camera={camera}
@@ -102,13 +102,13 @@ export default function PhotoPrevNext({
           scroll={false}
           prefetch
         >
-          <FiChevronLeft className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
+          <FiChevronLeft className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">PREV</span>
         </PhotoLink>
         <span className="text-extra-extra-dim">/</span>
         <PhotoLink
           photo={nextPhoto}
-          className="h-[1rem] select-none"
+          className="h-4 select-none"
           nextPhotoAnimation={ANIMATION_LEFT}
           tag={tag}
           camera={camera}
@@ -117,7 +117,7 @@ export default function PhotoPrevNext({
           scroll={false}
           prefetch
         >
-          <FiChevronRight className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
+          <FiChevronRight className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">NEXT</span>
         </PhotoLink>
       </div>

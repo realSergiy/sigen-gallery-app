@@ -82,25 +82,25 @@ export default function VideoPrevNext({
       <div className="flex select-none items-center gap-2">
         <VideoLink
           video={previousVideo}
-          className="h-[1rem] select-none"
+          className="h-4 select-none"
           nextVideoAnimation={ANIMATION_RIGHT}
           tag={tag}
           scroll={false}
           prefetch
         >
-          <FiChevronLeft className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
+          <FiChevronLeft className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">PREV</span>
         </VideoLink>
         <span className="text-extra-extra-dim">/</span>
         <VideoLink
           video={nextVideo}
-          className="h-[1rem] select-none"
+          className="h-4 select-none"
           nextVideoAnimation={ANIMATION_LEFT}
           tag={tag}
           scroll={false}
           prefetch
         >
-          <FiChevronRight className="translate-y-[-1px] text-[1.1rem] sm:hidden" />
+          <FiChevronRight className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">NEXT</span>
         </VideoLink>
       </div>

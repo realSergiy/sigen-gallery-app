@@ -34,11 +34,10 @@ export default function SiteGrid({
         'grid-cols-1 md:grid-cols-12',
         'gap-x-4 lg:gap-x-6',
         'gap-y-4',
-        'max-w-[1280px]',
-        // Offset sidebar width when centering on large screens
+        'max-w-screen-xl',
         '3xl:translate-x-[163px]',
         className,
-      )}
+      )} // Offset sidebar width when centering on large screens
     >
       <div
         className={clsx('col-span-1 md:col-span-9', sideFirstOnMobile && 'order-2 md:order-none')}

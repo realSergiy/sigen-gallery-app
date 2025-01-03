@@ -110,7 +110,7 @@ export default function PhotoLarge({
           <div
             className={clsx(
               arePhotosMatted && 'flex w-full items-center justify-center',
-              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
+              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-4/5' : 'h-[90%]',
             )}
           >
             <ImageLarge

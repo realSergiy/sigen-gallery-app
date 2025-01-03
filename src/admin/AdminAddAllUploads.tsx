@@ -129,9 +129,9 @@ export default function AdminAddAllUploads({
               disabled={Boolean(tagErrorMessage) || isAddingComplete}
               icon={
                 isAddingComplete ? (
-                  <BiCheckCircle size={18} className="translate-x-[1px]" />
+                  <BiCheckCircle size={18} className="translate-x-px" />
                 ) : (
-                  <BiImageAdd size={18} className="translate-x-[1px]" />
+                  <BiImageAdd size={18} className="translate-x-px" />
                 )
               }
               onClick={async () => {

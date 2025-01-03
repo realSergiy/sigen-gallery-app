@@ -9,7 +9,6 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "off",
-    "tailwindcss/no-unnecessary-arbitrary-value": "off"
+    "tailwindcss/classnames-order": "off"
   }
 }

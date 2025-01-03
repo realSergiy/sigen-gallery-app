@@ -89,7 +89,7 @@ export default function VideoLarge({
           <div
             className={clsx(
               areVideosMatted && 'flex w-full items-center justify-center',
-              areVideosMatted ? 'h-[80%]' : 'h-[90%]',
+              areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
             <VidLarge

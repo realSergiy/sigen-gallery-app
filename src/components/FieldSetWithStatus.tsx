@@ -63,9 +63,7 @@ export default function FieldSetWithStatus({
           {label}
           {note && !error && <span className="text-gray-400 dark:text-gray-600">({note})</span>}
           {isModified && !error && (
-            <span
-              className={clsx('text-main -ml-1.5 translate-y-[-1px] text-[0.9rem] font-medium')}
-            >
+            <span className={clsx('text-main -ml-1.5 -translate-y-px text-[0.9rem] font-medium')}>
               *
             </span>
           )}

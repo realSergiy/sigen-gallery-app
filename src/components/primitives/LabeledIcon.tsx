@@ -25,7 +25,7 @@ export default function LabeledIcon({
   const className = clsx(
     'inline-flex gap-x-1 md:gap-x-1.5',
     classNameProp,
-    debug && 'm-[-1px] border border-green-500',
+    debug && '-m-px border border-green-500',
   );
 
   const renderContent = () => (

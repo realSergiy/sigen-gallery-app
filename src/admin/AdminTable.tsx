@@ -6,7 +6,7 @@ export default function AdminTable({ title, children }: { title?: string; childr
     <div className="space-y-4">
       {title && <div className="font-bold">{title}</div>}
       {/* py-[1px] fixes Safari vertical scroll bug */}
-      <div className="min-w-[14rem] overflow-x-auto py-[1px]">
+      <div className="min-w-56 overflow-x-auto py-px">
         <div
           className={clsx(
             'w-full',

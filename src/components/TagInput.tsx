@@ -281,7 +281,7 @@ export default function TagInput({
             ref={optionsRef}
             className={clsx(
               'control absolute top-0 z-10 mt-3 w-full !p-1.5',
-              'max-h-[8rem] overflow-y-auto',
+              'max-h-32 overflow-y-auto',
               'flex flex-col gap-y-1',
               'text-xl shadow-lg dark:shadow-xl',
             )}

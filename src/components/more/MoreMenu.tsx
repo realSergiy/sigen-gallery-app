@@ -37,7 +37,7 @@ export default function MoreMenu({
           align="end"
           className={clsx(
             'z-10',
-            'min-w-[8rem]',
+            'min-w-32',
             'ml-2.5',
             'rounded-md border p-1',
             'bg-content',

@@ -64,7 +64,7 @@ export default function Nav({ siteDomainOrTitle }: { siteDomainOrTitle: string }
                       showAdmin={isUserSignedIn}
                     />
                     <div
-                      className={clsx('hidden min-w-0 grow translate-y-[-1px] text-right xs:block')}
+                      className={clsx('hidden min-w-0 grow -translate-y-px text-right xs:block')}
                     >
                       <div
                         className={clsx(

@@ -37,7 +37,7 @@ export default function SelectTileOverlay({
       <div className="absolute right-0 top-0 p-2">
         {isPerformingSelectEdit ? (
           isSelected ? (
-            <Spinner size={16} color="text" className="m-[1px]" />
+            <Spinner size={16} color="text" className="m-px" />
           ) : null
         ) : (
           <Checkbox

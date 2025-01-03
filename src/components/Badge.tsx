@@ -29,7 +29,7 @@ export default function Badge({
         return clsx(
           'h-max-baseline',
           'px-[5px] py-[2.75px]',
-          'rounded-[0.25rem] text-[0.7rem] font-medium',
+          'rounded text-[0.7rem] font-medium',
           highContrast ? 'text-invert bg-invert' : 'text-medium bg-gray-300/30 dark:bg-gray-700/50',
           interactive && highContrast
             ? 'hover:opacity-70'

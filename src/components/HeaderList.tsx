@@ -30,7 +30,7 @@ export default function HeaderList({
                 'uppercase',
               )}
             >
-              {icon && <span className="w-[1rem]">{icon}</span>}
+              {icon && <span className="w-4">{icon}</span>}
               {title}
             </div>,
           ]

@@ -43,7 +43,7 @@ export default function AdminOutdatedClient({
       accessory={
         <LoaderButton
           primary
-          icon={<IconGrSync className="translate-y-[1px]" />}
+          icon={<IconGrSync className="translate-y-px" />}
           hideTextOnMobile={false}
           onClick={async () => {
             if (

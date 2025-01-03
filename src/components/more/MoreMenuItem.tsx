@@ -68,7 +68,7 @@ export default function MoreMenuItem({
         isLoading={isLoading || isPending}
         hideTextOnMobile={false}
         styleAs="link-without-hover"
-        className="translate-y-[1px]"
+        className="translate-y-px"
       >
         {label}
       </LoaderButton>

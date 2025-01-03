@@ -52,7 +52,7 @@ export default function AdminPhotosTable({
             <Link
               key={photo.id}
               href={pathForPhoto({ photo })}
-              className="flex items-center gap-2 lg:w-[50%]"
+              className="flex items-center gap-2 lg:w-1/2"
               prefetch={false}
             >
               <span className={clsx(photo.hidden && 'text-dim')}>
@@ -76,7 +76,7 @@ export default function AdminPhotosTable({
                 </span>
               )}
             </Link>
-            <div className={clsx('uppercase lg:w-[50%]', 'text-dim')}>
+            <div className={clsx('uppercase lg:w-1/2', 'text-dim')}>
               <PhotoDate
                 {...{
                   photo,
