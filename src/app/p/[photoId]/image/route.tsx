@@ -18,9 +18,9 @@ if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   };
 }
 
-export async function GET(_: Request, context: { params: { photoId: string } }) {
+export async function GET(_: Request, context: { params: Promise<{ photoId: string }> }) {
   const [photo, { fontFamily, fonts }, headers] = await Promise.all([
-    getPhotoCached(context.params.photoId),
+    getPhotoCached((await context.params).photoId),
     getIBMPlexMonoMedium(),
     getImageResponseCacheControlHeaders(),
   ]);

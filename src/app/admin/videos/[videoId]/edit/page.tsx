@@ -3,11 +3,11 @@ import { getVideoNoStore, getUniqueTagsCached } from '@/video/cache';
 import { PATH_ADMIN } from '@/site/paths';
 import VideoEditPageClient from '@/video/VideoEditPageClient';
 
-export default async function VideoEditPage({
-  params: { videoId },
-}: {
-  params: { videoId: string };
-}) {
+export default async function VideoEditPage(props: { params: Promise<{ videoId: string }> }) {
+  const params = await props.params;
+
+  const { videoId } = params;
+
   const video = await getVideoNoStore(videoId, true);
 
   if (!video) {

@@ -1,6 +1,6 @@
 'use client';
 
-import { LegacyRef } from 'react';
+import { Ref } from 'react';
 import { useFormStatus } from 'react-dom';
 import Spinner from './Spinner';
 import { clsx } from 'clsx/lite';
@@ -44,7 +44,7 @@ export default function FieldSetWithStatus({
   readOnly?: boolean;
   capitalize?: boolean;
   type?: FieldSetType;
-  inputRef?: LegacyRef<HTMLInputElement>;
+  inputRef?: Ref<HTMLInputElement>;
   accessory?: React.ReactNode;
   hideLabel?: boolean;
 }) {

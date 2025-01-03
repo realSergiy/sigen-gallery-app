@@ -39,7 +39,7 @@ export const signInAction = async (_prevState: string | undefined, formData: For
 
 export const signOutAndRedirectAction = async () => signOut({ redirectTo: PATH_ROOT });
 
-export const getAuthAction = () => auth();
+export const getAuthAction = async () => auth();
 
-export const logClientAuthUpdate = (data: Session | null | undefined) =>
+export const logClientAuthUpdate = async (data: Session | null | undefined) =>
   console.log('Client auth update', data);

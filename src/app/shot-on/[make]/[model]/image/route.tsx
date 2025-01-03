@@ -7,7 +7,7 @@ import { ImageResponse } from 'next/og';
 import { getImageResponseCacheControlHeaders } from '@/image-response/cache';
 
 export async function GET(_: Request, context: CameraProps) {
-  const camera = getCameraFromParams(context.params);
+  const camera = getCameraFromParams(await context.params);
 
   const [photos, { fontFamily, fonts }, headers] = await Promise.all([
     getPhotosCached({

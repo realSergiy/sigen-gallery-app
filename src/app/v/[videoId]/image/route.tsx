@@ -19,9 +19,9 @@ if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   };
 }
 
-export async function GET(_: Request, context: { params: { videoId: string } }) {
+export async function GET(_: Request, context: { params: Promise<{ videoId: string }> }) {
   const [video, { fontFamily, fonts }, headers] = await Promise.all([
-    getVideoCached(context.params.videoId),
+    getVideoCached((await context.params).videoId),
     getIBMPlexMonoMedium(),
     getImageResponseCacheControlHeaders(),
   ]);

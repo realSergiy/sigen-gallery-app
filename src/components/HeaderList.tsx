@@ -1,6 +1,6 @@
 import { clsx } from 'clsx/lite';
 import AnimateItems from './AnimateItems';
-import { ReactNode } from 'react';
+import { ReactNode, type JSX } from 'react';
 
 export default function HeaderList({
   title,

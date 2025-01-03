@@ -11,6 +11,8 @@ import HiddenHeader from '@/tag/HiddenHeader';
 import FocalLengthHeader from '@/focal/FocalLengthHeader';
 import PhotoHeader from './PhotoHeader';
 
+import type { JSX } from 'react';
+
 export default function PhotoDetailPage({
   photo,
   photos,

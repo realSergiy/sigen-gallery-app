@@ -1,5 +1,4 @@
 'use client';
-
 import { Photo, PhotoSetAttributes } from '.';
 import PhotoMedium from './PhotoMedium';
 import { clsx } from 'clsx/lite';
@@ -7,6 +6,8 @@ import AnimateItems from '@/components/AnimateItems';
 import { GRID_ASPECT_RATIO } from '@/site/config';
 import { useAppState } from '@/state/AppState';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
+
+import type { JSX } from 'react';
 
 export default function PhotoGrid({
   photos,

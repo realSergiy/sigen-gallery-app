@@ -83,7 +83,7 @@ export const updateVideoAction = async (formData: FormData) =>
     redirect(PATH_ADMIN_VIDEOS);
   });
 
-export const tagMultipleVideosAction = (tags: string, videoIds: string[]) =>
+export const tagMultipleVideosAction = async (tags: string, videoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
     await addTagsToVideos(convertStringToArray(tags, false) ?? [], videoIds);
     revalidateAllKeysAndPaths();

@@ -7,7 +7,11 @@ import {
 import { CURRENT_STORAGE } from '@/site/config';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
-export async function GET(_: Request, { params: { key } }: { params: { key: string } }) {
+export async function GET(_: Request, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
+
+  const { key } = params;
+
   const session = await auth();
   if (session?.user && key) {
     const url = await getSignedUrl(

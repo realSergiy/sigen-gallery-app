@@ -189,7 +189,7 @@ export const updatePhotoAction = async (formData: FormData) =>
     redirect(PATH_ADMIN_PHOTOS);
   });
 
-export const tagMultiplePhotosAction = (tags: string, photoIds: string[]) =>
+export const tagMultiplePhotosAction = async (tags: string, photoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
     await addTagsToPhotos(convertStringToArray(tags, false) ?? [], photoIds);
     revalidateAllKeysAndPaths();
