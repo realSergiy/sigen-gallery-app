@@ -8,13 +8,7 @@ export type Camera = {
   model: string;
 };
 
-export interface CameraProps {
-  params: Camera;
-}
-
-export interface PhotoCameraProps {
-  params: Camera & { photoId: string };
-}
+export type CameraPhotoId = Camera & { photoId: string };
 
 export type CameraWithCount = {
   cameraKey: string;
