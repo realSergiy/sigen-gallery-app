@@ -9,10 +9,7 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/migration-from-tailwind-2": "off",
-    "tailwindcss/enforces-shorthand": "off",
     "tailwindcss/classnames-order": "off",
-    "@next/next/no-img-element": "off",
     "tailwindcss/no-unnecessary-arbitrary-value": "off",
     "tailwindcss/no-contradicting-classname": "off"
   }

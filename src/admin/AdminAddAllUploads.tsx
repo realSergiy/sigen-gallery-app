@@ -95,7 +95,7 @@ export default function AdminAddAllUploads({
       <Container padding="tight">
         <div className="w-full space-y-4 py-1">
           <div className="flex">
-            <div className={clsx('flex-grow', tagErrorMessage ? 'text-error' : 'text-main')}>
+            <div className={clsx('grow', tagErrorMessage ? 'text-error' : 'text-main')}>
               {showTags
                 ? tagErrorMessage || 'Add tags to all uploads'
                 : `Found ${storageUrls.length} uploads`}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
+import Image from 'next/image';
 import { BiError } from 'react-icons/bi';
 import Spinner from '@/components/Spinner';
 import { IMAGE_OG_DIMENSION } from '../image-response';
@@ -65,19 +66,14 @@ export default function OGTile({
     >
       <div className="relative" style={{ aspectRatio }}>
         {loadingState === 'loading' && (
-          <div
-            className={clsx(
-              'absolute bottom-0 left-0 right-0 top-0 z-10',
-              'flex items-center justify-center',
-            )}
-          >
+          <div className={clsx('absolute inset-0 z-10', 'flex items-center justify-center')}>
             <Spinner size={40} />
           </div>
         )}
         {loadingState === 'failed' && (
           <div
             className={clsx(
-              'absolute bottom-0 left-0 right-0 top-0 z-[11]',
+              'absolute inset-0 z-[11]',
               'flex items-center justify-center',
               'text-red-400',
             )}
@@ -85,39 +81,37 @@ export default function OGTile({
             <BiError size={32} />
           </div>
         )}
-        {(loadingState === 'loading' || loadingState === 'loaded') && (
-          <img
-            alt={title}
-            className={clsx(
-              'absolute bottom-0 left-0 right-0 top-0 z-0',
-              'w-full',
-              loadingState === 'loading' && 'opacity-0',
-              'transition-opacity',
-            )}
-            src={pathImageAbsolute}
-            width={width}
-            height={height}
-            onLoad={() => {
-              if (onLoad) {
-                onLoad();
-              } else {
-                setLoadingStateInternal('loaded');
-              }
-            }}
-            onError={() => {
-              if (onFail) {
-                onFail();
-              } else {
-                setLoadingStateInternal('failed');
-              }
-              if (retryTime !== undefined) {
-                setTimeout(() => {
-                  setLoadingStateInternal('loading');
-                }, retryTime);
-              }
-            }}
-          />
-        )}
+        <Image
+          alt={title}
+          className={clsx(
+            'absolute inset-0 z-0',
+            'w-full',
+            loadingState === 'loading' && 'opacity-0',
+            'transition-opacity',
+          )}
+          src={pathImageAbsolute}
+          width={width}
+          height={height}
+          onLoad={() => {
+            if (onLoad) {
+              onLoad();
+            } else {
+              setLoadingStateInternal('loaded');
+            }
+          }}
+          onError={() => {
+            if (onFail) {
+              onFail();
+            } else {
+              setLoadingStateInternal('failed');
+            }
+            if (retryTime !== undefined) {
+              setTimeout(() => {
+                setLoadingStateInternal('loading');
+              }, retryTime);
+            }
+          }}
+        />
       </div>
       <div
         className={clsx(

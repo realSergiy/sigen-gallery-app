@@ -94,7 +94,7 @@ export default function PhotoLarge({
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const renderPhotoLink = () => (
-    <PhotoLink photo={photo} className="flex-grow font-bold uppercase" prefetch={prefetch} />
+    <PhotoLink photo={photo} className="grow font-bold uppercase" prefetch={prefetch} />
   );
 
   return (
@@ -115,7 +115,7 @@ export default function PhotoLarge({
           >
             <ImageLarge
               className={clsx(arePhotosMatted && 'h-full')}
-              imgClassName={clsx(arePhotosMatted && 'h-full w-full object-contain')}
+              imgClassName={clsx(arePhotosMatted && 'size-full object-contain')}
               alt={altTextForPhoto(photo)}
               src={photo.url}
               aspectRatio={photo.aspectRatio}
