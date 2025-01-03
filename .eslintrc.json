@@ -7,7 +7,5 @@
     "plugin:tailwindcss/recommended"
   ],
   "plugins": ["@typescript-eslint"],
-  "rules": {
-    "tailwindcss/classnames-order": "off"
-  }
+  "rules": {}
 }
