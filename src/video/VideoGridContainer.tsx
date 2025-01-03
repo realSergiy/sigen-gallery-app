@@ -5,7 +5,7 @@ import VideoGrid from './VideoGrid';
 import VideoGridInfinite from './VideoGridInfinite';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useState, type JSX } from 'react';
 
 export default function VideoGridContainer({
   cacheKey,

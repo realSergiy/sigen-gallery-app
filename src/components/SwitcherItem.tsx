@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { clsx } from 'clsx/lite';
 import { SHOULD_PREFETCH_ALL_LINKS } from '@/site/config';
 
+import type { JSX } from 'react';
+
 export default function SwitcherItem({
   icon,
   title,

@@ -25,10 +25,14 @@ if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
 }
 
 interface PhotoProps {
-  params: { photoId: string };
+  params: Promise<{ photoId: string }>;
 }
 
-export async function generateMetadata({ params: { photoId } }: PhotoProps): Promise<Metadata> {
+export async function generateMetadata(props: PhotoProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { photoId } = params;
+
   const { photo } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {
@@ -58,10 +62,13 @@ export async function generateMetadata({ params: { photoId } }: PhotoProps): Pro
   };
 }
 
-export default async function PhotoPage({
-  params: { photoId },
-  children,
-}: PhotoProps & { children: ReactNode }) {
+export default async function PhotoPage(props: PhotoProps & { children: ReactNode }) {
+  const params = await props.params;
+
+  const { photoId } = params;
+
+  const { children } = props;
+
   const { photo, photos, photosGrid } = await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) {

@@ -9,6 +9,8 @@ import { VideoDateRange, VideoSetAttributes } from '.';
 import HiddenVideoHeader from '@/tag/HiddenVideoHeader';
 import TagVideoHeader from '@/tag/TagVideoHeader';
 
+import type { JSX } from 'react';
+
 export default function VideoDetailPage({
   video,
   videos,

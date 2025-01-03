@@ -8,12 +8,7 @@ export const KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL =
   'https://errors.authjs.dev#callbackrouteerror';
 export const KEY_CALLBACK_URL = 'callbackUrl';
 
-export const {
-  handlers: { GET, POST },
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       async authorize({ email, password }) {

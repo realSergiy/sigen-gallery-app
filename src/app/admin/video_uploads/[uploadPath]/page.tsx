@@ -8,10 +8,14 @@ import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 export const maxDuration = 60;
 
 interface Params {
-  params: { uploadPath: string };
+  params: Promise<{ uploadPath: string }>;
 }
 
-export default async function VideoUploadPage({ params: { uploadPath } }: Params) {
+export default async function VideoUploadPage(props: Params) {
+  const params = await props.params;
+
+  const { uploadPath } = params;
+
   const { blobId, videoFormData, imageThumbnailBase64 } = await extractVideoDataFromBlobPath(
     uploadPath,
     {

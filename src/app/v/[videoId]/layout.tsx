@@ -26,10 +26,14 @@ if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
 }
 
 interface VideoProps {
-  params: { videoId: string };
+  params: Promise<{ videoId: string }>;
 }
 
-export async function generateMetadata({ params: { videoId } }: VideoProps): Promise<Metadata> {
+export async function generateMetadata(props: VideoProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { videoId } = params;
+
   const { video } = await getVideosNearIdCachedCached(videoId);
 
   if (!video) {
@@ -59,10 +63,13 @@ export async function generateMetadata({ params: { videoId } }: VideoProps): Pro
   };
 }
 
-export default async function VideoPage({
-  params: { videoId },
-  children,
-}: VideoProps & { children: ReactNode }) {
+export default async function VideoPage(props: VideoProps & { children: ReactNode }) {
+  const params = await props.params;
+
+  const { videoId } = params;
+
+  const { children } = props;
+
   const { video, videos, videosGrid } = await getVideosNearIdCachedCached(videoId);
 
   if (!video) {

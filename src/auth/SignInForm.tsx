@@ -3,9 +3,8 @@
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import Container from '@/components/Container';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useActionState } from 'react';
 import { getAuthAction, signInAction } from './actions';
-import { useFormState } from 'react-dom';
 import ErrorNote from '@/components/ErrorNote';
 import { KEY_CALLBACK_URL, KEY_CREDENTIALS_SIGN_IN_ERROR } from '.';
 import { useSearchParams } from 'next/navigation';
@@ -20,7 +19,7 @@ export default function SignInForm() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [response, action] = useFormState(signInAction, undefined);
+  const [signInState, signInFormAction] = useActionState(signInAction, undefined);
 
   const emailRef = useRef<HTMLInputElement>(null);
   useLayoutEffect(() => {
@@ -42,9 +41,9 @@ export default function SignInForm() {
         <FiLock className="text-main translate-y-[0.5px]" />
         <span className="text-main">Sign in</span>
       </h1>
-      <form action={action} className="w-full">
+      <form action={signInFormAction} className="w-full">
         <div className="w-full -translate-y-0.5 space-y-6">
-          {response === KEY_CREDENTIALS_SIGN_IN_ERROR && (
+          {signInState === KEY_CREDENTIALS_SIGN_IN_ERROR && (
             <ErrorNote>Invalid email/password</ErrorNote>
           )}
           <div className="w-full space-y-4">

@@ -8,12 +8,14 @@ import { cache } from 'react';
 const getPhotosFilmSimulationDataCachedCached = cache(getPhotosFilmSimulationDataCached);
 
 interface FilmSimulationProps {
-  params: { simulation: FilmSimulation };
+  params: Promise<{ simulation: FilmSimulation }>;
 }
 
-export async function generateMetadata({
-  params: { simulation },
-}: FilmSimulationProps): Promise<Metadata> {
+export async function generateMetadata(props: FilmSimulationProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { simulation } = params;
+
   const [photos, { count, dateRange }] = await getPhotosFilmSimulationDataCachedCached({
     simulation,
     limit: INFINITE_SCROLL_GRID_INITIAL,
@@ -43,7 +45,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function FilmSimulationPage({ params: { simulation } }: FilmSimulationProps) {
+export default async function FilmSimulationPage(props: FilmSimulationProps) {
+  const params = await props.params;
+
+  const { simulation } = params;
+
   const [photos, { count, dateRange }] = await getPhotosFilmSimulationDataCachedCached({
     simulation,
     limit: INFINITE_SCROLL_GRID_INITIAL,

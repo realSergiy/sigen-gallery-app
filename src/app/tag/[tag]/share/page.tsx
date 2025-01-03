@@ -11,12 +11,14 @@ const getPhotosTagDataCachedCached = cache((tag: string) =>
 );
 
 interface TagProps {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }
 
-export async function generateMetadata({
-  params: { tag: tagFromParams },
-}: TagProps): Promise<Metadata> {
+export async function generateMetadata(props: TagProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { tag: tagFromParams } = params;
+
   const tag = decodeURIComponent(tagFromParams);
 
   const [photos, { count, dateRange }] = await getPhotosTagDataCachedCached(tag);
@@ -40,7 +42,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Share({ params: { tag: tagFromParams } }: TagProps) {
+export default async function Share(props: TagProps) {
+  const params = await props.params;
+
+  const { tag: tagFromParams } = params;
+
   const tag = decodeURIComponent(tagFromParams);
 
   const [photos, { count, dateRange }] = await getPhotosTagDataCachedCached(tag);

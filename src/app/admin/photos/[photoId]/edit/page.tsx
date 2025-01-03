@@ -6,11 +6,11 @@ import { AI_TEXT_GENERATION_ENABLED, BLUR_ENABLED } from '@/site/config';
 import { blurImageFromUrl, resizeImageFromUrl } from '@/photo/server';
 import { getNextImageUrlForManipulation } from '@/services/next-image';
 
-export default async function PhotoEditPage({
-  params: { photoId },
-}: {
-  params: { photoId: string };
-}) {
+export default async function PhotoEditPage(props: { params: Promise<{ photoId: string }> }) {
+  const params = await props.params;
+
+  const { photoId } = params;
+
   const photo = await getPhotoNoStore(photoId, true);
 
   if (!photo) {

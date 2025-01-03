@@ -10,10 +10,14 @@ import AdminTagBadge from '@/admin/AdminTagBadge';
 const MAX_PHOTO_TO_SHOW = 6;
 
 interface Props {
-  params: { tag: string };
+  params: Promise<{ tag: string }>;
 }
 
-export default async function PhotoPageEdit({ params: { tag: tagFromParams } }: Props) {
+export default async function PhotoPageEdit(props: Props) {
+  const params = await props.params;
+
+  const { tag: tagFromParams } = params;
+
   const tag = decodeURIComponent(tagFromParams);
 
   const [{ count }, photos] = await Promise.all([
