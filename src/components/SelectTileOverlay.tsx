@@ -17,18 +17,17 @@ export default function SelectTileOverlay({
   return (
     <div
       className={clsx(
-        'absolute h-full w-full cursor-pointer',
+        'absolute size-full cursor-pointer',
         'active:bg-gray-950/40 active:dark:bg-gray-950/60',
         isPerformingSelectEdit && 'pointer-events-none',
       )}
     >
       {/* Admin Select Border */}
-      <div className="h-full w-full" onClick={onSelectChange}>
+      <div className="size-full" onClick={onSelectChange}>
         <div
           className={clsx(
-            'h-full w-full',
+            'size-full',
             'border-black dark:border-white',
-            // eslint-disable-next-line max-len
             'bg-[radial-gradient(169.40%_89.55%_at_94.76%_6.29%,rgba(1,0,0,0.40)_0%,rgba(255,255,255,0.00)_75%)]',
             isSelected && 'border-4',
           )}
@@ -38,7 +37,7 @@ export default function SelectTileOverlay({
       <div className="absolute right-0 top-0 p-2">
         {isPerformingSelectEdit ? (
           isSelected ? (
-            <Spinner size={16} color="text" className="m-[1px]" />
+            <Spinner size={16} color="text" className="m-px" />
           ) : null
         ) : (
           <Checkbox

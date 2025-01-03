@@ -16,6 +16,7 @@ import { BiCheckCircle, BiImageAdd } from 'react-icons/bi';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import PhotoTagFieldset from './PhotoTagFieldset';
+import { getMessage } from '@/utility/err';
 
 const UPLOAD_BATCH_SIZE = 4;
 
@@ -80,11 +81,11 @@ export default function AdminAddAllUploads({
           return Math.max(current, updatedProgress);
         });
       }
-    } catch (e: any) {
+    } catch (e) {
       setIsAdding(false);
       setButtonText('Try Again');
       setAddingProgress(undefined);
-      setActionErrorMessage(e);
+      setActionErrorMessage(getMessage(e));
     }
   };
 
@@ -94,7 +95,7 @@ export default function AdminAddAllUploads({
       <Container padding="tight">
         <div className="w-full space-y-4 py-1">
           <div className="flex">
-            <div className={clsx('flex-grow', tagErrorMessage ? 'text-error' : 'text-main')}>
+            <div className={clsx('grow', tagErrorMessage ? 'text-error' : 'text-main')}>
               {showTags
                 ? tagErrorMessage || 'Add tags to all uploads'
                 : `Found ${storageUrls.length} uploads`}
@@ -128,9 +129,9 @@ export default function AdminAddAllUploads({
               disabled={Boolean(tagErrorMessage) || isAddingComplete}
               icon={
                 isAddingComplete ? (
-                  <BiCheckCircle size={18} className="translate-x-[1px]" />
+                  <BiCheckCircle size={18} className="translate-x-px" />
                 ) : (
-                  <BiImageAdd size={18} className="translate-x-[1px]" />
+                  <BiImageAdd size={18} className="translate-x-px" />
                 )
               }
               onClick={async () => {
@@ -153,11 +154,11 @@ export default function AdminAddAllUploads({
                     setIsAdding(false);
                     setIsAddingComplete(true);
                     await sleep(1000).then(() => router.push(PATH_ADMIN_PHOTOS));
-                  } catch (e: any) {
+                  } catch (e) {
                     setAddingProgress(undefined);
                     setIsAdding(false);
                     setButtonText('Try Again');
-                    setActionErrorMessage(e);
+                    setActionErrorMessage(getMessage(e));
                   }
                 }
               }}

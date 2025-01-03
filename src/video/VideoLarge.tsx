@@ -71,7 +71,7 @@ export default function VideoLarge({
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const renderVideoLink = () => (
-    <VideoLink video={video} className="flex-grow font-bold uppercase" prefetch={prefetch} />
+    <VideoLink video={video} className="grow font-bold uppercase" prefetch={prefetch} />
   );
 
   // ToDo: aspectRatio may be needed, compore with PhotoLarge.tsx
@@ -89,14 +89,14 @@ export default function VideoLarge({
           <div
             className={clsx(
               areVideosMatted && 'flex w-full items-center justify-center',
-              areVideosMatted ? 'h-[80%]' : 'h-[90%]',
+              areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
             <VidLarge
               showControls={showControls}
               aspectRatio={16 / 9}
               className={clsx(areVideosMatted && 'h-full')}
-              videoClassName={clsx(areVideosMatted && 'h-full w-full object-contain')}
+              videoClassName={clsx(areVideosMatted && 'size-full object-contain')}
               alt={altTextForVideo(video)}
               src={video.url}
               blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
@@ -107,7 +107,6 @@ export default function VideoLarge({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            'relative',
             'sticky top-4 -translate-y-1 self-start',
             'grid grid-cols-2 md:grid-cols-1',
             'gap-y-baseline gap-x-0.5 sm:gap-x-1',

@@ -9,7 +9,7 @@ export default function Checkbox(
     children?: ReactNode;
   } & InputHTMLAttributes<HTMLInputElement>,
 ) {
-  const { children, className, type: _type, ...rest } = props;
+  const { children, className, ...rest } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <label

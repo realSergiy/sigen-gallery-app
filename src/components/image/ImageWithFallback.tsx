@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable jsx-a11y/alt-text */
 import { BLUR_ENABLED } from '@/site/config';
 import { useAppState } from '@/state/AppState';
 import { clsx } from 'clsx/lite';
@@ -75,15 +74,18 @@ export default function ImageWithFallback(
           )}
         >
           {BLUR_ENABLED && blurDataURL ? (
-            <img
+            <Image
               {...{
                 ...rest,
                 src: blurDataURL,
+                alt: rest.alt,
+                width: rest.width,
+                height: rest.height,
                 className: clsx(imgClassName, getBlurClass()),
               }}
             />
           ) : (
-            <div className={clsx('h-full w-full', 'bg-gray-100/50 dark:bg-gray-900/50')} />
+            <div className={clsx('size-full', 'bg-gray-100/50 dark:bg-gray-900/50')} />
           )}
         </div>
       )}
@@ -95,6 +97,7 @@ export default function ImageWithFallback(
           className: imgClassName,
           onLoad,
           onError,
+          alt: rest.alt,
         }}
       />
     </div>

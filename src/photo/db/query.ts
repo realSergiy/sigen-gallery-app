@@ -1,12 +1,5 @@
 import { sql, query, convertArrayToPostgresString } from '@/services/postgres';
-import {
-  PhotoDb,
-  PhotoDbInsert,
-  translatePhotoId,
-  parsePhotoFromDb,
-  Photo,
-  PhotoDateRange,
-} from '@/photo';
+import { PhotoDb, translatePhotoId, parsePhotoFromDb, Photo, PhotoDateRange } from '@/photo';
 import { Cameras, createCameraKey } from '@/camera';
 import { Tags } from '@/tag';
 import { FilmSimulation, FilmSimulations } from '@/simulation';
@@ -15,6 +8,7 @@ import { GetPhotosOptions, getLimitAndOffsetFromOptions, getOrderByFromOptions }
 import { getWheresFromOptions } from '.';
 import { FocalLengths } from '@/focal';
 import { Lenses, createLensKey } from '@/lens';
+import { getMessage } from '@/utility/err';
 
 const createPhotosTable = () =>
   sql`
@@ -80,10 +74,12 @@ export const safelyQueryPhotos = async <T>(
 
   try {
     result = await callback();
-  } catch (e: any) {
+  } catch (e) {
     if (
       MIGRATION_FIELDS_01.some(field =>
-        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(e.message),
+        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(
+          getMessage(e),
+        ),
       )
     ) {
       console.log('Running migration 01 ...');
@@ -91,31 +87,34 @@ export const safelyQueryPhotos = async <T>(
       result = await callback();
     } else if (
       MIGRATION_FIELDS_02.some(field =>
-        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(e.message),
+        new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(
+          getMessage(e),
+        ),
       )
     ) {
       console.log('Running migration 02 ...');
       await runMigration02();
       result = await callback();
-    } else if (/relation "photos" does not exist/i.test(e.message)) {
+    } else if (/relation "photos" does not exist/i.test(getMessage(e))) {
       // If the table does not exist, create it
       console.log('Creating photos table ...');
       await createPhotosTable();
       result = await callback();
-    } else if (/endpoint is in transition/i.test(e.message)) {
+    } else if (/endpoint is in transition/i.test(getMessage(e))) {
       console.log('sql get error: endpoint is in transition (setting timeout)');
       // Wait 5 seconds and try again
       await new Promise(resolve => setTimeout(resolve, 5000));
       try {
         result = await callback();
-      } catch (e: any) {
-        console.log(`sql get error on retry (after 5000ms): ${e.message} `);
+      } catch (e) {
+        console.log(`sql get error on retry (after 5000ms): ${getMessage(e)} `);
         throw e;
       }
     } else {
-      if (e.message !== 'The server does not support SSL connections') {
+      const errMsg = getMessage(e);
+      if (errMsg !== 'The server does not support SSL connections') {
         // Avoid re-logging errors on initial installation
-        console.log(`sql get error: ${e.message} `);
+        console.log(`sql get error: ${errMsg} `);
       }
       throw e;
     }
@@ -436,7 +435,9 @@ export const getPhotos = async (options: GetPhotosOptions = {}) =>
     sql.push(limitAndOffset);
     values.push(...limitAndOffsetValues);
 
-    return query(sql.join(' '), values).then(({ rows }) => rows.map(parsePhotoFromDb));
+    return query(sql.join(' '), values).then(({ rows }) =>
+      rows.map(row => parsePhotoFromDb(row as unknown as PhotoDb)),
+    );
   }, 'getPhotos');
 
 export const getPhotosNearId = async (photoId: string, options: GetPhotosOptions) =>
@@ -464,9 +465,9 @@ export const getPhotosNearId = async (photoId: string, options: GetPhotosOptions
       [...wheresValues, photoId, limit],
     ).then(({ rows }) => {
       const photo = rows.find(({ id }) => id === photoId);
-      const indexNumber = photo ? parseInt(photo.row_number) : undefined;
+      const indexNumber = photo ? parseInt(String(photo.row_number)) : undefined;
       return {
-        photos: rows.map(parsePhotoFromDb),
+        photos: rows.map(row => parsePhotoFromDb(row as unknown as PhotoDb)),
         indexNumber,
       };
     });
@@ -482,7 +483,7 @@ export const getPhotosMeta = (options: GetPhotosOptions = {}) =>
       sql += ` ${wheres}`;
     }
     return query(sql, wheresValues).then(({ rows }) => ({
-      count: parseInt(rows[0].count, 10),
+      count: parseInt(rows[0].count as string, 10),
       ...(rows[0]?.start && rows[0]?.end ? { dateRange: rows[0] as PhotoDateRange } : undefined),
     }));
   }, 'getPhotosMeta');

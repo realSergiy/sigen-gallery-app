@@ -20,12 +20,6 @@ const sqNeHidden = db.$with('sq').as(db.select().from(tb.video).where(ne(tb.vide
 const sqAll = db.$with('sq').as(db.select().from(tb.video));
 const sqHidden = db.$with('sq').as(db.select().from(tb.video).where(eq(tb.video.hidden, true)));
 
-const videosWhereQuery = db.with(sqNeHidden).select().from(sqNeHidden).where;
-const videosSortQuery = db.with(sqNeHidden).select().from(sqNeHidden).orderBy;
-
-export type VideosFilter = Parameters<typeof videosWhereQuery>[0]; //ToDo: replace with json object
-export type VideosOrderBy = Parameters<typeof videosSortQuery>[1];
-
 export type VideoQueryOptions = {
   filter?: 'outdatedOnly';
   sort?: 'createdAt' | 'updatedAt' | 'takenAt';
@@ -166,16 +160,6 @@ export const insertVideo = async (video: VideoDbNew) => {
 export const updateVideo = async (video: VideoDbUpd) => {
   return db.update(tb.video).set(video).where(eq(tb.video.id, video.id));
 };
-
-const metaQuery = db
-  .select({
-    count: count(),
-    start: min(tb.video.takenAt),
-    end: max(tb.video.takenAt),
-  })
-  .from(tb.video);
-
-export type VideosMetaFilter = Parameters<typeof metaQuery.where>[0];
 
 export const getVideosMeta = async (options: VideoQueryOptions) => {
   const { sq, filter } = parseOptions(options);

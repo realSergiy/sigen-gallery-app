@@ -257,7 +257,7 @@ export default function PhotoForm({
               <Spinner
                 color="text"
                 size={9}
-                className={clsx('text-extra-dim', 'translate-x-[1px] translate-y-[0.5px]')}
+                className={clsx('text-extra-dim', 'translate-x-px translate-y-[0.5px]')}
               />
               Analyzing image
             </div>

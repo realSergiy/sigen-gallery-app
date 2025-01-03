@@ -83,7 +83,7 @@ export default function PhotoHeader({
   const renderContentA = () =>
     entity ??
     (selectedPhoto !== undefined && (
-      <PhotoLink photo={selectedPhoto} className="truncate text-ellipsis font-bold uppercase">
+      <PhotoLink photo={selectedPhoto} className="truncate font-bold uppercase">
         {titleForPhoto(selectedPhoto, true)}
       </PhotoLink>
     ));

@@ -117,7 +117,7 @@ const FORM_METADATA = (
 
 export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
   (Object.entries(FORM_METADATA(...args)) as [keyof PhotoFormData, FormMeta][]).filter(
-    ([_, meta]) => !meta.hide,
+    ([, meta]) => !meta.hide,
   );
 
 export const convertFormKeysToLabels = (keys: (keyof PhotoFormData)[]) =>
@@ -155,12 +155,13 @@ export const formHasTextContent = ({
 // CREATE FORM DATA: FROM PHOTO
 
 export const convertPhotoToFormData = (photo: Photo): PhotoFormData => {
-  const valueForKey = (key: keyof Photo, value: any) => {
+  const valueForKey = <K extends keyof Photo>(key: K, value: Photo[K]) => {
     switch (key) {
       case 'tags':
-        return (value ?? []).filter((tag: string) => tag !== TAG_FAVS).join(', ');
+        const tags = Array.isArray(value) ? value : [];
+        return tags.filter(tag => tag !== TAG_FAVS).join(', ');
       case 'takenAt':
-        return value?.toISOString ? value.toISOString() : value;
+        return value instanceof Date ? value.toISOString() : value;
       case 'hidden':
         return value ? 'true' : 'false';
       default:
@@ -228,10 +229,11 @@ export const convertFormDataToPhotoDbInsert = (
     const meta = FORM_METADATA()[key as keyof PhotoFormData];
     if (
       key.startsWith('$ACTION_ID_') ||
-      (photoForm as any)[key] === '' ||
+      (typeof (photoForm as Record<string, unknown>)[key] === 'string' &&
+        (photoForm as Record<string, unknown>)[key] === '') ||
       meta?.excludeFromInsert
     ) {
-      delete (photoForm as any)[key];
+      delete (photoForm as Record<string, unknown>)[key];
     }
   });
 

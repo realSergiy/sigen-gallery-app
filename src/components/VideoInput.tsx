@@ -21,7 +21,7 @@ export default function VideoInput({
     extension?: string;
     hasMultipleUploads?: boolean;
     isLastBlob?: boolean;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   shouldResize?: boolean;
   maxSize?: number;
   quality?: number;
@@ -90,7 +90,7 @@ export default function VideoInput({
           />
         </label>
         {showUploadStatus && filesLength > 0 && (
-          <div className="max-w-full truncate text-ellipsis">{fileUploadName}</div>
+          <div className="max-w-full truncate">{fileUploadName}</div>
         )}
       </div>
     </div>

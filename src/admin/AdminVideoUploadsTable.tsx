@@ -1,6 +1,5 @@
 'use client';
 
-import ImageSmall from '@/components/image/ImageSmall';
 import Spinner from '@/components/Spinner';
 import { getPhotoIdFromStorageUrl } from '@/services/storage';
 import { clsx } from 'clsx/lite';

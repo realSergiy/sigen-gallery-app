@@ -28,7 +28,7 @@ export default function PhotoCamera({
         showAppleIcon ? (
           <AiFillApple title="Apple" className="translate-x-[-0.5px]" size={15} />
         ) : (
-          <IoMdCamera size={12} className="translate-x-[-1px]" />
+          <IoMdCamera size={12} className="-translate-x-px" />
         )
       }
       type={showAppleIcon && isCameraApple ? 'icon-first' : type}

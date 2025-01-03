@@ -32,7 +32,7 @@ export default function StatusIcon({
   };
 
   return (
-    <div className="min-w-[1.2rem] pt-[1px]">
+    <div className="min-w-[1.2rem] pt-px">
       {loading ? (
         <div className="translate-y-0.5">
           <Spinner size={14} />

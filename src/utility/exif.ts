@@ -3,10 +3,18 @@ import { formatNumberToFraction, roundToString } from './number';
 
 const OFFSET_REGEX = /[+-]\d\d:\d\d/;
 
-export const getOffsetFromExif = (data: ExifData) =>
-  Object.values(data.tags as any).find(
-    (value: any) => typeof value === 'string' && OFFSET_REGEX.test(value),
-  ) as string | undefined;
+export const getOffsetFromExif = (data: ExifData): string | undefined => {
+  if (!data.tags) {
+    return undefined;
+  }
+
+  const tagValues = Object.values(data.tags);
+  const offsetValue = tagValues.find(
+    (value): value is string => typeof value === 'string' && OFFSET_REGEX.test(value),
+  );
+
+  return offsetValue;
+};
 
 export const getAspectRatioFromExif = (data: ExifData): number => {
   // Using '||' operator to handle `Orientation` unexpectedly being '0'

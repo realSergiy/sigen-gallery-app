@@ -22,7 +22,6 @@ export default function AdminVideosTable({
   onLastVideoVisible,
   revalidateVideo,
   videoIdsSyncing = [],
-  hasAiTextGeneration,
   showUpdatedAt,
   canEdit = true,
   canDelete = true,
@@ -54,7 +53,7 @@ export default function AdminVideosTable({
             <Link
               key={video.id}
               href={pathForVideo({ video })}
-              className="flex items-center gap-2 lg:w-[50%]"
+              className="flex items-center gap-2 lg:w-1/2"
               prefetch={false}
             >
               <span className={clsx(video.hidden && 'text-dim')}>
@@ -67,7 +66,7 @@ export default function AdminVideosTable({
                 )}
               </span>
             </Link>
-            <div className={clsx('uppercase lg:w-[50%]', 'text-dim')}>
+            <div className={clsx('text-dim uppercase lg:w-1/2')}>
               <VideoDate
                 {...{
                   video,
@@ -76,7 +75,7 @@ export default function AdminVideosTable({
               />
             </div>
           </div>
-          <div className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}>
+          <div className={clsx('flex flex-nowrap items-center gap-2 sm:gap-3')}>
             {canEdit && <EditButton path={pathForAdminVideoEdit(video)} />}
             <VideoSyncButton
               videoId={video.id}

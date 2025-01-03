@@ -28,7 +28,7 @@ export default function PhotoInput({
     extension?: string;
     hasMultipleUploads?: boolean;
     isLastBlob?: boolean;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   shouldResize?: boolean;
   maxSize?: number;
   quality?: number;
@@ -229,7 +229,7 @@ export default function PhotoInput({
           />
         </label>
         {showUploadStatus && filesLength > 0 && (
-          <div className="max-w-full truncate text-ellipsis">{fileUploadName}</div>
+          <div className="max-w-full truncate">{fileUploadName}</div>
         )}
       </div>
       <canvas

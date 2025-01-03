@@ -41,7 +41,7 @@ export default function VideoMedium({
         src={video.url}
         aspectRatio={16 / 9}
         blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
-        className="flex h-full w-full object-cover"
+        className="flex size-full object-cover"
         videoClassName="object-cover w-full h-full"
         alt={altTextForVideo(video)}
       />

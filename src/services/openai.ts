@@ -27,7 +27,7 @@ const checkRateLimitAndBailIfNecessary = async () => {
     let success = false;
     try {
       success = (await ratelimit.limit(RATE_LIMIT_IDENTIFIER)).success;
-    } catch (e: any) {
+    } catch (e) {
       console.error('Failed to rate limit OpenAI', e);
       throw new Error('Failed to rate limit OpenAI');
     }

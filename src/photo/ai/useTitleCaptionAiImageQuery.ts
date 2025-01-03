@@ -3,10 +3,7 @@ import useAiImageQuery from './useAiImageQuery';
 import { parseTitleAndCaption } from '.';
 
 export default function useTitleCaptionAiImageQuery(imageBase64?: string) {
-  const [request, text, isLoading, _reset, error] = useAiImageQuery(
-    imageBase64,
-    'title-and-caption',
-  );
+  const [request, text, isLoading, , error] = useAiImageQuery(imageBase64, 'title-and-caption');
 
   const [title, setTitle] = useState('');
   const [caption, setCaption] = useState('');

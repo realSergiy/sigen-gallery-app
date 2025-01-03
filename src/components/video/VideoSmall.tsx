@@ -21,7 +21,7 @@ export default function VideoSmall({
         src={src}
         width={width}
         height={height}
-        className="h-full w-full object-cover"
+        className="size-full object-cover"
         muted
         loop
         preload="metadata"

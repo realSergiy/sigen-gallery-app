@@ -6,12 +6,7 @@ export default function PageSpinner() {
   return (
     <SiteGrid
       contentMain={
-        <div
-          className={clsx(
-            'flex items-center justify-center',
-            'min-h-[20rem] w-full sm:min-h-[30rem]',
-          )}
-        >
+        <div className={clsx('flex min-h-80 w-full items-center justify-center sm:min-h-[30rem]')}>
           <Spinner size={24} color="light-gray" />
         </div>
       }

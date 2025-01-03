@@ -64,11 +64,7 @@ export default function Nav({ siteDomainOrTitle }: { siteDomainOrTitle: string }
                       showAdmin={isUserSignedIn}
                     />
                     <div
-                      className={clsx(
-                        'min-w-0 flex-grow text-right',
-                        'hidden xs:block',
-                        'translate-y-[-1px]',
-                      )}
+                      className={clsx('hidden min-w-0 grow -translate-y-px text-right xs:block')}
                     >
                       <div
                         className={clsx(
@@ -80,10 +76,7 @@ export default function Nav({ siteDomainOrTitle }: { siteDomainOrTitle: string }
                       </div>
                       {HAS_DEFINED_SITE_DESCRIPTION && (
                         <div
-                          className={clsx(
-                            'hidden overflow-hidden truncate sm:block',
-                            'leading-tight',
-                          )}
+                          className={clsx('hidden overflow-hidden truncate leading-tight sm:block')}
                         >
                           {SITE_DESCRIPTION}
                         </div>

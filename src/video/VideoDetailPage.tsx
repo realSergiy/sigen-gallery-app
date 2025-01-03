@@ -2,7 +2,6 @@ import AnimateItems from '@/components/AnimateItems';
 import VideoLarge from './VideoLarge';
 import SiteGrid from '@/components/SiteGrid';
 import VideoGrid from './VideoGrid';
-import TagHeader from '@/tag/TagHeader';
 import { TAG_HIDDEN } from '@/tag';
 import VideoHeader from './VideoHeader';
 import { Video } from '@/db/video_orm';

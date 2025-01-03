@@ -207,7 +207,7 @@ export default function CommandKClient({
 
   const SECTION_TAGS: CommandKSection = {
     heading: 'Tags',
-    accessory: <FaTag size={10} className="translate-x-[1px] translate-y-[0.75px]" />,
+    accessory: <FaTag size={10} className="translate-x-px translate-y-[0.75px]" />,
     items: tagsIncludingHidden.map(({ tag, count }) => ({
       label: formatTag(tag),
       annotation: formatCount(count),
@@ -219,7 +219,7 @@ export default function CommandKClient({
   const clientSections: CommandKSection[] = [
     {
       heading: 'Theme',
-      accessory: <IoInvertModeSharp size={14} className="translate-x-[-1px] translate-y-[0.5px]" />,
+      accessory: <IoInvertModeSharp size={14} className="-translate-x-px translate-y-[0.5px]" />,
       items: [
         {
           label: 'Use System',
@@ -233,7 +233,7 @@ export default function CommandKClient({
         },
         {
           label: 'Dark Mode',
-          annotation: <BiMoon className="translate-x-[1px]" />,
+          annotation: <BiMoon className="translate-x-px" />,
           action: () => setTheme('dark'),
         },
       ],
@@ -243,7 +243,7 @@ export default function CommandKClient({
   if (isUserSignedIn && showDebugTools) {
     clientSections.push({
       heading: 'Debug Tools',
-      accessory: <RiToolsFill size={16} className="translate-x-[-1px]" />,
+      accessory: <RiToolsFill size={16} className="-translate-x-px" />,
       items: [
         {
           label: 'Toggle Photo Matting',
@@ -290,13 +290,13 @@ export default function CommandKClient({
 
   const sectionPages: CommandKSection = {
     heading: 'Pages',
-    accessory: <HiDocumentText size={15} className="translate-x-[-1px]" />,
+    accessory: <HiDocumentText size={15} className="-translate-x-px" />,
     items: pagesItems,
   };
 
   const adminSection: CommandKSection = {
     heading: 'Admin',
-    accessory: <BiSolidUser size={15} className="translate-x-[-1px]" />,
+    accessory: <BiSolidUser size={15} className="-translate-x-px" />,
     items: isUserSignedIn
       ? (
           [

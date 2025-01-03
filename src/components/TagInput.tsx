@@ -219,7 +219,7 @@ export default function TagInput({
         aria-controls={ARIA_ID_TAG_CONTROL}
         className={clsx(
           className,
-          'control w-full !px-2 !py-2',
+          'control w-full !p-2',
           'outline-1 outline-blue-600',
           'group-focus-within:outline group-active:outline',
           'inline-flex flex-wrap items-center gap-2',
@@ -280,8 +280,8 @@ export default function TagInput({
             role="listbox"
             ref={optionsRef}
             className={clsx(
-              'control absolute top-0 z-10 mt-3 w-full !px-1.5 !py-1.5',
-              'max-h-[8rem] overflow-y-auto',
+              'control absolute top-0 z-10 mt-3 w-full !p-1.5',
+              'max-h-32 overflow-y-auto',
               'flex flex-col gap-y-1',
               'text-xl shadow-lg dark:shadow-xl',
             )}

@@ -1,6 +1,5 @@
-/* eslint-disable jsx-a11y/alt-text */
-
 import { Media } from '@/media';
+import Image from 'next/image';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';
 
 export default function MediaPhotoGrid({
@@ -57,7 +56,7 @@ export default function MediaPhotoGrid({
         gap,
       }}
     >
-      {medias.slice(0, count).map(({ id, url }) => (
+      {medias.slice(0, count).map(({ id, url, title }) => (
         <div
           key={id}
           style={{
@@ -68,16 +67,16 @@ export default function MediaPhotoGrid({
             filter: 'saturate(1.1)',
           }}
         >
-          <img
-            {...{
-              src: getNextImageUrlForRequest(url, nextImageWidth),
-              style: {
-                width: '100%',
-                ...(imagePosition === 'center' && {
-                  height: '100%',
-                }),
-                objectFit: 'cover',
-              },
+          <Image
+            src={getNextImageUrlForRequest(url, nextImageWidth)}
+            alt={title ?? ''}
+            fill
+            style={{
+              width: '100%',
+              ...(imagePosition === 'center' && {
+                height: '100%',
+              }),
+              objectFit: 'cover',
             }}
           />
         </div>

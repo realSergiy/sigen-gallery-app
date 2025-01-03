@@ -8,7 +8,6 @@ export default function VideoImageResponse({
   video,
   width,
   height,
-  fontFamily,
   isNextImageReady = true,
 }: {
   video: Video;

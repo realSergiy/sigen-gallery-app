@@ -19,7 +19,7 @@ export default function MoreMenuItem({
   icon?: ReactNode;
   href?: string;
   hrefDownloadName?: string;
-  action?: () => Promise<void> | void;
+  action?: () => Promise<unknown> | void;
   shouldPreventDefault?: boolean;
 }) {
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function MoreMenuItem({
         isLoading={isLoading || isPending}
         hideTextOnMobile={false}
         styleAs="link-without-hover"
-        className="translate-y-[1px]"
+        className="translate-y-px"
       >
         {label}
       </LoaderButton>

@@ -8,7 +8,7 @@ const pool = new Pool({
 
 export type Primitive = string | number | boolean | undefined | null;
 
-export const query = async <T extends QueryResultRow = any>(
+export const query = async <T extends QueryResultRow = Record<string, unknown>>(
   queryString: string,
   values: Primitive[] = [],
 ) => {

@@ -46,7 +46,7 @@ export default function ShareModal({
         {title && (
           <div className={clsx('flex items-center gap-x-3', 'text-2xl leading-snug')}>
             <TbPhotoShare size={22} className="hidden xs:block" />
-            <div className="flex-grow">{title}</div>
+            <div className="grow">{title}</div>
           </div>
         )}
         {children}

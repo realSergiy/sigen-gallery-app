@@ -137,7 +137,7 @@ export default function AdminBatchEditPanelClient({ uniqueTags }: { uniqueTags: 
           <Note
             color="gray"
             className={clsx(
-              'min-h-[3.5rem]',
+              'min-h-14',
               '!border-transparent backdrop-blur-lg',
               '!text-gray-900 dark:!text-gray-100',
               '!bg-gray-100/90 dark:!bg-gray-900/70',
