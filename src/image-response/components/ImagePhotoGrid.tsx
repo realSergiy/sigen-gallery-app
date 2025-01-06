@@ -1,5 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
+
+// ToDo: replace img with NextImage. Currently fails Production build, but not local or Preview builds
+// potentially due to `getNextImageUrlForRequest` having different URL in Production
+
 import { Media } from '@/media';
-import Image from 'next/image';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';
 
 export default function MediaPhotoGrid({
@@ -67,16 +71,17 @@ export default function MediaPhotoGrid({
             filter: 'saturate(1.1)',
           }}
         >
-          <Image
-            src={getNextImageUrlForRequest(url, nextImageWidth)}
-            alt={title ?? ''}
-            fill
-            style={{
-              width: '100%',
-              ...(imagePosition === 'center' && {
-                height: '100%',
-              }),
-              objectFit: 'cover',
+          <img
+            {...{
+              src: getNextImageUrlForRequest(url, nextImageWidth),
+              alt: title ?? '',
+              style: {
+                width: '100%',
+                ...(imagePosition === 'center' && {
+                  height: '100%',
+                }),
+                objectFit: 'cover',
+              },
             }}
           />
         </div>

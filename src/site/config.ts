@@ -38,7 +38,9 @@ const SITE_DOMAIN =
   VERCEL_PROJECT_URL ||
   VERCEL_DEPLOYMENT_URL;
 
-const getBaseUrl = (log = false) => {
+const logBaseUrl = false;
+
+const getBaseUrl = () => {
   const url = makeUrlAbsolute(
     process.env.NODE_ENV === 'production' && VERCEL_ENV !== 'preview'
       ? SITE_DOMAIN
@@ -47,15 +49,15 @@ const getBaseUrl = (log = false) => {
         : 'http://localhost:3000',
   )?.toLocaleLowerCase();
 
-  if (log) {
-    console.log('BASE_URL', url);
+  if (logBaseUrl) {
+    console.log('BASE_URL:', url);
   }
 
   return url;
 };
 
 // Used primarily for absolute references such as OG images
-export const BASE_URL = getBaseUrl(false);
+export const BASE_URL = getBaseUrl();
 
 const SITE_DOMAIN_SHORT = shortenUrl(SITE_DOMAIN);
 
