@@ -36,10 +36,7 @@ export default function Spinner({
         xmlns="http://www.w3.org/2000/svg"
         className="animate-rotate-pulse"
       >
-        <path
-          // eslint-disable-next-line max-len
-          d="M11 6C11 3.23858 8.76142 1 6 1C3.23858 1 1 3.23858 1 6C1 8.76142 3.23858 11 6 11"
-        />
+        <path d="M11 6C11 3.23858 8.76142 1 6 1C3.23858 1 1 3.23858 1 6C1 8.76142 3.23858 11 6 11" />
       </svg>
     </span>
   );

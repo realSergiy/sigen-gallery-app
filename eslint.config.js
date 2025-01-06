@@ -1,14 +1,22 @@
-export default [
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+import { FlatCompat } from '@eslint/eslintrc';
+
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+});
+
+/** @type {import('eslint').Linter.Config} */
+const config = [
+  ...compat.config({
     extends: [
       'next/core-web-vitals',
-      'plugin:@typescript-eslint/recommended',
       'next/typescript',
+      'plugin:@typescript-eslint/strict',
       'plugin:prettier/recommended',
-      'plugin:tailwindcss/recommended'
+      'plugin:tailwindcss/recommended',
     ],
     plugins: ['@typescript-eslint'],
-    rules: {}
-  }
+    rules: {},
+  }),
 ];
+
+export default config;

@@ -30,7 +30,6 @@ export default function ShareModal({
         'px-3.5 py-3',
         embedded ? 'border-l' : 'rounded-md border',
         'border-gray-200 bg-gray-50 active:bg-gray-100',
-        // eslint-disable-next-line max-len
         'dark:border-gray-800 dark:bg-gray-900/75 dark:hover:bg-gray-800/75 dark:active:bg-gray-900',
         'cursor-pointer',
       )}

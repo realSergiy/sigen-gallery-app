@@ -141,7 +141,6 @@ export const isFormValid = (formData: Partial<PhotoFormData>) =>
     ([key, { required, validate, validateStringMaxLength }]) =>
       (!required || Boolean(formData[key])) &&
       !validate?.(formData[key]) &&
-      // eslint-disable-next-line max-len
       (!validateStringMaxLength || (formData[key]?.length ?? 0) <= validateStringMaxLength),
   );
 
@@ -233,7 +232,7 @@ export const convertFormDataToPhotoDbInsert = (
         (photoForm as Record<string, unknown>)[key] === '') ||
       meta?.excludeFromInsert
     ) {
-      delete (photoForm as Record<string, unknown>)[key];
+      (photoForm as Record<string, unknown>)[key] = undefined;
     }
   });
 

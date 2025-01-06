@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { NextResponse } from 'next/server';
 
 const REQUIRE_ENV_VARS = false;

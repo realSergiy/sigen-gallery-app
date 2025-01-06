@@ -58,7 +58,7 @@ export default async function CommandK() {
     heading: 'Focal Lengths',
     accessory: <TbCone className="rotate-[270deg] text-[14px]" />,
     items: focalLengths.map(({ focal, count }) => ({
-      label: formatFocalLength(focal)!,
+      label: formatFocalLength(focal),
       annotation: formatCount(count),
       annotationAria: formatCountDescriptive(count),
       path: pathForFocalLength(focal),

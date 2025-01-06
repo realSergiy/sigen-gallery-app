@@ -38,6 +38,5 @@ export const config = {
   // - /favicon.ico + /favicons/*
   // - /grid
   // - / (root)
-  // eslint-disable-next-line max-len
   matcher: ['/((?!api$|api/auth|_next/static|_next/image|favicon.ico$|favicons/|grid$|$).*)'],
 };

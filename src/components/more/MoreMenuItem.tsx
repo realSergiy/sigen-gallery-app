@@ -19,7 +19,7 @@ export default function MoreMenuItem({
   icon?: ReactNode;
   href?: string;
   hrefDownloadName?: string;
-  action?: () => Promise<unknown> | void;
+  action?: () => Promise<unknown>;
   shouldPreventDefault?: boolean;
 }) {
   const router = useRouter();

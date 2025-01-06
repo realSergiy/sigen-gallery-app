@@ -241,9 +241,7 @@ export default function PhotoLarge({
                       photo,
                       tag: shouldShareTag ? primaryTag : undefined,
                       camera: shouldShareCamera ? camera : undefined,
-                      // eslint-disable-next-line max-len
                       simulation: shouldShareSimulation ? photo.filmSimulation : undefined,
-                      // eslint-disable-next-line max-len
                       focal: shouldShareFocalLength ? photo.focalLength : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}

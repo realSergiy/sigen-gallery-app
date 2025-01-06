@@ -11,7 +11,7 @@ export const getFocalLengthFromString = (focalString?: string) => {
   return focal ? parseInt(focal, 10) : 0;
 };
 
-export const formatFocalLength = (focal?: number) => (focal ? `${focal}mm` : undefined);
+export const formatFocalLength = (focal?: number) => (focal ? `${focal}mm` : '');
 
 export const titleForFocalLength = (focal: number, photos: Photo[], explicitCount?: number) =>
   [
