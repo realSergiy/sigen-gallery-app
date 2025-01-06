@@ -73,6 +73,8 @@ export default function AdminVideoMenuClient({
             revalidateVideo?.(video.id, true);
             registerAdminUpdate?.();
           });
+        } else {
+          return Promise.resolve();
         }
       },
     });

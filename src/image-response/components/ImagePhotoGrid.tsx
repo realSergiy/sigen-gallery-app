@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
-// ToDo: replace img with NextImage. Currently fails Production build, but not local or Preview builds
-// potentially due to `getNextImageUrlForRequest` having different URL in Production
+// My understanding is that Next Image is a client component and cannot be used here.
+// This grid is meant to render on the server to generate the OG image.
 
 import { Media } from '@/media';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';

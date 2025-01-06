@@ -35,7 +35,6 @@ export const PREFIX_FOCAL_LENGTH = '/focal';
 const PATH_PHOTO_DYNAMIC = `${PREFIX_PHOTO}/[photoId]`;
 const PATH_TAG_DYNAMIC = `${PREFIX_TAG}/[tag]`;
 const PATH_CAMERA_DYNAMIC = `${PREFIX_CAMERA}/[make]/[model]`;
-// eslint-disable-next-line max-len
 const PATH_FILM_SIMULATION_DYNAMIC = `${PREFIX_FILM_SIMULATION}/[simulation]`;
 const PATH_FOCAL_LENGTH_DYNAMIC = `${PREFIX_FOCAL_LENGTH}/[focal]`;
 

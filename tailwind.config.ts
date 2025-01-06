@@ -1,7 +1,9 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+import type { Config } from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+import containerQueries from '@tailwindcss/container-queries';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   darkMode: 'class',
   theme: {
@@ -56,5 +58,7 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/container-queries')],
-};
+  plugins: [forms, containerQueries],
+} satisfies Config;
+
+export default config;

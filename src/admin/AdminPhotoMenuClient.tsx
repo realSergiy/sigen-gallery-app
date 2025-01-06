@@ -73,6 +73,8 @@ export default function AdminPhotoMenuClient({
             revalidatePhoto?.(photo.id, true);
             registerAdminUpdate?.();
           });
+        } else {
+          return Promise.resolve();
         }
       },
     });

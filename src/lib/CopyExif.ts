@@ -11,7 +11,10 @@ const retrieveExif = (blob: Blob): Promise<Blob> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.addEventListener('load', e => {
-      const buffer = e.target!.result as ArrayBuffer;
+      if (!e.target?.result) {
+        return reject('FileReader load result is null');
+      }
+      const buffer = e.target.result as ArrayBuffer;
       const view = new DataView(buffer);
       let offset = 0;
       if (view.getUint16(offset) !== 0xffd8) return reject('not a valid jpeg');

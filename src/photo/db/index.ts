@@ -59,7 +59,6 @@ export const getWheresFromOptions = (options: GetPhotosOptions, initialValuesInd
     wheresValues.push(updatedBefore.toISOString());
   }
   if (query) {
-    // eslint-disable-next-line max-len
     wheres.push(`CONCAT(title, ' ', caption, ' ', semantic_description) ILIKE $${valuesIndex++}`);
     wheresValues.push(`%${query.toLocaleLowerCase()}%`);
   }

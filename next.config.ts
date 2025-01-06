@@ -18,8 +18,7 @@ const HOSTNAME_CLOUDFLARE_R2 = process.env.NEXT_PUBLIC_CLOUDFLARE_R2_PUBLIC_DOMA
 
 const HOSTNAME_AWS_S3 =
   process.env.NEXT_PUBLIC_AWS_S3_BUCKET && process.env.NEXT_PUBLIC_AWS_S3_REGION
-    ? // eslint-disable-next-line max-len
-      `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
+    ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
     : undefined;
 
 const createRemotePattern = (hostname: string | undefined): RemotePattern[] =>
