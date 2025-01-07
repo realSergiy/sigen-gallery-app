@@ -1,7 +1,7 @@
 import {
   convertTimestampToNaivePostgresString,
   convertTimestampWithOffsetToPostgresString,
-} from '../src/utility/date';
+} from '../../src/utility/date';
 
 describe('Date utility', () => {
   describe('parses ambiguous timestamps', () => {

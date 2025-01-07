@@ -10,9 +10,9 @@ const getPhotosTagDataCachedCached = cache((tag: string) =>
   getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL }),
 );
 
-interface TagProps {
+type TagProps = {
   params: Promise<{ tag: string }>;
-}
+};
 
 export async function generateMetadata(props: TagProps): Promise<Metadata> {
   const params = await props.params;

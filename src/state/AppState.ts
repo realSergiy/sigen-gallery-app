@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useContext } from 'react';
 import { AnimationConfig } from '@/components/AnimateItems';
 
-export interface AppStateContext {
+export type AppStateContext = {
   // CORE
   previousPathname?: string;
   hasLoaded?: boolean;
@@ -44,7 +44,7 @@ export interface AppStateContext {
   setShouldDebugImageFallbacks?: Dispatch<SetStateAction<boolean>>;
   shouldShowBaselineGrid?: boolean;
   setShouldShowBaselineGrid?: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 export const AppStateContext = createContext<AppStateContext>({});
 

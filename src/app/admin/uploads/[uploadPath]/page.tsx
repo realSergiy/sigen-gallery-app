@@ -11,9 +11,9 @@ import {
 
 export const maxDuration = 60;
 
-interface Params {
+type Params = {
   params: Promise<{ uploadPath: string }>;
-}
+};
 
 export default async function UploadPage(props: Params) {
   const params = await props.params;

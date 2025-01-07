@@ -14,9 +14,9 @@ const getPhotosFocalDataCachedCached = cache((focal: number) =>
   }),
 );
 
-interface FocalLengthProps {
+type FocalLengthProps = {
   params: Promise<{ focal: string }>;
-}
+};
 
 export async function generateMetadata(props: FocalLengthProps): Promise<Metadata> {
   const params = await props.params;

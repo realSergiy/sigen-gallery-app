@@ -6,11 +6,11 @@ export const MAX_PHOTOS_TO_SHOW_PER_TAG = 6;
 export const MAX_PHOTOS_TO_SHOW_TEMPLATE = 16;
 export const MAX_PHOTOS_TO_SHOW_TEMPLATE_TIGHT = 12;
 
-interface OGImageDimension {
+type OGImageDimension = {
   width: NextImageSize;
   height: number;
   aspectRatio: number;
-}
+};
 
 // 16:9 og image ratio
 const IMAGE_OG_RATIO = 16 / 9;

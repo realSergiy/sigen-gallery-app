@@ -7,9 +7,9 @@ import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 
 export const maxDuration = 60;
 
-interface Params {
+type Params = {
   params: Promise<{ uploadPath: string }>;
-}
+};
 
 export default async function VideoUploadPage(props: Params) {
   const params = await props.params;

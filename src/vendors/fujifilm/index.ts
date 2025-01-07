@@ -107,11 +107,11 @@ const getFujifilmMode = (value?: number): FujifilmMode | undefined => {
   }
 };
 
-interface FujifilmSimulationLabel {
+type FujifilmSimulationLabel = {
   small: string;
   medium: string;
   large: string;
-}
+};
 
 const FILM_SIMULATION_LABELS: Record<FujifilmSimulation, FujifilmSimulationLabel> = {
   monochrome: {
