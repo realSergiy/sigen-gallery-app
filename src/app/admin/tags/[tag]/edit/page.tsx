@@ -9,9 +9,9 @@ import AdminTagBadge from '@/admin/AdminTagBadge';
 
 const MAX_PHOTO_TO_SHOW = 6;
 
-interface Props {
+type Props = {
   params: Promise<{ tag: string }>;
-}
+};
 
 export default async function PhotoPageEdit(props: Props) {
   const params = await props.params;

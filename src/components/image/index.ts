@@ -5,7 +5,7 @@ export const IMAGE_WIDTH_MEDIUM = 300;
 // Height determined by intrinsic photo aspect ratio
 export const IMAGE_WIDTH_LARGE = 1000;
 
-export interface ImageProps {
+export type ImageProps = {
   aspectRatio: number;
   blurCompatibilityMode?: boolean;
   className?: string;
@@ -14,4 +14,4 @@ export interface ImageProps {
   alt: string;
   blurDataURL?: string;
   priority?: boolean;
-}
+};

@@ -15,9 +15,9 @@ const getPhotosNearIdCachedCached = cache((photoId: string) =>
   }),
 );
 
-interface PhotoTagProps {
+type PhotoTagProps = {
   params: Promise<{ photoId: string }>;
-}
+};
 
 export async function generateMetadata(props: PhotoTagProps): Promise<Metadata> {
   const params = await props.params;

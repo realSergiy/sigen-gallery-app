@@ -3,12 +3,12 @@ import LabeledIcon, { LabeledIconType } from './LabeledIcon';
 import Badge from '../Badge';
 import { clsx } from 'clsx/lite';
 
-export interface EntityLinkExternalProps {
+export type EntityLinkExternalProps = {
   type?: LabeledIconType;
   badged?: boolean;
   contrast?: 'low' | 'medium' | 'high';
   prefetch?: boolean;
-}
+};
 
 export default function EntityLink({
   icon,

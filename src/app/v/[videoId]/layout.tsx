@@ -25,9 +25,9 @@ if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   };
 }
 
-interface VideoProps {
+type VideoProps = {
   params: Promise<{ videoId: string }>;
-}
+};
 
 export async function generateMetadata(props: VideoProps): Promise<Metadata> {
   const params = await props.params;

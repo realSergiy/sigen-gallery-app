@@ -8,13 +8,13 @@ export type Lens = {
   model: string;
 };
 
-export interface LensProps {
+export type LensProps = {
   params: Lens;
-}
+};
 
-export interface PhotoLensProps {
+export type PhotoLensProps = {
   params: Lens & { photoId: string };
-}
+};
 
 export type LensWithCount = {
   lensKey: string;

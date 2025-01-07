@@ -24,9 +24,9 @@ if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   };
 }
 
-interface PhotoProps {
+type PhotoProps = {
   params: Promise<{ photoId: string }>;
-}
+};
 
 export async function generateMetadata(props: PhotoProps): Promise<Metadata> {
   const params = await props.params;

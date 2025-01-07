@@ -47,7 +47,7 @@ export const ACCEPTED_PHOTO_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png'
 export const MAX_PHOTO_UPLOAD_SIZE_IN_BYTES = 50_000_000;
 
 // Core EXIF data
-export interface PhotoExif {
+export type PhotoExif = {
   aspectRatio: number;
   make?: string;
   model?: string;
@@ -64,10 +64,10 @@ export interface PhotoExif {
   filmSimulation?: FilmSimulation;
   takenAt?: string;
   takenAtNaive?: string;
-}
+};
 
 // Raw db insert
-export interface PhotoDbInsert extends PhotoExif {
+export type PhotoDbInsert = {
   id: string;
   url: string;
   extension: string;
@@ -81,7 +81,7 @@ export interface PhotoDbInsert extends PhotoExif {
   hidden?: boolean;
   takenAt: string;
   takenAtNaive: string;
-}
+} & PhotoExif;
 
 // Raw db response
 export type PhotoDb = Omit<PhotoDbInsert, 'takenAt' | 'tags'> & {
@@ -102,13 +102,13 @@ export type Photo = PhotoDb & {
   takenAtNaiveFormatted: string;
 };
 
-export interface PhotoSetAttributes {
+export type PhotoSetAttributes = {
   tag?: string;
   camera?: Camera;
   simulation?: FilmSimulation;
   focal?: number;
   lens?: Lens; // Unimplemented as a set
-}
+};
 
 export const parsePhotoFromDb = (photoDbRaw: PhotoDb): Photo => {
   const photoDb = camelcaseKeys(

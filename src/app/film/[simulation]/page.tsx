@@ -7,9 +7,9 @@ import { cache } from 'react';
 
 const getPhotosFilmSimulationDataCachedCached = cache(getPhotosFilmSimulationDataCached);
 
-interface FilmSimulationProps {
+type FilmSimulationProps = {
   params: Promise<{ simulation: FilmSimulation }>;
-}
+};
 
 export async function generateMetadata(props: FilmSimulationProps): Promise<Metadata> {
   const params = await props.params;

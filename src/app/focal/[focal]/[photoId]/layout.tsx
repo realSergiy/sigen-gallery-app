@@ -15,9 +15,9 @@ const getPhotosNearIdCachedCached = cache((photoId: string, focal: number) =>
   }),
 );
 
-interface PhotoFocalLengthProps {
+type PhotoFocalLengthProps = {
   params: Promise<{ photoId: string; focal: string }>;
-}
+};
 
 export async function generateMetadata(props: PhotoFocalLengthProps): Promise<Metadata> {
   const params = await props.params;

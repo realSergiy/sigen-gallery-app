@@ -13,9 +13,9 @@ const getPhotosFilmSimulationDataCachedCached = cache((simulation: FilmSimulatio
   }),
 );
 
-interface FilmSimulationProps {
+type FilmSimulationProps = {
   params: Promise<{ simulation: FilmSimulation }>;
-}
+};
 
 export async function generateMetadata(props: FilmSimulationProps): Promise<Metadata> {
   const params = await props.params;
