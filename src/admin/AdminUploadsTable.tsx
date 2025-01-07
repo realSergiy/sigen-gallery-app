@@ -47,7 +47,7 @@ export default function AdminUploadsTable({
                 <ImageSmall
                   src={url}
                   alt={url}
-                  aspectRatio={3.0 / 2.0}
+                  aspectRatio={3 / 2}
                   className={clsx('overflow-hidden rounded-[3px]', 'border-subtle')}
                 />
               </div>

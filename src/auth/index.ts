@@ -1,4 +1,5 @@
 import { isPathProtected } from '@/site/paths';
+// eslint-disable-next-line import/named
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -18,7 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           process.env.ADMIN_PASSWORD &&
           process.env.ADMIN_PASSWORD === password
         ) {
-          const user: User = { email, name: 'Admin User' };
+          const user = { email, name: 'Admin User' } satisfies User;
           return user;
         } else {
           return null;

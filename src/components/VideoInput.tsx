@@ -74,15 +74,15 @@ export default function VideoInput({
               const { files } = e.currentTarget;
               if (files && files.length > 0) {
                 setFilesLength(files.length);
-                for (let i = 0; i < files.length; i++) {
-                  const file = files[i];
-                  setFileUploadIndex(i);
+                for (let index = 0; index < files.length; index++) {
+                  const file = files[index];
+                  setFileUploadIndex(index);
                   setFileUploadName(file.name);
                   await onBlobReady?.({
                     blob: file,
                     extension: file.name.split('.').pop()?.toLowerCase(),
                     hasMultipleUploads: files.length > 1,
-                    isLastBlob: i === files.length - 1,
+                    isLastBlob: index === files.length - 1,
                   });
                 }
               }

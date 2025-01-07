@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useRef } from 'react';
-import { Variant, motion } from 'framer-motion';
+import { type Variant, motion } from 'framer-motion';
 import { useAppState } from '@/state/AppState';
 import usePrefersReducedMotion from '@/utility/usePrefersReducedMotion';
 

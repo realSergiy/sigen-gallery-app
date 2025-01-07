@@ -16,7 +16,7 @@ import { BiCheckCircle, BiImageAdd } from 'react-icons/bi';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import PhotoTagFieldset from './PhotoTagFieldset';
-import { getMessage } from '@/utility/err';
+import { getMessage } from '@/utility/error';
 
 const UPLOAD_BATCH_SIZE = 4;
 
@@ -64,7 +64,7 @@ export default function AdminAddAllUploads({
               ? {
                   ...status,
                   // Prevent status regressions
-                  status: status.status !== 'added' ? data.status : 'added',
+                  status: status.status === 'added' ? 'added' : data.status,
                   statusMessage: data.statusMessage,
                   progress: data.progress,
                 }
@@ -143,7 +143,7 @@ export default function AdminAddAllUploads({
                       status: index === 0 ? 'adding' : 'waiting',
                     })),
                   );
-                  const uploadsToAdd = storageUrls.slice();
+                  const uploadsToAdd = [...storageUrls];
                   try {
                     while (uploadsToAdd.length > 0) {
                       await addUploadUrls(uploadsToAdd.splice(0, UPLOAD_BATCH_SIZE));

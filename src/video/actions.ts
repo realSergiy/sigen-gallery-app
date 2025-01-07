@@ -94,7 +94,7 @@ export const toggleFavoriteVideoAction = async (videoId: string, shouldRedirect?
     const video = await getVideo(videoId);
     if (video) {
       const { tags } = video;
-      video.tags = tags.some(tag => tag === TAG_FAVS)
+      video.tags = tags.includes(TAG_FAVS)
         ? tags.filter(tag => !isTagFavs(tag))
         : [...tags, TAG_FAVS];
       await updateVideo(convertVideoToVideoDbUpdate(video));

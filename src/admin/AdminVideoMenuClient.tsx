@@ -56,28 +56,28 @@ export default function AdminVideoMenuClient({
           ),
       });
     }
-    items.push({
-      label: 'Download',
-      icon: (
-        <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
-      ),
-      href: video.url,
-      hrefDownloadName: downloadFileNameForVideo(video),
-    });
-    items.push({
-      label: 'Delete',
-      icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
-      action: () => {
-        if (confirm(deleteConfirmationTextForVideo(video))) {
-          return deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
-            revalidateVideo?.(video.id, true);
-            registerAdminUpdate?.();
-          });
-        } else {
-          return Promise.resolve();
-        }
+    items.push(
+      {
+        label: 'Download',
+        icon: (
+          <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
+        ),
+        href: video.url,
+        hrefDownloadName: downloadFileNameForVideo(video),
       },
-    });
+      {
+        label: 'Delete',
+        icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
+        action: () => {
+          return confirm(deleteConfirmationTextForVideo(video))
+            ? deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
+                revalidateVideo?.(video.id, true);
+                registerAdminUpdate?.();
+              })
+            : Promise.resolve();
+        },
+      },
+    );
     return items;
   }, [
     video,

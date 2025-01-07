@@ -11,8 +11,8 @@ const BYTES_PER_TAG = 12;
 const BYTE_OFFSET_TAG_TYPE = 2;
 const BYTE_OFFSET_TAG_VALUE = 8;
 
-const TAG_ID_SATURATION = 0x1003;
-const TAG_ID_FILM_MODE = 0x1401;
+const TAG_ID_SATURATION = 0x10_03;
+const TAG_ID_FILM_MODE = 0x14_01;
 
 type FujifilmSimulationFromSaturation =
   | 'monochrome'
@@ -50,59 +50,59 @@ const getFujifilmSimulationFromSaturation = (
   value?: number,
 ): FujifilmSimulationFromSaturation | undefined => {
   switch (value) {
-    case 0x300:
+    case 0x3_00:
       return 'monochrome';
-    case 0x301:
+    case 0x3_01:
       return 'monochrome-r';
-    case 0x302:
+    case 0x3_02:
       return 'monochrome-ye';
-    case 0x303:
+    case 0x3_03:
       return 'monochrome-g';
-    case 0x310:
+    case 0x3_10:
       return 'sepia';
-    case 0x500:
+    case 0x5_00:
       return 'acros';
-    case 0x501:
+    case 0x5_01:
       return 'acros-r';
-    case 0x502:
+    case 0x5_02:
       return 'acros-ye';
-    case 0x503:
+    case 0x5_03:
       return 'acros-g';
   }
 };
 
 const getFujifilmMode = (value?: number): FujifilmMode | undefined => {
   switch (value) {
-    case 0x000:
+    case 0x0_00:
       return 'provia';
-    case 0x100:
+    case 0x1_00:
       return 'portrait';
-    case 0x110:
+    case 0x1_10:
       return 'portrait-saturation';
-    case 0x120:
+    case 0x1_20:
       return 'astia'; // can be encoded as 'portrait-skin-tone'
-    case 0x130:
+    case 0x1_30:
       return 'portrait-sharpness';
-    case 0x300:
+    case 0x3_00:
       return 'portrait-ex';
-    case 0x200:
-    case 0x400:
+    case 0x2_00:
+    case 0x4_00:
       return 'velvia';
-    case 0x500:
+    case 0x5_00:
       return 'pro-neg-std';
-    case 0x501:
+    case 0x5_01:
       return 'pro-neg-hi';
-    case 0x600:
+    case 0x6_00:
       return 'classic-chrome';
-    case 0x700:
+    case 0x7_00:
       return 'eterna';
-    case 0x800:
+    case 0x8_00:
       return 'classic-neg';
-    case 0x900:
+    case 0x9_00:
       return 'eterna-bleach-bypass';
-    case 0xa00:
+    case 0xa_00:
       return 'nostalgic-neg';
-    case 0xb00:
+    case 0xb_00:
       return 'reala';
   }
 };
@@ -254,8 +254,8 @@ const parseFujifilmMakerNote = (
   valueForTagUInt: (tagId: number, value: number) => void,
 ) => {
   const tagCount = bytes.readUint16LE(BYTE_INDEX_TAG_COUNT);
-  for (let i = 0; i < tagCount; i++) {
-    const index = BYTE_INDEX_FIRST_TAG + i * BYTES_PER_TAG;
+  for (let index_ = 0; index_ < tagCount; index_++) {
+    const index = BYTE_INDEX_FIRST_TAG + index_ * BYTES_PER_TAG;
     if (index + BYTES_PER_TAG < bytes.length) {
       const tagId = bytes.readUInt16LE(index);
       const tagType = bytes.readUInt16LE(index + BYTE_OFFSET_TAG_TYPE);

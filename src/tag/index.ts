@@ -26,7 +26,7 @@ export const getValidationMessageForTags = (tags?: string) => {
   const reservedTags = (convertStringToArray(tags) ?? [])
     .filter(tag => isTagFavs(tag) || isTagHidden(tag))
     .map(tag => tag.toLocaleUpperCase());
-  return reservedTags.length
+  return reservedTags.length > 0
     ? `Reserved tags: ${reservedTags.join(', ').toLocaleLowerCase()}`
     : undefined;
 };
@@ -85,14 +85,12 @@ export const isPathFavs = (pathname?: string) => getPathComponents(pathname).tag
 export const isTagHidden = (tag: string) => tag.toLowerCase() === TAG_HIDDEN;
 
 export const addHiddenToTags = (tags: Tags, hiddenPhotosCount = 0) => {
-  if (hiddenPhotosCount > 0) {
-    return tags
-      .filter(({ tag }) => tag === TAG_FAVS)
-      .concat({ tag: TAG_HIDDEN, count: hiddenPhotosCount })
-      .concat(tags.filter(({ tag }) => tag !== TAG_FAVS));
-  } else {
-    return tags;
-  }
+  return hiddenPhotosCount > 0
+    ? tags
+        .filter(({ tag }) => tag === TAG_FAVS)
+        .concat({ tag: TAG_HIDDEN, count: hiddenPhotosCount })
+        .concat(tags.filter(({ tag }) => tag !== TAG_FAVS))
+    : tags;
 };
 
 export const convertTagsForForm = (tags: Tags = []) =>

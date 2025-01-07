@@ -82,11 +82,11 @@ export default function PhotoForm({
       const changedKeys: (keyof PhotoFormData)[] = [];
 
       setFormData(currentForm => {
-        Object.entries(updatedExifData ?? {}).forEach(([key, value]) => {
+        for (const [key, value] of Object.entries(updatedExifData ?? {})) {
           if (currentForm[key as keyof PhotoFormData] !== value) {
             changedKeys.push(key as keyof PhotoFormData);
           }
-        });
+        }
 
         return {
           ...currentForm,
@@ -214,11 +214,9 @@ export default function PhotoForm({
     hideIfEmpty?: boolean,
     shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
   ) => {
-    if (key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks) {
-      return true;
-    } else {
-      return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
-    }
+    return key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks
+      ? true
+      : (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
   };
 
   return (

@@ -137,7 +137,7 @@ export default function FieldSetWithStatus({
             }
             type={type}
             autoComplete="off"
-            autoCapitalize={!capitalize ? 'off' : undefined}
+            autoCapitalize={capitalize ? undefined : 'off'}
             readOnly={readOnly || pending || loading}
             disabled={type === 'checkbox' && (readOnly || pending || loading)}
             className={clsx(

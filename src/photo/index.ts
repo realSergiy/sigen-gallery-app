@@ -84,15 +84,15 @@ export interface PhotoDbInsert extends PhotoExif {
 }
 
 // Raw db response
-export interface PhotoDb extends Omit<PhotoDbInsert, 'takenAt' | 'tags'> {
+export type PhotoDb = Omit<PhotoDbInsert, 'takenAt' | 'tags'> & {
   updatedAt: Date;
   createdAt: Date;
   takenAt: Date;
   tags: string[];
-}
+};
 
 // Parsed db response
-export interface Photo extends PhotoDb {
+export type Photo = PhotoDb & {
   focalLengthFormatted?: string;
   focalLengthIn35MmFormatFormatted?: string;
   fNumberFormatted?: string;
@@ -100,7 +100,7 @@ export interface Photo extends PhotoDb {
   exposureTimeFormatted?: string;
   exposureCompensationFormatted?: string;
   takenAtNaiveFormatted: string;
-}
+};
 
 export interface PhotoSetAttributes {
   tag?: string;

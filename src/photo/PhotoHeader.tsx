@@ -6,7 +6,7 @@ import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
-import PhotoPrevNext from './PhotoPrevNext';
+import PhotoPreviousNext from './PhotoPreviousNext';
 import PhotoLink from './PhotoLink';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 import { useAppState } from '@/state/AppState';
@@ -54,8 +54,8 @@ export default function PhotoHeader({
         ? 'photo-detail-with-entity'
         : 'photo-detail';
 
-  const renderPrevNext = () => (
-    <PhotoPrevNext
+  const renderPreviousNext = () => (
+    <PhotoPreviousNext
       {...{
         photo: selectedPhoto,
         photos,
@@ -163,7 +163,7 @@ export default function PhotoHeader({
           <div
             className={clsx(headerType === 'photo-set' ? 'hidden sm:flex' : 'flex', 'justify-end')}
           >
-            {selectedPhoto ? renderPrevNext() : renderDateRange()}
+            {selectedPhoto ? renderPreviousNext() : renderDateRange()}
           </div>
         </DivDebugBaselineGrid>,
       ]}

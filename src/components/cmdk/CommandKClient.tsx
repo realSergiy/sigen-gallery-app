@@ -21,12 +21,11 @@ import { useDebounce } from 'use-debounce';
 import Spinner from '../Spinner';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BiDesktop, BiMoon, BiSun } from 'react-icons/bi';
+import { BiDesktop, BiMoon, BiSun, BiLockAlt, BiSolidUser } from 'react-icons/bi';
 import { IoInvertModeSharp } from 'react-icons/io5';
 import { useAppState } from '@/state/AppState';
 import { searchPhotosAction } from '@/photo/actions';
 import { RiToolsFill } from 'react-icons/ri';
-import { BiLockAlt, BiSolidUser } from 'react-icons/bi';
 import { HiDocumentText } from 'react-icons/hi';
 import { signOutAndRedirectAction } from '@/auth/actions';
 import { TbPhoto } from 'react-icons/tb';
@@ -247,22 +246,22 @@ export default function CommandKClient({
       items: [
         {
           label: 'Toggle Photo Matting',
-          action: () => setArePhotosMatted?.(prev => !prev),
+          action: () => setArePhotosMatted?.(previous => !previous),
           annotation: arePhotosMatted ? <FaCheck size={12} /> : undefined,
         },
         {
           label: 'Toggle High Density Grid',
-          action: () => setIsGridHighDensity?.(prev => !prev),
+          action: () => setIsGridHighDensity?.(previous => !previous),
           annotation: isGridHighDensity ? <FaCheck size={12} /> : undefined,
         },
         {
           label: 'Toggle Image Fallbacks',
-          action: () => setShouldDebugImageFallbacks?.(prev => !prev),
+          action: () => setShouldDebugImageFallbacks?.(previous => !previous),
           annotation: shouldDebugImageFallbacks ? <FaCheck size={12} /> : undefined,
         },
         {
           label: 'Toggle Baseline Grid',
-          action: () => setShouldShowBaselineGrid?.(prev => !prev),
+          action: () => setShouldShowBaselineGrid?.(previous => !previous),
           annotation: shouldShowBaselineGrid ? <FaCheck size={12} /> : undefined,
         },
       ],
@@ -448,14 +447,14 @@ export default function CommandKClient({
                               }
                             }
                             if (path) {
-                              if (path !== pathname) {
+                              if (path === pathname) {
+                                setIsOpen?.(false);
+                              } else {
                                 setKeyPending(key);
                                 startTransition(async () => {
                                   shouldCloseAfterPending.current = true;
                                   router.push(path, { scroll: true });
                                 });
-                              } else {
-                                setIsOpen?.(false);
                               }
                             }
                           }}

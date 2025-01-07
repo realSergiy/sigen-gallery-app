@@ -8,7 +8,7 @@ export default function SwitcherItem({
   icon,
   title,
   href,
-  className: classNameProp,
+  className: classNameProperty,
   onClick,
   active,
   noPadding,
@@ -24,7 +24,7 @@ export default function SwitcherItem({
   prefetch?: boolean;
 }) {
   const className = clsx(
-    classNameProp,
+    classNameProperty,
     'px-1.5 py-0.5',
     'cursor-pointer',
     'hover:bg-gray-100/60 active:bg-gray-100',

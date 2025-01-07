@@ -272,8 +272,7 @@ export const isPathSignIn = (pathname?: string) => checkPathPrefix(pathname, PAT
 
 export const isPathAdmin = (pathname?: string) => checkPathPrefix(pathname, PATH_ADMIN);
 
-export const isPathTopLevelAdmin = (pathname?: string) =>
-  PATHS_ADMIN.some(path => path === pathname);
+export const isPathTopLevelAdmin = (pathname: string) => PATHS_ADMIN.includes(pathname);
 
 export const isPathAdminConfiguration = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN_CONFIGURATION);
@@ -311,7 +310,7 @@ export const getPathComponents = (
 
   const camera = cameraMake && cameraModel ? { make: cameraMake, model: cameraModel } : undefined;
 
-  const focal = focalString ? parseInt(focalString) : undefined;
+  const focal = focalString ? Number.parseInt(focalString) : undefined;
 
   return {
     photoId:

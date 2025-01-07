@@ -66,19 +66,19 @@ const getPhotosCacheKeyForOption = (
     // Primitive keys
     default:
       const value = options[option];
-      return value !== undefined ? `${option}-${value}` : null;
+      return value === undefined ? null : `${option}-${value}`;
   }
 };
 
 const getPhotosCacheKeys = (options: GetPhotosOptions = {}) => {
   const tags: string[] = [];
 
-  Object.keys(options).forEach(key => {
+  for (const key of Object.keys(options)) {
     const tag = getPhotosCacheKeyForOption(options, key as keyof GetPhotosOptions);
     if (tag) {
       tags.push(tag);
     }
-  });
+  }
 
   return tags;
 };
@@ -99,12 +99,12 @@ export const revalidateAllKeys = () => {
 };
 
 export const revalidateAdminPaths = () => {
-  PATHS_ADMIN.forEach(path => revalidatePath(path));
+  for (const path of PATHS_ADMIN) revalidatePath(path);
 };
 
 export const revalidateAllKeysAndPaths = () => {
   revalidateAllKeys();
-  PATHS_TO_CACHE.forEach(path => revalidatePath(path, 'layout'));
+  for (const path of PATHS_TO_CACHE) revalidatePath(path, 'layout');
 };
 
 export const revalidatePhoto = (photoId: string) => {

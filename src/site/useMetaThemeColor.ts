@@ -19,7 +19,7 @@ export default function useMetaThemeColor({
       const meta = document.createElement('meta');
       meta.name = 'theme-color';
       meta.content = preferredThemeColor;
-      document.getElementsByTagName('head')[0]?.appendChild(meta);
+      document.querySelectorAll('head')[0]?.append(meta);
       return () => meta.remove();
     }
   }, [preferredThemeColor]);

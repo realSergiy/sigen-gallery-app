@@ -79,14 +79,13 @@ export const convertFormKeysToLabels = (keys: (keyof VideoFormData)[]) =>
 export const getFormErrors = (
   formData: Partial<VideoFormData>,
 ): Partial<Record<keyof VideoFormData, string>> =>
-  Object.keys(formData).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: FORM_METADATA_ENTRIES()
+  Object.fromEntries(
+    Object.keys(formData).map(key => [
+      key,
+      FORM_METADATA_ENTRIES()
         .find(([k]) => k === key)?.[1]
         .validate?.(formData[key as keyof VideoFormData]),
-    }),
-    {},
+    ]),
   );
 
 export const isFormValid = (formData: Partial<VideoFormData>) =>
@@ -145,7 +144,7 @@ export const convertFormDataToVideoDbInsert = (
   // Parse FormData:
   // - remove server action ID
   // - remove empty strings
-  Object.keys(videoForm).forEach(key => {
+  for (const key of Object.keys(videoForm)) {
     const meta = FORM_METADATA()[key as keyof VideoFormData];
     if (
       key.startsWith('$ACTION_ID_') ||
@@ -155,7 +154,7 @@ export const convertFormDataToVideoDbInsert = (
     ) {
       (videoForm as Record<string, unknown>)[key] = undefined;
     }
-  });
+  }
 
   return {
     ...(videoForm as VideoFormData & { filmSimulation?: FilmSimulation }),

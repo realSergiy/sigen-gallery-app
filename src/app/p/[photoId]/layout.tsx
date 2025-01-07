@@ -15,7 +15,7 @@ const getPhotosNearIdCachedCached = cache((photoId: string) =>
   getPhotosNearIdCached(photoId, { limit: RELATED_GRID_PHOTOS_TO_SHOW + 2 }),
 );
 
-export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined;
 
 if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {

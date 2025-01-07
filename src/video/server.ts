@@ -27,10 +27,8 @@ export const extractVideoDataFromBlobPath = async (
 
   let imageThumbnailBase64: string | undefined;
 
-  if (fileBytes) {
-    if (generateResizedImage) {
-      //      imageThumbnailBase64 = await resizeImage(fileBytes);
-    }
+  if (fileBytes && generateResizedImage) {
+    //      imageThumbnailBase64 = await resizeImage(fileBytes);
   }
 
   return {

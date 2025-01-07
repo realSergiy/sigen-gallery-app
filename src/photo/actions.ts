@@ -39,7 +39,7 @@ import { createStreamableValue } from 'ai/rsc';
 import { convertUploadToPhoto } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
-import { getMessage } from '@/utility/err';
+import { getMessage } from '@/utility/error';
 
 // Private actions
 
@@ -146,10 +146,10 @@ export const addAllUploadsAction = async ({
             }
           }
         }
-      } catch (error) {
-        const msg = getMessage(error);
+      } catch (e) {
+        const message = getMessage(e);
         stream.error(
-          `${msg} (${addedUploadUrls.length} of ${uploadUrls.length} photos successfully added)`,
+          `${message} (${addedUploadUrls.length} of ${uploadUrls.length} photos successfully added)`,
         );
       }
       revalidateAllKeysAndPaths();
@@ -200,7 +200,7 @@ export const toggleFavoritePhotoAction = async (photoId: string, shouldRedirect?
     const photo = await getPhoto(photoId);
     if (photo) {
       const { tags } = photo;
-      photo.tags = tags.some(tag => tag === TAG_FAVS)
+      photo.tags = tags.includes(TAG_FAVS)
         ? tags.filter(tag => !isTagFavs(tag))
         : [...tags, TAG_FAVS];
       await updatePhoto(convertPhotoToPhotoDbInsert(photo));
@@ -269,11 +269,7 @@ export const deleteUploadAction = async (url: string) =>
 export const getExifDataAction = async (url: string): Promise<Partial<PhotoFormData>> =>
   runAuthenticatedAdminServerAction(async () => {
     const { photoFormExif } = await extractImageDataFromBlobPath(url);
-    if (photoFormExif) {
-      return photoFormExif;
-    } else {
-      return {};
-    }
+    return photoFormExif || {};
   });
 
 // Accessed from admin photo table, will:

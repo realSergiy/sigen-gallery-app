@@ -10,7 +10,7 @@ export default async function AdminOutdatedPage() {
     hidden: 'include',
     sortBy: 'createdAtAsc',
     updatedBefore: OUTDATED_THRESHOLD,
-    limit: 1_000,
+    limit: 1000,
   }).catch(() => []);
 
   return (

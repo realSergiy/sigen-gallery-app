@@ -9,7 +9,7 @@ import { Photo, PhotoSetAttributes } from '.';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { GetPhotosOptions } from './db';
-import { Arguments } from 'swr';
+import { type Arguments } from 'swr';
 
 export type RevalidatePhoto = (
   photoId: string,
@@ -47,7 +47,7 @@ export default function InfinitePhotoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Photo[]) => (prev && prev.length === 0 ? null : [key, size]),
+    (size: number, previous: Photo[]) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
@@ -90,7 +90,7 @@ export default function InfinitePhotoScroll({
   const isLoadingOrValidating = isLoading || isValidating;
 
   const isFinished = useMemo(
-    () => data && data[data.length - 1]?.length < itemsPerPage,
+    () => data && (data.at(-1)?.length ?? 0) < itemsPerPage,
     [data, itemsPerPage],
   );
 
@@ -108,8 +108,10 @@ export default function InfinitePhotoScroll({
         revalidate: (_data: Photo[], key: Arguments) => {
           if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
             const size = key[1];
-            const i = (data ?? []).findIndex(photos => photos.some(photo => photo.id === photoId));
-            return revalidateRemainingPhotos ? size >= i : size === i;
+            const index = (data ?? []).findIndex(photos =>
+              photos.some(photo => photo.id === photoId),
+            );
+            return revalidateRemainingPhotos ? size >= index : size === index;
           }
           return false;
         },

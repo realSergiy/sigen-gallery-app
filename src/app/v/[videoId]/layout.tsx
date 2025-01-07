@@ -16,7 +16,7 @@ const getVideosNearIdCachedCached = cache((videoId: string) =>
   getVideosNearIdCached(videoId, { limit: RELATED_GRID_VIDEOS_TO_SHOW + 2 }),
 );
 
-export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined;
 
 if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {

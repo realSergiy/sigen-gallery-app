@@ -7,7 +7,7 @@ import { IoMdCamera } from 'react-icons/io';
 import { NextImageSize } from '@/services/next-image';
 
 export default function CameraImageResponse({
-  camera: cameraProp,
+  camera: cameraProperty,
   photos,
   width,
   height,
@@ -19,7 +19,7 @@ export default function CameraImageResponse({
   height: number;
   fontFamily: string;
 }) {
-  const camera = cameraFromPhoto(photos[0], cameraProp);
+  const camera = cameraFromPhoto(photos[0], cameraProperty);
   return (
     <ImageContainer
       {...{
