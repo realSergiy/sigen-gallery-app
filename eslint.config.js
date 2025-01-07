@@ -7,8 +7,8 @@ const compat = new FlatCompat({
 
 // ToDo: firstly consider using xo: https://github.com/xojs/xo
 // otherwise
-// -migrate to typescript-eslint: https://typescript-eslint.io/packages/typescript-eslint
-// - convert to .ts: https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files
+// - convert to .ts once stable: https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files
+// - migrate to typescript-eslint: https://typescript-eslint.io/packages/typescript-eslint
 // - replace FlatCompat with flat configs
 
 /** @type {import('eslint').Linter.Config} */
@@ -27,7 +27,9 @@ const config = [
     plugins: ['@typescript-eslint', 'simple-import-sort'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
-      projectService: true,
+      projectService: {
+        allowDefaultProject: ['eslint.config.js'],
+      },
       tsconfigRootDir: import.meta.dirname,
     },
     rules: {
