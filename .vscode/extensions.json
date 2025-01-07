@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "firefox-devtools.vscode-firefox-debug",
+    "ms-azuretools.vscode-azurefunctions",
+    "ms-azuretools.vscode-azureresourcegroups",
+    "moshfeu.compare-folders",
+    "ms-vscode.vscode-copilot-data-analysis",
+    "ms-toolsai.datawrangler",
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
+    "formulahendry.docker-explorer",
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-js-profile-flame",
+    "donjayamanne.githistory",
+    "felipecaputo.git-project-manager",
+    "github.vscode-github-actions",
+    "github.codespaces",
+    "github.copilot-chat"
+  ]
+}
