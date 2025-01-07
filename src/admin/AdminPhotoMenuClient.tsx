@@ -56,28 +56,28 @@ export default function AdminPhotoMenuClient({
           ),
       });
     }
-    items.push({
-      label: 'Download',
-      icon: (
-        <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
-      ),
-      href: photo.url,
-      hrefDownloadName: downloadFileName(photo),
-    });
-    items.push({
-      label: 'Delete',
-      icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
-      action: () => {
-        if (confirm(deleteConfirmationTextForPhoto(photo))) {
-          return deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
-            revalidatePhoto?.(photo.id, true);
-            registerAdminUpdate?.();
-          });
-        } else {
-          return Promise.resolve();
-        }
+    items.push(
+      {
+        label: 'Download',
+        icon: (
+          <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
+        ),
+        href: photo.url,
+        hrefDownloadName: downloadFileName(photo),
       },
-    });
+      {
+        label: 'Delete',
+        icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
+        action: () => {
+          return confirm(deleteConfirmationTextForPhoto(photo))
+            ? deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
+                revalidatePhoto?.(photo.id, true);
+                registerAdminUpdate?.();
+              })
+            : Promise.resolve();
+        },
+      },
+    );
     return items;
   }, [
     photo,

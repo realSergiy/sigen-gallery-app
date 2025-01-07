@@ -6,7 +6,7 @@ import PhotoCamera from './PhotoCamera';
 import { descriptionForCameraPhotos } from './meta';
 
 export default function CameraHeader({
-  camera: cameraProp,
+  camera: cameraProperty,
   photos,
   selectedPhoto,
   indexNumber,
@@ -20,7 +20,7 @@ export default function CameraHeader({
   count?: number;
   dateRange?: PhotoDateRange;
 }) {
-  const camera = cameraFromPhoto(photos[0], cameraProp);
+  const camera = cameraFromPhoto(photos[0], cameraProperty);
   return (
     <PhotoHeader
       camera={camera}

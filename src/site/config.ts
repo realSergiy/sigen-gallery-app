@@ -142,7 +142,7 @@ export const SHOW_SOCIAL = process.env.NEXT_PUBLIC_HIDE_SOCIAL !== '1';
 export const SHOW_FILM_SIMULATIONS = process.env.NEXT_PUBLIC_HIDE_FILM_SIMULATIONS !== '1';
 export const SHOW_EXIF_DATA = process.env.NEXT_PUBLIC_HIDE_EXIF_DATA !== '1';
 export const GRID_ASPECT_RATIO = process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO
-  ? parseFloat(process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO)
+  ? Number.parseFloat(process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO)
   : 1;
 export const OG_TEXT_BOTTOM_ALIGNMENT =
   (process.env.NEXT_PUBLIC_OG_TEXT_ALIGNMENT ?? '').toUpperCase() === 'BOTTOM';

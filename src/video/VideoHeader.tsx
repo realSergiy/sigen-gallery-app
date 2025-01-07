@@ -6,7 +6,7 @@ import ShareButton from '@/components/ShareButton';
 import AnimateItems from '@/components/AnimateItems';
 import { ReactNode } from 'react';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
-import VideoPrevNext from './VideoPrevNext';
+import VideoPreviousNext from './VideoPreviousNext';
 import VideoLink from './VideoLink';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 import { useAppState } from '@/state/AppState';
@@ -52,8 +52,8 @@ export default function VideoHeader({
         ? 'video-detail-with-entity'
         : 'video-detail';
 
-  const renderPrevNext = () => (
-    <VideoPrevNext
+  const renderPreviousNext = () => (
+    <VideoPreviousNext
       {...{
         video: selectedVideo,
         videos,
@@ -158,7 +158,7 @@ export default function VideoHeader({
           <div
             className={clsx(headerType === 'video-set' ? 'hidden sm:flex' : 'flex', 'justify-end')}
           >
-            {selectedVideo ? renderPrevNext() : renderDateRange()}
+            {selectedVideo ? renderPreviousNext() : renderDateRange()}
           </div>
         </DivDebugBaselineGrid>,
       ]}

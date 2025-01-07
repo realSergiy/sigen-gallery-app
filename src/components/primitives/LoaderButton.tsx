@@ -46,9 +46,9 @@ export default function LoaderButton(
         }
       }}
       className={clsx(
-        ...(styleAs !== 'button'
-          ? ['link active:text-medium h-4', 'disabled:!bg-transparent']
-          : ['h-9']),
+        ...(styleAs === 'button'
+          ? ['h-9']
+          : ['link active:text-medium h-4', 'disabled:!bg-transparent']),
         styleAs === 'link' && 'hover:text-dim',
         styleAs === 'link-without-hover' && 'hover:text-main',
         'inline-flex items-center gap-2 self-start whitespace-nowrap',

@@ -1,18 +1,18 @@
-import fs from 'fs';
-import path from 'path';
-import { cwd } from 'process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { cwd } from 'node:process';
 
 const FONT_FAMILY_IBM_PLEX_MONO = 'IBMPlexMono';
 
 const getFontData = async () => {
   let data: ArrayBuffer;
-  if (typeof fs !== 'undefined') {
-    const buffer = fs.readFileSync(path.join(cwd(), '/public/fonts/IBMPlexMono-Medium.ttf'));
-    data = new Uint8Array(buffer).buffer;
-  } else {
+  if (fs === undefined) {
     data = await fetch(new URL('/public/fonts/IBMPlexMono-Medium.ttf', import.meta.url)).then(res =>
       res.arrayBuffer(),
     );
+  } else {
+    const buffer = fs.readFileSync(path.join(cwd(), '/public/fonts/IBMPlexMono-Medium.ttf'));
+    data = new Uint8Array(buffer).buffer;
   }
   return data;
 };

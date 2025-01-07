@@ -9,7 +9,7 @@ import { getPhotoIds } from '@/photo/db/query';
 import { GENERATE_STATIC_PARAMS_LIMIT } from '@/photo/db';
 import { isNextImageReadyBasedOnPhotos } from '@/photo';
 
-export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ photoId: string }[]>) | undefined;
 
 if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {

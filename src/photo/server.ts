@@ -1,8 +1,7 @@
 import { getExtensionFromStorageUrl, getPhotoIdFromStorageUrl } from '@/services/storage';
-import { convertExifToFormData } from '@/photo/form';
+import { convertExifToFormData, PhotoFormData } from '@/photo/form';
 import { getFujifilmSimulationFromMakerNote, isExifForFujifilm } from '@/vendors/fujifilm';
 import { ExifData, ExifParserFactory } from 'ts-exif-parser';
-import { PhotoFormData } from './form';
 import { FilmSimulation } from '@/simulation';
 import sharp, { Sharp } from 'sharp';
 import { GEO_PRIVACY_ENABLED, PRO_MODE_ENABLED } from '@/site/config';

@@ -91,10 +91,8 @@ export default function useAiImageQueries(
   );
 
   useEffect(() => {
-    if (imageBase64 && !hasRunAllQueriesOnce.current) {
-      if (textFieldsToAutoGenerate.length > 0) {
-        request(textFieldsToAutoGenerate);
-      }
+    if (imageBase64 && !hasRunAllQueriesOnce.current && textFieldsToAutoGenerate.length > 0) {
+      request(textFieldsToAutoGenerate);
     }
   }, [textFieldsToAutoGenerate, imageBase64, request]);
 

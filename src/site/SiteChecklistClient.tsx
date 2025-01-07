@@ -116,7 +116,7 @@ export default function SiteChecklistClient({
     />
   );
 
-  const renderEnvVar = (variable: string, minimal?: boolean) => (
+  const renderEnvironmentVariable = (variable: string, minimal?: boolean) => (
     <div
       key={variable}
       className={clsx('overflow-x-auto overflow-y-hidden', minimal && 'inline-flex')}
@@ -137,8 +137,10 @@ export default function SiteChecklistClient({
     </div>
   );
 
-  const renderEnvVars = (variables: string[]) => (
-    <div className="space-y-1 pt-1">{variables.map(envVar => renderEnvVar(envVar))}</div>
+  const renderEnvironmentVariables = (variables: string[]) => (
+    <div className="space-y-1 pt-1">
+      {variables.map(environmentVariable => renderEnvironmentVariable(environmentVariable))}
+    </div>
   );
 
   const renderSubStatus = (
@@ -230,11 +232,11 @@ export default function SiteChecklistClient({
             title={
               hasStorageProvider && isTestingConnections
                 ? 'Testing storage connection'
-                : !hasStorageProvider
-                  ? 'Setup storage (one of the following)'
-                  : hasMultipleStorageProviders
+                : hasStorageProvider
+                  ? hasMultipleStorageProviders
                     ? `Setup storage (new uploads go to: ${labelForStorage(currentStorage)})`
                     : 'Setup storage'
+                  : 'Setup storage (one of the following)'
             }
             status={hasStorageProvider}
             isPending={hasStorageProvider && isTestingConnections}
@@ -301,11 +303,11 @@ export default function SiteChecklistClient({
                 </Container>
               </div>
             )}
-            {renderEnvVars(['AUTH_SECRET'])}
+            {renderEnvironmentVariables(['AUTH_SECRET'])}
           </ChecklistRow>
           <ChecklistRow title="Setup admin user" status={hasAdminUser}>
             Store admin email/password in environment variables:
-            {renderEnvVars(['ADMIN_EMAIL', 'ADMIN_PASSWORD'])}
+            {renderEnvironmentVariables(['ADMIN_EMAIL', 'ADMIN_PASSWORD'])}
           </ChecklistRow>
         </Checklist>
         <Checklist title="Content" icon={<BiPencil size={16} />}>
@@ -317,19 +319,19 @@ export default function SiteChecklistClient({
                   'certain features to behave unexpectedly',
               })}
             Store in environment variable (seen in top-right nav):
-            {renderEnvVars(['NEXT_PUBLIC_SITE_DOMAIN'])}
+            {renderEnvironmentVariables(['NEXT_PUBLIC_SITE_DOMAIN'])}
           </ChecklistRow>
           <ChecklistRow title="Add title" status={hasTitle} optional>
             Store in environment variable (seen in browser tab):
-            {renderEnvVars(['NEXT_PUBLIC_SITE_TITLE'])}
+            {renderEnvironmentVariables(['NEXT_PUBLIC_SITE_TITLE'])}
           </ChecklistRow>
           <ChecklistRow title="Add description" status={hasDescription} optional>
             Store in environment variable (seen in nav, under title):
-            {renderEnvVars(['NEXT_PUBLIC_SITE_DESCRIPTION'])}
+            {renderEnvironmentVariables(['NEXT_PUBLIC_SITE_DESCRIPTION'])}
           </ChecklistRow>
           <ChecklistRow title="Add about" status={hasAbout} optional>
             Store in environment variable (seen in grid sidebar):
-            {renderEnvVars(['NEXT_PUBLIC_SITE_ABOUT'])}
+            {renderEnvironmentVariables(['NEXT_PUBLIC_SITE_ABOUT'])}
           </ChecklistRow>
         </Checklist>
         {!simplifiedView && (
@@ -358,7 +360,7 @@ export default function SiteChecklistClient({
                 Store your OpenAI secret key in order to add experimental support for AI-generated
                 text descriptions and enable an invisible field called {'"Semantic Description"'}{' '}
                 used to support CMD-K search:
-                {renderEnvVars(['OPENAI_SECRET_KEY'])}
+                {renderEnvironmentVariables(['OPENAI_SECRET_KEY'])}
               </ChecklistRow>
               <ChecklistRow
                 title={
@@ -387,13 +389,13 @@ export default function SiteChecklistClient({
               >
                 Comma-separated fields to auto-generate when uploading photos. Accepted values:
                 title, caption, tags, description, all, or none (default is {'"all"'}):
-                {renderEnvVars(['AI_TEXT_AUTO_GENERATED_FIELDS'])}
+                {renderEnvironmentVariables(['AI_TEXT_AUTO_GENERATED_FIELDS'])}
               </ChecklistRow>
             </Checklist>
             <Checklist title="Settings" icon={<BiCog size={16} />} optional>
               <ChecklistRow title="Grid homepage" status={isGridHomepageEnabled} optional>
                 Set environment variable to {'"1"'} to show grid layout on homepage:
-                {renderEnvVars(['NEXT_PUBLIC_GRID_HOMEPAGE'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_GRID_HOMEPAGE'])}
               </ChecklistRow>
               <ChecklistRow
                 title={`Default theme: ${defaultTheme}`}
@@ -402,11 +404,11 @@ export default function SiteChecklistClient({
               >
                 {"Set environment variable to 'light' or 'dark'"} to configure initial theme
                 (defaults to {"'system'"}):
-                {renderEnvVars(['NEXT_PUBLIC_DEFAULT_THEME'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_DEFAULT_THEME'])}
               </ChecklistRow>
               <ChecklistRow title="Pro mode" status={isProModeEnabled} optional>
                 Set environment variable to {'"1"'} to enable higher quality image storage:
-                {renderEnvVars(['NEXT_PUBLIC_PRO_MODE'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_PRO_MODE'])}
               </ChecklistRow>
               <ChecklistRow
                 title="Static optimization"
@@ -418,60 +420,60 @@ export default function SiteChecklistClient({
                 pages and images at build time:
                 {renderSubStatus(
                   arePagesStaticallyOptimized ? 'checked' : 'optional',
-                  renderEnvVars(['NEXT_PUBLIC_STATICALLY_OPTIMIZE_PAGES']),
+                  renderEnvironmentVariables(['NEXT_PUBLIC_STATICALLY_OPTIMIZE_PAGES']),
                   'translate-y-[3.5px]',
                 )}
                 {renderSubStatus(
                   areOGImagesStaticallyOptimized ? 'checked' : 'optional',
-                  renderEnvVars(['NEXT_PUBLIC_STATICALLY_OPTIMIZE_OG_IMAGES']),
+                  renderEnvironmentVariables(['NEXT_PUBLIC_STATICALLY_OPTIMIZE_OG_IMAGES']),
                   'translate-y-[3.5px]',
                 )}
               </ChecklistRow>
               <ChecklistRow title="Photo matting" status={arePhotosMatted} optional>
                 Set environment variable to {'"1"'} to constrain the size of each photo, and enable
                 a surrounding border:
-                {renderEnvVars(['NEXT_PUBLIC_MATTE_PHOTOS'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_MATTE_PHOTOS'])}
               </ChecklistRow>
               <ChecklistRow title="Image blur" status={isBlurEnabled} optional>
                 Set environment variable to {'"1"'} to prevent image blur data being stored and
                 displayed:
-                {renderEnvVars(['NEXT_PUBLIC_BLUR_DISABLED'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_BLUR_DISABLED'])}
               </ChecklistRow>
               <ChecklistRow title="Geo privacy" status={isGeoPrivacyEnabled} optional>
                 Set environment variable to {'"1"'} to disable collection/display of location-based
                 data:
-                {renderEnvVars(['NEXT_PUBLIC_GEO_PRIVACY'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_GEO_PRIVACY'])}
               </ChecklistRow>
               <ChecklistRow title="Show repo link" status={showRepoLink} optional>
                 Set environment variable to {'"1"'} to hide footer link:
-                {renderEnvVars(['NEXT_PUBLIC_HIDE_REPO_LINK'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_HIDE_REPO_LINK'])}
               </ChecklistRow>
               <ChecklistRow title="Public downloads" status={arePublicDownloadsEnabled} optional>
                 Set environment variable to {'"1"'} to enable public photo downloads for all
                 visitors:
-                {renderEnvVars(['NEXT_PUBLIC_ALLOW_PUBLIC_DOWNLOADS'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_ALLOW_PUBLIC_DOWNLOADS'])}
               </ChecklistRow>
               <ChecklistRow title="Public API" status={isPublicApiEnabled} optional>
                 Set environment variable to {'"1"'} to enable a public API available at{' '}
-                <code>/api</code>:{renderEnvVars(['NEXT_PUBLIC_PUBLIC_API'])}
+                <code>/api</code>:{renderEnvironmentVariables(['NEXT_PUBLIC_PUBLIC_API'])}
               </ChecklistRow>
               <ChecklistRow title="Priority order" status={isPriorityOrderEnabled} optional>
                 Set environment variable to {'"1"'} to prevent priority order photo field affecting
                 photo order:
-                {renderEnvVars(['NEXT_PUBLIC_IGNORE_PRIORITY_ORDER'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_IGNORE_PRIORITY_ORDER'])}
               </ChecklistRow>
               <ChecklistRow title="Show social" status={showSocial} optional>
                 Set environment variable to {'"1"'} to hide X button from share modal:
-                {renderEnvVars(['NEXT_PUBLIC_HIDE_SOCIAL'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_HIDE_SOCIAL'])}
               </ChecklistRow>
               <ChecklistRow title="Show Fujifilm simulations" status={showFilmSimulations} optional>
                 Set environment variable to {'"1"'} to prevent simulations showing up in /grid
                 sidebar and CMD-K results:
-                {renderEnvVars(['NEXT_PUBLIC_HIDE_FILM_SIMULATIONS'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_HIDE_FILM_SIMULATIONS'])}
               </ChecklistRow>
               <ChecklistRow title="Show EXIF data" status={showExifInfo} optional>
                 Set environment variable to {'"1"'} to hide EXIF data:
-                {renderEnvVars(['NEXT_PUBLIC_HIDE_EXIF_DATA'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_HIDE_EXIF_DATA'])}
               </ChecklistRow>
               <ChecklistRow
                 title={`Grid aspect ratio: ${gridAspectRatio}`}
@@ -480,7 +482,7 @@ export default function SiteChecklistClient({
               >
                 Set environment variable to any number to enforce aspect ratio (default is {'"1"'},
                 i.e., square)—set to {'"0"'} to disable:
-                {renderEnvVars(['NEXT_PUBLIC_GRID_ASPECT_RATIO'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_GRID_ASPECT_RATIO'])}
               </ChecklistRow>
               <ChecklistRow
                 title={`Grid density: ${gridDensity ? 'low' : 'high'}`}
@@ -489,7 +491,7 @@ export default function SiteChecklistClient({
               >
                 Set environment variable to {'"1"'} to ensure large thumbnails on photo grid views
                 (if not configured, density is based on aspect ratio configuration):
-                {renderEnvVars(['NEXT_PUBLIC_SHOW_LARGE_THUMBNAILS'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_SHOW_LARGE_THUMBNAILS'])}
               </ChecklistRow>
               <ChecklistRow
                 title="Legacy OG text alignment"
@@ -498,7 +500,7 @@ export default function SiteChecklistClient({
               >
                 Set environment variable to {'"BOTTOM"'} to keep OG image text bottom aligned
                 (default is {'"top"'}):
-                {renderEnvVars(['NEXT_PUBLIC_OG_TEXT_ALIGNMENT'])}
+                {renderEnvironmentVariables(['NEXT_PUBLIC_OG_TEXT_ALIGNMENT'])}
               </ChecklistRow>
             </Checklist>
           </>

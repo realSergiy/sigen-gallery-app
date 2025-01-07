@@ -19,8 +19,8 @@ export default function StaggeredOgVideos({
 }) {
   const [loadingState, setLoadingState] = useState(
     videos.reduce(
-      (acc, video) => ({
-        ...acc,
+      (accumulator, video) => ({
+        ...accumulator,
         [video.id]: 'unloaded' as const,
       }),
       {} as VideoLoadingState,
@@ -40,14 +40,14 @@ export default function StaggeredOgVideos({
         };
 
         let imagesLoadingCount = 0;
-        Object.entries(initialLoadingState).forEach(([id, state]) => {
+        for (const [id, state] of Object.entries(initialLoadingState)) {
           if (state === 'loading') {
             imagesLoadingCount++;
           } else if (imagesLoadingCount < maxConcurrency && state === 'unloaded') {
             updatedLoadingState[id] = 'loading';
             imagesLoadingCount++;
           }
-        });
+        }
 
         return updatedLoadingState;
       }),

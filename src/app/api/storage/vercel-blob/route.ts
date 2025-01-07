@@ -44,8 +44,8 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     console.log('Upload completed:', jsonResponse);
     return NextResponse.json(jsonResponse);
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+  } catch (e) {
+    console.error('Error uploading file:', e);
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

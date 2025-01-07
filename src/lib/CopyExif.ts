@@ -1,11 +1,11 @@
-export async function CopyExif(src: Blob, dest: Blob, type = 'image/jpeg') {
+export async function CopyExif(src: Blob, destination: Blob, type = 'image/jpeg') {
   const exif = await retrieveExif(src);
-  return new Blob([dest.slice(0, 2), exif, dest.slice(2)], { type });
+  return new Blob([destination.slice(0, 2), exif, destination.slice(2)], { type });
 }
 
-const SOS = 0xffda;
-const APP1 = 0xffe1;
-const EXIF = 0x45786966;
+const SOS = 0xff_da;
+const APP1 = 0xff_e1;
+const EXIF = 0x45_78_69_66;
 
 const retrieveExif = (blob: Blob): Promise<Blob> =>
   new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ const retrieveExif = (blob: Blob): Promise<Blob> =>
       const buffer = e.target.result as ArrayBuffer;
       const view = new DataView(buffer);
       let offset = 0;
-      if (view.getUint16(offset) !== 0xffd8) return reject('not a valid jpeg');
+      if (view.getUint16(offset) !== 0xff_d8) return reject('not a valid jpeg');
       offset += 2;
 
       while (true) {

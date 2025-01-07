@@ -4,7 +4,7 @@ const MEDIA_QUERY_SELECTOR = '(prefers-reduced-motion: reduce)';
 const MEDIA_QUERY_EVENT = 'change';
 
 const safelyGetMediaQuery = () =>
-  typeof window !== 'undefined' ? window.matchMedia(MEDIA_QUERY_SELECTOR) : undefined;
+  typeof window === 'undefined' ? undefined : window.matchMedia(MEDIA_QUERY_SELECTOR);
 
 const usePrefersReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(

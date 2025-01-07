@@ -60,12 +60,12 @@ export const revalidateAllKeys = () => {
 };
 
 export const revalidateAdminPaths = () => {
-  PATHS_ADMIN.forEach(path => revalidatePath(path));
+  for (const path of PATHS_ADMIN) revalidatePath(path);
 };
 
 export const revalidateAllKeysAndPaths = () => {
   revalidateAllKeys();
-  PATHS_TO_CACHE.forEach(path => revalidatePath(path, 'layout'));
+  for (const path of PATHS_TO_CACHE) revalidatePath(path, 'layout');
 };
 
 export const revalidateVideo = (videoId: string) => {

@@ -10,7 +10,7 @@ import { getVideoIds } from '@/db/video_orm';
 import { GENERATE_STATIC_PARAMS_LIMIT } from '@/media';
 import VideoImageResponse from '@/image-response/VideoImageResponse';
 
-export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined;
 
 if (STATICALLY_OPTIMIZED_OG_IMAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {

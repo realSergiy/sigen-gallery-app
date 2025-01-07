@@ -53,7 +53,7 @@ export default function Nav({ siteDomainOrTitle }: { siteDomainOrTitle: string }
       contentMain={
         <AnimateItems
           animateOnFirstLoadOnly
-          type={!isPathAdmin(pathname) ? 'bottom' : 'none'}
+          type={isPathAdmin(pathname) ? 'none' : 'bottom'}
           distanceOffset={10}
           items={
             showNav

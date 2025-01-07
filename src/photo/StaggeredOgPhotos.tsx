@@ -19,8 +19,8 @@ export default function StaggeredOgPhotos({
 }) {
   const [loadingState, setLoadingState] = useState(
     photos.reduce(
-      (acc, photo) => ({
-        ...acc,
+      (accumulator, photo) => ({
+        ...accumulator,
         [photo.id]: 'unloaded' as const,
       }),
       {} as PhotoLoadingState,
@@ -40,14 +40,14 @@ export default function StaggeredOgPhotos({
         };
 
         let imagesLoadingCount = 0;
-        Object.entries(initialLoadingState).forEach(([id, state]) => {
+        for (const [id, state] of Object.entries(initialLoadingState)) {
           if (state === 'loading') {
             imagesLoadingCount++;
           } else if (imagesLoadingCount < maxConcurrency && state === 'unloaded') {
             updatedLoadingState[id] = 'loading';
             imagesLoadingCount++;
           }
-        });
+        }
 
         return updatedLoadingState;
       }),

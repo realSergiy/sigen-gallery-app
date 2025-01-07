@@ -9,7 +9,7 @@ import { useAppState } from '@/state/AppState';
 import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
 import { getVideosAction, getVideosCachedAction } from './actions';
-import { Arguments } from 'swr';
+import { type Arguments } from 'swr';
 
 export type RevalidateVideo = (
   videoId: string,
@@ -44,7 +44,7 @@ export default function InfiniteVideoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Video[]) => (prev && prev.length === 0 ? null : [key, size]),
+    (size: number, previous: Video[]) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
@@ -76,7 +76,7 @@ export default function InfiniteVideoScroll({
   const isLoadingOrValidating = isLoading || isValidating;
 
   const isFinished = useMemo(
-    () => data && data[data.length - 1]?.length < itemsPerPage,
+    () => (data?.at(-1)?.length ?? 0) < itemsPerPage,
     [data, itemsPerPage],
   );
 
@@ -94,8 +94,10 @@ export default function InfiniteVideoScroll({
         revalidate: (_data: Video[], key: Arguments) => {
           if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
             const size = key[1];
-            const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
-            return revalidateRemainingVideos ? size >= i : size === i;
+            const index = (data ?? []).findIndex(videos =>
+              videos.some(video => video.id === videoId),
+            );
+            return revalidateRemainingVideos ? size >= index : size === index;
           }
           return false;
         },

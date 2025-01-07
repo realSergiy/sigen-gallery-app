@@ -51,11 +51,7 @@ export const convertVideoToVideoDbUpdate = (video: Video): VideoDbUpd => ({
 
 export const descriptionForVideo = (video: Video) => {
   const result = formatDate(video.takenAt);
-  if (result) {
-    return result.toUpperCase();
-  } else {
-    return '';
-  }
+  return result ? result.toUpperCase() : '';
 };
 
 export const getPreviousVideo = (video: Video, videos: Video[]) => {

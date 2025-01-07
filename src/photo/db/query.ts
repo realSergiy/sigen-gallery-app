@@ -1,14 +1,18 @@
 import { sql, query, convertArrayToPostgresString } from '@/services/postgres';
-import { PhotoDb, translatePhotoId, parsePhotoFromDb, Photo, PhotoDateRange } from '@/photo';
+import { type PhotoDb, translatePhotoId, parsePhotoFromDb, Photo, PhotoDateRange } from '@/photo';
 import { Cameras, createCameraKey } from '@/camera';
 import { Tags } from '@/tag';
 import { FilmSimulation, FilmSimulations } from '@/simulation';
 import { SHOULD_DEBUG_SQL } from '@/site/config';
-import { GetPhotosOptions, getLimitAndOffsetFromOptions, getOrderByFromOptions } from '.';
-import { getWheresFromOptions } from '.';
+import {
+  GetPhotosOptions,
+  getLimitAndOffsetFromOptions,
+  getOrderByFromOptions,
+  getWheresFromOptions,
+} from '.';
 import { FocalLengths } from '@/focal';
 import { Lenses, createLensKey } from '@/lens';
-import { getMessage } from '@/utility/err';
+import { getMessage } from '@/utility/error';
 
 const createPhotosTable = () =>
   sql`
@@ -111,17 +115,17 @@ export const safelyQueryPhotos = async <T>(
         throw e;
       }
     } else {
-      const errMsg = getMessage(e);
-      if (errMsg !== 'The server does not support SSL connections') {
+      const errorMessage = getMessage(e);
+      if (errorMessage !== 'The server does not support SSL connections') {
         // Avoid re-logging errors on initial installation
-        console.log(`sql get error: ${errMsg} `);
+        console.log(`sql get error: ${errorMessage} `);
       }
       throw e;
     }
   }
 
   if (SHOULD_DEBUG_SQL && debugMessage) {
-    const time = ((new Date().getTime() - start.getTime()) / 1000).toFixed(2);
+    const time = ((Date.now() - start.getTime()) / 1000).toFixed(2);
     console.log(`Executing sql query: ${debugMessage} (${time} seconds)`);
   }
 
@@ -303,7 +307,7 @@ export const getUniqueTags = async () =>
         ({ rows }): Tags =>
           rows.map(({ tag, count }) => ({
             tag: tag as string,
-            count: parseInt(count, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueTags',
@@ -321,7 +325,7 @@ export const getUniqueTagsHidden = async () =>
         ({ rows }): Tags =>
           rows.map(({ tag, count }) => ({
             tag: tag as string,
-            count: parseInt(count, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueTagsHidden',
@@ -343,7 +347,7 @@ export const getUniqueCameras = async () =>
           rows.map(({ make, model, count }) => ({
             cameraKey: createCameraKey({ make, model }),
             camera: { make, model },
-            count: parseInt(count, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueCameras',
@@ -366,7 +370,7 @@ export const getUniqueLenses = async () =>
           rows.map(({ lens_make: make, lens_model: model, count }) => ({
             lensKey: createLensKey({ make, model }),
             lens: { make, model },
-            count: parseInt(count, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueCameras',
@@ -385,7 +389,7 @@ export const getUniqueFilmSimulations = async () =>
         ({ rows }): FilmSimulations =>
           rows.map(({ film_simulation, count }) => ({
             simulation: film_simulation as FilmSimulation,
-            count: parseInt(count, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueFilmSimulations',
@@ -403,8 +407,8 @@ export const getUniqueFocalLengths = async () =>
   `.then(
         ({ rows }): FocalLengths =>
           rows.map(({ focal_length, count }) => ({
-            focal: parseInt(focal_length, 10),
-            count: parseInt(count, 10),
+            focal: Number.parseInt(focal_length, 10),
+            count: Number.parseInt(count, 10),
           })),
       ),
     'getUniqueFocalLengths',
@@ -465,7 +469,7 @@ export const getPhotosNearId = async (photoId: string, options: GetPhotosOptions
       [...wheresValues, photoId, limit],
     ).then(({ rows }) => {
       const photo = rows.find(({ id }) => id === photoId);
-      const indexNumber = photo ? parseInt(String(photo.row_number)) : undefined;
+      const indexNumber = photo ? Number.parseInt(String(photo.row_number)) : undefined;
       return {
         photos: rows.map(row => parsePhotoFromDb(row as unknown as PhotoDb)),
         indexNumber,
@@ -482,7 +486,7 @@ export const getPhotosMeta = (options: GetPhotosOptions = {}) =>
       sql += ` ${wheres}`;
     }
     return query(sql, wheresValues).then(({ rows }) => ({
-      count: parseInt(rows[0].count as string, 10),
+      count: Number.parseInt(rows[0].count as string, 10),
       ...(rows[0]?.start && rows[0]?.end ? { dateRange: rows[0] as PhotoDateRange } : undefined),
     }));
   }, 'getPhotosMeta');

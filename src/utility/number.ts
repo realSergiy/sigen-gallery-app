@@ -5,20 +5,16 @@ export const roundToString = (number: number, place = 1, includeZero?: boolean) 
 };
 
 export const roundToNumber = (...args: Parameters<typeof roundToString>) =>
-  parseFloat(roundToString(...args));
+  Number.parseFloat(roundToString(...args));
 
 const gcd = (a: number, b: number): number => {
-  if (b <= 0.0000001) {
-    return a;
-  } else {
-    return gcd(b, a % b);
-  }
+  return b <= 0.000_000_1 ? a : gcd(b, a % b);
 };
 
 const formatDecimalToFraction = (_decimal: number) => {
   // Prevent imprecision which causes numbers such as,
   // 0.1 to equal 0.10000000000000009
-  const decimal = parseFloat(_decimal.toPrecision(8));
+  const decimal = Number.parseFloat(_decimal.toPrecision(8));
   if (Math.abs(Math.abs(decimal) - 0.33) < 0.011) {
     return '1/3';
   } else if (Math.abs(Math.abs(decimal) - 0.66) <= 0.011) {
@@ -61,7 +57,7 @@ export const formatNumberToFraction = (number: number) => {
     integer += 1;
   }
 
-  const fraction = decimal !== 0 ? formatDecimalToFraction(Math.abs(decimal)) : '';
+  const fraction = decimal === 0 ? '' : formatDecimalToFraction(Math.abs(decimal));
 
   // Ensure fractions aren't too long
   if (!fraction || fraction.length <= MAX_FRACTION_LENGTH) {

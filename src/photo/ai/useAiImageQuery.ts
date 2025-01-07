@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { streamAiImageQueryAction } from '../actions';
 import { readStreamableValue } from 'ai/rsc';
 import { AiImageQuery } from '.';
-import { ErrorWithMessage, toErrorWithMessage } from '@/utility/err';
+import { ErrorWithMessage, toErrorWithMessage } from '@/utility/error';
 
 export default function useAiImageQuery(imageBase64: string | undefined, query: AiImageQuery) {
   const [text, setText] = useState('');

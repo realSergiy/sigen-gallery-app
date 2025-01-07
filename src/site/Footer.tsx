@@ -28,7 +28,7 @@ export default function Footer() {
       contentMain={
         <AnimateItems
           animateOnFirstLoadOnly
-          type={!shouldAnimate ? 'none' : 'bottom'}
+          type={shouldAnimate ? 'bottom' : 'none'}
           distanceOffset={10}
           items={
             showFooter

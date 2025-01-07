@@ -1,37 +1,39 @@
 'use client';
 
 import { useEffect } from 'react';
-import { VideoSetAttributes, getNextVideo, getPreviousVideo } from '@/video';
-import VideoLink from './VideoLink';
+import { Photo, PhotoSetAttributes, getNextPhoto, getPreviousPhoto } from '@/photo';
+import PhotoLink from './PhotoLink';
 import { useRouter } from 'next/navigation';
-import { pathForVideo } from '@/site/paths';
+import { pathForPhoto } from '@/site/paths';
 import { useAppState } from '@/state/AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import { clsx } from 'clsx/lite';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import { Video } from '@/db/video_orm';
 
 const LISTENER_KEYUP = 'keyup';
 
 const ANIMATION_LEFT: AnimationConfig = { type: 'left', duration: 0.3 };
 const ANIMATION_RIGHT: AnimationConfig = { type: 'right', duration: 0.3 };
 
-export default function VideoPrevNext({
-  video,
-  videos = [],
+export default function PhotoPreviousNext({
+  photo,
+  photos = [],
   className,
   tag,
+  camera,
+  simulation,
+  focal,
 }: {
-  video?: Video;
-  videos?: Video[];
+  photo?: Photo;
+  photos?: Photo[];
   className?: string;
-} & VideoSetAttributes) {
+} & PhotoSetAttributes) {
   const router = useRouter();
 
-  const { setNextVideoAnimation, shouldRespondToKeyboardCommands } = useAppState();
+  const { setNextPhotoAnimation, shouldRespondToKeyboardCommands } = useAppState();
 
-  const previousVideo = video ? getPreviousVideo(video, videos) : undefined;
-  const nextVideo = video ? getNextVideo(video, videos) : undefined;
+  const previousPhoto = photo ? getPreviousPhoto(photo, photos) : undefined;
+  const nextPhoto = photo ? getNextPhoto(photo, photos) : undefined;
 
   useEffect(() => {
     if (shouldRespondToKeyboardCommands) {
@@ -39,12 +41,15 @@ export default function VideoPrevNext({
         switch (e.key.toUpperCase()) {
           case 'ARROWLEFT':
           case 'J':
-            if (previousVideo) {
-              setNextVideoAnimation?.(ANIMATION_RIGHT);
+            if (previousPhoto) {
+              setNextPhotoAnimation?.(ANIMATION_RIGHT);
               router.push(
-                pathForVideo({
-                  video: previousVideo,
+                pathForPhoto({
+                  photo: previousPhoto,
                   tag,
+                  camera,
+                  simulation,
+                  focal,
                 }),
                 { scroll: false },
               );
@@ -52,12 +57,15 @@ export default function VideoPrevNext({
             break;
           case 'ARROWRIGHT':
           case 'L':
-            if (nextVideo) {
-              setNextVideoAnimation?.(ANIMATION_LEFT);
+            if (nextPhoto) {
+              setNextPhotoAnimation?.(ANIMATION_LEFT);
               router.push(
-                pathForVideo({
-                  video: nextVideo,
+                pathForPhoto({
+                  photo: nextPhoto,
                   tag,
+                  camera,
+                  simulation,
+                  focal,
                 }),
                 { scroll: false },
               );
@@ -71,38 +79,47 @@ export default function VideoPrevNext({
   }, [
     router,
     shouldRespondToKeyboardCommands,
-    setNextVideoAnimation,
-    previousVideo,
-    nextVideo,
+    setNextPhotoAnimation,
+    previousPhoto,
+    nextPhoto,
     tag,
+    camera,
+    simulation,
+    focal,
   ]);
 
   return (
     <div className={clsx('flex items-center', className)}>
       <div className="flex select-none items-center gap-2">
-        <VideoLink
-          video={previousVideo}
+        <PhotoLink
+          photo={previousPhoto}
           className="h-4 select-none"
-          nextVideoAnimation={ANIMATION_RIGHT}
+          nextPhotoAnimation={ANIMATION_RIGHT}
           tag={tag}
+          camera={camera}
+          simulation={simulation}
+          focal={focal}
           scroll={false}
           prefetch
         >
           <FiChevronLeft className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">PREV</span>
-        </VideoLink>
+        </PhotoLink>
         <span className="text-extra-extra-dim">/</span>
-        <VideoLink
-          video={nextVideo}
+        <PhotoLink
+          photo={nextPhoto}
           className="h-4 select-none"
-          nextVideoAnimation={ANIMATION_LEFT}
+          nextPhotoAnimation={ANIMATION_LEFT}
           tag={tag}
+          camera={camera}
+          simulation={simulation}
+          focal={focal}
           scroll={false}
           prefetch
         >
           <FiChevronRight className="-translate-y-px text-[1.1rem] sm:hidden" />
           <span className="hidden sm:inline-block">NEXT</span>
-        </VideoLink>
+        </PhotoLink>
       </div>
     </div>
   );

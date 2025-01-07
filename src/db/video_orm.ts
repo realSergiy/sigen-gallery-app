@@ -141,7 +141,7 @@ export const getVideoIds = async ({ limit }: { limit?: number }) =>
 
 export const getVideo = async (id: string, includeHidden = false) => {
   if (!id) {
-    return undefined;
+    return;
   }
 
   const filter = includeHidden
