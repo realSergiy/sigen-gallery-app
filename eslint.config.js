@@ -68,6 +68,8 @@ const config = [
       //   },
       // ],
       // ToDo: fix below ones
+      'unicorn/prefer-global-this': 'off',
+      'unicorn/no-useless-undefined': 'off',
       'unicorn/filename-case': 'off',
       'unicorn/no-null': 'off',
       'unicorn/no-array-reduce': 'off',
@@ -80,8 +82,6 @@ const config = [
       'unicorn/prefer-blob-reading-methods': 'off',
       'unicorn/no-array-push-push': 'off',
       'unicorn/prefer-add-event-listener': 'off',
-      'unicorn/no-useless-undefined': 'off',
-      'unicorn/prefer-global-this': 'off',
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'off',
@@ -103,7 +103,6 @@ const config = [
       '@typescript-eslint/dot-notation': 'off',
       '@typescript-eslint/await-thenable': 'off',
       '@typescript-eslint/no-base-to-string': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
     },
   }),
   {
