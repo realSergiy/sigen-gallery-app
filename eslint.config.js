@@ -28,7 +28,7 @@ const config = [
     parser: '@typescript-eslint/parser',
     parserOptions: {
       projectService: {
-        allowDefaultProject: ['eslint.config.js'],
+        allowDefaultProject: ['eslint.config.js', 'jest.config.js', 'prettier.config.js'],
       },
       tsconfigRootDir: import.meta.dirname,
     },
