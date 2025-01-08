@@ -18,6 +18,13 @@ export default function DownloadButton({
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleDownload = async () => {
+    setIsLoading(true);
+    await downloadFileFromBrowser(media.url, downloadFileName(media)).finally(() =>
+      setIsLoading(false),
+    );
+  };
+
   return (
     <LoaderButton
       title="Download Original File"
@@ -26,11 +33,8 @@ export default function DownloadButton({
       spinnerColor="dim"
       styleAs="link"
       isLoading={isLoading}
-      onClick={async () => {
-        setIsLoading(true);
-        downloadFileFromBrowser(media.url, downloadFileName(media)).finally(() =>
-          setIsLoading(false),
-        );
+      onClick={() => {
+        void handleDownload();
       }}
     />
   );

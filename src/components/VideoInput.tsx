@@ -35,6 +35,25 @@ export default function VideoInput({
   const [fileUploadIndex, setFileUploadIndex] = useState(0);
   const [fileUploadName, setFileUploadName] = useState('');
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    onStart?.();
+    const { files } = e.currentTarget;
+    if (!files?.length) return;
+
+    setFilesLength(files.length);
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      setFileUploadIndex(index);
+      setFileUploadName(file.name);
+      await onBlobReady?.({
+        blob: file,
+        extension: file.name.split('.').pop()?.toLowerCase(),
+        hasMultipleUploads: files.length > 1,
+        isLastBlob: index === files.length - 1,
+      });
+    }
+  };
+
   return (
     <div className="min-w-0 space-y-4">
       <div className="flex items-center gap-2 sm:gap-4">
@@ -69,23 +88,8 @@ export default function VideoInput({
             accept={ACCEPTED_VIDEO_FILE_TYPES.join(',')}
             disabled={loading}
             multiple
-            onChange={async e => {
-              onStart?.();
-              const { files } = e.currentTarget;
-              if (files && files.length > 0) {
-                setFilesLength(files.length);
-                for (let index = 0; index < files.length; index++) {
-                  const file = files[index];
-                  setFileUploadIndex(index);
-                  setFileUploadName(file.name);
-                  await onBlobReady?.({
-                    blob: file,
-                    extension: file.name.split('.').pop()?.toLowerCase(),
-                    hasMultipleUploads: files.length > 1,
-                    isLastBlob: index === files.length - 1,
-                  });
-                }
-              }
+            onChange={e => {
+              void handleFileChange(e);
             }}
           />
         </label>
