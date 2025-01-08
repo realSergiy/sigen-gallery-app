@@ -155,8 +155,8 @@ export const CONFIG_CHECKLIST_STATUS = {
   hasDatabase: HAS_DATABASE,
   isPostgresSslEnabled: POSTGRES_SSL_ENABLED,
   hasVercelPostgres:
-    /\/verceldb\?/.test(process.env.POSTGRES_URL ?? '') ||
-    /\.vercel-storage\.com\//.test(process.env.POSTGRES_URL ?? ''),
+    (process.env.POSTGRES_URL ?? '').includes('/verceldb?') ||
+    (process.env.POSTGRES_URL ?? '').includes('.vercel-storage.com/'),
   hasVercelKv: HAS_VERCEL_KV,
   hasVercelBlobStorage: HAS_VERCEL_BLOB_STORAGE,
   hasCloudflareR2Storage: HAS_CLOUDFLARE_R2_STORAGE,
