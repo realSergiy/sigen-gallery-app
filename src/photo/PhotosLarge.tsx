@@ -1,7 +1,7 @@
 import AnimateItems from '@/components/AnimateItems';
 import { Photo } from '.';
 import PhotoLarge from './PhotoLarge';
-import { RevalidatePhoto } from './InfinitePhotoScroll';
+import { RevalidateMedia } from '@/media';
 
 export default function PhotosLarge({
   photos,
@@ -14,7 +14,7 @@ export default function PhotosLarge({
   animate?: boolean;
   prefetchFirstPhotoLinks?: boolean;
   onLastPhotoVisible?: () => void;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
 }) {
   return (
     <AnimateItems

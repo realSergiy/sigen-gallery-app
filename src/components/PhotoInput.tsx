@@ -12,6 +12,78 @@ import ProgressButton from './primitives/ProgressButton';
 
 const INPUT_ID = 'file';
 
+const fixExifOrientation = (exifOrientation: number) => {
+  // Reverse engineer orientation so we can copy correct EXIF data
+  switch (exifOrientation) {
+    case 2:
+      return 1;
+    case 3:
+      return 3;
+    case 4:
+      return 1;
+    case 5:
+      return 1;
+    case 6:
+      return 8;
+    case 7:
+      return 1;
+    case 8:
+      return 6;
+    default:
+      return 1;
+  }
+};
+
+const applyOrientationTransform = (
+  context: CanvasRenderingContext2D,
+  orientation: number,
+  width: number,
+  height: number,
+  canvas: HTMLCanvasElement,
+) => {
+  // Orientation transforms from:
+  // https://gist.github.com/SagiMedina/f00a57de4e211456225d3114fd10b0d0
+  switch (orientation) {
+    case 2:
+      context.translate(width, 0);
+      context.scale(-1, 1);
+      break;
+    case 3:
+      context.translate(width, height);
+      context.rotate(Math.PI);
+      break;
+    case 4:
+      context.translate(0, height);
+      context.scale(1, -1);
+      break;
+    case 5:
+      canvas.width = height;
+      canvas.height = width;
+      context.rotate(Math.PI / 2);
+      context.scale(1, -1);
+      break;
+    case 6:
+      canvas.width = height;
+      canvas.height = width;
+      context.rotate(Math.PI / 2);
+      context.translate(0, -height);
+      break;
+    case 7:
+      canvas.width = height;
+      canvas.height = width;
+      context.rotate((3 * Math.PI) / 2);
+      context.translate(-width, height);
+      context.scale(1, -1);
+      break;
+    case 8:
+      canvas.width = height;
+      canvas.height = width;
+      context.translate(0, width);
+      context.rotate((3 * Math.PI) / 2);
+      break;
+  }
+};
+
 export default function PhotoInput({
   onStart,
   onBlobReady,
@@ -44,7 +116,7 @@ export default function PhotoInput({
   const [fileUploadIndex, setFileUploadIndex] = useState(0);
   const [fileUploadName, setFileUploadName] = useState('');
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChangeAsync = async (e: React.ChangeEvent<HTMLInputElement>) => {
     onStart?.();
     const { files } = e.currentTarget;
     if (!files?.length) return;
@@ -81,34 +153,7 @@ export default function PhotoInput({
 
         // Preserve EXIF data for PNGs
         if (!isPng) {
-          // Reverse engineer orientation
-          // so preserved EXIF data can be copied
-          switch (exifOrientation) {
-            case 1:
-              exifOrientation = 1;
-              break;
-            case 2:
-              exifOrientation = 1;
-              break;
-            case 3:
-              exifOrientation = 3;
-              break;
-            case 4:
-              exifOrientation = 1;
-              break;
-            case 5:
-              exifOrientation = 1;
-              break;
-            case 6:
-              exifOrientation = 8;
-              break;
-            case 7:
-              exifOrientation = 1;
-              break;
-            case 8:
-              exifOrientation = 6;
-              break;
-          }
+          exifOrientation = fixExifOrientation(exifOrientation);
         }
 
         const ratio = image.width / image.height;
@@ -122,45 +167,7 @@ export default function PhotoInput({
         // Orientation transforms from:
         // https://gist.github.com/SagiMedina/f00a57de4e211456225d3114fd10b0d0
 
-        switch (exifOrientation) {
-          case 2:
-            context.translate(width, 0);
-            context.scale(-1, 1);
-            break;
-          case 3:
-            context.translate(width, height);
-            context.rotate((180 / 180) * Math.PI);
-            break;
-          case 4:
-            context.translate(0, height);
-            context.scale(1, -1);
-            break;
-          case 5:
-            canvas.width = height;
-            canvas.height = width;
-            context.rotate((90 / 180) * Math.PI);
-            context.scale(1, -1);
-            break;
-          case 6:
-            canvas.width = height;
-            canvas.height = width;
-            context.rotate((90 / 180) * Math.PI);
-            context.translate(0, -height);
-            break;
-          case 7:
-            canvas.width = height;
-            canvas.height = width;
-            context.rotate((270 / 180) * Math.PI);
-            context.translate(-width, height);
-            context.scale(1, -1);
-            break;
-          case 8:
-            canvas.width = height;
-            canvas.height = width;
-            context.translate(0, width);
-            context.rotate((270 / 180) * Math.PI);
-            break;
-        }
+        applyOrientationTransform(context, exifOrientation, width, height, canvas);
 
         context.drawImage(image, 0, 0, width, height);
 
@@ -190,6 +197,8 @@ export default function PhotoInput({
       }
     }
   };
+
+  const handleFileChange = void handleFileChangeAsync;
 
   return (
     <div className="min-w-0 space-y-4">
@@ -225,9 +234,7 @@ export default function PhotoInput({
             accept={ACCEPTED_PHOTO_FILE_TYPES.join(',')}
             disabled={loading}
             multiple
-            onChange={e => {
-              void handleFileChange(e);
-            }}
+            onChange={handleFileChange}
           />
         </label>
         {showUploadStatus && filesLength > 0 && (

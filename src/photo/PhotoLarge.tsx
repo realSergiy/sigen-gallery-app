@@ -24,11 +24,11 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import PhotoLink from './PhotoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminPhotoMenuClient from '@/admin/AdminPhotoMenuClient';
-import { RevalidatePhoto } from './InfinitePhotoScroll';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import PhotoDate from './PhotoDate';
 import { useAppState } from '@/state/AppState';
+import { RevalidateMedia } from '@/media';
 
 export default function PhotoLarge({
   photo,
@@ -57,7 +57,7 @@ export default function PhotoLarge({
   priority?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   showTitle?: boolean;
   showTitleAsH1?: boolean;
   showCamera?: boolean;

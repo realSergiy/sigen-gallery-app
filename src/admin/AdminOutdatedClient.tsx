@@ -30,13 +30,11 @@ export default function AdminOutdatedClient({
 
   const router = useRouter();
 
-  const handleSync = async () => {
-    if (
-      !window.confirm(
-        `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`,
-      )
-    )
+  const handleLoadClick = () => {
+    const message = `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`;
+    if (!window.confirm(message)) {
       return;
+    }
 
     const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
     const isFinalBatch = photosToSync.length >= photos.length;
@@ -66,9 +64,7 @@ export default function AdminOutdatedClient({
           primary
           icon={<IconGrSync className="translate-y-px" />}
           hideTextOnMobile={false}
-          onClick={() => {
-            void handleSync();
-          }}
+          onClick={handleLoadClick}
           isLoading={arePhotoIdsSyncing}
         >
           {arePhotoIdsSyncing ? (

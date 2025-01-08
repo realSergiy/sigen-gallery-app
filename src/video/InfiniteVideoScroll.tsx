@@ -10,11 +10,7 @@ import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
 import { getVideosAction, getVideosCachedAction } from './actions';
 import { type Arguments } from 'swr';
-
-export type RevalidateVideo = (
-  videoId: string,
-  revalidateRemainingVideos?: boolean,
-) => Promise<unknown>;
+import { type RevalidateMedia } from '@/media';
 
 export default function InfiniteVideoScroll({
   cacheKey,
@@ -36,7 +32,7 @@ export default function InfiniteVideoScroll({
   children: (props: {
     videos: Video[];
     onLastVideoVisible: () => void;
-    revalidateVideo?: RevalidateVideo;
+    revalidateVideo?: RevalidateMedia;
   }) => ReactNode;
 } & VideoSetAttributes) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
@@ -88,7 +84,7 @@ export default function InfiniteVideoScroll({
 
   const videos = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidateVideo: RevalidateVideo = useCallback(
+  const revalidateVideo: RevalidateMedia = useCallback(
     (videoId: string, revalidateRemainingVideos?: boolean) =>
       mutate(data, {
         revalidate: (_data: Video[], key: Arguments) => {

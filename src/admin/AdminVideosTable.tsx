@@ -10,12 +10,12 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import VideoDate from '@/video/VideoDate';
 import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
-import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import VideoSyncButton from './VideoSyncButton';
 
 import { Video } from '@/db/video_orm';
 import DeleteVideoButton from './DeleteVideoButton';
 import VideoLinkSmall from '@/video/VideoLinkSmall';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminVideosTable({
   videos,
@@ -28,7 +28,7 @@ export default function AdminVideosTable({
 }: {
   videos: Video[];
   onLastVideoVisible?: () => void;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
   videoIdsSyncing?: string[];
   hasAiTextGeneration: boolean;
   showUpdatedAt?: boolean;

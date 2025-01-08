@@ -63,9 +63,7 @@ export default function MoreMenuItem({
         'whitespace-nowrap',
         isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
       )}
-      onClick={e => {
-        void handleClick(e);
-      }}
+      onClick={void handleClick}
     >
       <LoaderButton
         icon={icon}
