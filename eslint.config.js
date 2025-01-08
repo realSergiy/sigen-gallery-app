@@ -103,7 +103,6 @@ const config = [
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/prefer-includes': 'off',
       '@typescript-eslint/dot-notation': 'off',
-      '@typescript-eslint/await-thenable': 'off',
     },
   }),
   {
