@@ -11,9 +11,9 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import PhotoDate from '@/photo/PhotoDate';
 import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
 import PhotoSyncButton from './PhotoSyncButton';
 import DeletePhotoButton from './DeletePhotoButton';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminPhotosTable({
   photos,
@@ -27,7 +27,7 @@ export default function AdminPhotosTable({
 }: {
   photos: Photo[];
   onLastPhotoVisible?: () => void;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   photoIdsSyncing?: string[];
   hasAiTextGeneration: boolean;
   showUpdatedAt?: boolean;
@@ -99,7 +99,10 @@ export default function AdminPhotosTable({
               shouldToast
             />
             {canDelete && (
-              <DeletePhotoButton photo={photo} onDelete={() => revalidatePhoto?.(photo.id, true)} />
+              <DeletePhotoButton
+                photo={photo}
+                onDelete={() => void revalidatePhoto?.(photo.id, true)}
+              />
             )}
           </div>
         </Fragment>

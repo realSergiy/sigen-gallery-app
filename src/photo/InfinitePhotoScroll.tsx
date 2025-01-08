@@ -10,11 +10,7 @@ import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { GetPhotosOptions } from './db';
 import { type Arguments } from 'swr';
-
-export type RevalidatePhoto = (
-  photoId: string,
-  revalidateRemainingPhotos?: boolean,
-) => Promise<unknown>;
+import { RevalidateMedia } from '@/media';
 
 export default function InfinitePhotoScroll({
   cacheKey,
@@ -39,7 +35,7 @@ export default function InfinitePhotoScroll({
   children: (props: {
     photos: Photo[];
     onLastPhotoVisible: () => void;
-    revalidatePhoto?: RevalidatePhoto;
+    revalidatePhoto?: RevalidateMedia;
   }) => ReactNode;
 } & PhotoSetAttributes) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
@@ -102,7 +98,7 @@ export default function InfinitePhotoScroll({
 
   const photos = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidatePhoto: RevalidatePhoto = useCallback(
+  const revalidatePhoto: RevalidateMedia = useCallback(
     (photoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
         revalidate: (_data: Photo[], key: Arguments) => {
@@ -122,7 +118,7 @@ export default function InfinitePhotoScroll({
   const renderMoreButton = () => (
     <div ref={buttonContainerRef}>
       <button
-        onClick={() => (error ? mutate() : advance())}
+        onClick={() => void (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
         className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >

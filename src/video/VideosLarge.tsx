@@ -1,7 +1,7 @@
 import AnimateItems from '@/components/AnimateItems';
 import VideoLarge from './VideoLarge';
-import { RevalidateVideo } from './InfiniteVideoScroll';
 import { Video } from '@/db/video_orm';
+import { RevalidateMedia } from '@/media';
 
 export default function VideosLarge({
   videos,
@@ -14,7 +14,7 @@ export default function VideosLarge({
   animate?: boolean;
   prefetchFirstVideoLinks?: boolean;
   onLastVideoVisible?: () => void;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
 }) {
   return (
     <AnimateItems

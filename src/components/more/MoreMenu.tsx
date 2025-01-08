@@ -38,8 +38,8 @@ export default function MoreMenu({
             className,
           )}
         >
-          {items.map(props => (
-            <MoreMenuItem key={`${props.label}`} {...props} />
+          {items.map(item => (
+            <MoreMenuItem key={`${item.label}`} {...item} />
           ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
