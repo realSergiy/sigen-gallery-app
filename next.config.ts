@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
       ...createRemotePattern(HOSTNAME_CLOUDFLARE_R2),
       ...createRemotePattern(HOSTNAME_AWS_S3),
     ],
-    minimumCacheTTL: 31536000,
+    minimumCacheTTL: 31_536_000,
   },
 };
 
