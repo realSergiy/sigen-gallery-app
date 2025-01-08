@@ -104,7 +104,6 @@ const config = [
       '@typescript-eslint/prefer-includes': 'off',
       '@typescript-eslint/dot-notation': 'off',
       '@typescript-eslint/await-thenable': 'off',
-      '@typescript-eslint/no-base-to-string': 'off',
     },
   }),
   {

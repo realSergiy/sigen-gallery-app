@@ -15,7 +15,7 @@ export default function MoreMenuItem({
   action,
   shouldPreventDefault = true,
 }: {
-  label: ReactNode;
+  label: string;
   icon?: ReactNode;
   href?: string;
   hrefDownloadName?: string;
