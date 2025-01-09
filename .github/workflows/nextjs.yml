@@ -6,11 +6,12 @@ on:
   pull_request:
     branches: ['main']
 jobs:
-  build:
+  check:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.49.1-noble
+      options: --user 1001
     steps:
       - name: checkout
         uses: actions/checkout@v4
