@@ -15,7 +15,7 @@ export default function MoreMenuItem({
   action,
   shouldPreventDefault = true,
 }: {
-  label: ReactNode;
+  label: string;
   icon?: ReactNode;
   href?: string;
   hrefDownloadName?: string;
@@ -30,6 +30,27 @@ export default function MoreMenuItem({
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleClick = async (e: React.MouseEvent) => {
+    if (shouldPreventDefault) {
+      e.preventDefault();
+    }
+    if (action) {
+      const result = action();
+      if (result instanceof Promise) {
+        setIsLoading(true);
+        await result.finally(() => setIsLoading(false));
+      }
+    }
+    if (href && href !== pathname) {
+      if (hrefDownloadName) {
+        setIsLoading(true);
+        downloadFileFromBrowser(href, hrefDownloadName).finally(() => setIsLoading(false));
+      } else {
+        startTransition(() => router.push(href));
+      }
+    }
+  };
+
   return (
     <DropdownMenu.Item
       disabled={isLoading}
@@ -42,26 +63,7 @@ export default function MoreMenuItem({
         'whitespace-nowrap',
         isLoading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
       )}
-      onClick={async e => {
-        if (shouldPreventDefault) {
-          e.preventDefault();
-        }
-        if (action) {
-          const result = action();
-          if (result instanceof Promise) {
-            setIsLoading(true);
-            await result.finally(() => setIsLoading(false));
-          }
-        }
-        if (href && href !== pathname) {
-          if (hrefDownloadName) {
-            setIsLoading(true);
-            downloadFileFromBrowser(href, hrefDownloadName).finally(() => setIsLoading(false));
-          } else {
-            startTransition(() => router.push(href));
-          }
-        }
-      }}
+      onClick={void handleClick}
     >
       <LoaderButton
         icon={icon}

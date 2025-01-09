@@ -30,6 +30,25 @@ export default function AdminOutdatedClient({
 
   const router = useRouter();
 
+  const handleLoadClick = () => {
+    const message = `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`;
+    if (!window.confirm(message)) {
+      return;
+    }
+
+    const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
+    const isFinalBatch = photosToSync.length >= photos.length;
+    setPhotoIdsSyncing(photosToSync);
+    syncPhotosAction(photosToSync).finally(() => {
+      if (isFinalBatch) {
+        router.push(PATH_ADMIN_PHOTOS);
+      } else {
+        setPhotoIdsSyncing([]);
+        router.refresh();
+      }
+    });
+  };
+
   return (
     <AdminChildPage
       backLabel="Photos"
@@ -45,25 +64,7 @@ export default function AdminOutdatedClient({
           primary
           icon={<IconGrSync className="translate-y-px" />}
           hideTextOnMobile={false}
-          onClick={async () => {
-            if (
-              window.confirm(
-                `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`,
-              )
-            ) {
-              const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
-              const isFinalBatch = photosToSync.length >= photos.length;
-              setPhotoIdsSyncing(photosToSync);
-              syncPhotosAction(photosToSync).finally(() => {
-                if (isFinalBatch) {
-                  router.push(PATH_ADMIN_PHOTOS);
-                } else {
-                  setPhotoIdsSyncing([]);
-                  router.refresh();
-                }
-              });
-            }
-          }}
+          onClick={handleLoadClick}
           isLoading={arePhotoIdsSyncing}
         >
           {arePhotoIdsSyncing ? (

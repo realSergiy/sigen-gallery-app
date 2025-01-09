@@ -12,7 +12,6 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
-import { RevalidateVideo } from './InfiniteVideoScroll';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import VideoDate from './VideoDate';
@@ -20,6 +19,7 @@ import { useAppState } from '@/state/AppState';
 import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
 import VidLarge from '@/components/video/VidLarge';
+import { RevalidateMedia } from '@/media';
 
 export default function VideoLarge({
   video,
@@ -43,7 +43,7 @@ export default function VideoLarge({
   showControls?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
   showTitle?: boolean;
   showTitleAsH1?: boolean;
   shouldShare?: boolean;

@@ -10,10 +10,9 @@ import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
 import MoreMenu from '@/components/more/MoreMenu';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
-import { downloadFileName } from '@/media';
+import { downloadFileName, RevalidateMedia } from '@/media';
 
 export default function AdminPhotoMenuClient({
   photo,
@@ -22,7 +21,7 @@ export default function AdminPhotoMenuClient({
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
   photo: Photo;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();

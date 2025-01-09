@@ -10,10 +10,10 @@ import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
 import MoreMenu from '@/components/more/MoreMenu';
 import { useAppState } from '@/state/AppState';
-import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
 import { Video } from '@/db/video_orm';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminVideoMenuClient({
   video,
@@ -22,7 +22,7 @@ export default function AdminVideoMenuClient({
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
   video: Video;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
   includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();

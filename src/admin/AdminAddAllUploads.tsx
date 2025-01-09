@@ -89,6 +89,51 @@ export default function AdminAddAllUploads({
     }
   };
 
+  const addUploadUrlsInBatches = async (uploads: string[]) => {
+    if (uploads.length === 0) {
+      return;
+    }
+
+    const chunk = uploads.splice(0, UPLOAD_BATCH_SIZE);
+
+    await addUploadUrls(chunk);
+    return await addUploadUrlsInBatches(uploads);
+  };
+
+  const handleAddClick = () => {
+    if (!confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
+      return;
+    }
+
+    setIsAdding(true);
+    setUrlAddStatuses(current =>
+      current.map((item, index) => ({
+        ...item,
+        status: index === 0 ? 'adding' : 'waiting',
+      })),
+    );
+
+    const uploadsToAdd = [...storageUrls];
+
+    addUploadUrlsInBatches(uploadsToAdd)
+      .then(() => {
+        setButtonText('Complete');
+        setAddingProgress(1);
+        setIsAdding(false);
+        setIsAddingComplete(true);
+      })
+      .then(() => sleep(1000))
+      .then(() => {
+        router.push(PATH_ADMIN_PHOTOS);
+      })
+      .catch(e => {
+        setAddingProgress(undefined);
+        setIsAdding(false);
+        setButtonText('Try Again');
+        setActionErrorMessage(getMessage(e));
+      });
+  };
+
   return (
     <>
       {actionErrorMessage && <ErrorNote>{actionErrorMessage}</ErrorNote>}
@@ -134,33 +179,7 @@ export default function AdminAddAllUploads({
                   <BiImageAdd size={18} className="translate-x-px" />
                 )
               }
-              onClick={async () => {
-                if (confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
-                  setIsAdding(true);
-                  setUrlAddStatuses(current =>
-                    current.map((url, index) => ({
-                      ...url,
-                      status: index === 0 ? 'adding' : 'waiting',
-                    })),
-                  );
-                  const uploadsToAdd = [...storageUrls];
-                  try {
-                    while (uploadsToAdd.length > 0) {
-                      await addUploadUrls(uploadsToAdd.splice(0, UPLOAD_BATCH_SIZE));
-                    }
-                    setButtonText('Complete');
-                    setAddingProgress(1);
-                    setIsAdding(false);
-                    setIsAddingComplete(true);
-                    await sleep(1000).then(() => router.push(PATH_ADMIN_PHOTOS));
-                  } catch (e) {
-                    setAddingProgress(undefined);
-                    setIsAdding(false);
-                    setButtonText('Try Again');
-                    setActionErrorMessage(getMessage(e));
-                  }
-                }
-              }}
+              onClick={handleAddClick}
               hideTextOnMobile={false}
             >
               {buttonText}

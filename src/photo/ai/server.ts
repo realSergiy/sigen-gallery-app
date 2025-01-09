@@ -32,15 +32,15 @@ export const generateAiImageQueries = async (
         }
       } else {
         if (textFieldsToGenerate.includes('title')) {
-          title = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES['title']);
+          title = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES.title);
         }
         if (textFieldsToGenerate.includes('caption')) {
-          caption = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES['caption']);
+          caption = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES.caption);
         }
       }
 
       if (textFieldsToGenerate.includes('tags')) {
-        tags = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES['tags']);
+        tags = await generateOpenAiImageQuery(imageBase64, AI_IMAGE_QUERIES.tags);
       }
 
       if (textFieldsToGenerate.includes('semantic')) {

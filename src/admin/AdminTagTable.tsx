@@ -21,7 +21,7 @@ export default function AdminTagTable({ tags }: { tags: Tags }) {
           <div className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}>
             <EditButton path={pathForAdminTagEdit(tag)} />
             <FormWithConfirm
-              action={deletePhotoTagGloballyAction}
+              action={(formData: FormData) => void deletePhotoTagGloballyAction(formData)}
               confirmText={`Are you sure you want to remove "${formatTag(tag)}" from ${photoQuantityText(count, false).toLowerCase()}?`}
             >
               <input type="hidden" name="tag" value={tag} />
