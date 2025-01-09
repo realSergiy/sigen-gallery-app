@@ -7,18 +7,25 @@ on:
     branches: ['main']
 jobs:
   build:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: lts/*
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm tscheck
       - run: pnpm lint
-      - run: pnpm test
+      - run: pnpm test:unit
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

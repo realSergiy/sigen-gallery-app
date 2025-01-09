@@ -9,9 +9,9 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "tscheck": "tsc --noEmit",
-    "test": "pnpm run test:unit",
     "test:unit": "jest --rootDir ./__tests__/jest --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "test:watch": "jest --watch --rootDir ./__tests__/jest --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
+    "test:e2e": "playwright test",
     "analyze": "ANALYZE=true next build",
     "format": "prettier --write .",
     "ncu": "npm-check-updates",
@@ -59,6 +59,7 @@
     "use-debounce": "^10.0.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/jest": "^29.5.14",
