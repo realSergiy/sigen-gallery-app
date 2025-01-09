@@ -28,10 +28,10 @@ jobs:
       - name: install deps
         run: pnpm install
 
-      - name: ts-check
+      - name: run ts-check
         run: pnpm tscheck
 
-      - name: lint
+      - name: run lint
         run: pnpm lint
 
       - name: run unit tests
