@@ -3,6 +3,18 @@ import { clsx } from 'clsx/lite';
 import { SHOULD_PREFETCH_ALL_LINKS } from '@/site/config';
 
 import type { JSX } from 'react';
+import { TestIdProps } from './types';
+
+type SwitcherItemProps = {
+  icon: JSX.Element;
+  title?: string;
+  href?: string;
+  className?: string;
+  onClick?: () => void;
+  active?: boolean;
+  noPadding?: boolean;
+  prefetch?: boolean;
+} & TestIdProps;
 
 export default function SwitcherItem({
   icon,
@@ -13,16 +25,8 @@ export default function SwitcherItem({
   active,
   noPadding,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
-}: {
-  icon: JSX.Element;
-  title?: string;
-  href?: string;
-  className?: string;
-  onClick?: () => void;
-  active?: boolean;
-  noPadding?: boolean;
-  prefetch?: boolean;
-}) {
+  'data-testid': dataTestId,
+}: SwitcherItemProps) {
   const className = clsx(
     classNameProperty,
     'px-1.5 py-0.5',
@@ -39,12 +43,18 @@ export default function SwitcherItem({
     noPadding ? (
       icon
     ) : (
-      <div className="flex h-[24px] w-[28px] items-center justify-center">{icon}</div>
+      <div className="flex h-[24px] w-[28px] items-center justify-center" data-testid={dataTestId}>
+        {icon}
+      </div>
     );
 
   return href ? (
-    <Link {...{ title, href, className, prefetch }}>{renderIcon()}</Link>
+    <Link {...{ title, href, className, prefetch }} data-testid={dataTestId}>
+      {renderIcon()}
+    </Link>
   ) : (
-    <div {...{ title, onClick, className }}>{renderIcon()}</div>
+    <div {...{ title, onClick, className }} data-testid={dataTestId}>
+      {renderIcon()}
+    </div>
   );
 }
