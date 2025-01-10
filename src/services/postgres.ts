@@ -8,7 +8,7 @@ const pool = new Pool({
 
 export type Primitive = string | number | boolean | undefined | null;
 
-export const query = async <T extends QueryResultRow = any>(
+export const query = async <T extends QueryResultRow = Record<string, unknown>>(
   queryString: string,
   values: Primitive[] = [],
 ) => {
@@ -16,8 +16,8 @@ export const query = async <T extends QueryResultRow = any>(
   let response: QueryResult<T>;
   try {
     response = await client.query<T>(queryString, values);
-  } catch (error) {
-    throw error;
+  } catch (e) {
+    throw e;
   } finally {
     client.release();
   }
@@ -34,8 +34,8 @@ export const sql = <T extends QueryResultRow>(
 
   let result = strings[0] ?? '';
 
-  for (let i = 1; i < strings.length; i++) {
-    result += `$${i}${strings[i] ?? ''}`;
+  for (let index = 1; index < strings.length; index++) {
+    result += `$${index}${strings[index] ?? ''}`;
   }
 
   return query<T>(result, values);
@@ -49,8 +49,8 @@ export const convertArrayToPostgresString = (
     ? type === 'braces'
       ? `{${array.join(',')}}`
       : type === 'brackets'
-        ? `[${array.map(i => `'${i}'`).join(',')}]`
-        : `(${array.map(i => `'${i}'`).join(',')})`
+        ? `[${array.map(index => `'${index}'`).join(',')}]`
+        : `(${array.map(index => `'${index}'`).join(',')})`
     : null;
 
 const isTemplateStringsArray = (strings: unknown): strings is TemplateStringsArray => {

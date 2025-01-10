@@ -1,9 +1,5 @@
 import { getExtensionFromStorageUrl, getVideoIdFromStorageUrl } from '@/services/storage';
-import sharp, { Sharp } from 'sharp';
 import { VideoFormData } from './form';
-
-const IMAGE_WIDTH_RESIZE = 200;
-const IMAGE_WIDTH_BLUR = 200;
 
 export const extractVideoDataFromBlobPath = async (
   blobPath: string,
@@ -31,10 +27,8 @@ export const extractVideoDataFromBlobPath = async (
 
   let imageThumbnailBase64: string | undefined;
 
-  if (fileBytes) {
-    if (generateResizedImage) {
-      //      imageThumbnailBase64 = await resizeImage(fileBytes);
-    }
+  if (fileBytes && generateResizedImage) {
+    //      imageThumbnailBase64 = await resizeImage(fileBytes);
   }
 
   return {

@@ -83,17 +83,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SwrConfigClient>
             <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
               <main
-                className={clsx(
-                  'mx-3 mb-3',
-                  'lg:mx-6 lg:mb-6',
-                  // Center on large screens
-                  // 1280px width defined in components/SiteGrid.tsx
-                  '3xl:mx-auto 3xl:w-[1280px]',
-                )}
+                className={clsx('mx-3 mb-3', 'lg:mx-6 lg:mb-6', '3xl:mx-auto 3xl:w-[1280px]')} // Center on large screens; 1280px width defined in components/SiteGrid.tsx
               >
                 <Nav siteDomainOrTitle={SITE_DOMAIN_OR_TITLE} />
                 <AdminBatchEditPanel />
-                <div className={clsx('min-h-[16rem] sm:min-h-[30rem]', 'mb-12')}>{children}</div>
+                <div className={clsx('mb-12 min-h-64 sm:min-h-[30rem]')}>{children}</div>
                 <Footer />
               </main>
               <CommandK />

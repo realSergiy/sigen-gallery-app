@@ -30,7 +30,7 @@ export default function FavsTag({
         !badged && (
           <FaStar
             size={12}
-            className={clsx('text-amber-500', 'translate-x-[-1px] translate-y-[-0.5px]')}
+            className={clsx('text-amber-500', '-translate-x-px translate-y-[-0.5px]')}
           />
         )
       }

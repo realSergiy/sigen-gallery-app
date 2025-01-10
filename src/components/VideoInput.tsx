@@ -21,7 +21,7 @@ export default function VideoInput({
     extension?: string;
     hasMultipleUploads?: boolean;
     isLastBlob?: boolean;
-  }) => Promise<any>;
+  }) => Promise<unknown>;
   shouldResize?: boolean;
   maxSize?: number;
   quality?: number;
@@ -34,6 +34,25 @@ export default function VideoInput({
   const [filesLength, setFilesLength] = useState(0);
   const [fileUploadIndex, setFileUploadIndex] = useState(0);
   const [fileUploadName, setFileUploadName] = useState('');
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    onStart?.();
+    const { files } = e.currentTarget;
+    if (!files?.length) return;
+
+    setFilesLength(files.length);
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      setFileUploadIndex(index);
+      setFileUploadName(file.name);
+      await onBlobReady?.({
+        blob: file,
+        extension: file.name.split('.').pop()?.toLowerCase(),
+        hasMultipleUploads: files.length > 1,
+        isLastBlob: index === files.length - 1,
+      });
+    }
+  };
 
   return (
     <div className="min-w-0 space-y-4">
@@ -69,28 +88,11 @@ export default function VideoInput({
             accept={ACCEPTED_VIDEO_FILE_TYPES.join(',')}
             disabled={loading}
             multiple
-            onChange={async e => {
-              onStart?.();
-              const { files } = e.currentTarget;
-              if (files && files.length > 0) {
-                setFilesLength(files.length);
-                for (let i = 0; i < files.length; i++) {
-                  const file = files[i];
-                  setFileUploadIndex(i);
-                  setFileUploadName(file.name);
-                  await onBlobReady?.({
-                    blob: file,
-                    extension: file.name.split('.').pop()?.toLowerCase(),
-                    hasMultipleUploads: files.length > 1,
-                    isLastBlob: i === files.length - 1,
-                  });
-                }
-              }
-            }}
+            onChange={void handleFileChange}
           />
         </label>
         {showUploadStatus && filesLength > 0 && (
-          <div className="max-w-full truncate text-ellipsis">{fileUploadName}</div>
+          <div className="max-w-full truncate">{fileUploadName}</div>
         )}
       </div>
     </div>

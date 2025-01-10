@@ -12,14 +12,12 @@ export default function VideosEmptyState(props: { message: string }) {
   return (
     <SiteGrid
       contentMain={
-        <Container className="min-h-[20rem] px-8 sm:min-h-[30rem]" padding="loose">
+        <Container className="min-h-80 px-8 sm:min-h-[30rem]" padding="loose">
           <HiOutlinePhotograph className="text-medium" size={24} />
           <div className={clsx('text-2xl font-bold', 'text-gray-700 dark:text-gray-200')}>
-            {!IS_SITE_READY ? 'Finish Setup' : 'Setup Complete!'}
+            {IS_SITE_READY ? 'Setup Complete!' : 'Finish Setup'}
           </div>
-          {!IS_SITE_READY ? (
-            <SiteChecklist simplifiedView />
-          ) : (
+          {IS_SITE_READY ? (
             <div className="max-w-md space-y-6 text-center">
               <div className="space-y-2">
                 <div>{props.message}</div>
@@ -33,6 +31,8 @@ export default function VideosEmptyState(props: { message: string }) {
                 </Link>
               </div>
             </div>
+          ) : (
+            <SiteChecklist simplifiedView />
           )}
         </Container>
       }

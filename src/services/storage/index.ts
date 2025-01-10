@@ -39,9 +39,9 @@ const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): P
       logger.log(`[${operationName}] Success: ${result}`);
       return result;
     })
-    .catch(error => {
-      logger.error(`[${operationName}] Error: ${detail}`, error);
-      throw error;
+    .catch(e => {
+      logger.error(`[${operationName}] Error: ${detail}`, e);
+      throw e;
     });
 };
 

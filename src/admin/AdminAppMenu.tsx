@@ -37,6 +37,7 @@ export default function AdminAppMenu() {
             if (document.activeElement instanceof HTMLElement) {
               document.activeElement.blur();
             }
+            return Promise.resolve();
           },
           shouldPreventDefault: false,
         },

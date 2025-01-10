@@ -143,13 +143,13 @@ export default function TagInput({
           break;
         case 'ArrowDown':
           if (shouldShowMenu) {
-            setSelectedOptionIndex(i => {
-              if (i === undefined) {
+            setSelectedOptionIndex(index => {
+              if (index === undefined) {
                 return optionsFiltered.length > 1 ? 1 : 0;
-              } else if (i >= optionsFiltered.length - 1) {
+              } else if (index >= optionsFiltered.length - 1) {
                 return 0;
               } else {
-                return i + 1;
+                return index + 1;
               }
             });
           } else {
@@ -157,21 +157,24 @@ export default function TagInput({
           }
           break;
         case 'ArrowUp':
-          setSelectedOptionIndex(i => {
+          setSelectedOptionIndex(index => {
             if (document.activeElement === inputRef.current && optionsFiltered.length > 0) {
               return optionsFiltered.length - 1;
-            } else if (i === undefined || i === 0) {
+            } else if (index === undefined || index === 0) {
               inputRef.current?.focus();
-              return undefined;
+              return;
             } else {
-              return i - 1;
+              return index - 1;
             }
           });
           break;
         case 'Backspace':
-          if (inputText === '' && selectedOptions.length > 0) {
-            removeOption(selectedOptions[selectedOptions.length - 1]);
-            hideMenu();
+          if (inputText === '') {
+            const lastOption = selectedOptions.at(-1);
+            if (lastOption) {
+              removeOption(lastOption);
+              hideMenu();
+            }
           }
           break;
         case 'Escape':
@@ -213,13 +216,13 @@ export default function TagInput({
       >
         {selectedOptions.length === 0
           ? 'No tags selected'
-          : selectedOptions.join(', ') + ` tag${selectedOptions.length !== 1 ? 's' : ''} selected`}
+          : selectedOptions.join(', ') + ` tag${selectedOptions.length === 1 ? '' : 's'} selected`}
       </div>
       <div
         aria-controls={ARIA_ID_TAG_CONTROL}
         className={clsx(
           className,
-          'control w-full !px-2 !py-2',
+          'control w-full !p-2',
           'outline-1 outline-blue-600',
           'group-focus-within:outline group-active:outline',
           'inline-flex flex-wrap items-center gap-2',
@@ -280,8 +283,8 @@ export default function TagInput({
             role="listbox"
             ref={optionsRef}
             className={clsx(
-              'control absolute top-0 z-10 mt-3 w-full !px-1.5 !py-1.5',
-              'max-h-[8rem] overflow-y-auto',
+              'control absolute top-0 z-10 mt-3 w-full !p-1.5',
+              'max-h-32 overflow-y-auto',
               'flex flex-col gap-y-1',
               'text-xl shadow-lg dark:shadow-xl',
             )}

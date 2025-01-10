@@ -1,0 +1,37 @@
+name: Lint and Test
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+jobs:
+  check:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.49.1-noble
+      options: --user 1001
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'pnpm'
+
+      - name: install deps
+        run: pnpm install
+
+      - name: run ts-check
+        run: pnpm tscheck
+
+      - name: run lint
+        run: pnpm lint
+
+      - name: run unit tests
+        run: pnpm test:unit      

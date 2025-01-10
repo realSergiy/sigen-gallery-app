@@ -2,16 +2,20 @@ import { Video } from '@/db/video_orm';
 import { INFINITE_SCROLL_FEED_INITIAL, INFINITE_SCROLL_FEED_MULTIPLE } from '.';
 import VideosLarge from './VideosLarge';
 import VideosLargeInfinite from './VideosLargeInfinite';
+import { TestIdProps } from '@/components/types';
+
+type VideoFeedPageProps = {
+  videos: Video[];
+  videosCount: number;
+} & TestIdProps;
 
 export default function VideoFeedPage({
   videos,
   videosCount,
-}: {
-  videos: Video[];
-  videosCount: number;
-}) {
+  'data-testid': dataTestId,
+}: VideoFeedPageProps) {
   return (
-    <div className="space-y-1">
+    <div data-testid={dataTestId} className="space-y-1">
       <VideosLarge {...{ videos }} />
       {videosCount > videos.length && (
         <VideosLargeInfinite

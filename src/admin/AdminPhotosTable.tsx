@@ -11,9 +11,9 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import PhotoDate from '@/photo/PhotoDate';
 import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
 import PhotoSyncButton from './PhotoSyncButton';
 import DeletePhotoButton from './DeletePhotoButton';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminPhotosTable({
   photos,
@@ -27,7 +27,7 @@ export default function AdminPhotosTable({
 }: {
   photos: Photo[];
   onLastPhotoVisible?: () => void;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   photoIdsSyncing?: string[];
   hasAiTextGeneration: boolean;
   showUpdatedAt?: boolean;
@@ -52,7 +52,7 @@ export default function AdminPhotosTable({
             <Link
               key={photo.id}
               href={pathForPhoto({ photo })}
-              className="flex items-center gap-2 lg:w-[50%]"
+              className="flex items-center gap-2 lg:w-1/2"
               prefetch={false}
             >
               <span className={clsx(photo.hidden && 'text-dim')}>
@@ -76,7 +76,7 @@ export default function AdminPhotosTable({
                 </span>
               )}
             </Link>
-            <div className={clsx('uppercase lg:w-[50%]', 'text-dim')}>
+            <div className={clsx('uppercase lg:w-1/2', 'text-dim')}>
               <PhotoDate
                 {...{
                   photo,
@@ -99,7 +99,10 @@ export default function AdminPhotosTable({
               shouldToast
             />
             {canDelete && (
-              <DeletePhotoButton photo={photo} onDelete={() => revalidatePhoto?.(photo.id, true)} />
+              <DeletePhotoButton
+                photo={photo}
+                onDelete={() => void revalidatePhoto?.(photo.id, true)}
+              />
             )}
           </div>
         </Fragment>

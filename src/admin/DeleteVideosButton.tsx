@@ -35,7 +35,6 @@ export default function DeleteVideosButton({
     <DeleteButton
       {...rest}
       isLoading={isLoading}
-      // eslint-disable-next-line max-len
       confirmText={
         confirmText ??
         `Are you sure you want to delete ${videosText}? This action cannot be undone.`

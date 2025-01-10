@@ -46,9 +46,9 @@ export default function LoaderButton(
         }
       }}
       className={clsx(
-        ...(styleAs !== 'button'
-          ? ['link active:text-medium h-4', 'disabled:!bg-transparent']
-          : ['h-9']),
+        ...(styleAs === 'button'
+          ? ['h-9']
+          : ['link active:text-medium h-4', 'disabled:!bg-transparent']),
         styleAs === 'link' && 'hover:text-dim',
         styleAs === 'link-without-hover' && 'hover:text-main',
         'inline-flex items-center gap-2 self-start whitespace-nowrap',
@@ -60,9 +60,8 @@ export default function LoaderButton(
       {(icon || isLoading) && (
         <span
           className={clsx(
-            'max-h-5 min-w-[1.25rem] overflow-hidden',
+            'inline-flex max-h-5 min-w-5 shrink-0 justify-center overflow-hidden',
             styleAs === 'button' ? 'translate-y-[-0.5px]' : 'translate-y-[0.5px]',
-            'inline-flex shrink-0 justify-center',
           )}
         >
           {isLoading ? (

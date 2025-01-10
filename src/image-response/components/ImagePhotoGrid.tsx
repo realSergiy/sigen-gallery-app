@@ -1,4 +1,7 @@
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+
+// My understanding is that Next Image is a client component and cannot be used here.
+// This grid is meant to render on the server to generate the OG image.
 
 import { Media } from '@/media';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';
@@ -57,7 +60,7 @@ export default function MediaPhotoGrid({
         gap,
       }}
     >
-      {medias.slice(0, count).map(({ id, url }) => (
+      {medias.slice(0, count).map(({ id, url, title }) => (
         <div
           key={id}
           style={{
@@ -71,6 +74,7 @@ export default function MediaPhotoGrid({
           <img
             {...{
               src: getNextImageUrlForRequest(url, nextImageWidth),
+              alt: title ?? '',
               style: {
                 width: '100%',
                 ...(imagePosition === 'center' && {

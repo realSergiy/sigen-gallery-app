@@ -38,7 +38,9 @@ const SITE_DOMAIN =
   VERCEL_PROJECT_URL ||
   VERCEL_DEPLOYMENT_URL;
 
-const getBaseUrl = (log = false) => {
+const logBaseUrl = false;
+
+const getBaseUrl = () => {
   const url = makeUrlAbsolute(
     process.env.NODE_ENV === 'production' && VERCEL_ENV !== 'preview'
       ? SITE_DOMAIN
@@ -47,15 +49,15 @@ const getBaseUrl = (log = false) => {
         : 'http://localhost:3000',
   )?.toLocaleLowerCase();
 
-  if (log) {
-    console.log('BASE_URL', url);
+  if (logBaseUrl) {
+    console.log('BASE_URL:', url);
   }
 
   return url;
 };
 
 // Used primarily for absolute references such as OG images
-export const BASE_URL = getBaseUrl(false);
+export const BASE_URL = getBaseUrl();
 
 const SITE_DOMAIN_SHORT = shortenUrl(SITE_DOMAIN);
 
@@ -140,7 +142,7 @@ export const SHOW_SOCIAL = process.env.NEXT_PUBLIC_HIDE_SOCIAL !== '1';
 export const SHOW_FILM_SIMULATIONS = process.env.NEXT_PUBLIC_HIDE_FILM_SIMULATIONS !== '1';
 export const SHOW_EXIF_DATA = process.env.NEXT_PUBLIC_HIDE_EXIF_DATA !== '1';
 export const GRID_ASPECT_RATIO = process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO
-  ? parseFloat(process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO)
+  ? Number.parseFloat(process.env.NEXT_PUBLIC_GRID_ASPECT_RATIO)
   : 1;
 export const OG_TEXT_BOTTOM_ALIGNMENT =
   (process.env.NEXT_PUBLIC_OG_TEXT_ALIGNMENT ?? '').toUpperCase() === 'BOTTOM';
@@ -153,8 +155,8 @@ export const CONFIG_CHECKLIST_STATUS = {
   hasDatabase: HAS_DATABASE,
   isPostgresSslEnabled: POSTGRES_SSL_ENABLED,
   hasVercelPostgres:
-    /\/verceldb\?/.test(process.env.POSTGRES_URL ?? '') ||
-    /\.vercel-storage\.com\//.test(process.env.POSTGRES_URL ?? ''),
+    process.env.POSTGRES_URL?.includes('vercel.app') ||
+    process.env.POSTGRES_URL?.includes('.vercel-storage.com/'),
   hasVercelKv: HAS_VERCEL_KV,
   hasVercelBlobStorage: HAS_VERCEL_BLOB_STORAGE,
   hasCloudflareR2Storage: HAS_CLOUDFLARE_R2_STORAGE,

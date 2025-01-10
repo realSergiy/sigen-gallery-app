@@ -21,10 +21,8 @@ export default function MoreMenu({
         <button
           className={clsx(
             buttonClassName,
-            'min-h-0 border-none p-1 shadow-none hover:outline-none',
-            'hover:bg-gray-100 active:bg-gray-100',
-            'hover:dark:bg-gray-800/75 active:dark:bg-gray-900',
-            'text-dim',
+            'text-dim min-h-0 border-none p-1 shadow-none',
+            'hover:bg-gray-100 hover:outline-none active:bg-gray-100 hover:dark:bg-gray-800/75 active:dark:bg-gray-900',
           )}
           aria-label={ariaLabel}
         >
@@ -36,17 +34,12 @@ export default function MoreMenu({
         <DropdownMenu.Content
           align="end"
           className={clsx(
-            'z-10',
-            'min-w-[8rem]',
-            'ml-2.5',
-            'rounded-md border p-1',
-            'bg-content',
-            'shadow-lg dark:shadow-xl',
+            'bg-content z-10 ml-2.5 min-w-32 rounded-md border p-1 shadow-lg dark:shadow-xl',
             className,
           )}
         >
-          {items.map(props => (
-            <MoreMenuItem key={`${props.label}`} {...props} />
+          {items.map(item => (
+            <MoreMenuItem key={`${item.label}`} {...item} />
           ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

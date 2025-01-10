@@ -2,7 +2,7 @@ import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '@/../tailwind.config';
 import { useLayoutEffect, useState } from 'react';
 
-const screens = resolveConfig(tailwindConfig).theme?.screens as any;
+const screens = resolveConfig(tailwindConfig).theme?.screens;
 
 export default function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);

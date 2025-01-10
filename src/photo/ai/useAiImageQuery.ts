@@ -2,10 +2,11 @@ import { useCallback, useState } from 'react';
 import { streamAiImageQueryAction } from '../actions';
 import { readStreamableValue } from 'ai/rsc';
 import { AiImageQuery } from '.';
+import { ErrorWithMessage, toErrorWithMessage } from '@/utility/error';
 
 export default function useAiImageQuery(imageBase64: string | undefined, query: AiImageQuery) {
   const [text, setText] = useState('');
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState<ErrorWithMessage>();
   const [isLoading, setIsLoading] = useState(false);
 
   const request = useCallback(async () => {
@@ -19,7 +20,7 @@ export default function useAiImageQuery(imageBase64: string | undefined, query: 
         }
         setIsLoading(false);
       } catch (e) {
-        setError(e);
+        setError(toErrorWithMessage(e));
         setIsLoading(false);
       }
     }

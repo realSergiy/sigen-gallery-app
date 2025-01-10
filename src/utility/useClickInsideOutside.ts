@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 
 const MOUSE_DOWN = 'mousedown';
 
-interface Options {
+type Options = {
   // HTML reference
   htmlElements: (HTMLElement | null)[];
   // Callbacks based on click target
@@ -11,7 +11,7 @@ interface Options {
   onClickOutside?: (event?: MouseEvent) => void;
   // Dynamically listen to click events
   shouldListenToClicks?: boolean;
-}
+};
 
 const useClickInsideOutside = ({
   htmlElements,

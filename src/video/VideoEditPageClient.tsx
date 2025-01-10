@@ -18,16 +18,10 @@ export default function VideoEditPageClient({
 }) {
   const videoForm = convertVideoToFormData(video);
 
-  const {
-    pending,
-    setIsPending,
-    updatedTitle,
-    setUpdatedTitle,
-    hasTextContent,
-    setHasTextContent,
-  } = useVideoFormParent({
-    videoForm,
-  });
+  const { pending, setIsPending, updatedTitle, setUpdatedTitle, setHasTextContent } =
+    useVideoFormParent({
+      videoForm,
+    });
 
   return (
     <AdminChildPage

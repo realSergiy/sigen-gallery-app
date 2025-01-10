@@ -117,7 +117,7 @@ const FORM_METADATA = (
 
 export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
   (Object.entries(FORM_METADATA(...args)) as [keyof PhotoFormData, FormMeta][]).filter(
-    ([_, meta]) => !meta.hide,
+    ([, meta]) => !meta.hide,
   );
 
 export const convertFormKeysToLabels = (keys: (keyof PhotoFormData)[]) =>
@@ -126,14 +126,13 @@ export const convertFormKeysToLabels = (keys: (keyof PhotoFormData)[]) =>
 export const getFormErrors = (
   formData: Partial<PhotoFormData>,
 ): Partial<Record<keyof PhotoFormData, string>> =>
-  Object.keys(formData).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: FORM_METADATA_ENTRIES()
+  Object.fromEntries(
+    Object.keys(formData).map(key => [
+      key,
+      FORM_METADATA_ENTRIES()
         .find(([k]) => k === key)?.[1]
         .validate?.(formData[key as keyof PhotoFormData]),
-    }),
-    {},
+    ]),
   );
 
 export const isFormValid = (formData: Partial<PhotoFormData>) =>
@@ -141,7 +140,6 @@ export const isFormValid = (formData: Partial<PhotoFormData>) =>
     ([key, { required, validate, validateStringMaxLength }]) =>
       (!required || Boolean(formData[key])) &&
       !validate?.(formData[key]) &&
-      // eslint-disable-next-line max-len
       (!validateStringMaxLength || (formData[key]?.length ?? 0) <= validateStringMaxLength),
   );
 
@@ -155,12 +153,13 @@ export const formHasTextContent = ({
 // CREATE FORM DATA: FROM PHOTO
 
 export const convertPhotoToFormData = (photo: Photo): PhotoFormData => {
-  const valueForKey = (key: keyof Photo, value: any) => {
+  const valueForKey = <K extends keyof Photo>(key: K, value: Photo[K]) => {
     switch (key) {
       case 'tags':
-        return (value ?? []).filter((tag: string) => tag !== TAG_FAVS).join(', ');
+        const tags = Array.isArray(value) ? value : [];
+        return tags.filter(tag => tag !== TAG_FAVS).join(', ');
       case 'takenAt':
-        return value?.toISOString ? value.toISOString() : value;
+        return value instanceof Date ? value.toISOString() : value;
       case 'hidden':
         return value ? 'true' : 'false';
       default:
@@ -196,8 +195,8 @@ export const convertExifToFormData = (
   iso: data.tags?.ISO?.toString() || data.tags?.ISOSpeed?.toString(),
   exposureTime: data.tags?.ExposureTime?.toString(),
   exposureCompensation: data.tags?.ExposureCompensation?.toString(),
-  latitude: !GEO_PRIVACY_ENABLED ? data.tags?.GPSLatitude?.toString() : undefined,
-  longitude: !GEO_PRIVACY_ENABLED ? data.tags?.GPSLongitude?.toString() : undefined,
+  latitude: GEO_PRIVACY_ENABLED ? undefined : data.tags?.GPSLatitude?.toString(),
+  longitude: GEO_PRIVACY_ENABLED ? undefined : data.tags?.GPSLongitude?.toString(),
   filmSimulation,
   ...(data.tags?.DateTimeOriginal && {
     takenAt: convertTimestampWithOffsetToPostgresString(
@@ -224,16 +223,17 @@ export const convertFormDataToPhotoDbInsert = (
   // Parse FormData:
   // - remove server action ID
   // - remove empty strings
-  Object.keys(photoForm).forEach(key => {
+  for (const key of Object.keys(photoForm)) {
     const meta = FORM_METADATA()[key as keyof PhotoFormData];
     if (
       key.startsWith('$ACTION_ID_') ||
-      (photoForm as any)[key] === '' ||
+      (typeof (photoForm as Record<string, unknown>)[key] === 'string' &&
+        (photoForm as Record<string, unknown>)[key] === '') ||
       meta?.excludeFromInsert
     ) {
-      delete (photoForm as any)[key];
+      (photoForm as Record<string, unknown>)[key] = undefined;
     }
-  });
+  }
 
   return {
     ...(photoForm as PhotoFormData & { filmSimulation?: FilmSimulation }),
@@ -242,21 +242,21 @@ export const convertFormDataToPhotoDbInsert = (
     tags: tags.length > 0 ? tags : null,
     // Convert form strings to numbers
     aspectRatio: photoForm.aspectRatio
-      ? roundToNumber(parseFloat(photoForm.aspectRatio), 6)
+      ? roundToNumber(Number.parseFloat(photoForm.aspectRatio), 6)
       : DEFAULT_ASPECT_RATIO,
-    focalLength: photoForm.focalLength ? parseInt(photoForm.focalLength) : null,
+    focalLength: photoForm.focalLength ? Number.parseInt(photoForm.focalLength) : null,
     focalLengthIn35MmFormat: photoForm.focalLengthIn35MmFormat
-      ? parseInt(photoForm.focalLengthIn35MmFormat)
+      ? Number.parseInt(photoForm.focalLengthIn35MmFormat)
       : null,
-    fNumber: photoForm.fNumber ? parseFloat(photoForm.fNumber) : null,
-    latitude: photoForm.latitude ? parseFloat(photoForm.latitude) : null,
-    longitude: photoForm.longitude ? parseFloat(photoForm.longitude) : null,
-    iso: photoForm.iso ? parseInt(photoForm.iso) : null,
-    exposureTime: photoForm.exposureTime ? parseFloat(photoForm.exposureTime) : null,
+    fNumber: photoForm.fNumber ? Number.parseFloat(photoForm.fNumber) : null,
+    latitude: photoForm.latitude ? Number.parseFloat(photoForm.latitude) : null,
+    longitude: photoForm.longitude ? Number.parseFloat(photoForm.longitude) : null,
+    iso: photoForm.iso ? Number.parseInt(photoForm.iso) : null,
+    exposureTime: photoForm.exposureTime ? Number.parseFloat(photoForm.exposureTime) : null,
     exposureCompensation: photoForm.exposureCompensation
-      ? parseFloat(photoForm.exposureCompensation)
+      ? Number.parseFloat(photoForm.exposureCompensation)
       : null,
-    priorityOrder: photoForm.priorityOrder ? parseFloat(photoForm.priorityOrder) : null,
+    priorityOrder: photoForm.priorityOrder ? Number.parseFloat(photoForm.priorityOrder) : null,
     hidden: photoForm.hidden === 'true',
     ...generateTakenAtFields(photoForm),
   };

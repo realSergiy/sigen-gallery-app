@@ -3,17 +3,25 @@ import { formatNumberToFraction, roundToString } from './number';
 
 const OFFSET_REGEX = /[+-]\d\d:\d\d/;
 
-export const getOffsetFromExif = (data: ExifData) =>
-  Object.values(data.tags as any).find(
-    (value: any) => typeof value === 'string' && OFFSET_REGEX.test(value),
-  ) as string | undefined;
+export const getOffsetFromExif = (data: ExifData): string | undefined => {
+  if (!data.tags) {
+    return undefined;
+  }
+
+  const tagValues = Object.values(data.tags);
+  const offsetValue = tagValues.find(
+    (value): value is string => typeof value === 'string' && OFFSET_REGEX.test(value),
+  );
+
+  return offsetValue;
+};
 
 export const getAspectRatioFromExif = (data: ExifData): number => {
   // Using '||' operator to handle `Orientation` unexpectedly being '0'
   const orientation = data.tags?.Orientation || OrientationTypes.TOP_LEFT;
 
-  const width = data.imageSize?.width ?? 3.0;
-  const height = data.imageSize?.height ?? 2.0;
+  const width = data.imageSize?.width ?? 3;
+  const height = data.imageSize?.height ?? 2;
 
   switch (orientation) {
     case OrientationTypes.TOP_LEFT:
@@ -31,7 +39,7 @@ export const getAspectRatioFromExif = (data: ExifData): number => {
 
 export const convertApertureValueToFNumber = (apertureValue?: string): string | undefined => {
   if (apertureValue) {
-    const aperture = parseInt(apertureValue);
+    const aperture = Number.parseInt(apertureValue);
     if (aperture <= 10) {
       switch (aperture) {
         case 0:
@@ -58,7 +66,7 @@ export const convertApertureValueToFNumber = (apertureValue?: string): string | 
           return '32';
       }
     } else {
-      const value = Math.round(Math.pow(2, aperture / 2.0) * 10) / 10;
+      const value = Math.round(Math.pow(2, aperture / 2) * 10) / 10;
       return Number.isInteger(value) ? value.toFixed(0) : value.toFixed(1);
     }
   } else {
@@ -79,9 +87,7 @@ export const formatExposureTime = (exposureTime = 0) =>
     : undefined;
 
 export const formatExposureCompensation = (exposureCompensation?: number) => {
-  if (exposureCompensation && Math.abs(exposureCompensation) > 0.01) {
-    return `${formatNumberToFraction(exposureCompensation)}ev`;
-  } else {
-    return undefined;
-  }
+  return exposureCompensation && Math.abs(exposureCompensation) > 0.01
+    ? `${formatNumberToFraction(exposureCompensation)}ev`
+    : undefined;
 };

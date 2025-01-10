@@ -1,6 +1,6 @@
 'use server';
 
-import { VideoFormData, convertFormDataToVideoDbInsert, convertVideoToFormData } from './form';
+import { convertFormDataToVideoDbInsert, convertVideoToFormData } from './form';
 import { redirect } from 'next/navigation';
 import { deleteFile } from '@/services/storage';
 import {
@@ -37,7 +37,6 @@ import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 
 export const createVideoAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
-    const shouldStripGpsData = formData.get('shouldStripGpsData') === 'true';
     formData.delete('shouldStripGpsData');
 
     const video = convertFormDataToVideoDbInsert(formData);
@@ -84,7 +83,7 @@ export const updateVideoAction = async (formData: FormData) =>
     redirect(PATH_ADMIN_VIDEOS);
   });
 
-export const tagMultipleVideosAction = (tags: string, videoIds: string[]) =>
+export const tagMultipleVideosAction = async (tags: string, videoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
     await addTagsToVideos(convertStringToArray(tags, false) ?? [], videoIds);
     revalidateAllKeysAndPaths();
@@ -95,7 +94,7 @@ export const toggleFavoriteVideoAction = async (videoId: string, shouldRedirect?
     const video = await getVideo(videoId);
     if (video) {
       const { tags } = video;
-      video.tags = tags.some(tag => tag === TAG_FAVS)
+      video.tags = tags.includes(TAG_FAVS)
         ? tags.filter(tag => !isTagFavs(tag))
         : [...tags, TAG_FAVS];
       await updateVideo(convertVideoToVideoDbUpdate(video));

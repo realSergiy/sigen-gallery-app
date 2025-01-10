@@ -4,7 +4,7 @@ import Modal from '@/components/Modal';
 import { TbPhotoShare } from 'react-icons/tb';
 import { clsx } from 'clsx/lite';
 import { BiCopy } from 'react-icons/bi';
-import { ReactNode } from 'react';
+import { ReactNode, type JSX } from 'react';
 import { shortenUrl } from '@/utility/url';
 import { toastSuccess } from '@/toast';
 import { PiXLogo } from 'react-icons/pi';
@@ -30,7 +30,6 @@ export default function ShareModal({
         'px-3.5 py-3',
         embedded ? 'border-l' : 'rounded-md border',
         'border-gray-200 bg-gray-50 active:bg-gray-100',
-        // eslint-disable-next-line max-len
         'dark:border-gray-800 dark:bg-gray-900/75 dark:hover:bg-gray-800/75 dark:active:bg-gray-900',
         'cursor-pointer',
       )}
@@ -46,7 +45,7 @@ export default function ShareModal({
         {title && (
           <div className={clsx('flex items-center gap-x-3', 'text-2xl leading-snug')}>
             <TbPhotoShare size={22} className="hidden xs:block" />
-            <div className="flex-grow">{title}</div>
+            <div className="grow">{title}</div>
           </div>
         )}
         {children}

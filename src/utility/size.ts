@@ -1,4 +1,4 @@
-const DEFAULT_ASPECT_RATIO = 16.0 / 9.0;
+const DEFAULT_ASPECT_RATIO = 16 / 9;
 
 export const getDimensionsFromSize = (
   size: number,
@@ -10,7 +10,7 @@ export const getDimensionsFromSize = (
 } => {
   const aspectRatio =
     typeof aspectRatioRaw === 'string'
-      ? parseFloat(aspectRatioRaw)
+      ? Number.parseFloat(aspectRatioRaw)
       : aspectRatioRaw || DEFAULT_ASPECT_RATIO;
 
   let width = size;

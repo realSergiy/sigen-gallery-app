@@ -1,5 +1,4 @@
 'use client';
-
 import VideoMedium from './VideoMedium';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
@@ -8,6 +7,8 @@ import { useAppState } from '@/state/AppState';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
 import { Video } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
+
+import type { JSX } from 'react';
 
 export default function VideoGrid({
   videos,
@@ -76,10 +77,9 @@ export default function VideoGrid({
             >
               <VideoMedium
                 className={clsx(
-                  'flex h-full w-full',
-                  // Prevent video navigation when selecting
+                  'flex size-full',
                   selectedVideoIds?.length !== undefined && 'pointer-events-none',
-                )}
+                )} // Prevent video navigation when selecting
                 {...{
                   video,
                   tag,

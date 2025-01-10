@@ -63,9 +63,9 @@ export default function VideoUpload({
                       }
                     }
                   })
-                  .catch(error => {
+                  .catch(e => {
                     setIsUploading(false);
-                    setUploadError(`Upload Error: ${error.message}`);
+                    setUploadError(`Upload Error: ${e.message}`);
                   });
               }
             }}

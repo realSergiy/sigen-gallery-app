@@ -24,11 +24,11 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import PhotoLink from './PhotoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminPhotoMenuClient from '@/admin/AdminPhotoMenuClient';
-import { RevalidatePhoto } from './InfinitePhotoScroll';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import PhotoDate from './PhotoDate';
 import { useAppState } from '@/state/AppState';
+import { RevalidateMedia } from '@/media';
 
 export default function PhotoLarge({
   photo,
@@ -57,7 +57,7 @@ export default function PhotoLarge({
   priority?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   showTitle?: boolean;
   showTitleAsH1?: boolean;
   showCamera?: boolean;
@@ -94,7 +94,7 @@ export default function PhotoLarge({
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const renderPhotoLink = () => (
-    <PhotoLink photo={photo} className="flex-grow font-bold uppercase" prefetch={prefetch} />
+    <PhotoLink photo={photo} className="grow font-bold uppercase" prefetch={prefetch} />
   );
 
   return (
@@ -110,12 +110,12 @@ export default function PhotoLarge({
           <div
             className={clsx(
               arePhotosMatted && 'flex w-full items-center justify-center',
-              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-[80%]' : 'h-[90%]',
+              arePhotosMatted && photo.aspectRatio >= 1 ? 'h-4/5' : 'h-[90%]',
             )}
           >
             <ImageLarge
               className={clsx(arePhotosMatted && 'h-full')}
-              imgClassName={clsx(arePhotosMatted && 'h-full w-full object-contain')}
+              imgClassName={clsx(arePhotosMatted && 'size-full object-contain')}
               alt={altTextForPhoto(photo)}
               src={photo.url}
               aspectRatio={photo.aspectRatio}
@@ -129,7 +129,6 @@ export default function PhotoLarge({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            'relative',
             'sticky top-4 -translate-y-1 self-start',
             'grid grid-cols-2 md:grid-cols-1',
             'gap-y-baseline gap-x-0.5 sm:gap-x-1',
@@ -242,9 +241,7 @@ export default function PhotoLarge({
                       photo,
                       tag: shouldShareTag ? primaryTag : undefined,
                       camera: shouldShareCamera ? camera : undefined,
-                      // eslint-disable-next-line max-len
                       simulation: shouldShareSimulation ? photo.filmSimulation : undefined,
-                      // eslint-disable-next-line max-len
                       focal: shouldShareFocalLength ? photo.focalLength : undefined,
                     })}
                     prefetch={prefetchRelatedLinks}

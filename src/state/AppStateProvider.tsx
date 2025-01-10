@@ -40,7 +40,8 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   useEffect(() => {
     if (isUserSignedIn) {
       const timeout = setTimeout(
-        () => getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count)),
+        () =>
+          void getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count)),
         100,
       );
       return () => clearTimeout(timeout);

@@ -9,18 +9,14 @@ import { useAppState } from '@/state/AppState';
 import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
 import { getVideosAction, getVideosCachedAction } from './actions';
-
-export type RevalidateVideo = (
-  videoId: string,
-  revalidateRemainingVideos?: boolean,
-) => Promise<any>;
+import { type Arguments } from 'swr';
+import { type RevalidateMedia } from '@/media';
 
 export default function InfiniteVideoScroll({
   cacheKey,
   initialOffset,
   itemsPerPage,
   sort,
-  tag,
   wrapMoreButtonInGrid,
   useCachedVideos = true,
   includeHiddenVideos,
@@ -36,7 +32,7 @@ export default function InfiniteVideoScroll({
   children: (props: {
     videos: Video[];
     onLastVideoVisible: () => void;
-    revalidateVideo?: RevalidateVideo;
+    revalidateVideo?: RevalidateMedia;
   }) => ReactNode;
 } & VideoSetAttributes) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
@@ -44,12 +40,12 @@ export default function InfiniteVideoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Video[]) => (prev && prev.length === 0 ? null : [key, size]),
+    (size: number, previous: Video[]) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
   const fetcher = useCallback(
-    ([_key, size]: [string, number]) =>
+    ([, size]: [string, number]) =>
       (useCachedVideos ? getVideosCachedAction : getVideosAction)({
         offset: initialOffset + size * itemsPerPage,
         sort,
@@ -76,7 +72,7 @@ export default function InfiniteVideoScroll({
   const isLoadingOrValidating = isLoading || isValidating;
 
   const isFinished = useMemo(
-    () => data && data[data.length - 1]?.length < itemsPerPage,
+    () => (data?.at(-1)?.length ?? 0) < itemsPerPage,
     [data, itemsPerPage],
   );
 
@@ -88,21 +84,27 @@ export default function InfiniteVideoScroll({
 
   const videos = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidateVideo: RevalidateVideo = useCallback(
+  const revalidateVideo: RevalidateMedia = useCallback(
     (videoId: string, revalidateRemainingVideos?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Video[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(videos => videos.some(video => video.id === videoId));
-          return revalidateRemainingVideos ? size >= i : size === i;
+        revalidate: (_data: Video[], key: Arguments) => {
+          if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
+            const size = key[1];
+            const index = (data ?? []).findIndex(videos =>
+              videos.some(video => video.id === videoId),
+            );
+            return revalidateRemainingVideos ? size >= index : size === index;
+          }
+          return false;
         },
-      } as any),
+      }),
     [data, mutate],
   );
 
   const renderMoreButton = () => (
     <div ref={buttonContainerRef}>
       <button
-        onClick={() => (error ? mutate() : advance())}
+        onClick={() => void (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
         className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >

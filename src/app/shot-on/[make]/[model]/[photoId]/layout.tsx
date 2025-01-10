@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { PATH_ROOT, absolutePathForPhoto, absolutePathForPhotoImage } from '@/site/paths';
 import PhotoDetailPage from '@/photo/PhotoDetailPage';
 import { getPhotosMetaCached, getPhotosNearIdCached } from '@/photo/cache';
-import { PhotoCameraProps, cameraFromPhoto, getCameraFromParams } from '@/camera';
+import { cameraFromPhoto, getCameraFromParams, CameraPhotoId } from '@/camera';
 import { ReactNode, cache } from 'react';
 
 const getPhotosNearIdCachedCached = cache((photoId: string, make: string, model: string) =>
@@ -15,8 +15,12 @@ const getPhotosNearIdCachedCached = cache((photoId: string, make: string, model:
 );
 
 export async function generateMetadata({
-  params: { photoId, make, model },
-}: PhotoCameraProps): Promise<Metadata> {
+  params,
+}: {
+  params: PhotoCameraPageParams;
+}): Promise<Metadata> {
+  const { photoId, make, model } = await params;
+
   const { photo } = await getPhotosNearIdCachedCached(photoId, make, model);
 
   if (!photo) {
@@ -49,10 +53,17 @@ export async function generateMetadata({
   };
 }
 
+type PhotoCameraPageParams = Promise<CameraPhotoId>;
+
 export default async function PhotoCameraPage({
-  params: { photoId, make, model },
   children,
-}: PhotoCameraProps & { children: ReactNode }) {
+  params,
+}: {
+  children: ReactNode;
+  params: PhotoCameraPageParams;
+}) {
+  const { photoId, make, model } = await params;
+
   const { photo, photos, photosGrid, indexNumber } = await getPhotosNearIdCachedCached(
     photoId,
     make,

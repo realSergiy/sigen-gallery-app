@@ -49,7 +49,7 @@ export default function AdminPhotosClient({
             {photosCountOutdated > 0 && (
               <PathLoaderButton
                 path={PATH_ADMIN_OUTDATED}
-                icon={<LiaBroomSolid size={18} className="translate-y-[-1px]" />}
+                icon={<LiaBroomSolid size={18} className="-translate-y-px" />}
                 title={`${photosCountOutdated} Outdated Photos`}
                 className={clsx(isUploading && 'hidden md:inline-flex')}
                 hideTextOnMobile={false}

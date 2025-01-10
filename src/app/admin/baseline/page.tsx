@@ -13,7 +13,7 @@ import { FaCamera, FaHandSparkles, FaUserAltSlash } from 'react-icons/fa';
 import { IoMdCamera } from 'react-icons/io';
 import { IoImageSharp } from 'react-icons/io5';
 
-const DEBUG_LINES = new Array(22).fill(null);
+const DEBUG_LINES = Array.from({ length: 22 }).fill(null);
 
 export default function ComponentsPage() {
   const { shouldShowBaselineGrid, setShouldShowBaselineGrid } = useAppState();
@@ -170,8 +170,8 @@ export default function ComponentsPage() {
               </div>
             </div>
             <div className={clsx(debugComponents && '[&>*]:bg-gray-800', '[&>*]:flex')}>
-              {DEBUG_LINES.map((_, i) => (
-                <div key={i}>Line {(i + 1).toString().padStart(2, '0')}</div>
+              {DEBUG_LINES.map((_, index) => (
+                <div key={index}>Line {(index + 1).toString().padStart(2, '0')}</div>
               ))}
             </div>
           </DivDebugBaselineGrid>

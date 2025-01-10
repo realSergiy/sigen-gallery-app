@@ -9,7 +9,7 @@ export default async function AdminConfigurationPage() {
       contentMain={
         <div className="space-y-4">
           <div className="flex items-center">
-            <div className="flex-grow">App Configuration</div>
+            <div className="grow">App Configuration</div>
             <ClearCacheButton />
           </div>
           <Container spaceChildren={false}>

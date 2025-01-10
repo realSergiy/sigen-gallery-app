@@ -27,8 +27,7 @@ export default function VideoSyncButton({
   if (videoTitle) {
     confirmText.push(`"${videoTitle}"`);
   }
-  confirmText.push('data from original file?');
-  confirmText.push('This action cannot be undone.');
+  confirmText.push('data from original file?', 'This action cannot be undone.');
 
   return (
     <LoaderButton

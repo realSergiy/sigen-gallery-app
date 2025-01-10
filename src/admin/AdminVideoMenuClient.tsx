@@ -10,10 +10,10 @@ import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
 import MoreMenu from '@/components/more/MoreMenu';
 import { useAppState } from '@/state/AppState';
-import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
 import { Video } from '@/db/video_orm';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminVideoMenuClient({
   video,
@@ -22,7 +22,7 @@ export default function AdminVideoMenuClient({
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
   video: Video;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
   includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();
@@ -56,26 +56,28 @@ export default function AdminVideoMenuClient({
           ),
       });
     }
-    items.push({
-      label: 'Download',
-      icon: (
-        <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
-      ),
-      href: video.url,
-      hrefDownloadName: downloadFileNameForVideo(video),
-    });
-    items.push({
-      label: 'Delete',
-      icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
-      action: () => {
-        if (confirm(deleteConfirmationTextForVideo(video))) {
-          return deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
-            revalidateVideo?.(video.id, true);
-            registerAdminUpdate?.();
-          });
-        }
+    items.push(
+      {
+        label: 'Download',
+        icon: (
+          <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
+        ),
+        href: video.url,
+        hrefDownloadName: downloadFileNameForVideo(video),
       },
-    });
+      {
+        label: 'Delete',
+        icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
+        action: () => {
+          return confirm(deleteConfirmationTextForVideo(video))
+            ? deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
+                revalidateVideo?.(video.id, true);
+                registerAdminUpdate?.();
+              })
+            : Promise.resolve();
+        },
+      },
+    );
     return items;
   }, [
     video,

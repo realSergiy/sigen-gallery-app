@@ -1,6 +1,6 @@
 import { clsx } from 'clsx/lite';
 import AnimateItems from './AnimateItems';
-import { ReactNode } from 'react';
+import { ReactNode, type JSX } from 'react';
 
 export default function HeaderList({
   title,
@@ -30,7 +30,7 @@ export default function HeaderList({
                 'uppercase',
               )}
             >
-              {icon && <span className="w-[1rem]">{icon}</span>}
+              {icon && <span className="w-4">{icon}</span>}
               {title}
             </div>,
           ]

@@ -13,13 +13,15 @@ const getPhotosFocalLengthDataCachedCached = cache((focal: number) =>
   }),
 );
 
-interface FocalLengthProps {
-  params: { focal: string };
-}
+type FocalLengthProps = {
+  params: Promise<{ focal: string }>;
+};
 
-export async function generateMetadata({
-  params: { focal: focalString },
-}: FocalLengthProps): Promise<Metadata> {
+export async function generateMetadata(props: FocalLengthProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { focal: focalString } = params;
+
   const focal = getFocalLengthFromString(focalString);
 
   const [photos, { count, dateRange }] = await getPhotosFocalLengthDataCachedCached(focal);
@@ -48,7 +50,11 @@ export async function generateMetadata({
   };
 }
 
-export default async function Share({ params: { focal: focalString } }: FocalLengthProps) {
+export default async function Share(props: FocalLengthProps) {
+  const params = await props.params;
+
+  const { focal: focalString } = params;
+
   const focal = getFocalLengthFromString(focalString);
 
   const [photos, { count, dateRange }] = await getPhotosFocalLengthDataCachedCached(focal);

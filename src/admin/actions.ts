@@ -6,12 +6,13 @@ import { testOpenAiConnection } from '@/services/openai';
 import { testDatabaseConnection } from '@/services/postgres';
 import { testStorageConnection } from '@/services/storage';
 import { CONFIG_CHECKLIST_STATUS } from '@/site/config';
+import { getMessage } from '@/utility/error';
 
-const scanForError = (shouldCheck: boolean, promise: () => Promise<any>): Promise<string> =>
+const scanForError = (shouldCheck: boolean, promise: () => Promise<unknown>): Promise<string> =>
   shouldCheck
     ? promise()
         .then(() => '')
-        .catch(error => error.message)
+        .catch(e => getMessage(e))
     : Promise.resolve('');
 
 export const testConnectionsAction = async () =>

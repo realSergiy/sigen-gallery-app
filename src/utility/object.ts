@@ -1,10 +1,10 @@
 type SimpleObject = Record<string, string>;
 
-export const areSimpleObjectsEqual = (obj1: SimpleObject, obj2: SimpleObject): boolean => {
-  const obj1Keys = Object.keys(obj1);
-  const obj2Keys = Object.keys(obj2);
+export const areSimpleObjectsEqual = (object1: SimpleObject, object2: SimpleObject): boolean => {
+  const object1Keys = Object.keys(object1);
+  const object2Keys = Object.keys(object2);
 
-  return obj1Keys.length === obj2Keys.length
-    ? obj1Keys.every(key => obj1[key] === obj2[key])
+  return object1Keys.length === object2Keys.length
+    ? object1Keys.every(key => object1[key] === object2[key])
     : false;
 };

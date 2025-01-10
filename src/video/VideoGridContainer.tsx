@@ -5,7 +5,8 @@ import VideoGrid from './VideoGrid';
 import VideoGridInfinite from './VideoGridInfinite';
 import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useState, type JSX } from 'react';
+import { TestIdProps } from '@/components/types';
 
 export default function VideoGridContainer({
   cacheKey,
@@ -16,12 +17,14 @@ export default function VideoGridContainer({
   header,
   sidebar,
   canSelect,
+  'data-testid': dataTestId,
 }: {
   cacheKey: string;
   count: number;
   header?: JSX.Element;
   sidebar?: JSX.Element;
-} & ComponentProps<typeof VideoGrid>) {
+} & ComponentProps<typeof VideoGrid> &
+  TestIdProps) {
   const [shouldAnimateDynamicItems, setShouldAnimateDynamicItems] = useState(false);
 
   const onAnimationComplete = useCallback(() => setShouldAnimateDynamicItems(true), []);
@@ -31,7 +34,7 @@ export default function VideoGridContainer({
   return (
     <SiteGrid
       contentMain={
-        <div className={clsx(header && 'mt-1.5 space-y-8')}>
+        <div className={clsx(header && 'mt-1.5 space-y-8')} data-testid={dataTestId}>
           {header && <AnimateItems type="bottom" items={[header]} animateOnFirstLoadOnly />}
           <div className="space-y-0.5 sm:space-y-1">
             <VideoGrid

@@ -1,4 +1,5 @@
 import { isPathProtected } from '@/site/paths';
+// eslint-disable-next-line import/named
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -8,12 +9,7 @@ export const KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL =
   'https://errors.authjs.dev#callbackrouteerror';
 export const KEY_CALLBACK_URL = 'callbackUrl';
 
-export const {
-  handlers: { GET, POST },
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       async authorize({ email, password }) {
@@ -23,7 +19,7 @@ export const {
           process.env.ADMIN_PASSWORD &&
           process.env.ADMIN_PASSWORD === password
         ) {
-          const user: User = { email, name: 'Admin User' };
+          const user = { email, name: 'Admin User' } satisfies User;
           return user;
         } else {
           return null;

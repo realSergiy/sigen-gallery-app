@@ -29,7 +29,7 @@ export default async function GridPage() {
   ]);
 
   return videos.length > 0 ? (
-    <VideoGridPage {...{ videos, videosCount, tags }} />
+    <VideoGridPage {...{ videos, videosCount, tags }} data-testid="VideoGridPage" />
   ) : (
     <MediaEmptyState message="Add your first video:" />
   );

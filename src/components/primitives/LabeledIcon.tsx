@@ -8,7 +8,7 @@ export type LabeledIconType = 'icon-first' | 'icon-last' | 'icon-only' | 'text-o
 export default function LabeledIcon({
   icon,
   type = 'icon-first',
-  className: classNameProp,
+  className: classNameProperty,
   children,
   iconWide,
   href,
@@ -24,8 +24,8 @@ export default function LabeledIcon({
 } & Partial<ComponentProps<typeof Link>>) {
   const className = clsx(
     'inline-flex gap-x-1 md:gap-x-1.5',
-    classNameProp,
-    debug && 'm-[-1px] border border-green-500',
+    classNameProperty,
+    debug && '-m-px border border-green-500',
   );
 
   const renderContent = () => (

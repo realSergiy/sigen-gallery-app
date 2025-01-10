@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import nextJest from 'next/jest.js';
 
 const createJestConfig = nextJest({

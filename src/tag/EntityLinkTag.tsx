@@ -18,7 +18,7 @@ export default function EntityLinkTag({
     <EntityLink
       label={formatTag(tag)}
       href={pathForTag(tag)}
-      icon={<FaTag size={11} className="translate-y-[1px]" />}
+      icon={<FaTag size={11} className="translate-y-px" />}
       type={type}
       badged={badged}
       contrast={contrast}

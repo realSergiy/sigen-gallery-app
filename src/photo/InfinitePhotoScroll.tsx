@@ -9,11 +9,8 @@ import { Photo, PhotoSetAttributes } from '.';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { GetPhotosOptions } from './db';
-
-export type RevalidatePhoto = (
-  photoId: string,
-  revalidateRemainingPhotos?: boolean,
-) => Promise<any>;
+import { type Arguments } from 'swr';
+import { RevalidateMedia } from '@/media';
 
 export default function InfinitePhotoScroll({
   cacheKey,
@@ -38,7 +35,7 @@ export default function InfinitePhotoScroll({
   children: (props: {
     photos: Photo[];
     onLastPhotoVisible: () => void;
-    revalidatePhoto?: RevalidatePhoto;
+    revalidatePhoto?: RevalidateMedia;
   }) => ReactNode;
 } & PhotoSetAttributes) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
@@ -46,12 +43,12 @@ export default function InfinitePhotoScroll({
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, prev: Photo[]) => (prev && prev.length === 0 ? null : [key, size]),
+    (size: number, previous: Photo[]) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
   const fetcher = useCallback(
-    ([_key, size]: [string, number]) =>
+    ([, size]: [string, number]) =>
       (useCachedPhotos ? getPhotosCachedAction : getPhotosAction)({
         offset: initialOffset + size * itemsPerPage,
         sortBy,
@@ -89,7 +86,7 @@ export default function InfinitePhotoScroll({
   const isLoadingOrValidating = isLoading || isValidating;
 
   const isFinished = useMemo(
-    () => data && data[data.length - 1]?.length < itemsPerPage,
+    () => data && (data.at(-1)?.length ?? 0) < itemsPerPage,
     [data, itemsPerPage],
   );
 
@@ -101,21 +98,27 @@ export default function InfinitePhotoScroll({
 
   const photos = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidatePhoto: RevalidatePhoto = useCallback(
+  const revalidatePhoto: RevalidateMedia = useCallback(
     (photoId: string, revalidateRemainingPhotos?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Photo[], [_, size]: [string, number]) => {
-          const i = (data ?? []).findIndex(photos => photos.some(photo => photo.id === photoId));
-          return revalidateRemainingPhotos ? size >= i : size === i;
+        revalidate: (_data: Photo[], key: Arguments) => {
+          if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
+            const size = key[1];
+            const index = (data ?? []).findIndex(photos =>
+              photos.some(photo => photo.id === photoId),
+            );
+            return revalidateRemainingPhotos ? size >= index : size === index;
+          }
+          return false;
         },
-      } as any),
+      }),
     [data, mutate],
   );
 
   const renderMoreButton = () => (
     <div ref={buttonContainerRef}>
       <button
-        onClick={() => (error ? mutate() : advance())}
+        onClick={() => void (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
         className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >

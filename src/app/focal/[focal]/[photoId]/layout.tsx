@@ -15,13 +15,15 @@ const getPhotosNearIdCachedCached = cache((photoId: string, focal: number) =>
   }),
 );
 
-interface PhotoFocalLengthProps {
-  params: { photoId: string; focal: string };
-}
+type PhotoFocalLengthProps = {
+  params: Promise<{ photoId: string; focal: string }>;
+};
 
-export async function generateMetadata({
-  params: { photoId, focal: focalString },
-}: PhotoFocalLengthProps): Promise<Metadata> {
+export async function generateMetadata(props: PhotoFocalLengthProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { photoId, focal: focalString } = params;
+
   const focal = getFocalLengthFromString(focalString);
 
   const { photo } = await getPhotosNearIdCachedCached(photoId, focal);
@@ -53,10 +55,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function PhotoFocalLengthPage({
-  params: { photoId, focal: focalString },
-  children,
-}: PhotoFocalLengthProps & { children: ReactNode }) {
+export default async function PhotoFocalLengthPage(
+  props: PhotoFocalLengthProps & { children: ReactNode },
+) {
+  const params = await props.params;
+
+  const { photoId, focal: focalString } = params;
+
+  const { children } = props;
+
   const focal = getFocalLengthFromString(focalString);
 
   const { photo, photos, photosGrid, indexNumber } = await getPhotosNearIdCachedCached(

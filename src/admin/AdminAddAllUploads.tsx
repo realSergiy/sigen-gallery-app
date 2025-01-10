@@ -16,6 +16,7 @@ import { BiCheckCircle, BiImageAdd } from 'react-icons/bi';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import PhotoTagFieldset from './PhotoTagFieldset';
+import { getMessage } from '@/utility/error';
 
 const UPLOAD_BATCH_SIZE = 4;
 
@@ -63,7 +64,7 @@ export default function AdminAddAllUploads({
               ? {
                   ...status,
                   // Prevent status regressions
-                  status: status.status !== 'added' ? data.status : 'added',
+                  status: status.status === 'added' ? 'added' : data.status,
                   statusMessage: data.statusMessage,
                   progress: data.progress,
                 }
@@ -80,12 +81,57 @@ export default function AdminAddAllUploads({
           return Math.max(current, updatedProgress);
         });
       }
-    } catch (e: any) {
+    } catch (e) {
       setIsAdding(false);
       setButtonText('Try Again');
       setAddingProgress(undefined);
-      setActionErrorMessage(e);
+      setActionErrorMessage(getMessage(e));
     }
+  };
+
+  const addUploadUrlsInBatches = async (uploads: string[]) => {
+    if (uploads.length === 0) {
+      return;
+    }
+
+    const chunk = uploads.splice(0, UPLOAD_BATCH_SIZE);
+
+    await addUploadUrls(chunk);
+    return await addUploadUrlsInBatches(uploads);
+  };
+
+  const handleAddClick = () => {
+    if (!confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
+      return;
+    }
+
+    setIsAdding(true);
+    setUrlAddStatuses(current =>
+      current.map((item, index) => ({
+        ...item,
+        status: index === 0 ? 'adding' : 'waiting',
+      })),
+    );
+
+    const uploadsToAdd = [...storageUrls];
+
+    addUploadUrlsInBatches(uploadsToAdd)
+      .then(() => {
+        setButtonText('Complete');
+        setAddingProgress(1);
+        setIsAdding(false);
+        setIsAddingComplete(true);
+      })
+      .then(() => sleep(1000))
+      .then(() => {
+        router.push(PATH_ADMIN_PHOTOS);
+      })
+      .catch(e => {
+        setAddingProgress(undefined);
+        setIsAdding(false);
+        setButtonText('Try Again');
+        setActionErrorMessage(getMessage(e));
+      });
   };
 
   return (
@@ -94,7 +140,7 @@ export default function AdminAddAllUploads({
       <Container padding="tight">
         <div className="w-full space-y-4 py-1">
           <div className="flex">
-            <div className={clsx('flex-grow', tagErrorMessage ? 'text-error' : 'text-main')}>
+            <div className={clsx('grow', tagErrorMessage ? 'text-error' : 'text-main')}>
               {showTags
                 ? tagErrorMessage || 'Add tags to all uploads'
                 : `Found ${storageUrls.length} uploads`}
@@ -128,39 +174,12 @@ export default function AdminAddAllUploads({
               disabled={Boolean(tagErrorMessage) || isAddingComplete}
               icon={
                 isAddingComplete ? (
-                  <BiCheckCircle size={18} className="translate-x-[1px]" />
+                  <BiCheckCircle size={18} className="translate-x-px" />
                 ) : (
-                  <BiImageAdd size={18} className="translate-x-[1px]" />
+                  <BiImageAdd size={18} className="translate-x-px" />
                 )
               }
-              onClick={async () => {
-                // eslint-disable-next-line max-len
-                if (confirm(`Are you sure you want to add all ${storageUrls.length} uploads?`)) {
-                  setIsAdding(true);
-                  setUrlAddStatuses(current =>
-                    current.map((url, index) => ({
-                      ...url,
-                      status: index === 0 ? 'adding' : 'waiting',
-                    })),
-                  );
-                  const uploadsToAdd = storageUrls.slice();
-                  try {
-                    while (uploadsToAdd.length > 0) {
-                      await addUploadUrls(uploadsToAdd.splice(0, UPLOAD_BATCH_SIZE));
-                    }
-                    setButtonText('Complete');
-                    setAddingProgress(1);
-                    setIsAdding(false);
-                    setIsAddingComplete(true);
-                    await sleep(1000).then(() => router.push(PATH_ADMIN_PHOTOS));
-                  } catch (e: any) {
-                    setAddingProgress(undefined);
-                    setIsAdding(false);
-                    setButtonText('Try Again');
-                    setActionErrorMessage(e);
-                  }
-                }
-              }}
+              onClick={handleAddClick}
               hideTextOnMobile={false}
             >
               {buttonText}

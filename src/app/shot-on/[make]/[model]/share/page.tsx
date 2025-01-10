@@ -1,4 +1,4 @@
-import { CameraProps } from '@/camera';
+import { Camera } from '@/camera';
 import CameraShareModal from '@/camera/CameraShareModal';
 import { generateMetaForCamera } from '@/camera/meta';
 import { Metadata } from 'next/types';
@@ -11,9 +11,13 @@ const getPhotosCameraDataCachedCached = cache((make: string, model: string) =>
   getPhotosCameraDataCached(make, model, INFINITE_SCROLL_GRID_INITIAL),
 );
 
-export async function generateMetadata({
-  params: { make, model },
-}: CameraProps): Promise<Metadata> {
+type CameraPageProps = {
+  params: Promise<Camera>;
+};
+
+export async function generateMetadata({ params }: CameraPageProps): Promise<Metadata> {
+  const { make, model } = await params;
+
   const [photos, { count, dateRange }, camera] = await getPhotosCameraDataCachedCached(make, model);
 
   const { url, title, description, images } = generateMetaForCamera(
@@ -40,7 +44,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function Share({ params: { make, model } }: CameraProps) {
+export default async function Share({ params }: CameraPageProps) {
+  const { make, model } = await params;
+
   const [photos, { count, dateRange }, camera] = await getPhotosCameraDataCachedCached(make, model);
 
   return (

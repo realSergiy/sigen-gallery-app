@@ -25,6 +25,7 @@ export default function ViewSwitcher({
 
   const renderItemFeed = () => (
     <SwitcherItem
+      data-testid="FeedSwitcherItem"
       icon={<IconFeed />}
       href={PATH_VIDEO_FEED_INFERRED}
       active={currentSelection === 'feed'}
@@ -34,6 +35,7 @@ export default function ViewSwitcher({
 
   const renderItemGrid = () => (
     <SwitcherItem
+      data-testid="GridSwitcherItem"
       icon={<IconGrid />}
       href={PATH_VIDEO_GRID_INFERRED}
       active={currentSelection === 'grid'}
@@ -48,6 +50,7 @@ export default function ViewSwitcher({
         {GRID_HOMEPAGE_ENABLED ? renderItemFeed() : renderItemGrid()}
         {showAdmin && (
           <SwitcherItem
+            data-testid="AdminSwitcherItem"
             icon={<BiLockAlt size={16} className="translate-y-[-0.5px]" />}
             href={PATH_ADMIN_VIDEOS}
             active={currentSelection === 'admin'}
@@ -55,7 +58,11 @@ export default function ViewSwitcher({
         )}
       </Switcher>
       <Switcher type="borderless">
-        <SwitcherItem icon={<IconSearch />} onClick={() => setIsCommandKOpen?.(true)} />
+        <SwitcherItem
+          icon={<IconSearch />}
+          onClick={() => setIsCommandKOpen?.(true)}
+          data-testid="SearchSwitcherItem"
+        />
       </Switcher>
     </div>
   );

@@ -46,7 +46,7 @@ export default function AdminNavClient({
   useEffect(() => {
     // Check every 5 seconds if update times are recent
     setHasRecentUpdates(areTimesRecent(updateTimes));
-    const interval = setInterval(() => setHasRecentUpdates(areTimesRecent(updateTimes)), 5_000);
+    const interval = setInterval(() => setHasRecentUpdates(areTimesRecent(updateTimes)), 5000);
     return () => clearInterval(interval);
   }, [updateTimes]);
 
@@ -62,7 +62,7 @@ export default function AdminNavClient({
               'border-b border-gray-200 pb-3 dark:border-gray-800',
             )}
           >
-            <div className={clsx('flex gap-2 md:gap-4', 'flex-grow overflow-x-auto')}>
+            <div className={clsx('flex gap-2 md:gap-4', 'grow overflow-x-auto')}>
               {items.map(({ label, href, count }) => (
                 <Link
                   key={label}
@@ -86,7 +86,7 @@ export default function AdminNavClient({
             </Link>
           </div>
           {shouldShowBanner && (
-            <Note icon={<FaRegClock className="flex-shrink-0" />}>
+            <Note icon={<FaRegClock className="shrink-0" />}>
               Photo updates detected—they may take several minutes to show up for visitors
             </Note>
           )}

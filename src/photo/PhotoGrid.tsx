@@ -1,5 +1,4 @@
 'use client';
-
 import { Photo, PhotoSetAttributes } from '.';
 import PhotoMedium from './PhotoMedium';
 import { clsx } from 'clsx/lite';
@@ -7,6 +6,8 @@ import AnimateItems from '@/components/AnimateItems';
 import { GRID_ASPECT_RATIO } from '@/site/config';
 import { useAppState } from '@/state/AppState';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
+
+import type { JSX } from 'react';
 
 export default function PhotoGrid({
   photos,
@@ -78,10 +79,9 @@ export default function PhotoGrid({
             >
               <PhotoMedium
                 className={clsx(
-                  'flex h-full w-full',
-                  // Prevent photo navigation when selecting
+                  'flex size-full',
                   selectedPhotoIds?.length !== undefined && 'pointer-events-none',
-                )}
+                )} // Prevent photo navigation when selecting
                 {...{
                   photo,
                   tag,

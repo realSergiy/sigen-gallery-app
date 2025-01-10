@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useRef } from 'react';
-import { Variant, motion } from 'framer-motion';
+import { type Variant, motion } from 'framer-motion';
 import { useAppState } from '@/state/AppState';
 import usePrefersReducedMotion from '@/utility/usePrefersReducedMotion';
 
@@ -9,15 +9,15 @@ const IGNORE_CAN_START = true;
 
 export type AnimationType = 'none' | 'scale' | 'left' | 'right' | 'bottom';
 
-export interface AnimationConfig {
+export type AnimationConfig = {
   type?: AnimationType;
   duration?: number;
   staggerDelay?: number;
   scaleOffset?: number;
   distanceOffset?: number;
-}
+};
 
-interface Props extends AnimationConfig {
+type Props = {
   className?: string;
   classNameItem?: string;
   items: ReactNode[];
@@ -27,7 +27,7 @@ interface Props extends AnimationConfig {
   animateOnFirstLoadOnly?: boolean;
   staggerOnFirstLoadOnly?: boolean;
   onAnimationComplete?: () => void;
-}
+} & AnimationConfig;
 
 function AnimateItems({
   className,

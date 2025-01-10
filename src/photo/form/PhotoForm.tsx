@@ -82,11 +82,11 @@ export default function PhotoForm({
       const changedKeys: (keyof PhotoFormData)[] = [];
 
       setFormData(currentForm => {
-        Object.entries(updatedExifData ?? {}).forEach(([key, value]) => {
+        for (const [key, value] of Object.entries(updatedExifData ?? {})) {
           if (currentForm[key as keyof PhotoFormData] !== value) {
             changedKeys.push(key as keyof PhotoFormData);
           }
-        });
+        }
 
         return {
           ...currentForm,
@@ -214,11 +214,9 @@ export default function PhotoForm({
     hideIfEmpty?: boolean,
     shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
   ) => {
-    if (key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks) {
-      return true;
-    } else {
-      return (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
-    }
+    return key === 'blurData' && type === 'create' && !BLUR_ENABLED && !shouldDebugImageFallbacks
+      ? true
+      : (hideIfEmpty && !formData[key]) || shouldHide?.(formData);
   };
 
   return (
@@ -257,7 +255,7 @@ export default function PhotoForm({
               <Spinner
                 color="text"
                 size={9}
-                className={clsx('text-extra-dim', 'translate-x-[1px] translate-y-[0.5px]')}
+                className={clsx('text-extra-dim', 'translate-x-px translate-y-[0.5px]')}
               />
               Analyzing image
             </div>

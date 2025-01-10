@@ -27,7 +27,7 @@ const checkRateLimitAndBailIfNecessary = async () => {
     let success = false;
     try {
       success = (await ratelimit.limit(RATE_LIMIT_IDENTIFIER)).success;
-    } catch (e: any) {
+    } catch (e) {
       console.error('Failed to rate limit OpenAI', e);
       throw new Error('Failed to rate limit OpenAI');
     }
@@ -72,7 +72,7 @@ export const streamOpenAiImageQuery = async (imageBase64: string, query: string)
 
   if (args) {
     (async () => {
-      const { textStream } = await streamText(args);
+      const { textStream } = streamText(args);
       for await (const delta of textStream) {
         stream.update(cleanUpAiTextResponse(delta));
       }

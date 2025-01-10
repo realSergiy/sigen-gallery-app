@@ -6,8 +6,8 @@ import { getImageResponseCacheControlHeaders } from '@/image-response/cache';
 import FocalLengthImageResponse from '@/image-response/FocalLengthImageResponse';
 import { getFocalLengthFromString } from '@/focal';
 
-export async function GET(_: Request, context: { params: { focal: string } }) {
-  const focal = getFocalLengthFromString(context.params.focal);
+export async function GET(_: Request, context: { params: Promise<{ focal: string }> }) {
+  const focal = getFocalLengthFromString((await context.params).focal);
 
   const [photos, { fontFamily, fonts }, headers] = await Promise.all([
     getPhotosCached({ limit: MAX_PHOTOS_TO_SHOW_PER_TAG, focal }),

@@ -11,24 +11,23 @@ import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import VideoDate from '@/video/VideoDate';
 import EditButton from './EditButton';
 import { useAppState } from '@/state/AppState';
-import { RevalidateVideo } from '@/video/InfiniteVideoScroll';
 import VideoSyncButton from './VideoSyncButton';
 import DeleteVideoButton from './DeleteVideoButton';
 import { Video } from '@/db/video_orm';
+import { RevalidateMedia } from '@/media';
 
 export default function AdminVideosTable({
   videos,
   onLastVideoVisible,
   revalidateVideo,
   videoIdsSyncing = [],
-  hasAiTextGeneration,
   showUpdatedAt,
   canEdit = true,
   canDelete = true,
 }: {
   videos: Video[];
   onLastVideoVisible?: () => void;
-  revalidateVideo?: RevalidateVideo;
+  revalidateVideo?: RevalidateMedia;
   videoIdsSyncing?: string[];
   hasAiTextGeneration: boolean;
   showUpdatedAt?: boolean;
@@ -53,7 +52,7 @@ export default function AdminVideosTable({
             <Link
               key={video.id}
               href={pathForVideo({ video })}
-              className="flex items-center gap-2 lg:w-[50%]"
+              className="flex items-center gap-2 lg:w-1/2"
               prefetch={false}
             >
               <span className={clsx(video.hidden && 'text-dim')}>
@@ -66,7 +65,7 @@ export default function AdminVideosTable({
                 )}
               </span>
             </Link>
-            <div className={clsx('uppercase lg:w-[50%]', 'text-dim')}>
+            <div className={clsx('text-dim uppercase lg:w-1/2')}>
               <VideoDate
                 {...{
                   video,
@@ -88,7 +87,10 @@ export default function AdminVideosTable({
               shouldToast
             />
             {canDelete && (
-              <DeleteVideoButton video={video} onDelete={() => revalidateVideo?.(video.id, true)} />
+              <DeleteVideoButton
+                video={video}
+                onDelete={() => void revalidateVideo?.(video.id, true)}
+              />
             )}
           </div>
         </Fragment>

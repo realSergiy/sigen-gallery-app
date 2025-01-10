@@ -10,10 +10,9 @@ import { usePathname } from 'next/navigation';
 import { BiTrash } from 'react-icons/bi';
 import MoreMenu from '@/components/more/MoreMenu';
 import { useAppState } from '@/state/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
-import { downloadFileName } from '@/media';
+import { downloadFileName, RevalidateMedia } from '@/media';
 
 export default function AdminPhotoMenuClient({
   photo,
@@ -22,7 +21,7 @@ export default function AdminPhotoMenuClient({
   ...props
 }: Omit<ComponentProps<typeof MoreMenu>, 'items'> & {
   photo: Photo;
-  revalidatePhoto?: RevalidatePhoto;
+  revalidatePhoto?: RevalidateMedia;
   includeFavorite?: boolean;
 }) {
   const { isUserSignedIn, registerAdminUpdate } = useAppState();
@@ -56,26 +55,28 @@ export default function AdminPhotoMenuClient({
           ),
       });
     }
-    items.push({
-      label: 'Download',
-      icon: (
-        <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
-      ),
-      href: photo.url,
-      hrefDownloadName: downloadFileName(photo),
-    });
-    items.push({
-      label: 'Delete',
-      icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
-      action: () => {
-        if (confirm(deleteConfirmationTextForPhoto(photo))) {
-          return deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
-            revalidatePhoto?.(photo.id, true);
-            registerAdminUpdate?.();
-          });
-        }
+    items.push(
+      {
+        label: 'Download',
+        icon: (
+          <MdOutlineFileDownload size={17} className="translate-x-[-1.5px] translate-y-[-0.5px]" />
+        ),
+        href: photo.url,
+        hrefDownloadName: downloadFileName(photo),
       },
-    });
+      {
+        label: 'Delete',
+        icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
+        action: () => {
+          return confirm(deleteConfirmationTextForPhoto(photo))
+            ? deletePhotoAction(photo.id, photo.url, shouldRedirectDelete).then(() => {
+                revalidatePhoto?.(photo.id, true);
+                registerAdminUpdate?.();
+              })
+            : Promise.resolve();
+        },
+      },
+    );
     return items;
   }, [
     photo,

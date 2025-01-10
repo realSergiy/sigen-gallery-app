@@ -35,7 +35,6 @@ export const PREFIX_FOCAL_LENGTH = '/focal';
 const PATH_PHOTO_DYNAMIC = `${PREFIX_PHOTO}/[photoId]`;
 const PATH_TAG_DYNAMIC = `${PREFIX_TAG}/[tag]`;
 const PATH_CAMERA_DYNAMIC = `${PREFIX_CAMERA}/[make]/[model]`;
-// eslint-disable-next-line max-len
 const PATH_FILM_SIMULATION_DYNAMIC = `${PREFIX_FILM_SIMULATION}/[simulation]`;
 const PATH_FOCAL_LENGTH_DYNAMIC = `${PREFIX_FOCAL_LENGTH}/[focal]`;
 
@@ -273,8 +272,7 @@ export const isPathSignIn = (pathname?: string) => checkPathPrefix(pathname, PAT
 
 export const isPathAdmin = (pathname?: string) => checkPathPrefix(pathname, PATH_ADMIN);
 
-export const isPathTopLevelAdmin = (pathname?: string) =>
-  PATHS_ADMIN.some(path => path === pathname);
+export const isPathTopLevelAdmin = (pathname: string) => PATHS_ADMIN.includes(pathname);
 
 export const isPathAdminConfiguration = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN_CONFIGURATION);
@@ -312,7 +310,7 @@ export const getPathComponents = (
 
   const camera = cameraMake && cameraModel ? { make: cameraMake, model: cameraModel } : undefined;
 
-  const focal = focalString ? parseInt(focalString) : undefined;
+  const focal = focalString ? Number.parseInt(focalString) : undefined;
 
   return {
     photoId:

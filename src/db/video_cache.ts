@@ -2,12 +2,10 @@ import { unstable_cache } from 'next/cache';
 import { getVideosMeta } from './video_orm';
 
 // Table key
-const KEY_VIDEOS = 'photos';
-const KEY_VIDEO = 'photo';
+const KEY_VIDEOS = 'videos';
 
 // Type keys
 const KEY_COUNT = 'count';
-const KEY_HIDDEN = 'hidden';
 const KEY_DATE_RANGE = 'date-range';
 
 export const getVideosMetaCached = (...args: Parameters<typeof getVideosMeta>) =>

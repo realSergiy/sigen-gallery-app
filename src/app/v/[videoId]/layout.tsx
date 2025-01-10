@@ -16,7 +16,7 @@ const getVideosNearIdCachedCached = cache((videoId: string) =>
   getVideosNearIdCached(videoId, { limit: RELATED_GRID_VIDEOS_TO_SHOW + 2 }),
 );
 
-export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined = undefined;
+export let generateStaticParams: (() => Promise<{ videoId: string }[]>) | undefined;
 
 if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   generateStaticParams = async () => {
@@ -25,11 +25,15 @@ if (STATICALLY_OPTIMIZED_PAGES && IS_PRODUCTION) {
   };
 }
 
-interface VideoProps {
-  params: { videoId: string };
-}
+type VideoProps = {
+  params: Promise<{ videoId: string }>;
+};
 
-export async function generateMetadata({ params: { videoId } }: VideoProps): Promise<Metadata> {
+export async function generateMetadata(props: VideoProps): Promise<Metadata> {
+  const params = await props.params;
+
+  const { videoId } = params;
+
   const { video } = await getVideosNearIdCachedCached(videoId);
 
   if (!video) {
@@ -59,10 +63,13 @@ export async function generateMetadata({ params: { videoId } }: VideoProps): Pro
   };
 }
 
-export default async function VideoPage({
-  params: { videoId },
-  children,
-}: VideoProps & { children: ReactNode }) {
+export default async function VideoPage(props: VideoProps & { children: ReactNode }) {
+  const params = await props.params;
+
+  const { videoId } = params;
+
+  const { children } = props;
+
   const { video, videos, videosGrid } = await getVideosNearIdCachedCached(videoId);
 
   if (!video) {

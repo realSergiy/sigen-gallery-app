@@ -13,25 +13,25 @@ import { PATH_ADMIN_PHOTOS, PATH_ROOT } from '@/site/paths';
 import type { Session } from 'next-auth';
 import { redirect } from 'next/navigation';
 
-export const signInAction = async (_prevState: string | undefined, formData: FormData) => {
+export const signInAction = async (_previousState: string | undefined, formData: FormData) => {
   try {
     await signIn('credentials', Object.fromEntries(formData));
-  } catch (error) {
+  } catch (e) {
     if (
-      `${error}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR) ||
-      `${error}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR_URL) ||
+      `${e}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR) ||
+      `${e}`.includes(KEY_CREDENTIALS_SIGN_IN_ERROR_URL) ||
       // New error thrown in next-auth 5.0.0-beta.19 for incorrect credentials
-      `${error}`.includes(KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL)
+      `${e}`.includes(KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL)
     ) {
       // Return credentials error to display on sign-in page.
       return KEY_CREDENTIALS_SIGN_IN_ERROR;
-    } else if (!`${error}`.includes('NEXT_REDIRECT')) {
+    } else if (!`${e}`.includes('NEXT_REDIRECT')) {
       console.log('Unknown sign in error:', {
-        errorText: `${error}`,
-        error,
+        errorText: `${e}`,
+        error: e,
       });
       // Rethrow non-redirect errors
-      throw error;
+      throw e;
     }
   }
   redirect((formData.get(KEY_CALLBACK_URL) as string) || PATH_ADMIN_PHOTOS);
@@ -39,7 +39,7 @@ export const signInAction = async (_prevState: string | undefined, formData: For
 
 export const signOutAndRedirectAction = async () => signOut({ redirectTo: PATH_ROOT });
 
-export const getAuthAction = () => auth();
+export const getAuthAction = async () => auth();
 
-export const logClientAuthUpdate = (data: Session | null | undefined) =>
+export const logClientAuthUpdate = async (data: Session | null | undefined) =>
   console.log('Client auth update', data);

@@ -8,10 +8,10 @@ export type FocalLengths = {
 
 export const getFocalLengthFromString = (focalString?: string) => {
   const focal = focalString?.match(/^([0-9]+)mm/)?.[1];
-  return focal ? parseInt(focal, 10) : 0;
+  return focal ? Number.parseInt(focal, 10) : 0;
 };
 
-export const formatFocalLength = (focal?: number) => (focal ? `${focal}mm` : undefined);
+export const formatFocalLength = (focal?: number) => (focal ? `${focal}mm` : '');
 
 export const titleForFocalLength = (focal: number, photos: Photo[], explicitCount?: number) =>
   [

@@ -4,9 +4,9 @@ export const shortenUrl = (url?: string) =>
 
 // Add protocol to url and remove trailing slash
 export const makeUrlAbsolute = (url?: string) =>
-  url !== undefined
-    ? (!url.startsWith('http') ? `https://${url}` : url).replace(/\/$/, '')
-    : undefined;
+  url === undefined
+    ? undefined
+    : (url.startsWith('http') ? url : `https://${url}`).replace(/\/$/, '');
 
 export const downloadFileFromBrowser = async (url: string, fileName: string) => {
   const blob = await fetch(url).then(response => response.blob());
@@ -14,8 +14,8 @@ export const downloadFileFromBrowser = async (url: string, fileName: string) => 
   const link = document.createElement('a');
   link.href = downloadUrl;
   link.download = fileName;
-  document.body.appendChild(link);
+  document.body.append(link);
   link.click();
-  document.body.removeChild(link);
+  link.remove();
   window.URL.revokeObjectURL(downloadUrl);
 };

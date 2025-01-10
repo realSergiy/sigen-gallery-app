@@ -9,6 +9,8 @@ export type Media = {
   extension: string;
 };
 
+export type RevalidateMedia = (id: string, revalidateRemaining?: boolean) => Promise<unknown>;
+
 export const GENERATE_STATIC_PARAMS_LIMIT = 1000;
 
 export const downloadFileName = ({

@@ -50,7 +50,7 @@ export default function AdminVideosClient({
             {videosCountOutdated > 0 && (
               <PathLoaderButton
                 path={PATH_ADMIN_OUTDATED}
-                icon={<LiaBroomSolid size={18} className="translate-y-[-1px]" />}
+                icon={<LiaBroomSolid size={18} className="-translate-y-px" />}
                 title={`${videosCountOutdated} Outdated Videos`}
                 className={clsx(isUploading && 'hidden md:inline-flex')}
                 hideTextOnMobile={false}

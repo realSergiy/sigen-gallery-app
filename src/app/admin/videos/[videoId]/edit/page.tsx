@@ -2,14 +2,12 @@ import { redirect } from 'next/navigation';
 import { getVideoNoStore, getUniqueTagsCached } from '@/video/cache';
 import { PATH_ADMIN } from '@/site/paths';
 import VideoEditPageClient from '@/video/VideoEditPageClient';
-import { AI_TEXT_GENERATION_ENABLED, BLUR_ENABLED } from '@/site/config';
-import { getNextImageUrlForManipulation } from '@/services/next-image';
 
-export default async function VideoEditPage({
-  params: { videoId },
-}: {
-  params: { videoId: string };
-}) {
+export default async function VideoEditPage(props: { params: Promise<{ videoId: string }> }) {
+  const params = await props.params;
+
+  const { videoId } = params;
+
   const video = await getVideoNoStore(videoId, true);
 
   if (!video) {
@@ -17,8 +15,6 @@ export default async function VideoEditPage({
   }
 
   const uniqueTags = await getUniqueTagsCached();
-
-  const hasAiTextGeneration = AI_TEXT_GENERATION_ENABLED;
 
   /*
   // Only generate image thumbnails when AI generation is enabled

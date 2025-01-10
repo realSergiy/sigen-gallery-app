@@ -1,9 +1,5 @@
 import { Video, VideoDbNew, VideoDbUpd } from '@/db/video_orm';
-import {
-  dateFromTimestamp,
-  generateLocalNaivePostgresString,
-  generateLocalPostgresString,
-} from '@/utility/date';
+import { dateFromTimestamp } from '@/utility/date';
 import { convertStringToArray } from '@/utility/string';
 import { generateNanoid } from '@/utility/nanoid';
 import { FilmSimulation } from '@/simulation';
@@ -74,7 +70,7 @@ const FORM_METADATA = (
 
 export const FORM_METADATA_ENTRIES = (...args: Parameters<typeof FORM_METADATA>) =>
   (Object.entries(FORM_METADATA(...args)) as [keyof VideoFormData, FormMeta][]).filter(
-    ([_, meta]) => !meta.hide,
+    ([, meta]) => !meta.hide,
   );
 
 export const convertFormKeysToLabels = (keys: (keyof VideoFormData)[]) =>
@@ -83,14 +79,13 @@ export const convertFormKeysToLabels = (keys: (keyof VideoFormData)[]) =>
 export const getFormErrors = (
   formData: Partial<VideoFormData>,
 ): Partial<Record<keyof VideoFormData, string>> =>
-  Object.keys(formData).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: FORM_METADATA_ENTRIES()
+  Object.fromEntries(
+    Object.keys(formData).map(key => [
+      key,
+      FORM_METADATA_ENTRIES()
         .find(([k]) => k === key)?.[1]
         .validate?.(formData[key as keyof VideoFormData]),
-    }),
-    {},
+    ]),
   );
 
 export const isFormValid = (formData: Partial<VideoFormData>) =>
@@ -98,7 +93,6 @@ export const isFormValid = (formData: Partial<VideoFormData>) =>
     ([key, { required, validate, validateStringMaxLength }]) =>
       (!required || Boolean(formData[key])) &&
       !validate?.(formData[key]) &&
-      // eslint-disable-next-line max-len
       (!validateStringMaxLength || (formData[key]?.length ?? 0) <= validateStringMaxLength),
   );
 
@@ -108,12 +102,13 @@ export const formHasTextContent = ({ title, caption, tags }: Partial<VideoFormDa
 // CREATE FORM DATA: FROM PHOTO
 
 export const convertVideoToFormData = (video: Video): VideoFormData => {
-  const valueForKey = (key: keyof Video, value: any) => {
+  const valueForKey = <K extends keyof Video>(key: K, value: Video[K]) => {
     switch (key) {
       case 'tags':
-        return (value ?? []).filter((tag: string) => tag !== TAG_FAVS).join(', ');
+        const tags = Array.isArray(value) ? value : [];
+        return tags.filter(tag => tag !== TAG_FAVS).join(', ');
       case 'takenAt':
-        return value?.toISOString ? value.toISOString() : value;
+        return value instanceof Date ? value.toISOString() : value;
       case 'hidden':
         return value ? 'true' : 'false';
       default:
@@ -149,16 +144,17 @@ export const convertFormDataToVideoDbInsert = (
   // Parse FormData:
   // - remove server action ID
   // - remove empty strings
-  Object.keys(videoForm).forEach(key => {
+  for (const key of Object.keys(videoForm)) {
     const meta = FORM_METADATA()[key as keyof VideoFormData];
     if (
       key.startsWith('$ACTION_ID_') ||
-      (videoForm as any)[key] === '' ||
+      (typeof (videoForm as Record<string, unknown>)[key] === 'string' &&
+        (videoForm as Record<string, unknown>)[key] === '') ||
       meta?.excludeFromInsert
     ) {
-      delete (videoForm as any)[key];
+      (videoForm as Record<string, unknown>)[key] = undefined;
     }
-  });
+  }
 
   return {
     ...(videoForm as VideoFormData & { filmSimulation?: FilmSimulation }),

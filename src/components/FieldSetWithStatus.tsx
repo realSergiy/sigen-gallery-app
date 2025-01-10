@@ -1,6 +1,6 @@
 'use client';
 
-import { LegacyRef } from 'react';
+import { Ref } from 'react';
 import { useFormStatus } from 'react-dom';
 import Spinner from './Spinner';
 import { clsx } from 'clsx/lite';
@@ -44,7 +44,7 @@ export default function FieldSetWithStatus({
   readOnly?: boolean;
   capitalize?: boolean;
   type?: FieldSetType;
-  inputRef?: LegacyRef<HTMLInputElement>;
+  inputRef?: Ref<HTMLInputElement>;
   accessory?: React.ReactNode;
   hideLabel?: boolean;
 }) {
@@ -63,9 +63,7 @@ export default function FieldSetWithStatus({
           {label}
           {note && !error && <span className="text-gray-400 dark:text-gray-600">({note})</span>}
           {isModified && !error && (
-            <span
-              className={clsx('text-main -ml-1.5 translate-y-[-1px] text-[0.9rem] font-medium')}
-            >
+            <span className={clsx('text-main -ml-1.5 -translate-y-px text-[0.9rem] font-medium')}>
               *
             </span>
           )}
@@ -139,7 +137,7 @@ export default function FieldSetWithStatus({
             }
             type={type}
             autoComplete="off"
-            autoCapitalize={!capitalize ? 'off' : undefined}
+            autoCapitalize={capitalize ? undefined : 'off'}
             readOnly={readOnly || pending || loading}
             disabled={type === 'checkbox' && (readOnly || pending || loading)}
             className={clsx(
