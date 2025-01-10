@@ -40,9 +40,12 @@ export default async function HomePage() {
 
   return videos.length > 0 ? (
     GRID_HOMEPAGE_ENABLED ? (
-      <VideoGridPage {...{ videos, videosCount, tags, cameras, simulations }} />
+      <VideoGridPage
+        {...{ videos, videosCount, tags, cameras, simulations }}
+        data-testid="VideoGridPage"
+      />
     ) : (
-      <VideoFeedPage {...{ videos, videosCount }} />
+      <VideoFeedPage {...{ videos, videosCount }} data-testid="VideoFeedPage" />
     )
   ) : (
     <MediaEmptyState message="Add your first video:" />

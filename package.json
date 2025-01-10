@@ -12,6 +12,7 @@
     "test:unit": "jest --rootDir ./__tests__/jest --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "test:watch": "jest --watch --rootDir ./__tests__/jest --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "test:e2e": "playwright test",
+    "test:e2e:gen": "playwright codegen http://localhost:3000/",
     "analyze": "ANALYZE=true next build",
     "format": "prettier --write .",
     "ncu": "npm-check-updates",
