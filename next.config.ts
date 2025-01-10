@@ -34,9 +34,10 @@ const createRemotePattern = (hostname: string | undefined): RemotePattern[] =>
     : [];
 
 const nextConfig: NextConfig = {
-  compiler: {
-    reactRemoveProperties: process.env.NODE_ENV === 'production',
-  },
+  // this removes the 'data-testid', however it also happens during priview builds
+  // compiler: {
+  //   reactRemoveProperties: process.env.NODE_ENV === 'production',
+  // },
   images: {
     imageSizes: [200],
     remotePatterns: [
