@@ -27,18 +27,19 @@ export default function SubmitButtonWithStatus({
   const pendingPrevious = useRef(pending);
 
   useEffect(() => {
-    if (!pending && pendingPrevious.current) {
-      if (onFormSubmitToastMessage) {
-        toastSuccess(onFormSubmitToastMessage);
+    // calling toasts or external functions should be wrapped into useEffect
+    if (pending !== pendingPrevious.current) {
+      if (pendingPrevious.current && !pending) {
+        if (onFormSubmitToastMessage) {
+          toastSuccess(onFormSubmitToastMessage);
+        }
+        onFormSubmit?.();
       }
-      onFormSubmit?.();
-    }
-    pendingPrevious.current = pending;
-  }, [pending, onFormSubmitToastMessage, onFormSubmit]);
 
-  useEffect(() => {
-    onFormStatusChange?.(pending);
-  }, [onFormStatusChange, pending]);
+      onFormStatusChange?.(pending);
+      pendingPrevious.current = pending;
+    }
+  }, [pending, onFormStatusChange, onFormSubmitToastMessage, onFormSubmit]);
 
   return (
     <LoaderButton

@@ -15,6 +15,8 @@ export default function DeleteFormButton(
 
   const { invalidateSwr, registerAdminUpdate } = useAppState();
 
+  // ToDo: remove useCallback everywhere where it's useless
+  // for example here SubmitButtonWithStatus will be re-rendered every time DeleteFormButton rerenders anyways
   const onFormSubmit = useCallback(() => {
     onFormSubmitProps?.();
     if (clearLocalState) {
