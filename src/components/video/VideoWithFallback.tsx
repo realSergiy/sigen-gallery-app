@@ -70,10 +70,14 @@ export default function VideoWithFallback(props: VideoWithFallbackProps) {
       <video
         ref={videoRef}
         controls={showControls}
+        controlsList="nodownload noremoteplayback"
         className={clsx(videoClassName, getBlurClass())}
         onLoadedData={onLoadedData}
         onError={onError}
         poster={poster}
+        disablePictureInPicture
+        disableRemotePlayback
+        muted
         {...rest}
       >
         <source src={src} />
