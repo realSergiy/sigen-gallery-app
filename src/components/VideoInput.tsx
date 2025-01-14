@@ -88,7 +88,7 @@ export default function VideoInput({
             accept={ACCEPTED_VIDEO_FILE_TYPES.join(',')}
             disabled={loading}
             multiple
-            onChange={void handleFileChange}
+            onChange={handleFileChange}
           />
         </label>
         {showUploadStatus && filesLength > 0 && (

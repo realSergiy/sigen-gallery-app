@@ -116,7 +116,7 @@ export default function PhotoInput({
   const [fileUploadIndex, setFileUploadIndex] = useState(0);
   const [fileUploadName, setFileUploadName] = useState('');
 
-  const handleFileChangeAsync = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     onStart?.();
     const { files } = e.currentTarget;
     if (!files?.length) return;
@@ -197,8 +197,6 @@ export default function PhotoInput({
       }
     }
   };
-
-  const handleFileChange = void handleFileChangeAsync;
 
   return (
     <div className="min-w-0 space-y-4">

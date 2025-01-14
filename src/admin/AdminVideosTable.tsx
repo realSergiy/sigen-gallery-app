@@ -88,10 +88,7 @@ export default function AdminVideosTable({
               shouldToast
             />
             {canDelete && (
-              <DeleteVideoButton
-                video={video}
-                onDelete={() => void revalidateVideo?.(video.id, true)}
-              />
+              <DeleteVideoButton video={video} onDelete={() => revalidateVideo?.(video.id, true)} />
             )}
           </div>
         </Fragment>

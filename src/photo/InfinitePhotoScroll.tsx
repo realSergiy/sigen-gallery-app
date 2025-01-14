@@ -118,7 +118,7 @@ export default function InfinitePhotoScroll({
   const renderMoreButton = () => (
     <div ref={buttonContainerRef}>
       <button
-        onClick={() => void (error ? mutate() : advance())}
+        onClick={() => (error ? mutate() : advance())}
         disabled={isLoading || isValidating}
         className={clsx('flex w-full justify-center', isLoadingOrValidating && 'subtle')}
       >

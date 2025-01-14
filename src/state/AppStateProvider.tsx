@@ -8,6 +8,7 @@ import { getAuthAction } from '@/auth/actions';
 import useSWR from 'swr';
 import { HIGH_DENSITY_GRID, MATTE_PHOTOS } from '@/site/config';
 import { getPhotosHiddenMetaCachedAction } from '@/photo/actions';
+import { useTimeout } from '@/hooks';
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const { previousPathname } = usePathnames();
@@ -37,18 +38,18 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     setUserEmail(data?.user?.email ?? undefined);
   }, [data]);
   const isUserSignedIn = Boolean(userEmail);
-  useEffect(() => {
-    if (isUserSignedIn) {
-      const timeout = setTimeout(
-        () =>
-          void getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count)),
-        100,
-      );
-      return () => clearTimeout(timeout);
-    } else {
-      setHiddenPhotosCount(0);
-    }
-  }, [isUserSignedIn]);
+
+  useTimeout(
+    async () => {
+      if (isUserSignedIn) {
+        await getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count));
+      } else {
+        setHiddenPhotosCount(0);
+      }
+    },
+    100,
+    [isUserSignedIn],
+  );
 
   const registerAdminUpdate = useCallback(
     () => setAdminUpdateTimes(updates => [...updates, new Date()]),

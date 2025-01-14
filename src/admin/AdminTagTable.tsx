@@ -2,7 +2,6 @@ import FormWithConfirm from '@/components/FormWithConfirm';
 import { deletePhotoTagGloballyAction } from '@/photo/actions';
 import AdminTable from '@/admin/AdminTable';
 import { Fragment } from 'react';
-import DeleteFormButton from '@/admin/DeleteFormButton';
 import { photoQuantityText } from '@/photo';
 import { Tags, formatTag, sortTagsObject } from '@/tag';
 import EditButton from '@/admin/EditButton';
@@ -21,11 +20,10 @@ export default function AdminTagTable({ tags }: { tags: Tags }) {
           <div className={clsx('flex flex-nowrap', 'items-center gap-2 sm:gap-3')}>
             <EditButton path={pathForAdminTagEdit(tag)} />
             <FormWithConfirm
-              action={(formData: FormData) => void deletePhotoTagGloballyAction(formData)}
+              action={deletePhotoTagGloballyAction}
               confirmText={`Are you sure you want to remove "${formatTag(tag)}" from ${photoQuantityText(count, false).toLowerCase()}?`}
             >
               <input type="hidden" name="tag" value={tag} />
-              <DeleteFormButton clearLocalState />
             </FormWithConfirm>
           </div>
         </Fragment>

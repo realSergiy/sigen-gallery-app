@@ -30,7 +30,7 @@ export default function AdminOutdatedClient({
 
   const router = useRouter();
 
-  const handleLoadClick = () => {
+  const handleLoadClick = async () => {
     const message = `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`;
     if (!window.confirm(message)) {
       return;
@@ -39,7 +39,7 @@ export default function AdminOutdatedClient({
     const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
     const isFinalBatch = photosToSync.length >= photos.length;
     setPhotoIdsSyncing(photosToSync);
-    syncPhotosAction(photosToSync).finally(() => {
+    await syncPhotosAction(photosToSync).finally(() => {
       if (isFinalBatch) {
         router.push(PATH_ADMIN_PHOTOS);
       } else {
