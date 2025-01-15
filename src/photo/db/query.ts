@@ -297,7 +297,7 @@ export const getPhotosMostRecentUpdate = async () =>
 export const getUniqueTags = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ tag: string; count: string }>`
     SELECT DISTINCT unnest(tags) as tag, COUNT(*)
     FROM photos
     WHERE hidden IS NOT TRUE
@@ -306,7 +306,7 @@ export const getUniqueTags = async () =>
   `.then(
         ({ rows }): Tags =>
           rows.map(({ tag, count }) => ({
-            tag: tag as string,
+            tag: tag,
             count: Number.parseInt(count, 10),
           })),
       ),
@@ -316,7 +316,7 @@ export const getUniqueTags = async () =>
 export const getUniqueTagsHidden = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ tag: string; count: string }>`
     SELECT DISTINCT unnest(tags) as tag, COUNT(*)
     FROM photos
     GROUP BY tag
@@ -324,7 +324,7 @@ export const getUniqueTagsHidden = async () =>
   `.then(
         ({ rows }): Tags =>
           rows.map(({ tag, count }) => ({
-            tag: tag as string,
+            tag: tag,
             count: Number.parseInt(count, 10),
           })),
       ),
@@ -334,7 +334,7 @@ export const getUniqueTagsHidden = async () =>
 export const getUniqueCameras = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ camera: string; make: string; model: string; count: string }>`
     SELECT DISTINCT make||' '||model as camera, make, model, COUNT(*)
     FROM photos
     WHERE hidden IS NOT TRUE
@@ -356,7 +356,7 @@ export const getUniqueCameras = async () =>
 export const getUniqueLenses = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ lens_make: string; lens: string; lens_model: string; count: string }>`
     SELECT DISTINCT lens_make||' '||lens_model as lens,
     lens_make, lens_model, COUNT(*)
     FROM photos
@@ -379,7 +379,7 @@ export const getUniqueLenses = async () =>
 export const getUniqueFilmSimulations = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ film_simulation: string; count: string }>`
     SELECT DISTINCT film_simulation, COUNT(*)
     FROM photos
     WHERE hidden IS NOT TRUE AND film_simulation IS NOT NULL
@@ -398,7 +398,7 @@ export const getUniqueFilmSimulations = async () =>
 export const getUniqueFocalLengths = async () =>
   safelyQueryPhotos(
     () =>
-      sql`
+      sql<{ focal_length: string; count: string }>`
     SELECT DISTINCT focal_length, COUNT(*)
     FROM photos
     WHERE hidden IS NOT TRUE AND focal_length IS NOT NULL

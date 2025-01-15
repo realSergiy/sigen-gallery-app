@@ -266,7 +266,7 @@ export default function PhotoForm({
       <form
         action={data =>
           (type === 'create' ? createPhotoAction : updatePhotoAction)(data).catch(e =>
-            setFormActionErrorMessage(e.message),
+            setFormActionErrorMessage(`${e.message}`),
           )
         }
         onSubmit={() => {
