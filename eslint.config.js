@@ -98,7 +98,6 @@ const config = [
       '@typescript-eslint/no-floating-promises': 'off',
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/no-unnecessary-template-expression': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
     },
   }),
   {

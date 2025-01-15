@@ -56,7 +56,7 @@ export default function InfiniteVideoScroll({
     [useCachedVideos, sort, initialOffset, itemsPerPage, includeHiddenVideos],
   );
 
-  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Video[]>(
+  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Video[], Error>(
     keyGenerator,
     fetcher,
     {

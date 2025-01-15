@@ -83,7 +83,7 @@ export const generateOgImageMetaForVideos = (videos: Video[]): Metadata => {
 
 const VIDEO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
   process.env.VIDEO_ID_FORWARDING_TABLE || '{}',
-);
+) as Record<string, string>;
 
 export const translateVideoId = (id: string) => VIDEO_ID_FORWARDING_TABLE[id] || id;
 

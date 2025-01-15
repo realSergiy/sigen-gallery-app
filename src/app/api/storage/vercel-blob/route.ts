@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 import { ACCEPTED_VIDEO_FILE_TYPES, MAX_VIDEO_UPLOAD_SIZE_IN_BYTES } from '@/video';
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body: HandleUploadBody = await request.json();
+  const body = (await request.json()) as HandleUploadBody;
 
   try {
     const jsonResponse = await handleUpload({

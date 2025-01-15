@@ -70,7 +70,7 @@ export default function InfinitePhotoScroll({
     ],
   );
 
-  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[]>(
+  const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[], Error>(
     keyGenerator,
     fetcher,
     {

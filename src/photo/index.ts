@@ -196,7 +196,7 @@ export const generateOgImageMetaForPhotos = (photos: Photo[]): Metadata => {
 
 const PHOTO_ID_FORWARDING_TABLE: Record<string, string> = JSON.parse(
   process.env.PHOTO_ID_FORWARDING_TABLE || '{}',
-);
+) as Record<string, string>;
 
 export const translatePhotoId = (id: string) => PHOTO_ID_FORWARDING_TABLE[id] || id;
 
