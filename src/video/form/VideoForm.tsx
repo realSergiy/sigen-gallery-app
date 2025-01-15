@@ -105,7 +105,7 @@ export default function VideoForm({
       <form
         action={data =>
           (type === 'create' ? createVideoAction : updateVideoAction)(data).catch(e =>
-            setFormActionErrorMessage(e.message),
+            setFormActionErrorMessage(`${e.message}`),
           )
         }
         onSubmit={() => {
