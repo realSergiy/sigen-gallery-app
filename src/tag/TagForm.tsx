@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { PATH_ADMIN_TAGS } from '@/site/paths';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import { ReactNode, useMemo, useState } from 'react';
-import { renamePhotoTagGloballyAction } from '@/photo/actions';
+import { renamePhotoTagGloballyAction } from '@/photo/serverFunctions';
 import { parameterize } from '@/utility/string';
 import { useAppState } from '@/state/AppState';
 

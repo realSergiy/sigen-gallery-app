@@ -24,7 +24,7 @@ import { useTheme } from 'next-themes';
 import { BiDesktop, BiMoon, BiSun, BiLockAlt, BiSolidUser } from 'react-icons/bi';
 import { IoInvertModeSharp } from 'react-icons/io5';
 import { useAppState } from '@/state/AppState';
-import { searchPhotosAction } from '@/photo/actions';
+import { searchPhotosAction } from '@/photo/serverFunctions';
 import { RiToolsFill } from 'react-icons/ri';
 import { HiDocumentText } from 'react-icons/hi';
 import { signOutAndRedirectAction } from '@/auth/actions';

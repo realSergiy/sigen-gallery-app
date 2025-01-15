@@ -16,7 +16,7 @@ import { VideoDbUpd } from '@/db/video_orm';
 import clsx from 'clsx';
 import Spinner from '@/components/Spinner';
 import ErrorNote from '@/components/ErrorNote';
-import { createVideoAction, updateVideoAction } from '../actions';
+import { createVideoAction, updateVideoAction } from '../serverFunctions';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import Link from 'next/link';
 import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
@@ -75,20 +75,17 @@ export default function VideoForm({
           <VideoWithFallback
             src={url}
             className={clsx(
-              'overflow-hidden rounded-md border',
-              'border-gray-200 dark:border-gray-700',
+              'overflow-hidden rounded-md border border-gray-200 dark:border-gray-700',
             )}
             blurCompatibilityLevel="none"
           />
           <div className={clsx('absolute left-2 top-2 opacity-0 transition-opacity duration-500')}>
             <div
               className={clsx(
-                'text-xs font-medium uppercase leading-none tracking-wide',
-                'rounded-[4px] px-1.5 py-1',
-                'inline-flex items-center gap-2',
-                'bg-white/70 backdrop-blur-md dark:bg-black/60',
-                'border border-gray-900/10 dark:border-gray-700/70',
-                'select-none',
+                'inline-flex select-none items-center gap-2',
+                'rounded-[4px] border border-gray-900/10 bg-white/70 px-1.5 py-1',
+                'text-xs font-medium uppercase leading-none tracking-wide backdrop-blur-md',
+                'dark:border-gray-700/70 dark:bg-black/60',
               )}
             >
               <Spinner

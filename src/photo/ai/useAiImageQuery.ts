@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { streamAiImageQueryAction } from '../actions';
+import { streamAiImageQueryAction } from '../serverFunctions';
 import { readStreamableValue } from 'ai/rsc';
 import { AiImageQuery } from '.';
 import { ErrorWithMessage, toErrorWithMessage } from '@/utility/error';

@@ -4,7 +4,7 @@ import useSwrInfinite from 'swr/infinite';
 import { ReactNode, useCallback, useMemo, useRef } from 'react';
 import SiteGrid from '@/components/SiteGrid';
 import Spinner from '@/components/Spinner';
-import { getPhotosCachedAction, getPhotosAction } from '@/photo/actions';
+import { getPhotosCachedAction, getPhotosAction } from '@/photo/serverFunctions';
 import { Photo, PhotoSetAttributes } from '.';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';

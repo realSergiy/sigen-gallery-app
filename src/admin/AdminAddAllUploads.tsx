@@ -3,7 +3,7 @@
 import ErrorNote from '@/components/ErrorNote';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import Container from '@/components/Container';
-import { addAllUploadsAction } from '@/photo/actions';
+import { addAllUploadsAction } from '@/photo/serverFunctions';
 import { PATH_ADMIN_PHOTOS } from '@/site/paths';
 import { Tags } from '@/tag';
 import { generateLocalNaivePostgresString, generateLocalPostgresString } from '@/utility/date';

@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, createContext, useContext } from 'react';
 import { AnimationConfig } from '@/components/AnimateItems';
 
-export type AppStateContext = {
+export type AppState = {
   // CORE
   previousPathname?: string;
   hasLoaded?: boolean;
@@ -28,7 +28,6 @@ export type AppStateContext = {
   hiddenVideosCount?: number;
   selectedPhotoIds?: string[];
   setSelectedPhotoIds?: Dispatch<SetStateAction<string[] | undefined>>;
-
   selectedVideoIds?: string[];
   setSelectedVideoIds?: Dispatch<SetStateAction<string[] | undefined>>;
   isPerformingSelectEdit?: boolean;
@@ -46,6 +45,6 @@ export type AppStateContext = {
   setShouldShowBaselineGrid?: Dispatch<SetStateAction<boolean>>;
 };
 
-export const AppStateContext = createContext<AppStateContext>({});
+export const AppStateContext = createContext<AppState>({});
 
 export const useAppState = () => useContext(AppStateContext);

@@ -2,7 +2,7 @@
 
 import { ComponentProps, useMemo } from 'react';
 import { pathForAdminPhotoEdit, pathForPhoto } from '@/site/paths';
-import { deletePhotoAction, toggleFavoritePhotoAction } from '@/photo/actions';
+import { deletePhotoAction, toggleFavoritePhotoAction } from '@/photo/serverFunctions';
 import { FaRegEdit, FaRegStar, FaStar } from 'react-icons/fa';
 import { Photo, deleteConfirmationTextForPhoto } from '@/photo';
 import { isPathFavs, isPhotoFav } from '@/tag';

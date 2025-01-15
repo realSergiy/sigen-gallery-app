@@ -8,7 +8,7 @@ import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
-import { getVideosAction, getVideosCachedAction } from './actions';
+import { getVideosAction, getVideosCachedAction } from './serverFunctions';
 import { type Arguments } from 'swr';
 import { type RevalidateMedia } from '@/media';
 

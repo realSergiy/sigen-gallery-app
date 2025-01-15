@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { TAG_FAVS, Tags } from '@/tag';
 import { usePathname } from 'next/navigation';
 import PhotoTagFieldset from './PhotoTagFieldset';
-import { tagMultiplePhotosAction } from '@/photo/actions';
+import { tagMultiplePhotosAction } from '@/photo/serverFunctions';
 import { toastSuccess } from '@/toast';
 import DeletePhotosButton from './DeletePhotosButton';
 import { photoQuantityText } from '@/photo';

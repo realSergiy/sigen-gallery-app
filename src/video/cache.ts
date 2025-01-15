@@ -63,7 +63,7 @@ export const revalidateAdminPaths = () => {
   for (const path of PATHS_ADMIN) revalidatePath(path);
 };
 
-export const revalidateAllKeysAndPaths = () => {
+export const revalidateAllKeysAndPaths = async () => {
   revalidateAllKeys();
   for (const path of PATHS_TO_CACHE) revalidatePath(path, 'layout');
 };

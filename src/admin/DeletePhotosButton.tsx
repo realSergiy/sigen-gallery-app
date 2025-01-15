@@ -2,7 +2,7 @@
 
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { photoQuantityText } from '@/photo';
-import { deletePhotosAction } from '@/photo/actions';
+import { deletePhotosAction } from '@/photo/serverFunctions';
 import { useAppState } from '@/state/AppState';
 import { toastSuccess, toastWarning } from '@/toast';
 import { ComponentProps, useState } from 'react';

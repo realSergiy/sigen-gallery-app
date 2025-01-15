@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect, ReactNode, useCallback } from 'react';
-import { AppStateContext } from './AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import usePathnames from '@/utility/usePathnames';
 import { getAuthAction } from '@/auth/actions';
 import useSWR from 'swr';
 import { HIGH_DENSITY_GRID, MATTE_PHOTOS } from '@/site/config';
-import { getPhotosHiddenMetaCachedAction } from '@/photo/actions';
+import { getPhotosHiddenMetaCachedAction } from '@/photo/serverFunctions';
 import { useTimeout } from '@/hooks';
+import { AppStateContext } from './AppState';
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const { previousPathname } = usePathnames();
@@ -25,6 +25,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const [hiddenPhotosCount, setHiddenPhotosCount] = useState(0);
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[] | undefined>();
   const [isPerformingSelectEdit, setIsPerformingSelectEdit] = useState(false);
+
   // DEBUG
   const [isGridHighDensity, setIsGridHighDensity] = useState(HIGH_DENSITY_GRID);
   const [arePhotosMatted, setArePhotosMatted] = useState(MATTE_PHOTOS);

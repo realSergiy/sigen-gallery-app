@@ -11,7 +11,7 @@ import {
   isFormValid,
 } from '.';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
-import { createPhotoAction, updatePhotoAction } from '../actions';
+import { createPhotoAction, updatePhotoAction } from '../serverFunctions';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';

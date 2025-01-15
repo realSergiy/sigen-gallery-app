@@ -37,11 +37,6 @@ export default async function AdminVideosPage() {
         videos,
         videosCount,
         videosCountOutdated,
-        onLastVideoUpload: async () => {
-          'use server';
-          // Update upload count in admin nav
-          revalidatePath('/admin', 'layout');
-        },
         blobVideoUrls,
         infiniteScrollInitial: INFINITE_SCROLL_INITIAL_ADMIN,
         infiniteScrollMultiple: INFINITE_SCROLL_MULTIPLE_ADMIN,

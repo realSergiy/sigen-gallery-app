@@ -43,7 +43,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
 });
 
-export const runAuthenticatedAdminServerAction = async <T>(callback: () => T): Promise<T> => {
+export const runAuthenticatedAdminServerAction = async <T>(
+  callback: () => Promise<T>,
+): Promise<T> => {
   const session = await auth();
   if (session?.user) {
     return callback();

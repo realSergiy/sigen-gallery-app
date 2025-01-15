@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteUploadAction } from '@/photo/actions';
+import { deleteUploadAction } from '@/photo/serverFunctions';
 import DeleteButton from './DeleteButton';
 import { useRouter } from 'next/navigation';
 import { PATH_ADMIN_PHOTOS } from '@/site/paths';

@@ -2,7 +2,7 @@
 
 import { ComponentProps, useMemo } from 'react';
 import { pathForAdminVideoEdit, pathForVideo } from '@/site/paths';
-import { deleteVideoAction, toggleFavoriteVideoAction } from '@/video/actions';
+import { deleteVideoAction, toggleFavoriteVideoAction } from '@/video/serverFunctions';
 import { FaRegEdit, FaRegStar, FaStar } from 'react-icons/fa';
 import { deleteConfirmationTextForVideo, downloadFileNameForVideo } from '@/video';
 import { isPathFavs, isVideoFav } from '@/tag';

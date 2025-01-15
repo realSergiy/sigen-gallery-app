@@ -1,5 +1,5 @@
 import FormWithConfirm from '@/components/FormWithConfirm';
-import { deletePhotoTagGloballyAction } from '@/photo/actions';
+import { deletePhotoTagGloballyAction } from '@/photo/serverFunctions';
 import AdminTable from '@/admin/AdminTable';
 import { Fragment } from 'react';
 import { photoQuantityText } from '@/photo';
