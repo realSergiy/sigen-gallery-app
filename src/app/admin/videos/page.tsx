@@ -1,6 +1,5 @@
 import { getStorageVideoUrlsNoStore } from '@/services/storage/cache';
 import { getVideos } from '@/db/video_orm';
-import { revalidatePath } from 'next/cache';
 import { getVideosMetaCached } from '@/db/video_cache';
 import AdminVideosClient from '@/admin/AdminVideosClient';
 
