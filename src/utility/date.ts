@@ -43,7 +43,7 @@ export const dateFromTimestamp = (timestamp?: AmbiguousTimestamp): Date => {
 
 const createNaiveDateWithOffset = (timestamp?: AmbiguousTimestamp, offset = '+00:00') => {
   const date = dateFromTimestamp(timestamp);
-  const dateString = `${date.toISOString()}`.replace(/\.[\d]+Z/, offset);
+  const dateString = date.toISOString().replace(/\.[\d]+Z/, offset);
   return parseISO(dateString);
 };
 

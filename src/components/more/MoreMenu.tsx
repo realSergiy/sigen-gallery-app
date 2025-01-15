@@ -39,7 +39,7 @@ export default function MoreMenu({
           )}
         >
           {items.map(item => (
-            <MoreMenuItem key={`${item.label}`} {...item} />
+            <MoreMenuItem key={item.label} {...item} />
           ))}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
