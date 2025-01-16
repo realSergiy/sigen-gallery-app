@@ -42,8 +42,7 @@ export default function VideoHeader({
     ? videos.findIndex(video => video.id === selectedVideo.id)
     : undefined;
 
-  const paginationLabel =
-    (indexNumber || (selectedVideoIndex ?? 0 + 1)) + ' of ' + (count ?? videos.length);
+  const paginationLabel = `${indexNumber || (selectedVideoIndex ?? 0 + 1)} of ${count ?? videos.length}`;
 
   const headerType =
     selectedVideoIndex === undefined
