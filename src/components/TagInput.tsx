@@ -71,7 +71,7 @@ export default function TagInput({
       const optionsToAdd = (options.filter(Boolean) as string[])
         .map(option =>
           option.startsWith(CREATE_LABEL)
-            ? (option.match(new RegExp(`^${CREATE_LABEL} "(.+)"$`))?.[1] ?? option)
+            ? (new RegExp(`^${CREATE_LABEL} "(.+)"$`).exec(option)?.[1] ?? option)
             : option,
         )
         .map(option => parameterize(option))

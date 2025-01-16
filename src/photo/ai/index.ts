@@ -49,8 +49,8 @@ export const AI_IMAGE_QUERIES: Record<AiImageQuery, string> = {
 
 export const parseTitleAndCaption = (text: string) => {
   const matches = text.includes('Title')
-    ? text.match(/^[`'"]*Title: ["']*(.*?)["']*[ ]*Caption: ["']*(.*?)\.*["']*[`'"]*$/)
-    : text.match(/^(.*?): (.*?)$/);
+    ? /^[`'"]*Title: ["']*(.*?)["']*[ ]*Caption: ["']*(.*?)\.*["']*[`'"]*$/.exec(text)
+    : /^(.*?): (.*?)$/.exec(text);
 
   return {
     title: matches?.[1] ?? '',

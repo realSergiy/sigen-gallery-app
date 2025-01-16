@@ -19,11 +19,11 @@ export default function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.redirect(new URL(PATH_OG_SAMPLE, req.url));
   } else if (/^\/photos\/(.)+$/.test(pathname)) {
     // Accept /photos/* paths, but serve /p/*
-    const matches = pathname.match(/^\/photos\/(.+)$/);
+    const matches = /^\/photos\/(.+)$/.exec(pathname);
     return NextResponse.rewrite(new URL(`${PREFIX_PHOTO}/${matches?.[1]}`, req.url));
   } else if (/^\/t\/(.)+$/.test(pathname)) {
     // Accept /t/* paths, but serve /tag/*
-    const matches = pathname.match(/^\/t\/(.+)$/);
+    const matches = /^\/t\/(.+)$/.exec(pathname);
     return NextResponse.rewrite(new URL(`${PREFIX_TAG}/${matches?.[1]}`, req.url));
   }
 

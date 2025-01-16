@@ -287,26 +287,22 @@ export const getPathComponents = (
 ): {
   photoId?: string;
 } & PhotoSetAttributes => {
-  const photoIdFromPhoto = pathname.match(new RegExp(`^${PREFIX_PHOTO}/([^/]+)`))?.[1];
-  const photoIdFromTag = pathname.match(
-    new RegExp(`^${PREFIX_TAG}/[^/]+/((?!${SHARE})[^/]+)`),
+  const photoIdFromPhoto = new RegExp(`^${PREFIX_PHOTO}/([^/]+)`).exec(pathname)?.[1];
+  const photoIdFromTag = new RegExp(`^${PREFIX_TAG}/[^/]+/((?!${SHARE})[^/]+)`).exec(pathname)?.[1];
+  const photoIdFromCamera = new RegExp(`^${PREFIX_CAMERA}/[^/]+/[^/]+/((?!${SHARE})[^/]+)`).exec(
+    pathname,
   )?.[1];
-  const photoIdFromCamera = pathname.match(
-    new RegExp(`^${PREFIX_CAMERA}/[^/]+/[^/]+/((?!${SHARE})[^/]+)`),
-  )?.[1];
-  const photoIdFromFilmSimulation = pathname.match(
-    new RegExp(`^${PREFIX_FILM_SIMULATION}/[^/]+/((?!${SHARE})[^/]+)`),
-  )?.[1];
-  const photoIdFromFocalLength = pathname.match(
-    new RegExp(`^${PREFIX_FOCAL_LENGTH}/[0-9]+mm/((?!${SHARE})[^/]+)`),
-  )?.[1];
-  const tag = pathname.match(new RegExp(`^${PREFIX_TAG}/([^/]+)`))?.[1];
-  const cameraMake = pathname.match(new RegExp(`^${PREFIX_CAMERA}/([^/]+)`))?.[1];
-  const cameraModel = pathname.match(new RegExp(`^${PREFIX_CAMERA}/[^/]+/([^/]+)`))?.[1];
-  const simulation = pathname.match(
-    new RegExp(`^${PREFIX_FILM_SIMULATION}/([^/]+)`),
+  const photoIdFromFilmSimulation = new RegExp(`
+    ^${PREFIX_FILM_SIMULATION}/[^/]+/((?!${SHARE})[^/]+)`).exec(pathname)?.[1];
+  const photoIdFromFocalLength = new RegExp(`
+    ^${PREFIX_FOCAL_LENGTH}/[0-9]+mm/((?!${SHARE})[^/]+)`).exec(pathname)?.[1];
+  const tag = new RegExp(`^${PREFIX_TAG}/([^/]+)`).exec(pathname)?.[1];
+  const cameraMake = new RegExp(`^${PREFIX_CAMERA}/([^/]+)`).exec(pathname)?.[1];
+  const cameraModel = new RegExp(`^${PREFIX_CAMERA}/[^/]+/([^/]+)`).exec(pathname)?.[1];
+  const simulation = new RegExp(`^${PREFIX_FILM_SIMULATION}/([^/]+)`).exec(
+    pathname,
   )?.[1] as FilmSimulation;
-  const focalString = pathname.match(new RegExp(`^${PREFIX_FOCAL_LENGTH}/([0-9]+)mm`))?.[1];
+  const focalString = new RegExp(`^${PREFIX_FOCAL_LENGTH}/([0-9]+)mm`).exec(pathname)?.[1];
 
   const camera = cameraMake && cameraModel ? { make: cameraMake, model: cameraModel } : undefined;
 

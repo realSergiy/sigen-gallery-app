@@ -120,10 +120,10 @@ export const fileNameForStorageUrl = (url: string) => {
   }
 };
 
-export const getExtensionFromStorageUrl = (url: string) => url.match(/.([a-z0-9]{1,4})$/i)?.[1];
+export const getExtensionFromStorageUrl = (url: string) => /.([a-z0-9]{1,4})$/i.exec(url)?.[1];
 
-export const getPhotoIdFromStorageUrl = (url: string) => url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
-export const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_UPLOAD_ID)?.[1];
+export const getPhotoIdFromStorageUrl = (url: string) => REGEX_PHOTO_UPLOAD_ID.exec(url)?.[1];
+export const getVideoIdFromStorageUrl = (url: string) => REGEX_VIDEO_UPLOAD_ID.exec(url)?.[1];
 
 export const isPhotoUploadPathnameValid = (pathname?: string) =>
   pathname?.match(REGEX_PHOTO_UPLOAD_PATH);
@@ -131,9 +131,7 @@ export const isPhotoUploadPathnameValid = (pathname?: string) =>
 export const isVideoUploadPathnameValid = (pathname?: string) =>
   pathname?.match(REGEX_VIDEO_UPLOAD_PATH);
 
-const getFileNameFromStorageUrl = (url: string) =>
-  new URL(url).pathname.match(/\/(.+)$/)?.[1] ?? '';
-
+const getFileNameFromStorageUrl = (url: string) => /\/(.+)$/.exec(new URL(url).pathname)?.[1] ?? '';
 export const uploadFromClientViaPresignedUrl = async (
   file: File | Blob,
   fileName: string,
