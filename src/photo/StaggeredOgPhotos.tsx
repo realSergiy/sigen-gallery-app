@@ -17,14 +17,8 @@ export default function StaggeredOgPhotos({
   maxConcurrency?: number;
   onLastPhotoVisible?: () => void;
 }) {
-  const [loadingState, setLoadingState] = useState(
-    photos.reduce(
-      (accumulator, photo) => ({
-        ...accumulator,
-        [photo.id]: 'unloaded' as const,
-      }),
-      {} as PhotoLoadingState,
-    ),
+  const [loadingState, setLoadingState] = useState<PhotoLoadingState>(
+    Object.fromEntries(photos.map(photo => [photo.id, 'unloaded' as const])),
   );
 
   const recomputeLoadingState = useCallback(
