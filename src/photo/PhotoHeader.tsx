@@ -44,8 +44,7 @@ export default function PhotoHeader({
     ? photos.findIndex(photo => photo.id === selectedPhoto.id)
     : undefined;
 
-  const paginationLabel =
-    (indexNumber || (selectedPhotoIndex ?? 0 + 1)) + ' of ' + (count ?? photos.length);
+  const paginationLabel = `${indexNumber || (selectedPhotoIndex ?? 0 + 1)} of ${count ?? photos.length}`;
 
   const headerType =
     selectedPhotoIndex === undefined
