@@ -126,7 +126,7 @@ export default function AdminAddAllUploads({
       .then(() => {
         router.push(PATH_ADMIN_PHOTOS);
       })
-      .catch(e => {
+      .catch((e: unknown) => {
         setAddingProgress(undefined);
         setIsAdding(false);
         setButtonText('Try Again');

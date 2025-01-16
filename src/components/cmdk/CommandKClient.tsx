@@ -171,7 +171,7 @@ export default function CommandKClient({
           }
           setIsLoading(false);
         })
-        .catch(e => {
+        .catch((e: unknown) => {
           console.error(e);
           setQueriedSections([]);
           setIsLoading(false);

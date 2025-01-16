@@ -34,13 +34,13 @@ export default async function AdminNav() {
       .catch(() => 0),
     getStoragePhotoUploadUrlsNoStore()
       .then(urls => urls.length)
-      .catch(e => {
+      .catch((e: unknown) => {
         console.error(`Error getting blob upload urls: ${e}`);
         return 0;
       }),
     getStorageVideoUploadUrlsNoStore()
       .then(urls => urls.length)
-      .catch(e => {
+      .catch((e: unknown) => {
         console.error(`Error getting blob upload urls: ${e}`);
         return 0;
       }),
