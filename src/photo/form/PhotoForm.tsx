@@ -30,7 +30,7 @@ import { getNextImageUrlForManipulation } from '@/services/next-image';
 import { BLUR_ENABLED } from '@/site/config';
 import { PhotoDbInsert } from '..';
 import ErrorNote from '@/components/ErrorNote';
-
+import { getMessage } from '@/utility/error';
 const THUMBNAIL_SIZE = 300;
 
 export default function PhotoForm({
@@ -266,7 +266,7 @@ export default function PhotoForm({
       <form
         action={data =>
           (type === 'create' ? createPhotoAction : updatePhotoAction)(data).catch(e =>
-            setFormActionErrorMessage(e.message),
+            setFormActionErrorMessage(getMessage(e)),
           )
         }
         onSubmit={() => {

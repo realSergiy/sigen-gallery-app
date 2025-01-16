@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { PATH_ADMIN_VIDEO_UPLOADS, pathForAdminVideoUploadUrl } from '@/site/paths';
 import { clsx } from 'clsx/lite';
 import VideoInput from '@/components/VideoInput';
+import { getMessage } from '@/utility/error';
 
 export default function VideoUpload({
   shouldResize,
@@ -65,7 +66,7 @@ export default function VideoUpload({
                   })
                   .catch(e => {
                     setIsUploading(false);
-                    setUploadError(`Upload Error: ${e.message}`);
+                    setUploadError(`Upload Error: ${getMessage(e)}`);
                   });
               }
             }}
