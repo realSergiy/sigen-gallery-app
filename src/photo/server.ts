@@ -5,7 +5,7 @@ import { ExifData, ExifParserFactory } from 'ts-exif-parser';
 import { FilmSimulation } from '@/simulation';
 import sharp, { Sharp } from 'sharp';
 import { GEO_PRIVACY_ENABLED, PRO_MODE_ENABLED } from '@/site/config';
-
+import { getMessage } from '@/utility/error';
 const IMAGE_WIDTH_RESIZE = 200;
 const IMAGE_WIDTH_BLUR = 200;
 
@@ -112,8 +112,8 @@ export const resizeImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => resizeImage(buffer))
-    .catch(e => {
-      console.log(`Error resizing image from URL (${url})`, e);
+    .catch((e: unknown) => {
+      console.log(`Error resizing image from URL (${url})`, getMessage(e));
       return '';
     });
 
@@ -121,8 +121,8 @@ export const blurImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => blurImage(buffer))
-    .catch(e => {
-      console.log(`Error blurring image from URL (${url})`, e);
+    .catch((e: unknown) => {
+      console.log(`Error blurring image from URL (${url})`, getMessage(e));
       return '';
     });
 

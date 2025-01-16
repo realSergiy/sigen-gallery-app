@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { PATH_ADMIN_PHOTO_UPLOADS, pathForAdminPhotoUploadUrl } from '@/site/paths';
 import PhotoInput from '../components/PhotoInput';
 import { clsx } from 'clsx/lite';
-
+import { getMessage } from '@/utility/error';
 export default function PhotoUpload({
   shouldResize,
   onLastUpload,
@@ -63,9 +63,9 @@ export default function PhotoUpload({
                       }
                     }
                   })
-                  .catch(e => {
+                  .catch((e: unknown) => {
                     setIsUploading(false);
-                    setUploadError(`Upload Error: ${e.message}`);
+                    setUploadError(`Upload Error: ${getMessage(e)}`);
                   });
               }
             }}

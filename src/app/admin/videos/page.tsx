@@ -15,7 +15,7 @@ export default async function AdminVideosPage() {
   const [videos, videosCount, videosCountOutdated, blobVideoUrls] = await Promise.all([
     getVideos({
       limit: INFINITE_SCROLL_INITIAL_ADMIN,
-    }).catch(e => {
+    }).catch((e: unknown) => {
       console.error('Failed to get videos', e);
       return [];
     }),

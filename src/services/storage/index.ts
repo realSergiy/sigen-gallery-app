@@ -30,7 +30,7 @@ import {
   isUrlFromCloudflareR2,
 } from './cloudflare-r2';
 import { PATH_API_PRESIGNED_URL } from '@/site/paths';
-
+import { getMessage } from '@/utility/error';
 const logger = console;
 const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): Promise<T> => {
   logger.log(`[${operationName}] Starting: ${detail}`);
@@ -39,8 +39,8 @@ const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): P
       logger.log(`[${operationName}] Success: ${result}`);
       return result;
     })
-    .catch(e => {
-      logger.error(`[${operationName}] Error: ${detail}`, e);
+    .catch((e: unknown) => {
+      logger.error(`[${operationName}] Error: ${detail}`, getMessage(e));
       throw e;
     });
 };

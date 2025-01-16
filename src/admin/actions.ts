@@ -12,7 +12,7 @@ const scanForError = (shouldCheck: boolean, promise: () => Promise<unknown>): Pr
   shouldCheck
     ? promise()
         .then(() => '')
-        .catch(e => getMessage(e))
+        .catch((e: unknown) => getMessage(e))
     : Promise.resolve('');
 
 export const testConnectionsAction = async () =>

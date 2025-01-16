@@ -22,7 +22,7 @@ import Link from 'next/link';
 import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 import VideoWithFallback from '@/components/video/VideoWithFallback';
-
+import { getMessage } from '@/utility/error';
 export default function VideoForm({
   type = 'create',
   initialVideoForm,
@@ -104,8 +104,8 @@ export default function VideoForm({
       {formActionErrorMessage && <ErrorNote>{formActionErrorMessage}</ErrorNote>}
       <form
         action={data =>
-          (type === 'create' ? createVideoAction : updateVideoAction)(data).catch(e =>
-            setFormActionErrorMessage(e.message),
+          (type === 'create' ? createVideoAction : updateVideoAction)(data).catch((e: unknown) =>
+            setFormActionErrorMessage(getMessage(e)),
           )
         }
         onSubmit={() => {
