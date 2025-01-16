@@ -17,14 +17,8 @@ export default function StaggeredOgVideos({
   maxConcurrency?: number;
   onLastVideoVisible?: () => void;
 }) {
-  const [loadingState, setLoadingState] = useState(
-    videos.reduce(
-      (accumulator, video) => ({
-        ...accumulator,
-        [video.id]: 'unloaded' as const,
-      }),
-      {} as VideoLoadingState,
-    ),
+  const [loadingState, setLoadingState] = useState<VideoLoadingState>(
+    Object.fromEntries(videos.map(video => [video.id, 'unloaded' as const])),
   );
 
   const recomputeLoadingState = useCallback(
