@@ -1,6 +1,6 @@
 'use client';
 
-import { doesVideoNeedBlurCompatibility, titleForVideo } from '.';
+import { titleForVideo } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
@@ -20,28 +20,13 @@ import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
 import { RevalidateMedia } from '@/media';
 import { VIDEO_WIDTH_LARGE } from '@/components/video';
-import VideoWithFallback from '@/components/video/VideoWithFallback';
+import VideoWithMasks from '@/components/video/VideoWithMasks';
+import MasksSwitch from './MasksSwitch';
 
-export default function VideoDetail({
-  video,
-  className,
-  primaryTag,
-  showControls = false,
-  prefetch = SHOULD_PREFETCH_ALL_LINKS,
-  prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
-  revalidateVideo,
-  showTitle = true,
-  showTitleAsH1,
-  shouldShare = true,
-  shouldShareTag,
-  shouldScrollOnShare,
-  includeFavoriteInAdminMenu,
-  onVisible,
-}: {
+type VideoDetailProps = {
   video: Video;
   className?: string;
   primaryTag?: string;
-  showControls?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
   revalidateVideo?: RevalidateMedia;
@@ -52,7 +37,23 @@ export default function VideoDetail({
   shouldScrollOnShare?: boolean;
   includeFavoriteInAdminMenu?: boolean;
   onVisible?: () => void;
-}) {
+};
+
+export default function VideoDetail({
+  video,
+  className,
+  primaryTag,
+  prefetch = SHOULD_PREFETCH_ALL_LINKS,
+  prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
+  revalidateVideo,
+  showTitle = true,
+  showTitleAsH1,
+  shouldShare = true,
+  shouldShareTag,
+  shouldScrollOnShare,
+  includeFavoriteInAdminMenu,
+  onVisible,
+}: VideoDetailProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const tags = sortTags(video.tags, primaryTag);
@@ -79,6 +80,9 @@ export default function VideoDetail({
 
   const aspectRatio = 16 / 9;
 
+  const masks = video.videoMask ?? [];
+  masks.push({ name: 'Original', videoUrl: video.videoUrl, bitmask: 0 });
+
   return (
     <SiteGrid
       containerRef={ref}
@@ -91,16 +95,14 @@ export default function VideoDetail({
         >
           <div
             className={clsx(
-              areVideosMatted && 'flex w-full items-center justify-center',
+              areVideosMatted && 'flex h-full items-center justify-center',
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VideoWithFallback
-              showControls={showControls}
-              className={clsx(areVideosMatted && 'h-full')}
-              videoClassName={clsx(areVideosMatted && 'size-full object-contain')}
-              src={video.videoUrl}
-              blurCompatibilityLevel={doesVideoNeedBlurCompatibility(video) ? 'high' : 'none'}
+            <VideoWithMasks
+              masks={[]}
+              enabledBit={0}
+              videoUrl={video.videoUrl}
               width={VIDEO_WIDTH_LARGE}
               height={Math.round(VIDEO_WIDTH_LARGE / aspectRatio)}
             />
@@ -110,10 +112,9 @@ export default function VideoDetail({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            'sticky top-4 -translate-y-1 self-start',
-            'grid grid-cols-2 md:grid-cols-1',
-            'gap-y-baseline gap-x-0.5 sm:gap-x-1',
-            'pb-6',
+            'gap-y-baseline sticky top-4 grid h-full',
+            '-translate-y-1 grid-cols-2 gap-x-0.5',
+            'sm:gap-x-1 md:grid-cols-1',
           )}
         >
           {/* Meta */}
@@ -152,7 +153,13 @@ export default function VideoDetail({
               )}
             </div>
           </div>
-          <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
+          {/* Date */}
+          <div
+            className={clsx(
+              'space-y-baseline flex flex-col justify-between',
+              !hasTitleContent && 'md:-mt-baseline',
+            )}
+          >
             <div
               className={clsx(
                 'gap-y-baseline flex gap-x-2.5',
@@ -192,6 +199,12 @@ export default function VideoDetail({
                 )}
               </div>
             </div>
+            <MasksSwitch
+              tags={['mask A', 'mask B', 'mask C']}
+              contrast="medium"
+              prefetch={prefetchRelatedLinks}
+              className={'pb-14 text-xl'}
+            />
           </div>
         </DivDebugBaselineGrid>
       }

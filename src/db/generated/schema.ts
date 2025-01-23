@@ -56,7 +56,7 @@ const videoMask = pgTable(
     videoId: varchar('video_id', { length: 8 }).notNull(),
     bitmask: integer().notNull(),
     name: varchar({ length: 255 }).default('').notNull(),
-    videoUrl: varchar('video_url', { length: 255 }),
+    videoUrl: varchar('video_url', { length: 255 }).notNull(),
   },
   table => [
     foreignKey({

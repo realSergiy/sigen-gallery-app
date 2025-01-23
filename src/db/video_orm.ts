@@ -21,6 +21,7 @@ export type VideoWithMasks = Awaited<ReturnType<typeof getVideosWithMasks>>[numb
 type Condition = SQLWrapper | undefined;
 
 export type Video = VideoWithMasks;
+export type VideoMask = Video['videoMask'][number];
 
 const sqNeHidden = db.$with('sq').as(db.select().from(tb.video).where(ne(tb.video.hidden, true)));
 
@@ -69,7 +70,13 @@ export const getVideosWithMasks = logOp(async (options: VideoQueryOptions) => ({
       where: () => and(...conditions),
       limit: options.limit ?? 1000,
       with: {
-        videoMask: true,
+        videoMask: {
+          columns: {
+            name: true,
+            videoUrl: true,
+            bitmask: true,
+          },
+        },
       },
     });
   },
