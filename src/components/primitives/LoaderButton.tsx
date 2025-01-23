@@ -1,8 +1,8 @@
 'use client';
 
-import Spinner, { SpinnerColor } from '@/components/Spinner';
+import Spinner, { type SpinnerColor } from '@/components/Spinner';
 import { clsx } from 'clsx/lite';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export default function LoaderButton(
   props: {
@@ -37,12 +37,12 @@ export default function LoaderButton(
     <button
       {...rest}
       type={type}
-      onClick={e => {
+      onClick={err => {
         if (shouldPreventDefault) {
-          e.preventDefault();
+          err.preventDefault();
         }
         if (!confirmText || confirm(confirmText)) {
-          onClick?.(e);
+          onClick?.(err);
         }
       }}
       className={clsx(

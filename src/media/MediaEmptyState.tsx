@@ -24,7 +24,7 @@ export default function VideosEmptyState(props: { message: string }) {
                 <AdminCTA />
               </div>
               <div>
-                Change the name of this blog and other configuration by editing environment
+                Change the name of this gallery and other configuration by editing environment
                 variables referenced in{' '}
                 <Link href={PATH_ADMIN_CONFIGURATION} className="text-main hover:underline">
                   /admin/configuration

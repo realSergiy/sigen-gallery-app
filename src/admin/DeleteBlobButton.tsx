@@ -1,20 +1,24 @@
 'use client';
 
-import { deleteUploadAction } from '@/photo/serverFunctions';
 import DeleteButton from './DeleteButton';
 import { useRouter } from 'next/navigation';
-import { PATH_ADMIN_PHOTOS } from '@/site/paths';
+import { PATH_ADMIN_VIDEOS } from '@/site/paths';
 import { useState } from 'react';
+import { deleteUploadAction } from '@/media/serverFunctions';
+
+type DeleteBlobOptionsProps = {
+  url: string;
+  shouldRedirectToAdmin?: boolean;
+  shouldDeleteRelated?: boolean;
+  onDelete?: () => void;
+};
 
 export default function DeleteUploadButton({
   url,
-  shouldRedirectToAdminPhotos,
+  shouldRedirectToAdmin,
+  shouldDeleteRelated = false,
   onDelete,
-}: {
-  url: string;
-  shouldRedirectToAdminPhotos?: boolean;
-  onDelete?: () => void;
-}) {
+}: DeleteBlobOptionsProps) {
   const router = useRouter();
 
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,11 +28,11 @@ export default function DeleteUploadButton({
       confirmText="Are you sure you want to delete this upload?"
       onClick={() => {
         setIsDeleting(true);
-        deleteUploadAction(url)
+        deleteUploadAction(url, shouldDeleteRelated)
           .then(() => {
             onDelete?.();
-            if (shouldRedirectToAdminPhotos) {
-              router.push(PATH_ADMIN_PHOTOS);
+            if (shouldRedirectToAdmin) {
+              router.push(PATH_ADMIN_VIDEOS);
             } else {
               setIsDeleting(false);
             }

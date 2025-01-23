@@ -1,7 +1,8 @@
 import { getStorageVideoUploadUrlsNoStore } from '@/services/storage/cache';
 import SiteGrid from '@/components/SiteGrid';
-import AdminVideoUploadsClient from '@/admin/AdminVideoUploadsClient';
 import { getUniqueTagsCached } from '@/video/cache';
+import AdminVideoUploadsTable from '@/admin/AdminVideoUploadsTable';
+import AdminUploadsClient from '@/admin/AdminUploadsClient';
 
 export const maxDuration = 60;
 
@@ -11,10 +12,11 @@ export default async function AdminVideoUploadsPage() {
   return (
     <SiteGrid
       contentMain={
-        <AdminVideoUploadsClient
+        <AdminUploadsClient
           {...{
             urls,
             uniqueTags,
+            TableComponent: AdminVideoUploadsTable,
           }}
         />
       }

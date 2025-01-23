@@ -1,15 +1,15 @@
 'use client';
 
+import ImageSmall from '@/components/image/ImageSmall';
 import Spinner from '@/components/Spinner';
-import { getPhotoIdFromStorageUrl } from '@/services/storage';
+import { getIdFromStorageUrl } from '@/services/storage';
 import { clsx } from 'clsx/lite';
 import { FaRegCircleCheck } from 'react-icons/fa6';
-import { pathForAdminVideoUploadUrl } from '@/site/paths';
+import { pathForAdminUploadUrl } from '@/site/paths';
 import AddButton from './AddButton';
-import { UrlAddStatus } from './AdminUploadsClient';
+import { type UrlAddStatus } from './AdminUploadsClient';
 import ResponsiveDate from '@/components/ResponsiveDate';
 import DeleteBlobButton from './DeleteBlobButton';
-import VideoSmall from '@/components/video/VideoSmall';
 
 export default function AdminVideoUploadsTable({
   isAdding,
@@ -44,14 +44,17 @@ export default function AdminVideoUploadsTable({
                   isAdding && !isComplete && status !== 'adding' && 'scale-90',
                 )}
               >
-                <VideoSmall
+                <ImageSmall
                   src={url}
-                  aspectRatio={16 / 9}
+                  alt={url}
+                  aspectRatio={3 / 2}
                   className={clsx('overflow-hidden rounded-[3px]', 'border-subtle')}
                 />
               </div>
               <span className="min-w-0 grow">
-                <div className="overflow-hidden text-ellipsis">{getPhotoIdFromStorageUrl(url)}</div>
+                <div className="overflow-hidden text-ellipsis">
+                  {getIdFromStorageUrl(url, 'video')}
+                </div>
                 <div className="text-dim overflow-hidden text-ellipsis">
                   {isAdding || isComplete ? (
                     status === 'added' ? (
@@ -82,10 +85,11 @@ export default function AdminVideoUploadsTable({
                 </>
               ) : (
                 <>
-                  <AddButton path={pathForAdminVideoUploadUrl(url)} />
+                  <AddButton path={pathForAdminUploadUrl(url, 'video')} />
                   <DeleteBlobButton
                     url={url}
-                    shouldRedirectToAdminPhotos={urlAddStatuses.length <= 1}
+                    shouldRedirectToAdmin={urlAddStatuses.length <= 1}
+                    shouldDeleteRelated
                     onDelete={() =>
                       setUrlAddStatuses?.(
                         urlAddStatuses.filter(({ url: urlToRemove }) => urlToRemove !== url),

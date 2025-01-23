@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from 'react';
 import { clsx } from 'clsx/lite';
 import { FiUploadCloud } from 'react-icons/fi';
 import { ACCEPTED_VIDEO_FILE_TYPES } from '@/video';
-import { uploadVideoFromClient } from '@/services/storage';
+import { uploadVideoAndThumbnailFromClient } from '@/services/storage';
 import { PATH_ADMIN_VIDEO_UPLOADS, pathForAdminVideoUploadUrl } from '@/site/paths';
 import { useRouter } from 'next/navigation';
 import { getMessage } from '@/utility/error';
@@ -44,7 +44,7 @@ export default function VideoUpload({ onLastUpload }: VideoUploadProps) {
           setFileUploadIndex(index);
           setFileUploadName(file.name);
 
-          const url = await uploadVideoFromClient(file, extension);
+          const url = await uploadVideoAndThumbnailFromClient(file, extension);
 
           if (index === files.length - 1) {
             // is last blob

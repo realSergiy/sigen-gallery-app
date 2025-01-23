@@ -2,29 +2,31 @@
 
 import AdminChildPage from '@/components/AdminChildPage';
 import { PATH_ADMIN_PHOTO_UPLOADS } from '@/site/paths';
-import { VideoFormData } from './form';
+import type { VideoFormData } from './form';
 import VideoForm from './form/VideoForm';
-import { Tags } from '@/tag';
+import type { Tags } from '@/tag';
 import useVideoFormParent from './form/useVideoFormParent';
 import { useMemo } from 'react';
 import { formatDate } from '@/utility/date';
+
+type UpdatePageClientProps = {
+  blobId?: string;
+  videoFormData: Partial<VideoFormData>;
+  uniqueTags: Tags;
+};
 
 export default function UploadPageClient({
   blobId,
   videoFormData,
   uniqueTags,
-}: {
-  blobId?: string;
-  videoFormData: Partial<VideoFormData>;
-  uniqueTags: Tags;
-}) {
+}: UpdatePageClientProps) {
   const { pending, setIsPending, updatedTitle, setUpdatedTitle, setHasTextContent } =
     useVideoFormParent({});
 
   const initialVideoForm = useMemo(
     () => ({
       ...videoFormData,
-      thumbnailUrl: videoFormData.url,
+      videoUrl: videoFormData.videoUrl,
       takenAt: videoFormData.takenAt ?? formatDate(new Date()),
     }),
     [videoFormData],

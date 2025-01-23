@@ -31,7 +31,7 @@ import { BLUR_ENABLED } from '@/site/config';
 import { PhotoDbInsert } from '..';
 import ErrorNote from '@/components/ErrorNote';
 
-const THUMBNAIL_SIZE = 300;
+export const THUMBNAIL_SIZE = 300;
 
 export default function PhotoForm({
   type = 'create',

@@ -65,12 +65,10 @@ const video = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    thumbnailUrl: varchar('thumbnail_url', { length: 255 }).notNull(),
+    thumbnailUrl: varchar('thumbnail_url', { length: 255 }),
+    videoUrl: varchar('video_url', { length: 255 }).notNull(),
   },
-  () => [
-    check('check_thumbnail_url', sql`(thumbnail_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
-    check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
-  ],
+  () => [check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`)],
 );
 
 export const tb = {

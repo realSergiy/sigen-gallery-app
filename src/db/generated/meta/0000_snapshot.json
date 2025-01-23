@@ -272,7 +272,13 @@
           "name": "thumbnail_url",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "video_url": {
+          "name": "video_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -280,10 +286,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {
-        "check_thumbnail_url": {
-          "name": "check_thumbnail_url",
-          "value": "(thumbnail_url)::text ~ '^https://.+\\.[A-Za-z0-9]+$'::text"
-        },
         "check_url": {
           "name": "check_url",
           "value": "(url)::text ~ '^https://.+\\.[A-Za-z0-9]+$'::text"

@@ -3,16 +3,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   FORM_METADATA_ENTRIES,
-  VideoFormData,
+  type VideoFormData,
   formHasTextContent,
   getChangedFormFields,
   getFormErrors,
   isFormValid,
 } from '.';
-import { convertTagsForForm, Tags } from '@/tag';
+import { convertTagsForForm, type Tags } from '@/tag';
 import usePreventNavigation from '@/utility/usePreventNavigation';
 import { useAppState } from '@/state/AppState';
-import { VideoDbUpd } from '@/db/video_orm';
+import type { VideoDbUpd } from '@/db/video_orm';
 import clsx from 'clsx';
 import Spinner from '@/components/Spinner';
 import ErrorNote from '@/components/ErrorNote';
@@ -21,7 +21,9 @@ import FieldSetWithStatus from '@/components/FieldSetWithStatus';
 import Link from 'next/link';
 import { PATH_ADMIN_VIDEO_UPLOADS, PATH_ADMIN_VIDEOS } from '@/site/paths';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import VideoWithFallback from '@/components/video/VideoWithFallback';
+import ImageWithFallback from '@/components/image/ImageWithFallback';
+import { THUMBNAIL_SIZE } from '@/photo/form/PhotoForm';
+import { getDimensionsFromSize } from '@/utility/size';
 
 export default function VideoForm({
   type = 'create',
@@ -54,6 +56,8 @@ export default function VideoForm({
 
   const canFormBeSubmitted = (type === 'create' || formHasChanged) && isFormValid(formData);
 
+  const { width, height } = getDimensionsFromSize(THUMBNAIL_SIZE, 16 / 9);
+
   const url = formData.url ?? '';
 
   useEffect(() => {
@@ -72,12 +76,16 @@ export default function VideoForm({
     <div className="relative max-w-[38rem] space-y-8">
       <div className="flex gap-2">
         <div className="relative">
-          <VideoWithFallback
+          <ImageWithFallback
+            alt="Upload"
             src={url}
             className={clsx(
               'overflow-hidden rounded-md border border-gray-200 dark:border-gray-700',
             )}
             blurCompatibilityLevel="none"
+            width={width}
+            height={height}
+            priority
           />
           <div className={clsx('absolute left-2 top-2 opacity-0 transition-opacity duration-500')}>
             <div

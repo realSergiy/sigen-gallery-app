@@ -70,7 +70,7 @@ export default function AdminVideoMenuClient({
         icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
         action: () => {
           return confirm(deleteConfirmationTextForVideo(video))
-            ? deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
+            ? deleteVideoAction(video, shouldRedirectDelete).then(() => {
                 revalidateVideo?.(video.id, true);
                 registerAdminUpdate?.();
               })

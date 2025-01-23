@@ -32,7 +32,15 @@ export const RELATED_GRID_VIDEOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
-export const ACCEPTED_VIDEO_FILE_TYPES = ['video/mp4'];
+export const ACCEPTED_VIDEO_EXTENSIONS = ['mp4'];
+export const ACCEPTED_VIDEO_FILE_TYPES = ACCEPTED_VIDEO_EXTENSIONS.map(
+  extension => `video/${extension}`,
+);
+
+export const ACCEPTED_VIDEO_THUMBNAIL_EXTENSIONS = ['png'];
+export const ACCEPTED_VIDEO_THUMBNAIL_FILE_TYPES = ACCEPTED_VIDEO_THUMBNAIL_EXTENSIONS.map(
+  extension => `image/${extension}`,
+);
 
 export const MAX_VIDEO_UPLOAD_SIZE_IN_BYTES = 70 * 1024 * 1024; // 70 MB
 
