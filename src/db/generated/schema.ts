@@ -7,7 +7,9 @@ import {
   doublePrecision,
   timestamp,
   boolean,
+  foreignKey,
   check,
+  integer,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
@@ -47,6 +49,27 @@ const photos = pgTable('photos', {
   ),
 });
 
+const videoMask = pgTable(
+  'video_mask',
+  {
+    id: integer().primaryKey().notNull(),
+    videoId: varchar('video_id', { length: 8 }).notNull(),
+    bitmask: integer().notNull(),
+    name: varchar({ length: 255 }).default('').notNull(),
+    videoUrl: varchar('video_url', { length: 255 }),
+  },
+  table => [
+    foreignKey({
+      columns: [table.videoId],
+      foreignColumns: [video.id],
+      name: 'video_mask_video_id_fk',
+    })
+      .onUpdate('cascade')
+      .onDelete('cascade'),
+    check('check_video_url', sql`(video_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
+  ],
+);
+
 const video = pgTable(
   'video',
   {
@@ -67,10 +90,14 @@ const video = pgTable(
       .notNull(),
     videoUrl: varchar('video_url', { length: 255 }).notNull(),
   },
-  () => [check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`)],
+  () => [
+    check('check_url', sql`(url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
+    check('check_video_url', sql`(video_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text`),
+  ],
 );
 
 export const tb = {
   photo: photos,
+  videoMask,
   video,
 };
