@@ -1,6 +1,6 @@
 'use client';
 
-import { altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
+import { doesVideoNeedBlurCompatibility, titleForVideo } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
@@ -18,10 +18,11 @@ import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
 import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
-import VidLarge from '@/components/video/VidLarge';
 import { RevalidateMedia } from '@/media';
+import { VIDEO_WIDTH_LARGE } from '@/components/video';
+import VideoWithFallback from '@/components/video/VideoWithFallback';
 
-export default function VideoPlayerLarge({
+export default function VideoDetail({
   video,
   className,
   primaryTag,
@@ -76,6 +77,8 @@ export default function VideoPlayerLarge({
 
   // ToDo: aspectRatio may be needed, compore with PhotoLarge.tsx
 
+  const aspectRatio = 16 / 9;
+
   return (
     <SiteGrid
       containerRef={ref}
@@ -92,14 +95,14 @@ export default function VideoPlayerLarge({
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VidLarge
+            <VideoWithFallback
               showControls={showControls}
-              aspectRatio={16 / 9}
               className={clsx(areVideosMatted && 'h-full')}
               videoClassName={clsx(areVideosMatted && 'size-full object-contain')}
-              alt={altTextForVideo(video)}
               src={video.videoUrl}
-              blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
+              blurCompatibilityLevel={doesVideoNeedBlurCompatibility(video) ? 'high' : 'none'}
+              width={VIDEO_WIDTH_LARGE}
+              height={Math.round(VIDEO_WIDTH_LARGE / aspectRatio)}
             />
           </div>
         </Link>
@@ -149,7 +152,6 @@ export default function VideoPlayerLarge({
               )}
             </div>
           </div>
-          {/* EXIF Data */}
           <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
             <div
               className={clsx(

@@ -25,7 +25,7 @@ import {
   deleteVideo,
   deleteVideoTagGlobally,
   getVideo,
-  getVideos,
+  getVideosWithMasks,
   insertVideo,
   renameVideoTagGlobally,
   updateVideo,
@@ -245,8 +245,8 @@ export const getVideosHiddenMetaCachedAction = async () =>
 
 export const getVideosAction = async (options: VideoQueryOptions) =>
   areOptionsSensitive(options)
-    ? runAuthenticatedAdminServerAction(() => getVideos(options))
-    : getVideos(options);
+    ? runAuthenticatedAdminServerAction(() => getVideosWithMasks(options))
+    : getVideosWithMasks(options);
 
 export const getVideosCachedAction = async (options: VideoQueryOptions) =>
   areOptionsSensitive(options)

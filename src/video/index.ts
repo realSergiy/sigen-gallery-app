@@ -8,8 +8,8 @@ import { isBefore } from 'date-fns';
 import type { Metadata } from 'next';
 
 // INFINITE SCROLL: FEED
-export const INFINITE_SCROLL_FEED_INITIAL = process.env.NODE_ENV === 'development' ? 2 : 12;
-export const INFINITE_SCROLL_FEED_MULTIPLE = process.env.NODE_ENV === 'development' ? 2 : 24;
+export const INFINITE_SCROLL_FEED_INITIAL = process.env.NODE_ENV === 'development' ? 12 : 24;
+export const INFINITE_SCROLL_FEED_MULTIPLE = process.env.NODE_ENV === 'development' ? 12 : 24;
 
 // INFINITE SCROLL: GRID
 export const INFINITE_SCROLL_GRID_INITIAL = HIGH_DENSITY_GRID
