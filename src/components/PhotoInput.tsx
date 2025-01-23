@@ -92,7 +92,6 @@ export default function PhotoInput({
   quality = 0.8,
   loading,
   showUploadStatus = true,
-  debug,
 }: {
   onStart?: () => void;
   onBlobReady?: (args: {
@@ -106,17 +105,15 @@ export default function PhotoInput({
   quality?: number;
   loading?: boolean;
   showUploadStatus?: boolean;
-  debug?: boolean;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [image, setImage] = useState<HTMLImageElement>();
   const [filesLength, setFilesLength] = useState(0);
   const [fileUploadIndex, setFileUploadIndex] = useState(0);
   const [fileUploadName, setFileUploadName] = useState('');
 
-  const handleFileChangeAsync = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     onStart?.();
     const { files } = e.currentTarget;
     if (!files?.length) return;
@@ -144,8 +141,6 @@ export default function PhotoInput({
       if ((shouldResize || isPng) && canvas && context) {
         // Process images that need resizing
         const image = await blobToImage(file);
-
-        setImage(image);
 
         context.save();
 
@@ -198,8 +193,6 @@ export default function PhotoInput({
     }
   };
 
-  const handleFileChange = void handleFileChangeAsync;
-
   return (
     <div className="min-w-0 space-y-4">
       <div className="flex items-center gap-2 sm:gap-4">
@@ -241,15 +234,6 @@ export default function PhotoInput({
           <div className="max-w-full truncate">{fileUploadName}</div>
         )}
       </div>
-      <canvas
-        ref={canvasRef}
-        className={clsx(
-          'rounded-md bg-gray-50 dark:bg-gray-900/50',
-          'border border-gray-200 dark:border-gray-800',
-          'w-[400px]',
-          (!image || !debug) && 'hidden',
-        )}
-      />
     </div>
   );
 }

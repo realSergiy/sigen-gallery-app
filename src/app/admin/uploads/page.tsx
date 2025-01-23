@@ -2,6 +2,7 @@ import { getStoragePhotoUploadUrlsNoStore } from '@/services/storage/cache';
 import SiteGrid from '@/components/SiteGrid';
 import { getUniqueTagsCached } from '@/photo/cache';
 import AdminUploadsClient from '@/admin/AdminUploadsClient';
+import AdminUploadsTable from '@/admin/AdminUploadsTable';
 
 export const maxDuration = 60;
 
@@ -15,6 +16,7 @@ export default async function AdminUploadsPage() {
           {...{
             urls,
             uniqueTags,
+            TableComponent: AdminUploadsTable,
           }}
         />
       }

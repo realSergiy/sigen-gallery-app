@@ -29,9 +29,8 @@ import {
   insertVideo,
   renameVideoTagGlobally,
   updateVideo,
-  VideoQueryOptions,
+  type VideoQueryOptions,
 } from '@/db/video_orm';
-import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 
 // Private actions
 
@@ -41,12 +40,14 @@ export const createVideoAction = async (formData: FormData) =>
 
     const video = convertFormDataToVideoDbInsert(formData);
 
-    const updatedUrl = await convertUploadToVideo({
+    const { url, videoUrl } = await convertUploadToVideo({
       urlOrigin: video.url,
+      videoUrlOrigin: video.videoUrl,
     });
 
-    if (updatedUrl) {
-      video.url = updatedUrl;
+    if (url && videoUrl) {
+      video.url = url;
+      video.videoUrl = videoUrl;
       await insertVideo(video);
       revalidateAllKeysAndPaths();
       redirect(PATH_ADMIN_VIDEOS);
@@ -58,17 +59,22 @@ export const updateVideoAction = async (formData: FormData) =>
     const video = convertFormDataToVideoDbInsert(formData);
 
     let urlToDelete: string | undefined;
+    let videoUrlToDelete: string | undefined;
+
     if (video.hidden && video.url.includes(video.id)) {
       // Backfill:
       // Anonymize storage url on update if necessary by
       // re-running image upload transfer logic
-      const url = await convertUploadToVideo({
+      const { url, videoUrl } = await convertUploadToVideo({
         urlOrigin: video.url,
+        videoUrlOrigin: video.videoUrl,
         shouldDeleteOrigin: false,
       });
-      if (url) {
+
+      if (url && videoUrl) {
         urlToDelete = video.url;
         video.url = url;
+        video.videoUrl = videoUrl;
       }
     }
 
@@ -76,10 +82,13 @@ export const updateVideoAction = async (formData: FormData) =>
       if (urlToDelete) {
         await deleteFile(urlToDelete);
       }
+
+      if (videoUrlToDelete) {
+        await deleteFile(videoUrlToDelete);
+      }
     });
 
     revalidateVideo(video.id);
-
     redirect(PATH_ADMIN_VIDEOS);
   });
 
@@ -110,24 +119,38 @@ export const deleteVideosAction = async (videoIds: string[]) =>
     for (const videoId of videoIds) {
       const video = await getVideo(videoId, true);
       if (video) {
-        await deleteVideo(videoId).then(() => deleteFile(video.url));
+        await deleteVideoAndThumbnail(video);
       }
     }
     revalidateAllKeysAndPaths();
   });
 
 export const deleteVideoAction = async (
-  videoId: string,
-  videoUrl: string,
+  { id, url, videoUrl }: { id: string; url: string; videoUrl: string },
   shouldRedirect?: boolean,
 ) =>
   runAuthenticatedAdminServerAction(async () => {
-    await deleteVideo(videoId).then(() => deleteFile(videoUrl));
+    deleteVideoAndThumbnail({ id, url, videoUrl });
+
     revalidateAllKeysAndPaths();
     if (shouldRedirect) {
       redirect(PATH_ROOT);
     }
   });
+
+const deleteVideoAndThumbnail = async ({
+  id,
+  url,
+  videoUrl,
+}: {
+  id: string;
+  url: string;
+  videoUrl: string;
+}) => {
+  await deleteVideo(id);
+  await deleteFile(url);
+  await deleteFile(videoUrl);
+};
 
 export const deleteVideoTagGloballyAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
@@ -152,16 +175,7 @@ export const renameVideoTagGloballyAction = async (formData: FormData) =>
     }
   });
 
-export const deleteUploadAction = async (url: string) =>
-  runAuthenticatedAdminServerAction(async () => {
-    await deleteFile(url);
-    revalidateAdminPaths();
-  });
-
 // Accessed from admin video table, will:
-// - update EXIF data
-// - anonymize storage url if necessary
-// - strip GPS data if necessary
 // - update blur data (or destroy if blur is disabled)
 // - generate AI text data, if enabled, and auto-generated fields are empty
 export const syncVideoAction = async (videoId: string) =>
@@ -169,22 +183,23 @@ export const syncVideoAction = async (videoId: string) =>
     const video = await getVideo(videoId, true);
 
     if (video) {
-      const { fileBytes } = await extractVideoDataFromBlobPath(video.url, {
-        generateResizedImage: GENERATE_RESIZED_IMAGE,
-      });
+      const { fileBytes } = await extractVideoDataFromBlobPath(video.url);
 
       let urlToDelete: string | undefined;
+      let videoUrlToDelete: string | undefined;
 
       if (video.url.includes(video.id)) {
         // Anonymize storage url on update if necessary by
         // re-running image upload transfer logic
-        const url = await convertUploadToVideo({
+        const { url, videoUrl } = await convertUploadToVideo({
           urlOrigin: video.url,
+          videoUrlOrigin: video.videoUrl,
           fileBytes,
           shouldDeleteOrigin: false,
         });
-        if (url) {
+        if (url && videoUrl) {
           urlToDelete = video.url;
+          videoUrlToDelete = video.videoUrl;
           video.url = url;
         }
       }
@@ -196,6 +211,10 @@ export const syncVideoAction = async (videoId: string) =>
       await updateVideo(videoFormDbInsert).then(async () => {
         if (urlToDelete) {
           await deleteFile(urlToDelete);
+        }
+
+        if (videoUrlToDelete) {
+          await deleteFile(videoUrlToDelete);
         }
       });
 

@@ -18,9 +18,11 @@ export default function DownloadButton({
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     setIsLoading(true);
-    downloadFileFromBrowser(media.url, downloadFileName(media)).finally(() => setIsLoading(false));
+    await downloadFileFromBrowser(media.url, downloadFileName(media)).finally(() =>
+      setIsLoading(false),
+    );
   };
 
   return (

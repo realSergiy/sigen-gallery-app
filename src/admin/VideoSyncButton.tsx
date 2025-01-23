@@ -1,5 +1,5 @@
 import LoaderButton from '@/components/primitives/LoaderButton';
-import { syncVideoAction } from '@/video/actions';
+import { syncVideoAction } from '@/video/serverFunctions';
 import IconGrSync from '@/site/IconGrSync';
 import { toastSuccess } from '@/toast';
 import { ComponentProps, useState } from 'react';

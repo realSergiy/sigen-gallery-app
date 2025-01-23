@@ -5,17 +5,30 @@ import {
   moveFile,
 } from '@/services/storage';
 
-export const convertUploadToVideo = async ({
-  urlOrigin,
-  shouldDeleteOrigin = true,
-}: {
+type Args = {
   urlOrigin: string;
+  videoUrlOrigin: string;
   fileBytes?: ArrayBuffer;
   shouldDeleteOrigin?: boolean;
-}) => {
-  const fileName = generateRandomFileNameForVideo();
-  const fileExtension = getExtensionFromStorageUrl(urlOrigin);
-  const videoPath = `${fileName}.${fileExtension || 'mp4'}`;
+};
 
-  return shouldDeleteOrigin ? moveFile(urlOrigin, videoPath) : copyFile(urlOrigin, videoPath);
+export const convertUploadToVideo = async ({
+  urlOrigin,
+  videoUrlOrigin,
+  shouldDeleteOrigin = true,
+}: Args) => {
+  const fileName = generateRandomFileNameForVideo();
+
+  const thumbnailFileExtension = getExtensionFromStorageUrl(urlOrigin);
+  const thumbnailPath = `${fileName}.${thumbnailFileExtension || 'png'}`;
+
+  const videoFileExtension = getExtensionFromStorageUrl(videoUrlOrigin);
+  const videoPath = `${fileName}.${videoFileExtension || 'mp4'}`;
+
+  const convert = shouldDeleteOrigin ? moveFile : copyFile;
+
+  const url = await convert(urlOrigin, thumbnailPath);
+  const videoUrl = await convert(videoUrlOrigin, videoPath);
+
+  return { url, videoUrl };
 };

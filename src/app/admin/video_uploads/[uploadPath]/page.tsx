@@ -1,9 +1,8 @@
 import { PATH_ADMIN } from '@/site/paths';
-import { extractVideoDataFromBlobPath } from '@/video/server';
+import { extractVideoMetaFromBlobPath } from '@/video/server';
 import { redirect } from 'next/navigation';
 import { getUniqueTagsCached } from '@/video/cache';
 import UploadPageClient from '@/video/UploadPageClient';
-import { GENERATE_RESIZED_IMAGE } from '@/site/config';
 
 export const maxDuration = 60;
 
@@ -16,12 +15,7 @@ export default async function VideoUploadPage(props: Params) {
 
   const { uploadPath } = params;
 
-  const { blobId, videoFormData, imageThumbnailBase64 } = await extractVideoDataFromBlobPath(
-    uploadPath,
-    {
-      generateResizedImage: GENERATE_RESIZED_IMAGE,
-    },
-  );
+  const { blobId, videoFormData } = await extractVideoMetaFromBlobPath(uploadPath);
 
   if (!videoFormData) {
     redirect(PATH_ADMIN);
@@ -35,7 +29,6 @@ export default async function VideoUploadPage(props: Params) {
         blobId,
         videoFormData,
         uniqueTags,
-        imageThumbnailBase64,
       }}
     />
   );

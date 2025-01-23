@@ -30,28 +30,24 @@ import {
   isUrlFromCloudflareR2,
 } from './cloudflare-r2';
 import { PATH_API_PRESIGNED_URL } from '@/site/paths';
+import { generateThumbnailPng } from '../thumbnailGenerator';
+import { stripExtension } from '@/utility/file';
+import { createLogOp } from '@/utility/logging';
+import { ACCEPTED_PHOTO_EXTENSIONS } from '@/photo';
+import { ACCEPTED_VIDEO_EXTENSIONS, ACCEPTED_VIDEO_THUMBNAIL_EXTENSIONS } from '@/video';
 
 const logger = console;
-const logOp = <T>(operationName: string, detail: string, promise: Promise<T>): Promise<T> => {
-  logger.log(`[${operationName}] Starting: ${detail}`);
-  return promise
-    .then(result => {
-      logger.log(`[${operationName}] Success: ${result}`);
-      return result;
-    })
-    .catch(e => {
-      logger.error(`[${operationName}] Error: ${detail}`, e);
-      throw e;
-    });
-};
+const logOp = createLogOp(logger);
 
 export const generateStorageId = () => generateNanoid(16);
 
-export type StorageListResponse = {
+export type StorageResponse = {
   url: string;
   fileName: string;
   uploadedAt?: Date;
-}[];
+};
+
+export type StorageListResponse = StorageResponse[];
 
 export type StorageType = 'vercel-blob' | 'aws-s3' | 'cloudflare-r2';
 
@@ -95,19 +91,8 @@ export const generateRandomFileNameForVideo = () => `${PREFIX_VIDEO}-${generateS
 
 const PREFIX_PHOTO_UPLOAD = 'upload_p';
 
-const REGEX_PHOTO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_PHOTO_UPLOAD})\.[a-z]{1,4}`, 'i');
-
-const REGEX_PHOTO_UPLOAD_ID = new RegExp(`.${PREFIX_PHOTO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`, 'i');
-
 const PREFIX_VIDEO_UPLOAD = 'upload_v';
 const PREFIX_VIDEO = 'video';
-
-const REGEX_VIDEO_UPLOAD_PATH = new RegExp(`(?:${PREFIX_VIDEO_UPLOAD})\.[a-z0-9]{1,4}`, 'i');
-
-const REGEX_VIDEO_UPLOAD_ID = new RegExp(
-  `.${PREFIX_VIDEO_UPLOAD}-([a-z0-9]+)\.[a-z0-9]{1,4}$`,
-  'i',
-);
 
 export const fileNameForStorageUrl = (url: string) => {
   switch (storageTypeFromUrl(url)) {
@@ -122,28 +107,54 @@ export const fileNameForStorageUrl = (url: string) => {
 
 export const getExtensionFromStorageUrl = (url: string) => url.match(/.([a-z0-9]{1,4})$/i)?.[1];
 
-export const getPhotoIdFromStorageUrl = (url: string) => url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
-export const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_UPLOAD_ID)?.[1];
+const REGEX_PHOTO_UPLOAD_ID = new RegExp(`.${PREFIX_PHOTO_UPLOAD}-([a-z0-9]+)\.[a-z]{1,4}$`, 'i');
 
-export const isPhotoUploadPathnameValid = (pathname?: string) =>
-  pathname?.match(REGEX_PHOTO_UPLOAD_PATH);
+const getPhotoIdFromStorageUrl = (url: string) => url.match(REGEX_PHOTO_UPLOAD_ID)?.[1];
 
-export const isVideoUploadPathnameValid = (pathname?: string) =>
-  pathname?.match(REGEX_VIDEO_UPLOAD_PATH);
+const REGEX_VIDEO_UPLOAD_ID = new RegExp(
+  `.${PREFIX_VIDEO_UPLOAD}-([a-z0-9]+)\.[a-z0-9]{1,4}$`,
+  'i',
+);
+
+const getVideoIdFromStorageUrl = (url: string) => url.match(REGEX_VIDEO_UPLOAD_ID)?.[1];
+
+export const getIdFromStorageUrl = (url: string, type: 'photo' | 'video' | 'thumbnail') => {
+  switch (type) {
+    case 'photo':
+      return getPhotoIdFromStorageUrl(url);
+    case 'video':
+      return getVideoIdFromStorageUrl(url);
+    case 'thumbnail':
+      return getVideoIdFromStorageUrl(url);
+  }
+};
+
+export const isPhotoUploadPathnameValid = (pathname?: string) => {
+  const extensions = ACCEPTED_PHOTO_EXTENSIONS.join('|');
+  const regex = new RegExp(`^${PREFIX_PHOTO_UPLOAD}\\.[^.]+\\.(${extensions})$`, 'i');
+  return regex.test(pathname ?? '');
+};
+
+export const isThumbnailUploadPathnameValid = (pathname?: string) => {
+  const extensions = ACCEPTED_VIDEO_THUMBNAIL_EXTENSIONS.join('|');
+  const regex = new RegExp(`^${PREFIX_VIDEO_UPLOAD}\\.[^.]+\\.(${extensions})$`, 'i');
+  return regex.test(pathname ?? '');
+};
+
+export const isVideoUploadPathnameValid = (pathname?: string) => {
+  const extensions = ACCEPTED_VIDEO_EXTENSIONS.join('|');
+  const regex = new RegExp(`^${PREFIX_VIDEO_UPLOAD}\\.[^.]+\\.(${extensions})$`, 'i');
+  return regex.test(pathname ?? '');
+};
 
 const getFileNameFromStorageUrl = (url: string) =>
   new URL(url).pathname.match(/\/(.+)$/)?.[1] ?? '';
 
-export const uploadFromClientViaPresignedUrl = async (
-  file: File | Blob,
-  fileName: string,
-  extension: string,
-  addRandomSuffix?: boolean,
-) => {
-  return logOp(
-    'uploadFromClientViaPresignedUrl',
-    `file "${fileName}" in ${CURRENT_STORAGE}`,
-    (async () => {
+export const uploadFromClientViaPresignedUrl = logOp(
+  async (file: File | Blob, fileName: string, extension: string, addRandomSuffix?: boolean) => ({
+    name: 'uploadFromClientViaPresignedUrl',
+    params: `file "${fileName}" in ${CURRENT_STORAGE}`,
+    op: async () => {
       const key = addRandomSuffix
         ? `${fileName}-${generateStorageId()}.${extension}`
         : `${fileName}.${extension}`;
@@ -151,93 +162,99 @@ export const uploadFromClientViaPresignedUrl = async (
       const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`).then(response => response.text());
       await fetch(url, { method: 'PUT', body: file });
       return `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`;
-    })(),
-  );
-};
+    },
+  }),
+);
 
 export const uploadPhotoFromClient = async (file: File | Blob, extension = 'jpg') =>
   uploadBlobFromClient(PREFIX_PHOTO_UPLOAD, file, extension);
 
-export const uploadVideoFromClient = async (file: File | Blob, extension = 'mp4') =>
-  uploadBlobFromClient(PREFIX_VIDEO_UPLOAD, file, extension);
+export const uploadVideoAndThumbnailFromClient = async (file: File, extension = 'mp4') => {
+  const thumbnailFile = await generateThumbnailPng(file);
+  const thumbnailUrl = await uploadBlobFromClient(
+    `${PREFIX_VIDEO_UPLOAD}.${stripExtension(thumbnailFile.name)}`,
+    thumbnailFile,
+    'png',
+  );
+  await uploadBlobFromClient(
+    `${PREFIX_VIDEO_UPLOAD}.${stripExtension(file.name)}`,
+    file,
+    extension,
+  );
 
-const uploadBlobFromClient = async (prefix: string, file: File | Blob, extension: string) =>
-  logOp(
-    'uploadBlobFromClient',
-    `prefix: "${prefix}", file: ${'name' in file ? file.name : 'Blob'}, extension "${extension}" in ${CURRENT_STORAGE}`,
-    (() =>
+  return thumbnailUrl;
+};
+
+const uploadBlobFromClient = logOp(
+  async (fileName: string, file: File | Blob, extension: string) => ({
+    name: 'uploadBlobFromClient',
+    params: `fileName: "${fileName}", file: ${'name' in file ? file.name : 'Blob'}, extension "${extension}" in ${CURRENT_STORAGE}`,
+    op: () =>
       CURRENT_STORAGE === 'cloudflare-r2' || CURRENT_STORAGE === 'aws-s3'
-        ? uploadFromClientViaPresignedUrl(file, prefix, extension, true)
-        : vercelBlobUploadFromClient(file, `${prefix}.${extension}`))(),
-  );
+        ? uploadFromClientViaPresignedUrl(file, fileName, extension, true)
+        : vercelBlobUploadFromClient(file, `${fileName}.${extension}`),
+  }),
+);
 
-export const putFile = (file: Buffer, fileName: string) =>
-  logOp(
-    'putFile',
-    `file "${fileName}" in ${CURRENT_STORAGE}`,
-    (() => {
-      switch (CURRENT_STORAGE) {
-        case 'vercel-blob':
-          return vercelBlobPut(file, fileName);
-        case 'cloudflare-r2':
-          return cloudflareR2Put(file, fileName);
-        case 'aws-s3':
-          return awsS3Put(file, fileName);
-      }
-    })(),
-  );
+export const putFile = logOp(async (file: Buffer, fileName: string) => ({
+  name: 'putFile',
+  params: `file "${fileName}" in ${CURRENT_STORAGE}`,
+  op: async () => {
+    switch (CURRENT_STORAGE) {
+      case 'vercel-blob':
+        return vercelBlobPut(file, fileName);
+      case 'cloudflare-r2':
+        return cloudflareR2Put(file, fileName);
+      case 'aws-s3':
+        return awsS3Put(file, fileName);
+    }
+  },
+}));
 
-export const copyFile = (originUrl: string, destinationFileName: string): Promise<string> => {
-  const currentStorage = storageTypeFromUrl(originUrl);
-  return logOp(
-    'copyFile',
-    `from "${originUrl}" to "${destinationFileName}" in ${currentStorage}`,
-    (() => {
-      switch (currentStorage) {
-        case 'vercel-blob':
-          return vercelBlobCopy(originUrl, destinationFileName, false);
-        case 'cloudflare-r2':
-          return cloudflareR2Copy(getFileNameFromStorageUrl(originUrl), destinationFileName, false);
-        case 'aws-s3':
-          return awsS3Copy(originUrl, destinationFileName, false);
-      }
-    })(),
-  );
-};
+export const copyFile = logOp(async (originUrl: string, destinationFileName: string) => ({
+  name: 'copyFile',
+  params: `from "${originUrl}" to "${destinationFileName}" in ${storageTypeFromUrl(originUrl)}`,
+  op: async () => {
+    switch (storageTypeFromUrl(originUrl)) {
+      case 'vercel-blob':
+        return vercelBlobCopy(originUrl, destinationFileName, false);
+      case 'cloudflare-r2':
+        return cloudflareR2Copy(getFileNameFromStorageUrl(originUrl), destinationFileName, false);
+      case 'aws-s3':
+        return awsS3Copy(originUrl, destinationFileName, false);
+    }
+  },
+}));
 
-export const deleteFile = (url: string) => {
-  const currentStorage = storageTypeFromUrl(url);
-  return logOp(
-    'deleteFile',
-    `file "${url}" in ${currentStorage}`,
-    (() => {
-      switch (currentStorage) {
-        case 'vercel-blob':
-          return vercelBlobDelete(url);
-        case 'cloudflare-r2':
-          return cloudflareR2Delete(getFileNameFromStorageUrl(url));
-        case 'aws-s3':
-          return awsS3Delete(getFileNameFromStorageUrl(url));
-      }
-    })(),
-  );
-};
+export const deleteFile = logOp(async (url: string) => ({
+  name: 'deleteFile',
+  params: `file "${url}" in ${storageTypeFromUrl(url)}`,
+  op: async () => {
+    switch (storageTypeFromUrl(url)) {
+      case 'vercel-blob':
+        return vercelBlobDelete(url);
+      case 'cloudflare-r2':
+        return cloudflareR2Delete(getFileNameFromStorageUrl(url));
+      case 'aws-s3':
+        return awsS3Delete(getFileNameFromStorageUrl(url));
+    }
+  },
+}));
 
-export const moveFile = async (originUrl: string, destinationFileName: string) => {
-  return logOp(
-    'moveFile',
-    `from "${originUrl}" to "${destinationFileName}"`,
-    copyFile(originUrl, destinationFileName).then(async url => {
-      if (url) {
-        await deleteFile(originUrl);
-      }
-      return url;
-    }),
-  );
-};
+export const moveFile = logOp(async (originUrl: string, destinationFileName: string) => ({
+  name: 'moveFile',
+  params: `from "${originUrl}" to "${destinationFileName}"`,
+  op: async () => {
+    const url = await copyFile(originUrl, destinationFileName);
+    if (url) {
+      await deleteFile(originUrl);
+    }
+    return url;
+  },
+}));
 
-const getStorageUrlsForPrefix = async (prefix = '') => {
-  const urls: StorageListResponse = [];
+const getStorageUrlsForPrefixCore = async (prefix = '') => {
+  const urls: StorageResponse[] = [];
 
   if (HAS_VERCEL_BLOB_STORAGE) {
     urls.push(...(await vercelBlobList(prefix).catch(() => [])));
@@ -260,12 +277,34 @@ const getStorageUrlsForPrefix = async (prefix = '') => {
   });
 };
 
-export const getStoragePhotoUploadUrls = () => getStorageUrlsForPrefix(`${PREFIX_PHOTO_UPLOAD}-`);
+const getStorageUrls = logOp(async (prefix?: string, extensions: string[] = []) => ({
+  name: 'getStorageUrls',
+  op: async () => {
+    const allURLs = await getStorageUrlsForPrefixCore(prefix);
+    const extensionsMatching =
+      extensions.length > 0
+        ? allURLs.filter(({ fileName }) =>
+            extensions.some(extension => fileName.endsWith(`.${extension}`)),
+          )
+        : allURLs;
+    return extensionsMatching;
+  },
+}));
 
-export const getStorageVideoUploadUrls = () => getStorageUrlsForPrefix(`${PREFIX_VIDEO_UPLOAD}-`);
+export const getStoragePhotoUploadUrls = logOp(async () => ({
+  name: 'getStoragePhotoUploadUrls',
+  op: async () => await getStorageUrls(`${PREFIX_PHOTO_UPLOAD}`),
+}));
 
-export const getStoragePhotoUrls = () => getStorageUrlsForPrefix(`${PREFIX_PHOTO}-`);
+export const getStorageVideoUploadUrls = async () =>
+  getStorageUrls(`${PREFIX_VIDEO_UPLOAD}`, ['mp4']);
 
-export const getStorageVideoUrls = () => getStorageUrlsForPrefix(`${PREFIX_VIDEO}-`);
+export const getStorageVideoUrls = async () => getStorageUrls(`${PREFIX_VIDEO}`, ['mp4']);
+export const getStorageThumbnailUploadUrls = async () =>
+  getStorageUrls(`${PREFIX_VIDEO_UPLOAD}`, ['png']);
 
-export const testStorageConnection = () => getStorageUrlsForPrefix();
+export const getStorageThumbnailUrls = async () => getStorageUrls(`${PREFIX_VIDEO}`, ['png']);
+
+export const getStoragePhotoUrls = () => getStorageUrls(`${PREFIX_PHOTO}`);
+
+export const testStorageConnection = () => getStorageUrls();

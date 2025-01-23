@@ -1,10 +1,10 @@
 'use client';
 
-import { StorageListResponse } from '@/services/storage';
-import AdminAddAllUploads from './AdminAddAllUploads';
 import { useMemo, useState } from 'react';
-import { Tags } from '@/tag';
-import AdminUploadsTable from './AdminUploadsTable';
+import AdminAddAllUploads from './AdminAddAllUploads';
+import { type Tags } from '@/tag';
+
+export type HasUrl = { url: string };
 
 export type UrlAddStatus = {
   url: string;
@@ -14,32 +14,41 @@ export type UrlAddStatus = {
   progress?: number;
 };
 
-export default function AdminUploadsClient({
+type AdminUploadsClientProps<T extends HasUrl> = {
+  urls: T[];
+  uniqueTags?: Tags;
+  TableComponent: React.ComponentType<{
+    isAdding: boolean;
+    urlAddStatuses: UrlAddStatus[];
+    setUrlAddStatuses: React.Dispatch<React.SetStateAction<UrlAddStatus[]>>;
+  }>;
+};
+
+export default function AdminUploadsClient<T extends HasUrl>({
   urls,
   uniqueTags,
-}: {
-  urls: StorageListResponse;
-  uniqueTags?: Tags;
-}) {
+  TableComponent,
+}: AdminUploadsClientProps<T>) {
   const [isAdding, setIsAdding] = useState(false);
   const [urlAddStatuses, setUrlAddStatuses] = useState<UrlAddStatus[]>(urls);
-
-  const storageUrls = useMemo(() => urls.map(({ url }) => url), [urls]);
+  const uploadUrls = useMemo(() => urls.map(item => item.url), [urls]);
 
   return (
     <div className="space-y-4">
       {(urls.length > 1 || isAdding) && (
         <AdminAddAllUploads
-          {...{
-            storageUrls,
-            uniqueTags,
-            isAdding,
-            setIsAdding,
-            setUrlAddStatuses,
-          }}
+          uploadUrls={uploadUrls}
+          uniqueTags={uniqueTags}
+          isAdding={isAdding}
+          setIsAdding={setIsAdding}
+          setUrlAddStatuses={setUrlAddStatuses}
         />
       )}
-      <AdminUploadsTable {...{ isAdding, urlAddStatuses, setUrlAddStatuses }} />
+      <TableComponent
+        isAdding={isAdding}
+        urlAddStatuses={urlAddStatuses}
+        setUrlAddStatuses={setUrlAddStatuses}
+      />
     </div>
   );
 }

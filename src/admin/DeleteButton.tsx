@@ -1,6 +1,6 @@
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { clsx } from 'clsx/lite';
-import { ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 import { BiTrash } from 'react-icons/bi';
 
 export default function DeleteButton({ className, ...rest }: ComponentProps<typeof LoaderButton>) {

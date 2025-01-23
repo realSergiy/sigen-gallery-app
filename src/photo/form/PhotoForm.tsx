@@ -11,7 +11,7 @@ import {
   isFormValid,
 } from '.';
 import FieldSetWithStatus from '@/components/FieldSetWithStatus';
-import { createPhotoAction, updatePhotoAction } from '../actions';
+import { createPhotoAction, updatePhotoAction } from '../serverFunctions';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
 import Link from 'next/link';
 import { clsx } from 'clsx/lite';
@@ -31,7 +31,7 @@ import { BLUR_ENABLED } from '@/site/config';
 import { PhotoDbInsert } from '..';
 import ErrorNote from '@/components/ErrorNote';
 
-const THUMBNAIL_SIZE = 300;
+export const THUMBNAIL_SIZE = 300;
 
 export default function PhotoForm({
   type = 'create',

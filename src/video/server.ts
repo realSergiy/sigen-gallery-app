@@ -1,45 +1,36 @@
-import { getExtensionFromStorageUrl, getVideoIdFromStorageUrl } from '@/services/storage';
-import { VideoFormData } from './form';
+import { findRelatedVideoUrl } from '@/media/serverFunctions';
+import { getExtensionFromStorageUrl, getIdFromStorageUrl } from '@/services/storage';
 
-export const extractVideoDataFromBlobPath = async (
-  blobPath: string,
-  options?: {
-    generateResizedImage?: boolean;
-  },
-): Promise<{
-  blobId?: string;
-  videoFormData?: Partial<VideoFormData>;
-  imageThumbnailBase64?: string;
-  shouldStripGpsData?: boolean;
-  fileBytes?: ArrayBuffer;
-}> => {
-  const { generateResizedImage } = options ?? {};
-
+export const extractVideoMetaFromBlobPath = async (blobPath: string) => {
   const url = decodeURIComponent(blobPath);
-
-  const blobId = getVideoIdFromStorageUrl(url);
-
-  const extension = getExtensionFromStorageUrl(url);
-
-  const fileBytes = blobPath
-    ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer())
-    : undefined;
-
-  let imageThumbnailBase64: string | undefined;
-
-  if (fileBytes && generateResizedImage) {
-    //      imageThumbnailBase64 = await resizeImage(fileBytes);
-  }
+  const videoUrl = await findRelatedVideoUrl(url);
+  const blobId = getIdFromStorageUrl(url, 'video');
+  const extension = getExtensionFromStorageUrl(videoUrl ?? '');
 
   return {
     blobId,
     videoFormData: {
+      videoUrl,
       hidden: 'false',
       favorite: 'false',
       extension,
       url,
     },
-    imageThumbnailBase64,
+  };
+};
+
+export const extractVideoDataFromBlobPath = async (blobPath: string) => {
+  const { videoFormData } = await extractVideoMetaFromBlobPath(blobPath);
+
+  const fileBytes = blobPath
+    ? await fetch(videoFormData.url, { cache: 'no-store' }).then(res => res.arrayBuffer())
+    : undefined;
+
+  // find thumbnail
+  const thumbnailBytes = null;
+
+  return {
+    thumbnailBytes,
     fileBytes,
   };
 };

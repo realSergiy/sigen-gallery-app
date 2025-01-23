@@ -1,6 +1,6 @@
 import { clsx } from 'clsx/lite';
 import { FiRotateCcw } from 'react-icons/fi';
-import { getImageBlurAction } from './actions';
+import { getImageBlurAction } from './serverFunctions';
 import { useState } from 'react';
 import Spinner from '@/components/Spinner';
 

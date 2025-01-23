@@ -8,7 +8,7 @@ import Note from '@/components/Note';
 import AdminChildPage from '@/components/AdminChildPage';
 import { PATH_ADMIN_PHOTOS } from '@/site/paths';
 import { useState } from 'react';
-import { syncPhotosAction } from '@/photo/actions';
+import { syncPhotosAction } from '@/photo/serverFunctions';
 import { useRouter } from 'next/navigation';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 import { OUTDATED_THRESHOLD } from '@/media';
@@ -30,7 +30,7 @@ export default function AdminOutdatedClient({
 
   const router = useRouter();
 
-  const handleLoadClick = () => {
+  const handleLoadClick = async () => {
     const message = `Are you sure you want to sync the oldest ${updateBatchSize} photos? This action cannot be undone.`;
     if (!window.confirm(message)) {
       return;
@@ -39,7 +39,7 @@ export default function AdminOutdatedClient({
     const photosToSync = photos.slice(0, updateBatchSize).map(photo => photo.id);
     const isFinalBatch = photosToSync.length >= photos.length;
     setPhotoIdsSyncing(photosToSync);
-    syncPhotosAction(photosToSync).finally(() => {
+    await syncPhotosAction(photosToSync).finally(() => {
       if (isFinalBatch) {
         router.push(PATH_ADMIN_PHOTOS);
       } else {

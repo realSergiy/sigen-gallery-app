@@ -18,13 +18,14 @@ import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
 import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
+import VidLarge from '@/components/video/VidLarge';
 import { RevalidateMedia } from '@/media';
-import ImageLarge from '@/components/image/ImageLarge';
 
-export default function VideoLarge({
+export default function VideoPlayerLarge({
   video,
   className,
   primaryTag,
+  showControls = false,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
   revalidateVideo,
@@ -91,12 +92,13 @@ export default function VideoLarge({
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <ImageLarge
-              className={clsx(areVideosMatted && 'h-full')}
-              imgClassName={clsx(areVideosMatted && 'size-full object-contain')}
-              alt={altTextForVideo(video)}
+            <VidLarge
+              showControls={showControls}
               aspectRatio={16 / 9}
-              src={video.url}
+              className={clsx(areVideosMatted && 'h-full')}
+              videoClassName={clsx(areVideosMatted && 'size-full object-contain')}
+              alt={altTextForVideo(video)}
+              src={video.videoUrl}
               blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
             />
           </div>

@@ -1,5 +1,5 @@
 import AnimateItems from '@/components/AnimateItems';
-import VideoLarge from './VideoLarge';
+import VideoPlayerLarge from './VideoPlayerLarge';
 import SiteGrid from '@/components/SiteGrid';
 import VideoGrid from './VideoGrid';
 import { TAG_HIDDEN } from '@/tag';
@@ -65,7 +65,7 @@ export default function VideoDetailPage({
         className="md:mb-8"
         animateFromAppState
         items={[
-          <VideoLarge
+          <VideoPlayerLarge
             key={video.id}
             video={video}
             primaryTag={tag}

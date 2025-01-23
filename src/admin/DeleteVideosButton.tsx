@@ -2,7 +2,7 @@
 
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { videoQuantityText } from '@/video';
-import { deleteVideosAction } from '@/video/actions';
+import { deleteVideosAction } from '@/video/serverFunctions';
 import { useAppState } from '@/state/AppState';
 import { toastSuccess, toastWarning } from '@/toast';
 import { ComponentProps, useState } from 'react';

@@ -99,10 +99,7 @@ export default function AdminPhotosTable({
               shouldToast
             />
             {canDelete && (
-              <DeletePhotoButton
-                photo={photo}
-                onDelete={() => void revalidatePhoto?.(photo.id, true)}
-              />
+              <DeletePhotoButton photo={photo} onDelete={() => revalidatePhoto?.(photo.id, true)} />
             )}
           </div>
         </Fragment>

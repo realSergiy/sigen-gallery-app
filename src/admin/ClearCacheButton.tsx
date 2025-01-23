@@ -1,7 +1,7 @@
 'use client';
 
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import { clearCacheAction } from '@/photo/actions';
+import { clearCacheAction } from '@/photo/serverFunctions';
 import { useAppState } from '@/state/AppState';
 import { BiTrash } from 'react-icons/bi';
 

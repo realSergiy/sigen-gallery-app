@@ -1,10 +1,18 @@
 import { auth } from '@/auth';
 import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
 import { ACCEPTED_PHOTO_FILE_TYPES, MAX_PHOTO_UPLOAD_SIZE_IN_BYTES } from '@/photo';
-import { isPhotoUploadPathnameValid, isVideoUploadPathnameValid } from '@/services/storage';
+import {
+  isPhotoUploadPathnameValid,
+  isThumbnailUploadPathnameValid,
+  isVideoUploadPathnameValid,
+} from '@/services/storage';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
-import { ACCEPTED_VIDEO_FILE_TYPES, MAX_VIDEO_UPLOAD_SIZE_IN_BYTES } from '@/video';
+import {
+  ACCEPTED_VIDEO_FILE_TYPES,
+  ACCEPTED_VIDEO_THUMBNAIL_FILE_TYPES,
+  MAX_VIDEO_UPLOAD_SIZE_IN_BYTES,
+} from '@/video';
 
 export async function POST(request: Request): Promise<NextResponse> {
   const body: HandleUploadBody = await request.json();
@@ -25,6 +33,11 @@ export async function POST(request: Request): Promise<NextResponse> {
             return {
               maximumSizeInBytes: MAX_VIDEO_UPLOAD_SIZE_IN_BYTES,
               allowedContentTypes: ACCEPTED_VIDEO_FILE_TYPES,
+            };
+          } else if (isThumbnailUploadPathnameValid(pathname)) {
+            return {
+              maximumSizeInBytes: MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
+              allowedContentTypes: ACCEPTED_VIDEO_THUMBNAIL_FILE_TYPES,
             };
           } else {
             throw new Error('Invalid upload path: ' + pathname);

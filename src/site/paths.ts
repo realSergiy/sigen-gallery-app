@@ -98,6 +98,17 @@ export const pathForAdminVideoUploadUrl = (url: string) =>
 export const pathForAdminPhotoUploadUrl = (url: string) =>
   `${PATH_ADMIN_PHOTO_UPLOADS}/${encodeURIComponent(url)}`;
 
+export const pathForAdminUploadUrl = (url: string, type: 'photo' | 'video' | 'thumbnail') => {
+  switch (type) {
+    case 'photo':
+      return pathForAdminPhotoUploadUrl(url);
+    case 'video':
+      return pathForAdminVideoUploadUrl(url);
+    case 'thumbnail':
+      return pathForAdminVideoUploadUrl(url);
+  }
+};
+
 export const pathForAdminPhotoEdit = (photo: PhotoOrPhotoId) =>
   `${PATH_ADMIN_PHOTOS}/${getPhotoId(photo)}/${EDIT}`;
 

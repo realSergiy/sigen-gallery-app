@@ -1,4 +1,4 @@
-import { getExtensionFromStorageUrl, getPhotoIdFromStorageUrl } from '@/services/storage';
+import { getExtensionFromStorageUrl, getIdFromStorageUrl } from '@/services/storage';
 import { convertExifToFormData, PhotoFormData } from '@/photo/form';
 import { getFujifilmSimulationFromMakerNote, isExifForFujifilm } from '@/vendors/fujifilm';
 import { ExifData, ExifParserFactory } from 'ts-exif-parser';
@@ -27,7 +27,7 @@ export const extractImageDataFromBlobPath = async (
 
   const url = decodeURIComponent(blobPath);
 
-  const blobId = getPhotoIdFromStorageUrl(url);
+  const blobId = getIdFromStorageUrl(url, 'photo');
 
   const extension = getExtensionFromStorageUrl(url);
 

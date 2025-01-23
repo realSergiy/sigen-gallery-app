@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect, ReactNode, useCallback } from 'react';
-import { AppStateContext } from './AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import usePathnames from '@/utility/usePathnames';
 import { getAuthAction } from '@/auth/actions';
 import useSWR from 'swr';
 import { HIGH_DENSITY_GRID, MATTE_PHOTOS } from '@/site/config';
-import { getPhotosHiddenMetaCachedAction } from '@/photo/actions';
+import { getPhotosHiddenMetaCachedAction } from '@/photo/serverFunctions';
+import { useTimeout } from '@/hooks';
+import { AppStateContext } from './AppState';
 
 export default function AppStateProvider({ children }: { children: ReactNode }) {
   const { previousPathname } = usePathnames();
@@ -24,6 +25,7 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
   const [hiddenPhotosCount, setHiddenPhotosCount] = useState(0);
   const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[] | undefined>();
   const [isPerformingSelectEdit, setIsPerformingSelectEdit] = useState(false);
+
   // DEBUG
   const [isGridHighDensity, setIsGridHighDensity] = useState(HIGH_DENSITY_GRID);
   const [arePhotosMatted, setArePhotosMatted] = useState(MATTE_PHOTOS);
@@ -37,18 +39,18 @@ export default function AppStateProvider({ children }: { children: ReactNode }) 
     setUserEmail(data?.user?.email ?? undefined);
   }, [data]);
   const isUserSignedIn = Boolean(userEmail);
-  useEffect(() => {
-    if (isUserSignedIn) {
-      const timeout = setTimeout(
-        () =>
-          void getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count)),
-        100,
-      );
-      return () => clearTimeout(timeout);
-    } else {
-      setHiddenPhotosCount(0);
-    }
-  }, [isUserSignedIn]);
+
+  useTimeout(
+    async () => {
+      if (isUserSignedIn) {
+        await getPhotosHiddenMetaCachedAction().then(({ count }) => setHiddenPhotosCount(count));
+      } else {
+        setHiddenPhotosCount(0);
+      }
+    },
+    100,
+    [isUserSignedIn],
+  );
 
   const registerAdminUpdate = useCallback(
     () => setAdminUpdateTimes(updates => [...updates, new Date()]),

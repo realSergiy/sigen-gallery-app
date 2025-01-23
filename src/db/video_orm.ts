@@ -1,9 +1,13 @@
 import { tb } from '@/db/generated/schema';
 import { db } from '@/db';
 import { count, and, eq, ne, max, min, desc, sql, inArray, lt } from 'drizzle-orm';
-import { TagInfo } from '@/tag';
+import type { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
 import { OUTDATED_THRESHOLD } from '@/media';
+import { createLogOp } from '@/utility/logging';
+
+const logger = console;
+const logOp = createLogOp(logger);
 
 export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
 export type VideoDb = typeof tb.video.$inferSelect;
@@ -44,22 +48,24 @@ const parseOptions = (options: VideoQueryOptions) => {
   return { sq, filter, sort };
 };
 
-export const getVideos = async (options: VideoQueryOptions) => {
-  const { sq, filter, sort } = parseOptions(options);
+export const getVideos = logOp(async (options: VideoQueryOptions) => ({
+  name: 'getVideos',
+  resultFormat: result => `${result.length} videos`,
+  op: async () => {
+    const { sq, filter, sort } = parseOptions(options);
 
-  const rows = await db
-    .with(sq)
-    .select()
-    .from(sq)
-    .where(filter)
-    .orderBy(sort)
-    .limit(options.limit ?? 1000)
-    .offset(options.offset ?? 0);
+    const rows = await db
+      .with(sq)
+      .select()
+      .from(sq)
+      .where(filter)
+      .orderBy(sort)
+      .limit(options.limit ?? 1000)
+      .offset(options.offset ?? 0);
 
-  console.log('getVideos found:', rows.length);
-
-  return rows;
-};
+    return rows;
+  },
+}));
 
 export const getVideosMostRecentUpdate = async () => {
   return db

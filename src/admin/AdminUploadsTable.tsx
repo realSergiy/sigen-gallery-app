@@ -2,12 +2,12 @@
 
 import ImageSmall from '@/components/image/ImageSmall';
 import Spinner from '@/components/Spinner';
-import { getPhotoIdFromStorageUrl } from '@/services/storage';
+import { getIdFromStorageUrl } from '@/services/storage';
 import { clsx } from 'clsx/lite';
 import { FaRegCircleCheck } from 'react-icons/fa6';
-import { pathForAdminPhotoUploadUrl } from '@/site/paths';
+import { pathForAdminUploadUrl } from '@/site/paths';
 import AddButton from './AddButton';
-import { UrlAddStatus } from './AdminUploadsClient';
+import { type UrlAddStatus } from './AdminUploadsClient';
 import ResponsiveDate from '@/components/ResponsiveDate';
 import DeleteBlobButton from './DeleteBlobButton';
 
@@ -52,7 +52,9 @@ export default function AdminUploadsTable({
                 />
               </div>
               <span className="min-w-0 grow">
-                <div className="overflow-hidden text-ellipsis">{getPhotoIdFromStorageUrl(url)}</div>
+                <div className="overflow-hidden text-ellipsis">
+                  {getIdFromStorageUrl(url, 'photo')}
+                </div>
                 <div className="text-dim overflow-hidden text-ellipsis">
                   {isAdding || isComplete ? (
                     status === 'added' ? (
@@ -83,10 +85,10 @@ export default function AdminUploadsTable({
                 </>
               ) : (
                 <>
-                  <AddButton path={pathForAdminPhotoUploadUrl(url)} />
+                  <AddButton path={pathForAdminUploadUrl(url, 'photo')} />
                   <DeleteBlobButton
                     url={url}
-                    shouldRedirectToAdminPhotos={urlAddStatuses.length <= 1}
+                    shouldRedirectToAdmin={urlAddStatuses.length <= 1}
                     onDelete={() =>
                       setUrlAddStatuses?.(
                         urlAddStatuses.filter(({ url: urlToRemove }) => urlToRemove !== url),

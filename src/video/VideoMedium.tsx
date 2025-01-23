@@ -8,7 +8,7 @@ import { SHOULD_PREFETCH_ALL_LINKS } from '@/site/config';
 import { useRef } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import { Video } from '@/db/video_orm';
-import VidMedium from '@/components/video/VidMedium';
+import ImageMedium from '@/components/image/ImageMedium';
 
 export default function VideoMedium({
   video,
@@ -37,12 +37,12 @@ export default function VideoMedium({
       className={clsx('active:brightness-75', selected && 'brightness-50', className)}
       prefetch={prefetch}
     >
-      <VidMedium
+      <ImageMedium
         src={video.url}
         aspectRatio={16 / 9}
         blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
         className="flex size-full object-cover"
-        videoClassName="object-cover w-full h-full"
+        imgClassName="object-cover w-full h-full"
         alt={altTextForVideo(video)}
       />
     </Link>

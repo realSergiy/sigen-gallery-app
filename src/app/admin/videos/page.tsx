@@ -1,6 +1,5 @@
 import { getStorageVideoUrlsNoStore } from '@/services/storage/cache';
 import { getVideos } from '@/db/video_orm';
-import { revalidatePath } from 'next/cache';
 import { getVideosMetaCached } from '@/db/video_cache';
 import AdminVideosClient from '@/admin/AdminVideosClient';
 
@@ -37,11 +36,6 @@ export default async function AdminVideosPage() {
         videos,
         videosCount,
         videosCountOutdated,
-        onLastVideoUpload: async () => {
-          'use server';
-          // Update upload count in admin nav
-          revalidatePath('/admin', 'layout');
-        },
         blobVideoUrls,
         infiniteScrollInitial: INFINITE_SCROLL_INITIAL_ADMIN,
         infiniteScrollMultiple: INFINITE_SCROLL_MULTIPLE_ADMIN,

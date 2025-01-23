@@ -2,7 +2,7 @@
 
 import { ComponentProps, useMemo } from 'react';
 import { pathForAdminVideoEdit, pathForVideo } from '@/site/paths';
-import { deleteVideoAction, toggleFavoriteVideoAction } from '@/video/actions';
+import { deleteVideoAction, toggleFavoriteVideoAction } from '@/video/serverFunctions';
 import { FaRegEdit, FaRegStar, FaStar } from 'react-icons/fa';
 import { deleteConfirmationTextForVideo, downloadFileNameForVideo } from '@/video';
 import { isPathFavs, isVideoFav } from '@/tag';
@@ -70,7 +70,7 @@ export default function AdminVideoMenuClient({
         icon: <BiTrash size={15} className="translate-x-[-1.5px]" />,
         action: () => {
           return confirm(deleteConfirmationTextForVideo(video))
-            ? deleteVideoAction(video.id, video.url, shouldRedirectDelete).then(() => {
+            ? deleteVideoAction(video, shouldRedirectDelete).then(() => {
                 revalidateVideo?.(video.id, true);
                 registerAdminUpdate?.();
               })

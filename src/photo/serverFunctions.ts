@@ -9,8 +9,8 @@ import {
   addTagsToPhotos,
 } from '@/photo/db/query';
 import { insertPhoto, updatePhoto } from '@/db/photo_orm';
-import { GetPhotosOptions, areOptionsSensitive } from './db';
-import { PhotoFormData, convertFormDataToPhotoDbInsert, convertPhotoToFormData } from './form';
+import { type GetPhotosOptions, areOptionsSensitive } from './db';
+import { type PhotoFormData, convertFormDataToPhotoDbInsert, convertPhotoToFormData } from './form';
 import { redirect } from 'next/navigation';
 import { deleteFile } from '@/services/storage';
 import {
@@ -25,9 +25,9 @@ import {
 import { PATH_ADMIN_PHOTOS, PATH_ADMIN_TAGS, PATH_ROOT, pathForPhoto } from '@/site/paths';
 import { blurImageFromUrl, extractImageDataFromBlobPath } from './server';
 import { TAG_FAVS, isTagFavs } from '@/tag';
-import { convertPhotoToPhotoDbInsert, Photo } from '.';
+import { convertPhotoToPhotoDbInsert, type Photo } from '.';
 import { runAuthenticatedAdminServerAction } from '@/auth';
-import { AI_IMAGE_QUERIES, AiImageQuery } from './ai';
+import { AI_IMAGE_QUERIES, type AiImageQuery } from './ai';
 import { streamOpenAiImageQuery } from '@/services/openai';
 import {
   AI_TEXT_AUTO_GENERATED_FIELDS,
@@ -37,7 +37,7 @@ import {
 import { generateAiImageQueries } from './ai/server';
 import { createStreamableValue } from 'ai/rsc';
 import { convertUploadToPhoto } from './storage';
-import { UrlAddStatus } from '@/admin/AdminUploadsClient';
+import type { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
 import { getMessage } from '@/utility/error';
 
@@ -256,12 +256,6 @@ export const renamePhotoTagGloballyAction = async (formData: FormData) =>
       revalidateTagsKey();
       redirect(PATH_ADMIN_TAGS);
     }
-  });
-
-export const deleteUploadAction = async (url: string) =>
-  runAuthenticatedAdminServerAction(async () => {
-    await deleteFile(url);
-    revalidateAdminPaths();
   });
 
 // Accessed from admin photo edit page

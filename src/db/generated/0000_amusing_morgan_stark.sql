@@ -45,8 +45,8 @@ CREATE TABLE "video" (
 	"hidden" boolean DEFAULT false NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"thumbnail_url" varchar(255) NOT NULL,
-	CONSTRAINT "check_thumbnail_url" CHECK ((thumbnail_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text),
+	"thumbnail_url" varchar(255),
+	"video_url" varchar(255),
 	CONSTRAINT "check_url" CHECK ((url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text)
 );
 

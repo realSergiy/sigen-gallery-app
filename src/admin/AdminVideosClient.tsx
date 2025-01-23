@@ -1,24 +1,21 @@
-'use client';
-
 import VideoUpload from '@/video/VideoUpload';
 import { clsx } from 'clsx/lite';
 import SiteGrid from '@/components/SiteGrid';
-import { AI_TEXT_GENERATION_ENABLED, PRO_MODE_ENABLED } from '@/site/config';
+import { AI_TEXT_GENERATION_ENABLED } from '@/site/config';
 import AdminVideosTable from '@/admin/AdminVideosTable';
 import AdminVideosTableInfinite from '@/admin/AdminVideosTableInfinite';
 import PathLoaderButton from '@/components/primitives/PathLoaderButton';
 import { PATH_ADMIN_OUTDATED } from '@/site/paths';
 import { Video } from '@/db/video_orm';
 import { StorageListResponse } from '@/services/storage';
-import { useState } from 'react';
 import { LiaBroomSolid } from 'react-icons/lia';
 import AdminUploadsTable from './AdminUploadsTable';
+import { revalidatePath } from 'next/cache';
 
 type AdminVideosClientProps = {
   videos: Video[];
   videosCount: number;
   videosCountOutdated: number;
-  onLastVideoUpload: () => Promise<void>;
   blobVideoUrls: StorageListResponse;
   infiniteScrollInitial: number;
   infiniteScrollMultiple: number;
@@ -28,13 +25,10 @@ export default function AdminVideosClient({
   videos,
   videosCount,
   videosCountOutdated,
-  onLastVideoUpload,
   blobVideoUrls,
   infiniteScrollInitial,
   infiniteScrollMultiple,
 }: AdminVideosClientProps) {
-  const [isUploading, setIsUploading] = useState(false);
-
   return (
     <SiteGrid
       contentMain={
@@ -42,10 +36,11 @@ export default function AdminVideosClient({
           <div className="flex">
             <div className="min-w-0 grow">
               <VideoUpload
-                shouldResize={!PRO_MODE_ENABLED}
-                isUploading={isUploading}
-                setIsUploading={setIsUploading}
-                onLastUpload={onLastVideoUpload}
+                onLastUpload={async () => {
+                  'use server';
+                  // Update upload count in admin nav
+                  revalidatePath('/admin', 'layout');
+                }}
               />
             </div>
             {videosCountOutdated > 0 && (
@@ -53,7 +48,6 @@ export default function AdminVideosClient({
                 path={PATH_ADMIN_OUTDATED}
                 icon={<LiaBroomSolid size={18} className="-translate-y-px" />}
                 title={`${videosCountOutdated} Outdated Videos`}
-                className={clsx(isUploading && 'hidden md:inline-flex')}
                 hideTextOnMobile={false}
               >
                 {videosCountOutdated}

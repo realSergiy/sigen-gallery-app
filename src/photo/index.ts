@@ -42,7 +42,10 @@ export const RELATED_GRID_PHOTOS_TO_SHOW = 12;
 
 export const DEFAULT_ASPECT_RATIO = 1.5;
 
-export const ACCEPTED_PHOTO_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png'];
+export const ACCEPTED_PHOTO_EXTENSIONS = ['jpg', 'jpeg', 'png'];
+export const ACCEPTED_PHOTO_FILE_TYPES = ACCEPTED_PHOTO_EXTENSIONS.map(
+  extension => `image/${extension}`,
+);
 
 export const MAX_PHOTO_UPLOAD_SIZE_IN_BYTES = 50_000_000;
 

@@ -2,8 +2,8 @@ import { unstable_noStore } from 'next/cache';
 import {
   getStoragePhotoUrls,
   getStoragePhotoUploadUrls,
-  getStorageVideoUrls,
-  getStorageVideoUploadUrls,
+  getStorageThumbnailUrls,
+  getStorageThumbnailUploadUrls,
 } from '@/services/storage';
 
 export const getStoragePhotoUploadUrlsNoStore: typeof getStoragePhotoUploadUrls = (...args) => {
@@ -11,9 +11,9 @@ export const getStoragePhotoUploadUrlsNoStore: typeof getStoragePhotoUploadUrls 
   return getStoragePhotoUploadUrls(...args);
 };
 
-export const getStorageVideoUploadUrlsNoStore: typeof getStorageVideoUploadUrls = (...args) => {
+export const getStorageVideoUploadUrlsNoStore: typeof getStorageThumbnailUploadUrls = (...args) => {
   unstable_noStore();
-  return getStorageVideoUploadUrls(...args);
+  return getStorageThumbnailUploadUrls(...args);
 };
 
 export const getStoragePhotoUrlsNoStore: typeof getStoragePhotoUrls = (...args) => {
@@ -21,9 +21,9 @@ export const getStoragePhotoUrlsNoStore: typeof getStoragePhotoUrls = (...args) 
   return getStoragePhotoUrls(...args);
 };
 
-export const getStorageVideoUrlsNoStore: typeof getStorageVideoUrls = (...args) => {
+export const getStorageVideoUrlsNoStore: typeof getStorageThumbnailUrls = (...args) => {
   unstable_noStore();
-  return getStorageVideoUrls(...args);
+  return getStorageThumbnailUrls(...args);
 };
 
 // ToDo: replace
