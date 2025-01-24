@@ -18,7 +18,11 @@ export default function PhotosLargeInfinite({
       itemsPerPage={itemsPerPage}
       wrapMoreButtonInGrid
     >
-      {({ photos, onLastPhotoVisible, revalidatePhoto }) => (
+      {({
+        items: photos,
+        onLastItemVisible: onLastPhotoVisible,
+        revalidateItem: revalidatePhoto,
+      }) => (
         <PhotosLarge
           photos={photos}
           onLastPhotoVisible={onLastPhotoVisible}

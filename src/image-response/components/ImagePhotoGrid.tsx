@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
-// My understanding is that Next Image is a client component and cannot be used here.
-// This grid is meant to render on the server to generate the OG image.
+// ToDo use
+// import { ImageResponse } from 'next/og';
+// https://nextjs.org/docs/app/api-reference/file-conventions/metadata/opengraph-image#generate-images-using-code-js-ts-tsx
 
 import { Media } from '@/media';
 import { NextImageSize, getNextImageUrlForRequest } from '@/services/next-image';

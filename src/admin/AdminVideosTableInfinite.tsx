@@ -20,11 +20,15 @@ export default function AdminVideosTableInfinite({
       cacheKey={`page-${PATH_ADMIN_PHOTOS}`}
       initialOffset={initialOffset}
       itemsPerPage={itemsPerPage}
-      useCachedVideos={false}
+      useCached={false}
       sort={'createdAt'}
-      includeHiddenVideos
+      includeHidden
     >
-      {({ videos, onLastVideoVisible, revalidateVideo }) => (
+      {({
+        items: videos,
+        onLastItemVisible: onLastVideoVisible,
+        revalidateItem: revalidateVideo,
+      }) => (
         <AdminVideosTable
           videos={videos}
           onLastVideoVisible={onLastVideoVisible}

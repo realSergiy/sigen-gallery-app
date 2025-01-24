@@ -28,7 +28,7 @@ export default function PhotoGridInfinite({
       camera={camera}
       simulation={simulation}
     >
-      {({ photos, onLastPhotoVisible }) => (
+      {({ items: photos, onLastItemVisible: onLastPhotoVisible }) => (
         <PhotoGrid
           {...{
             photos,

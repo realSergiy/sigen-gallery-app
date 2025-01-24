@@ -18,7 +18,11 @@ export default function VideosLargeInfinite({
       itemsPerPage={itemsPerPage}
       wrapMoreButtonInGrid
     >
-      {({ videos, onLastVideoVisible, revalidateVideo }) => (
+      {({
+        items: videos,
+        onLastItemVisible: onLastVideoVisible,
+        revalidateItem: revalidateVideo,
+      }) => (
         <VideosLarge
           videos={videos}
           onLastVideoVisible={onLastVideoVisible}

@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Photo } from '@/photo';
-import PhotoOGTile, { OGLoadingState } from './PhotoOGTile';
+import PhotoOGTile, { OGLoadingState } from '../../photo/PhotoOGTile';
 
 const DEFAULT_MAX_CONCURRENCY = 3;
 
 type PhotoLoadingState = Record<string, OGLoadingState>;
 
-export default function StaggeredOgPhotos({
+export default function StaggeredOgImages({
   photos,
   maxConcurrency = DEFAULT_MAX_CONCURRENCY,
   onLastPhotoVisible,

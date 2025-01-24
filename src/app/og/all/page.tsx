@@ -1,24 +1,24 @@
+import { getVideosMeta } from '@/db/video_orm';
 import { INFINITE_SCROLL_GRID_INITIAL, INFINITE_SCROLL_GRID_MULTIPLE } from '@/photo';
-import { getPhotosCached } from '@/photo/cache';
-import { getPhotosMeta } from '@/photo/db/query';
-import StaggeredOgPhotos from '@/photo/StaggeredOgPhotos';
-import StaggeredOgPhotosInfinite from '@/photo/StaggeredOgPhotosInfinite';
+import StaggeredOgImages from '@/app/og/StaggeredOgImages';
+import StaggeredOgPhotosInfinite from '@/app/og/StaggeredOgImagesInfinite';
+import { getVideosCached } from '@/video/cache';
 
 export default async function OGPage() {
-  const [photos, count] = await Promise.all([
-    getPhotosCached({ limit: INFINITE_SCROLL_GRID_INITIAL }).catch(() => []),
-    getPhotosMeta()
+  const [media, count] = await Promise.all([
+    getVideosCached({ limit: INFINITE_SCROLL_GRID_INITIAL }).catch(() => []),
+    getVideosMeta({})
       .then(({ count }) => count)
       .catch(() => 0),
   ]);
 
   return (
     <>
-      <StaggeredOgPhotos {...{ photos }} />
-      {count > photos.length && (
+      <StaggeredOgImages {...{ photos: media }} />
+      {count > media.length && (
         <div className="mt-3">
           <StaggeredOgPhotosInfinite
-            initialOffset={photos.length}
+            initialOffset={media.length}
             itemsPerPage={INFINITE_SCROLL_GRID_MULTIPLE}
           />
         </div>

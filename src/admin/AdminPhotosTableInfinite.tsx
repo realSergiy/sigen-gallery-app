@@ -20,11 +20,15 @@ export default function AdminPhotosTableInfinite({
       cacheKey={`page-${PATH_ADMIN_PHOTOS}`}
       initialOffset={initialOffset}
       itemsPerPage={itemsPerPage}
-      useCachedPhotos={false}
+      useCached={false}
       sortBy="createdAt"
-      includeHiddenPhotos
+      includeHidden
     >
-      {({ photos, onLastPhotoVisible, revalidatePhoto }) => (
+      {({
+        items: photos,
+        onLastItemVisible: onLastPhotoVisible,
+        revalidateItem: revalidatePhoto,
+      }) => (
         <AdminPhotosTable
           photos={photos}
           onLastPhotoVisible={onLastPhotoVisible}

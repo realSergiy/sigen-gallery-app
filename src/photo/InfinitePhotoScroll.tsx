@@ -9,8 +9,22 @@ import { Photo, PhotoSetAttributes } from '.';
 import { clsx } from 'clsx/lite';
 import { useAppState } from '@/state/AppState';
 import { GetPhotosOptions } from './db';
-import { type Arguments } from 'swr';
 import { RevalidateMedia } from '@/media';
+
+type InfiniteScrollProps = {
+  initialOffset: number;
+  itemsPerPage: number;
+  sortBy?: GetPhotosOptions['sortBy'];
+  cacheKey: string;
+  wrapMoreButtonInGrid?: boolean;
+  useCached?: boolean;
+  includeHidden?: boolean;
+  children: (props: {
+    items: Photo[];
+    onLastItemVisible: () => void;
+    revalidateItem?: RevalidateMedia;
+  }) => ReactNode;
+} & PhotoSetAttributes;
 
 export default function InfinitePhotoScroll({
   cacheKey,
@@ -21,53 +35,31 @@ export default function InfinitePhotoScroll({
   camera,
   simulation,
   wrapMoreButtonInGrid,
-  useCachedPhotos = true,
-  includeHiddenPhotos,
+  useCached = true,
+  includeHidden,
   children,
-}: {
-  initialOffset: number;
-  itemsPerPage: number;
-  sortBy?: GetPhotosOptions['sortBy'];
-  cacheKey: string;
-  wrapMoreButtonInGrid?: boolean;
-  useCachedPhotos?: boolean;
-  includeHiddenPhotos?: boolean;
-  children: (props: {
-    photos: Photo[];
-    onLastPhotoVisible: () => void;
-    revalidatePhoto?: RevalidateMedia;
-  }) => ReactNode;
-} & PhotoSetAttributes) {
+}: InfiniteScrollProps) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
 
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, previous: Photo[]) => (previous && previous.length === 0 ? null : [key, size]),
+    (size: number, previous: []) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
   const fetcher = useCallback(
     ([, size]: [string, number]) =>
-      (useCachedPhotos ? getPhotosCachedAction : getPhotosAction)({
+      (useCached ? getPhotosCachedAction : getPhotosAction)({
         offset: initialOffset + size * itemsPerPage,
         sortBy,
         limit: itemsPerPage,
-        hidden: includeHiddenPhotos ? 'include' : 'exclude',
+        hidden: includeHidden ? 'include' : 'exclude',
         tag,
         camera,
         simulation,
       }),
-    [
-      useCachedPhotos,
-      sortBy,
-      initialOffset,
-      itemsPerPage,
-      includeHiddenPhotos,
-      tag,
-      camera,
-      simulation,
-    ],
+    [useCached, sortBy, initialOffset, itemsPerPage, includeHidden, tag, camera, simulation],
   );
 
   const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Photo[]>(
@@ -86,7 +78,7 @@ export default function InfinitePhotoScroll({
   const isLoadingOrValidating = isLoading || isValidating;
 
   const isFinished = useMemo(
-    () => data && (data.at(-1)?.length ?? 0) < itemsPerPage,
+    () => (data?.at(-1)?.length ?? 0) < itemsPerPage,
     [data, itemsPerPage],
   );
 
@@ -96,18 +88,16 @@ export default function InfinitePhotoScroll({
     }
   }, [isFinished, isLoadingOrValidating, setSize]);
 
-  const photos = useMemo(() => (data ?? [])?.flat(), [data]);
+  const items = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidatePhoto: RevalidateMedia = useCallback(
-    (photoId: string, revalidateRemainingPhotos?: boolean) =>
+  const revalidate: RevalidateMedia = useCallback(
+    (id: string, revalidateRemaining?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Photo[], key: Arguments) => {
+        revalidate: (_data, key) => {
           if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
             const size = key[1];
-            const index = (data ?? []).findIndex(photos =>
-              photos.some(photo => photo.id === photoId),
-            );
-            return revalidateRemainingPhotos ? size >= index : size === index;
+            const index = (data ?? []).findIndex(items => items.some(item => item.id === id));
+            return revalidateRemaining ? size >= index : size === index;
           }
           return false;
         },
@@ -130,9 +120,9 @@ export default function InfinitePhotoScroll({
   return (
     <div className="space-y-4">
       {children({
-        photos,
-        onLastPhotoVisible: advance,
-        revalidatePhoto,
+        items,
+        onLastItemVisible: advance,
+        revalidateItem: revalidate,
       })}
       {!isFinished &&
         (wrapMoreButtonInGrid ? <SiteGrid contentMain={renderMoreButton()} /> : renderMoreButton())}

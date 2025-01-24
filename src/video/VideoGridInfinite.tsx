@@ -23,7 +23,7 @@ export default function VideoGridInfinite({
       itemsPerPage={INFINITE_SCROLL_GRID_MULTIPLE}
       tag={tag}
     >
-      {({ videos, onLastVideoVisible }) => (
+      {({ items: videos, onLastItemVisible: onLastVideoVisible }) => (
         <VideoGrid
           {...{
             videos,

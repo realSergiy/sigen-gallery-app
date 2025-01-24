@@ -1,8 +1,8 @@
 'use client';
 
 import { PATH_OG } from '@/site/paths';
-import InfinitePhotoScroll from './InfinitePhotoScroll';
-import StaggeredOgPhotos from './StaggeredOgPhotos';
+import InfinitePhotoScroll from '../../photo/InfinitePhotoScroll';
+import StaggeredOgImages from './StaggeredOgImages';
 
 export default function StaggeredOgPhotosInfinite({
   initialOffset,
@@ -17,8 +17,8 @@ export default function StaggeredOgPhotosInfinite({
       initialOffset={initialOffset}
       itemsPerPage={itemsPerPage}
     >
-      {({ photos, onLastPhotoVisible }) => (
-        <StaggeredOgPhotos photos={photos} onLastPhotoVisible={onLastPhotoVisible} />
+      {({ items: photos, onLastItemVisible: onLastPhotoVisible }) => (
+        <StaggeredOgImages photos={photos} onLastPhotoVisible={onLastPhotoVisible} />
       )}
     </InfinitePhotoScroll>
   );

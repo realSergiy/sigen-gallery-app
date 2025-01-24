@@ -9,8 +9,22 @@ import { useAppState } from '@/state/AppState';
 import { Video, VideoQueryOptions } from '@/db/video_orm';
 import { VideoSetAttributes } from '.';
 import { getVideosAction, getVideosCachedAction } from './serverFunctions';
-import { type Arguments } from 'swr';
 import { type RevalidateMedia } from '@/media';
+
+type InfiniteScrollProps = {
+  initialOffset: number;
+  itemsPerPage: number;
+  sort?: VideoQueryOptions['sort'];
+  cacheKey: string;
+  wrapMoreButtonInGrid?: boolean;
+  useCached?: boolean;
+  includeHidden?: boolean;
+  children: (props: {
+    items: Video[];
+    onLastItemVisible: () => void;
+    revalidateItem?: RevalidateMedia;
+  }) => ReactNode;
+} & VideoSetAttributes;
 
 export default function InfiniteVideoScroll({
   cacheKey,
@@ -18,42 +32,29 @@ export default function InfiniteVideoScroll({
   itemsPerPage,
   sort,
   wrapMoreButtonInGrid,
-  useCachedVideos = true,
-  includeHiddenVideos,
+  useCached = true,
+  includeHidden,
   children,
-}: {
-  initialOffset: number;
-  itemsPerPage: number;
-  sort?: VideoQueryOptions['sort'];
-  cacheKey: string;
-  wrapMoreButtonInGrid?: boolean;
-  useCachedVideos?: boolean;
-  includeHiddenVideos?: boolean;
-  children: (props: {
-    videos: Video[];
-    onLastVideoVisible: () => void;
-    revalidateVideo?: RevalidateMedia;
-  }) => ReactNode;
-} & VideoSetAttributes) {
+}: InfiniteScrollProps) {
   const { swrTimestamp, isUserSignedIn } = useAppState();
 
   const key = `${swrTimestamp}-${cacheKey}`;
 
   const keyGenerator = useCallback(
-    (size: number, previous: Video[]) => (previous && previous.length === 0 ? null : [key, size]),
+    (size: number, previous: []) => (previous && previous.length === 0 ? null : [key, size]),
     [key],
   );
 
   const fetcher = useCallback(
     ([, size]: [string, number]) =>
-      (useCachedVideos ? getVideosCachedAction : getVideosAction)({
+      (useCached ? getVideosCachedAction : getVideosAction)({
         offset: initialOffset + size * itemsPerPage,
         sort,
         limit: itemsPerPage,
-        hidden: includeHiddenVideos ? 'include' : 'exclude',
+        hidden: includeHidden ? 'include' : 'exclude',
         filter: undefined, //add tag filter here
       }),
-    [useCachedVideos, sort, initialOffset, itemsPerPage, includeHiddenVideos],
+    [useCached, sort, initialOffset, itemsPerPage, includeHidden],
   );
 
   const { data, isLoading, isValidating, error, mutate, setSize } = useSwrInfinite<Video[]>(
@@ -82,18 +83,16 @@ export default function InfiniteVideoScroll({
     }
   }, [isFinished, isLoadingOrValidating, setSize]);
 
-  const videos = useMemo(() => (data ?? [])?.flat(), [data]);
+  const items = useMemo(() => (data ?? [])?.flat(), [data]);
 
-  const revalidateVideo: RevalidateMedia = useCallback(
-    (videoId: string, revalidateRemainingVideos?: boolean) =>
+  const revalidate: RevalidateMedia = useCallback(
+    (id: string, revalidateRemaining?: boolean) =>
       mutate(data, {
-        revalidate: (_data: Video[], key: Arguments) => {
+        revalidate: (_data, key) => {
           if (Array.isArray(key) && key.length >= 2 && typeof key[1] === 'number') {
             const size = key[1];
-            const index = (data ?? []).findIndex(videos =>
-              videos.some(video => video.id === videoId),
-            );
-            return revalidateRemainingVideos ? size >= index : size === index;
+            const index = (data ?? []).findIndex(items => items.some(item => item.id === id));
+            return revalidateRemaining ? size >= index : size === index;
           }
           return false;
         },
@@ -116,9 +115,9 @@ export default function InfiniteVideoScroll({
   return (
     <div className="space-y-4">
       {children({
-        videos,
-        onLastVideoVisible: advance,
-        revalidateVideo,
+        items,
+        onLastItemVisible: advance,
+        revalidateItem: revalidate,
       })}
       {!isFinished &&
         (wrapMoreButtonInGrid ? <SiteGrid contentMain={renderMoreButton()} /> : renderMoreButton())}
