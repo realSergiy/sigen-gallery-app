@@ -16,7 +16,7 @@ const constAttributes = {
   playsInline: true,
 };
 
-export default function VideoWithMasks({
+export default function VideoSwitcher({
   videoUrl,
   masks,
   enabledBit,

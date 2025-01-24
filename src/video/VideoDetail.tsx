@@ -20,7 +20,7 @@ import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
 import { RevalidateMedia } from '@/media';
 import { VIDEO_WIDTH_LARGE } from '@/components/video';
-import VideoWithMasks from '@/components/video/VideoWithMasks';
+import VideoSwitcher from '@/components/video/VideoSwitcher';
 import MasksSwitch from './MasksSwitch';
 
 type VideoDetailProps = {
@@ -80,8 +80,44 @@ export default function VideoDetail({
 
   const aspectRatio = 16 / 9;
 
-  const masks = video.videoMask ?? [];
-  masks.push({ name: 'Original', videoUrl: video.videoUrl, bitmask: 0 });
+  //const masks = video.videoMask ?? [];
+  const masks = [
+    {
+      name: 'mask1',
+      videoUrl: 'https://example.com/video1.mp4',
+      bitmask: 1,
+    },
+    {
+      name: 'mask2',
+      videoUrl: 'https://example.com/video2.mp4',
+      bitmask: 2,
+    },
+    {
+      name: 'mask3',
+      videoUrl: 'https://example.com/video3.mp4',
+      bitmask: 4,
+    },
+    {
+      name: 'mask4',
+      videoUrl: 'https://example.com/video4.mp4',
+      bitmask: 8,
+    },
+    {
+      name: 'mask5',
+      videoUrl: 'https://example.com/video5.mp4',
+      bitmask: 16,
+    },
+    {
+      name: 'mask6',
+      videoUrl: 'https://example.com/video6.mp4',
+      bitmask: 32,
+    },
+    {
+      name: 'mask7',
+      videoUrl: 'https://example.com/video7.mp4',
+      bitmask: 64,
+    },
+  ];
 
   return (
     <SiteGrid
@@ -99,8 +135,8 @@ export default function VideoDetail({
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VideoWithMasks
-              masks={[]}
+            <VideoSwitcher
+              masks={masks}
               enabledBit={0}
               videoUrl={video.videoUrl}
               width={VIDEO_WIDTH_LARGE}
@@ -200,7 +236,7 @@ export default function VideoDetail({
               </div>
             </div>
             <MasksSwitch
-              tags={['mask A', 'mask B', 'mask C']}
+              masks={masks}
               contrast="medium"
               prefetch={prefetchRelatedLinks}
               className={'pb-14 text-xl'}
