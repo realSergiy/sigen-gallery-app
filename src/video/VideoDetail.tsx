@@ -12,7 +12,7 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
@@ -20,8 +20,8 @@ import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
 import { RevalidateMedia } from '@/media';
 import { VIDEO_WIDTH_LARGE } from '@/components/video';
-import VideoSwitcher from '@/components/video/VideoSwitcher';
-import MasksSwitch from './MasksSwitch';
+import VideoSwitchPlayer from '@/components/video/VideoSwitchPlayer';
+import MaskSwitcher from './MaskSwitcher';
 
 type VideoDetailProps = {
   video: Video;
@@ -38,6 +38,44 @@ type VideoDetailProps = {
   includeFavoriteInAdminMenu?: boolean;
   onVisible?: () => void;
 };
+
+const masks = [
+  {
+    name: 'mask1',
+    videoUrl: 'https://8ypnp51mf8nxu2xt.public.blob.vercel-storage.com/video-tIxboLUFoBaetPph.mp4',
+    bitmask: 1,
+  },
+  {
+    name: 'mask2',
+    videoUrl: 'https://8ypnp51mf8nxu2xt.public.blob.vercel-storage.com/video-WBBYS6WWbi6mgaNE.mp4',
+    bitmask: 2,
+  },
+  {
+    name: 'mask3',
+    videoUrl: 'https://example.com/video3.mp4',
+    bitmask: 3,
+  },
+  {
+    name: 'mask4',
+    videoUrl: 'https://example.com/video4.mp4',
+    bitmask: 4,
+  },
+  {
+    name: 'mask5',
+    videoUrl: 'https://example.com/video5.mp4',
+    bitmask: 5,
+  },
+  {
+    name: 'mask6',
+    videoUrl: 'https://example.com/video6.mp4',
+    bitmask: 6,
+  },
+  {
+    name: 'mask7',
+    videoUrl: 'https://example.com/video7.mp4',
+    bitmask: 7,
+  },
+];
 
 export default function VideoDetail({
   video,
@@ -72,6 +110,8 @@ export default function VideoDetail({
 
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
+  const [activeBitmask, setActiveBitmask] = useState(0);
+
   const renderVideoLink = () => (
     <VideoLink video={video} className="grow font-bold uppercase" prefetch={prefetch} />
   );
@@ -81,43 +121,6 @@ export default function VideoDetail({
   const aspectRatio = 16 / 9;
 
   //const masks = video.videoMask ?? [];
-  const masks = [
-    {
-      name: 'mask1',
-      videoUrl: 'https://example.com/video1.mp4',
-      bitmask: 1,
-    },
-    {
-      name: 'mask2',
-      videoUrl: 'https://example.com/video2.mp4',
-      bitmask: 2,
-    },
-    {
-      name: 'mask3',
-      videoUrl: 'https://example.com/video3.mp4',
-      bitmask: 4,
-    },
-    {
-      name: 'mask4',
-      videoUrl: 'https://example.com/video4.mp4',
-      bitmask: 8,
-    },
-    {
-      name: 'mask5',
-      videoUrl: 'https://example.com/video5.mp4',
-      bitmask: 16,
-    },
-    {
-      name: 'mask6',
-      videoUrl: 'https://example.com/video6.mp4',
-      bitmask: 32,
-    },
-    {
-      name: 'mask7',
-      videoUrl: 'https://example.com/video7.mp4',
-      bitmask: 64,
-    },
-  ];
 
   return (
     <SiteGrid
@@ -135,9 +138,9 @@ export default function VideoDetail({
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VideoSwitcher
+            <VideoSwitchPlayer
               masks={masks}
-              enabledBit={0}
+              enabledBit={activeBitmask}
               videoUrl={video.videoUrl}
               width={VIDEO_WIDTH_LARGE}
               height={Math.round(VIDEO_WIDTH_LARGE / aspectRatio)}
@@ -192,7 +195,7 @@ export default function VideoDetail({
           {/* Date */}
           <div
             className={clsx(
-              'space-y-baseline flex flex-col justify-between',
+              'space-y-baseline flex flex-col justify-evenly',
               !hasTitleContent && 'md:-mt-baseline',
             )}
           >
@@ -235,12 +238,7 @@ export default function VideoDetail({
                 )}
               </div>
             </div>
-            <MasksSwitch
-              masks={masks}
-              contrast="medium"
-              prefetch={prefetchRelatedLinks}
-              className={'pb-14 text-xl'}
-            />
+            <MaskSwitcher masks={masks} setActiveBitmask={setActiveBitmask} />
           </div>
         </DivDebugBaselineGrid>
       }
