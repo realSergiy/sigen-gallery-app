@@ -2,7 +2,7 @@
 
 import Switcher from '@/components/Switcher';
 import SwitcherItem2 from '@/components/SwitcherItem2';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { PiMaskHappyBold } from 'react-icons/pi';
 
 const videoUrl =
@@ -54,15 +54,39 @@ type VideoMask = {
 
 export default function VideoPage() {
   const [activeBitmask, setActiveBitmask] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const currentTimeRef = useRef(0);
 
-  const mask = useMemo(() => masks.find(mask => mask.bitmask === activeBitmask), [activeBitmask]);
+  const mask = useMemo(() => masks.find(m => m.bitmask === activeBitmask), [activeBitmask]);
+
+  const onBitmaskChange = useCallback((bitmask: number) => {
+    currentTimeRef.current = videoRef.current?.currentTime ?? 0;
+    setActiveBitmask(bitmask);
+  }, []);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      const handle = () => {
+        videoElement.currentTime = currentTimeRef.current;
+      };
+
+      videoElement.addEventListener('loadedmetadata', handle);
+
+      return () => {
+        videoElement.removeEventListener('loadedmetadata', handle);
+      };
+    }
+  }, [mask?.videoUrl]);
 
   return (
     <div>
       <h1>Video Page</h1>
       <p>Video page content</p>
-      <MSwitcher masks={masks} setActiveBitmask={setActiveBitmask} />
+      <MSwitcher masks={masks} setActiveBitmask={onBitmaskChange} />
+
       <video
+        ref={videoRef}
         src={mask ? mask.videoUrl : videoUrl}
         controls
         autoPlay
