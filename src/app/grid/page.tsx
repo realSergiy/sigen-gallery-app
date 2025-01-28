@@ -4,12 +4,12 @@ import { getVideoSidebarData } from '@/video/data';
 import { cache } from 'react';
 import VideoGridPage from '@/video/VideoGridPage';
 import MediaEmptyState from '@/media/MediaEmptyState';
-import { getVideos, getVideosMeta } from '@/db/video_orm';
+import { getVideosWithMasks, getVideosMeta } from '@/db/video_orm';
 
 export const dynamic = 'force-static';
 
 const getVideosCached = cache(() =>
-  getVideos({
+  getVideosWithMasks({
     limit: INFINITE_SCROLL_GRID_INITIAL,
   }),
 );

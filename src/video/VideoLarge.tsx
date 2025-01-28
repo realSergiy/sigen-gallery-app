@@ -25,6 +25,7 @@ export default function VideoLarge({
   video,
   className,
   primaryTag,
+  priority,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
   revalidateVideo,
@@ -39,6 +40,7 @@ export default function VideoLarge({
   video: Video;
   className?: string;
   primaryTag?: string;
+  priority?: boolean;
   showControls?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
@@ -73,7 +75,7 @@ export default function VideoLarge({
     <VideoLink video={video} className="grow font-bold uppercase" prefetch={prefetch} />
   );
 
-  // ToDo: aspectRatio may be needed, compore with PhotoLarge.tsx
+  // ToDo: aspectRatio most likely needed in the database
 
   return (
     <SiteGrid
@@ -98,6 +100,7 @@ export default function VideoLarge({
               aspectRatio={16 / 9}
               src={video.url}
               blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
+              priority={priority}
             />
           </div>
         </Link>

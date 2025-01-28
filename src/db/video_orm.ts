@@ -1,23 +1,27 @@
 import { tb } from '@/db/generated/schema';
-import { db } from '@/db';
-import { count, and, eq, ne, max, min, desc, sql, inArray, lt } from 'drizzle-orm';
+import { count, and, eq, ne, max, min, desc, sql, inArray, lt, type SQLWrapper } from 'drizzle-orm';
 import type { TagInfo } from '@/tag';
 import { convertArrayToPostgresString } from '@/services/postgres';
 import { OUTDATED_THRESHOLD } from '@/media';
 import { createLogOp } from '@/utility/logging';
+import { drizzle } from 'drizzle-orm/vercel-postgres';
+import * as relationalSchema from './relationalSchema';
 
 const logger = console;
 const logOp = createLogOp(logger);
 
+const db = drizzle({ schema: relationalSchema });
+
 export type VideoDbNew = Omit<typeof tb.video.$inferInsert, 'createdAt' | 'updatedAt'>;
-export type VideoDb = typeof tb.video.$inferSelect;
+export type VideoDb = Awaited<ReturnType<typeof getVideos>>[number];
 export type VideoDbUpd = Omit<VideoDb, 'createdAt' | 'updatedAt'>;
 
-type ReplaceNullWithUndefined<T> = {
-  [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K];
-};
+export type VideoWithMasks = Awaited<ReturnType<typeof getVideosWithMasks>>[number];
 
-export type Video = ReplaceNullWithUndefined<VideoDb>;
+type Condition = SQLWrapper | undefined;
+
+export type Video = VideoWithMasks;
+export type VideoMask = Video['videoMask'][number];
 
 const sqNeHidden = db.$with('sq').as(db.select().from(tb.video).where(ne(tb.video.hidden, true)));
 
@@ -48,32 +52,60 @@ const parseOptions = (options: VideoQueryOptions) => {
   return { sq, filter, sort };
 };
 
+const parseOptions2 = (options: VideoQueryOptions): Condition[] => {
+  const hidden = (options.hidden ?? 'exclude') ? ne(tb.video.hidden, true) : undefined;
+  const outdated =
+    options.filter === 'outdatedOnly' ? lt(tb.video.updatedAt, OUTDATED_THRESHOLD) : undefined;
+
+  return [hidden, outdated];
+};
+
+export const getVideosWithMasks = logOp(async (options: VideoQueryOptions) => ({
+  name: 'getVideosWithMasks',
+  resultFormat: result => `${result.length} videos`,
+  op: async () => {
+    const conditions = parseOptions2(options);
+
+    return db.query.video.findMany({
+      where: () => and(...conditions),
+      limit: options.limit ?? 1000,
+      with: {
+        videoMask: {
+          columns: {
+            name: true,
+            videoUrl: true,
+            bitmask: true,
+          },
+        },
+      },
+    });
+  },
+}));
+
 export const getVideos = logOp(async (options: VideoQueryOptions) => ({
   name: 'getVideos',
   resultFormat: result => `${result.length} videos`,
   op: async () => {
-    const { sq, filter, sort } = parseOptions(options);
+    const conditions = parseOptions2(options);
 
-    const rows = await db
-      .with(sq)
-      .select()
-      .from(sq)
-      .where(filter)
-      .orderBy(sort)
-      .limit(options.limit ?? 1000)
-      .offset(options.offset ?? 0);
-
-    return rows;
+    return db.query.video.findMany({
+      where: and(...conditions),
+      orderBy: desc(options.sort ? tb.video[options.sort] : tb.video.takenAt),
+      limit: options.limit ?? 1000,
+      offset: options.offset ?? 0,
+    });
   },
 }));
 
 export const getVideosMostRecentUpdate = async () => {
-  return db
-    .select({
-      updatedAt: max(tb.video.updatedAt),
-    })
-    .from(tb.video)
-    .then(rows => rows[0].updatedAt);
+  const row = await db.query.video.findFirst({
+    orderBy: desc(tb.video.updatedAt),
+    columns: {
+      updatedAt: true,
+    },
+  });
+
+  return row?.updatedAt ?? null;
 };
 
 export const getUniqueTags = async () => getUniqueTagsCore(false);
@@ -121,6 +153,7 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
       limit ${_limit}
     `);
 
+  /*
   const rows = await db
     .select()
     .from(video)
@@ -129,10 +162,21 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
         id,
         sq.rows.map(p => p.id),
       ),
-    );
+    );*/
+
+  const rows = await db.query.video.findMany({
+    where: inArray(
+      id,
+      sq.rows.map(p => p.id),
+    ),
+    with: {
+      videoMask: true,
+    },
+  });
 
   const row = rows.find(p => p.id === videoId);
   const indexNumber = row ? sq.rows.find(r => r.id === row.id) : undefined;
+
   return {
     videos: rows,
     indexNumber,
@@ -140,10 +184,10 @@ export const getVideosNearId = async (videoId: string, { limit }: VideoQueryOpti
 };
 
 export const getVideoIds = async ({ limit }: { limit?: number }) =>
-  db
-    .select({ id: tb.video.id })
-    .from(tb.video)
-    .limit(limit ?? 1000);
+  db.query.video.findMany({
+    columns: { id: true },
+    limit: limit ?? 1000,
+  });
 
 export const getVideo = async (id: string, includeHidden = false) => {
   if (!id) {
@@ -154,9 +198,12 @@ export const getVideo = async (id: string, includeHidden = false) => {
     ? eq(tb.video.id, id)
     : and(eq(tb.video.id, id), eq(tb.video.hidden, false));
 
-  const rows = await db.select().from(tb.video).where(filter);
-
-  return rows.length == 1 ? rows[0] : undefined; // ToDo: log error if > 1
+  return db.query.video.findFirst({
+    where: filter,
+    with: {
+      videoMask: true,
+    },
+  });
 };
 
 export const insertVideo = async (video: VideoDbNew) => {

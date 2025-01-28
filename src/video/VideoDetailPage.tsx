@@ -1,5 +1,5 @@
 import AnimateItems from '@/components/AnimateItems';
-import VideoPlayerLarge from './VideoPlayerLarge';
+import VideoDetail from './VideoDetail';
 import SiteGrid from '@/components/SiteGrid';
 import VideoGrid from './VideoGrid';
 import { TAG_HIDDEN } from '@/tag';
@@ -65,11 +65,10 @@ export default function VideoDetailPage({
         className="md:mb-8"
         animateFromAppState
         items={[
-          <VideoPlayerLarge
+          <VideoDetail
             key={video.id}
             video={video}
             primaryTag={tag}
-            showControls={true}
             prefetchRelatedLinks
             showTitle={Boolean(customHeader)}
             showTitleAsH1

@@ -1,6 +1,6 @@
 'use client';
 
-import { altTextForVideo, doesVideoNeedBlurCompatibility, titleForVideo } from '.';
+import { titleForVideo, VIDEO_WIDTH_LARGE } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
@@ -12,35 +12,20 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
-import { useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
 import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
-import VidLarge from '@/components/video/VidLarge';
 import { RevalidateMedia } from '@/media';
 
-export default function VideoPlayerLarge({
-  video,
-  className,
-  primaryTag,
-  showControls = false,
-  prefetch = SHOULD_PREFETCH_ALL_LINKS,
-  prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
-  revalidateVideo,
-  showTitle = true,
-  showTitleAsH1,
-  shouldShare = true,
-  shouldShareTag,
-  shouldScrollOnShare,
-  includeFavoriteInAdminMenu,
-  onVisible,
-}: {
+import MaskSwitcher from './MaskSwitcher';
+
+type VideoDetailProps = {
   video: Video;
   className?: string;
   primaryTag?: string;
-  showControls?: boolean;
   prefetch?: boolean;
   prefetchRelatedLinks?: boolean;
   revalidateVideo?: RevalidateMedia;
@@ -51,7 +36,31 @@ export default function VideoPlayerLarge({
   shouldScrollOnShare?: boolean;
   includeFavoriteInAdminMenu?: boolean;
   onVisible?: () => void;
-}) {
+};
+
+const constVideoAttributes = {
+  controls: true,
+  autoPlay: true,
+  muted: true,
+  loop: true,
+  playsInline: true,
+};
+
+export default function VideoDetail({
+  video,
+  className,
+  primaryTag,
+  prefetch = SHOULD_PREFETCH_ALL_LINKS,
+  prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
+  revalidateVideo,
+  showTitle = true,
+  showTitleAsH1,
+  shouldShare = true,
+  shouldShareTag,
+  shouldScrollOnShare,
+  includeFavoriteInAdminMenu,
+  onVisible,
+}: VideoDetailProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const tags = sortTags(video.tags, primaryTag);
@@ -70,11 +79,40 @@ export default function VideoPlayerLarge({
 
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
+  const [activeBitmask, setActiveBitmask] = useState(0);
+  const masks = useMemo(() => video.videoMask ?? [], [video]);
+  const activeMask = useMemo(
+    () => masks.find(m => m.bitmask === activeBitmask),
+    [activeBitmask, masks],
+  );
+  const playbackTimeRef = useRef(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const onBitmaskChange = useCallback((bitmask: number) => {
+    playbackTimeRef.current = videoRef.current?.currentTime ?? 0;
+    setActiveBitmask(bitmask);
+  }, []);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      const listener = () =>
+        (videoElement.currentTime = Math.min(playbackTimeRef.current, videoElement.duration));
+
+      videoElement.addEventListener('loadedmetadata', listener);
+      return () => videoElement.removeEventListener('loadedmetadata', listener);
+    }
+  }, [activeMask?.videoUrl]);
+
   const renderVideoLink = () => (
     <VideoLink video={video} className="grow font-bold uppercase" prefetch={prefetch} />
   );
 
   // ToDo: aspectRatio may be needed, compore with PhotoLarge.tsx
+
+  const aspectRatio = 16 / 9;
+
+  //const masks = video.videoMask ?? [];
 
   return (
     <SiteGrid
@@ -88,18 +126,17 @@ export default function VideoPlayerLarge({
         >
           <div
             className={clsx(
-              areVideosMatted && 'flex w-full items-center justify-center',
+              areVideosMatted && 'flex h-full items-center justify-center',
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VidLarge
-              showControls={showControls}
-              aspectRatio={16 / 9}
-              className={clsx(areVideosMatted && 'h-full')}
-              videoClassName={clsx(areVideosMatted && 'size-full object-contain')}
-              alt={altTextForVideo(video)}
-              src={video.videoUrl}
-              blurCompatibilityMode={doesVideoNeedBlurCompatibility(video)}
+            <video
+              {...constVideoAttributes}
+              width={VIDEO_WIDTH_LARGE}
+              height={Math.round(VIDEO_WIDTH_LARGE / aspectRatio)}
+              ref={videoRef}
+              src={activeMask ? activeMask.videoUrl : video.videoUrl}
+              className="h-full object-cover"
             />
           </div>
         </Link>
@@ -107,10 +144,9 @@ export default function VideoPlayerLarge({
       contentSide={
         <DivDebugBaselineGrid
           className={clsx(
-            'sticky top-4 -translate-y-1 self-start',
-            'grid grid-cols-2 md:grid-cols-1',
-            'gap-y-baseline gap-x-0.5 sm:gap-x-1',
-            'pb-6',
+            'gap-y-baseline sticky top-4 grid h-full',
+            '-translate-y-1 grid-cols-2 gap-x-0.5',
+            'sm:gap-x-1 md:grid-cols-1',
           )}
         >
           {/* Meta */}
@@ -149,8 +185,13 @@ export default function VideoPlayerLarge({
               )}
             </div>
           </div>
-          {/* EXIF Data */}
-          <div className={clsx('space-y-baseline', !hasTitleContent && 'md:-mt-baseline')}>
+          {/* Date */}
+          <div
+            className={clsx(
+              'space-y-baseline flex flex-col justify-evenly',
+              !hasTitleContent && 'md:-mt-baseline',
+            )}
+          >
             <div
               className={clsx(
                 'gap-y-baseline flex gap-x-2.5',
@@ -190,6 +231,7 @@ export default function VideoPlayerLarge({
                 )}
               </div>
             </div>
+            <MaskSwitcher masks={masks} onBitmaskChange={onBitmaskChange} />
           </div>
         </DivDebugBaselineGrid>
       }

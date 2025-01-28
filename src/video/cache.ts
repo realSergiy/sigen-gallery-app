@@ -13,7 +13,7 @@ import {
   getUniqueTags,
   getUniqueTagsHidden,
   getVideo,
-  getVideos,
+  getVideosWithMasks,
   getVideosMeta,
   getVideosMostRecentUpdate,
   getVideosNearId,
@@ -83,8 +83,8 @@ export const revalidateVideo = (videoId: string) => {
 
 // Cache
 
-export const getVideosCached = (...args: Parameters<typeof getVideos>) =>
-  unstable_cache(getVideos, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(...args);
+export const getVideosCached = (...args: Parameters<typeof getVideosWithMasks>) =>
+  unstable_cache(getVideosWithMasks, [KEY_VIDEOS, ...getVideosCacheKeys(...args)])(...args);
 
 export const getVideosNearIdCached = (...args: Parameters<typeof getVideosNearId>) =>
   unstable_cache(getVideosNearId, [KEY_VIDEOS, ...getVideosCacheKeys(args[1])])(...args).then(
@@ -128,9 +128,9 @@ export const getUniqueTagsHiddenCached = unstable_cache(getUniqueTagsHidden, [
 ]);
 
 // No store
-export const getVideosNoStore = (...args: Parameters<typeof getVideos>) => {
+export const getVideosNoStore = (...args: Parameters<typeof getVideosWithMasks>) => {
   unstable_noStore();
-  return getVideos(...args);
+  return getVideosWithMasks(...args);
 };
 
 export const getVideoNoStore = (...args: Parameters<typeof getVideo>) => {

@@ -11,7 +11,7 @@ import { GRID_HOMEPAGE_ENABLED } from '@/site/config';
 
 import VideoGridPage from '@/video/VideoGridPage';
 import VideoFeedPage from '@/video/VideoFeedPage';
-import { getVideos, getVideosMeta } from '@/db/video_orm';
+import { getVideosWithMasks, getVideosMeta } from '@/db/video_orm';
 import { getVideoSidebarData } from '@/video/data';
 import MediaEmptyState from '@/media/MediaEmptyState';
 
@@ -19,7 +19,7 @@ export const dynamic = 'force-static';
 export const maxDuration = 60;
 
 const getVideosCached = cache(() =>
-  getVideos({
+  getVideosWithMasks({
     limit: GRID_HOMEPAGE_ENABLED ? INFINITE_SCROLL_GRID_INITIAL : INFINITE_SCROLL_FEED_INITIAL,
   }),
 );

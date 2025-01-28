@@ -31,6 +31,7 @@ export default function VideosLarge({
           prefetchRelatedLinks={prefetchFirstVideoLinks && index === 0}
           revalidateVideo={revalidateVideo}
           onVisible={index === videos.length - 1 ? onLastVideoVisible : undefined}
+          priority={index <= 1}
         />
       ))}
       itemKeys={videos.map(video => video.id)}

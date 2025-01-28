@@ -194,6 +194,70 @@
       "policies": {},
       "isRLSEnabled": false
     },
+    "public.video_mask": {
+      "name": "video_mask",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "video_id": {
+          "name": "video_id",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bitmask": {
+          "name": "bitmask",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "video_url": {
+          "name": "video_url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "video_mask_video_id_fk": {
+          "name": "video_mask_video_id_fk",
+          "tableFrom": "video_mask",
+          "tableTo": "video",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "video_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "check_video_url": {
+          "name": "check_video_url",
+          "value": "(video_url)::text ~ '^https://.+\\.[A-Za-z0-9]+$'::text"
+        }
+      },
+      "policies": {},
+      "isRLSEnabled": false
+    },
     "public.video": {
       "name": "video",
       "schema": "",
@@ -268,12 +332,6 @@
           "notNull": true,
           "default": "CURRENT_TIMESTAMP"
         },
-        "thumbnail_url": {
-          "name": "thumbnail_url",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
         "video_url": {
           "name": "video_url",
           "type": "varchar(255)",
@@ -289,6 +347,10 @@
         "check_url": {
           "name": "check_url",
           "value": "(url)::text ~ '^https://.+\\.[A-Za-z0-9]+$'::text"
+        },
+        "check_video_url": {
+          "name": "check_video_url",
+          "value": "(video_url)::text ~ '^https://.+\\.[A-Za-z0-9]+$'::text"
         }
       },
       "policies": {},

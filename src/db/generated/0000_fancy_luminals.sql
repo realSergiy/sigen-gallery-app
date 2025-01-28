@@ -33,6 +33,15 @@ CREATE TABLE "photos" (
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 --> statement-breakpoint
+CREATE TABLE "video_mask" (
+	"id" integer PRIMARY KEY NOT NULL,
+	"video_id" varchar(8) NOT NULL,
+	"bitmask" integer NOT NULL,
+	"name" varchar(255) DEFAULT '' NOT NULL,
+	"video_url" varchar(255),
+	CONSTRAINT "check_video_url" CHECK ((video_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text)
+);
+--> statement-breakpoint
 CREATE TABLE "video" (
 	"id" varchar(8) PRIMARY KEY NOT NULL,
 	"url" varchar(255) NOT NULL,
@@ -45,9 +54,10 @@ CREATE TABLE "video" (
 	"hidden" boolean DEFAULT false NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	"created_at" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	"thumbnail_url" varchar(255),
 	"video_url" varchar(255),
-	CONSTRAINT "check_url" CHECK ((url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text)
+	CONSTRAINT "check_url" CHECK ((url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text),
+	CONSTRAINT "check_video_url" CHECK ((video_url)::text ~ '^https://.+\.[A-Za-z0-9]+$'::text)
 );
-
+--> statement-breakpoint
+ALTER TABLE "video_mask" ADD CONSTRAINT "video_mask_video_id_fk" FOREIGN KEY ("video_id") REFERENCES "public"."video"("id") ON DELETE cascade ON UPDATE cascade;
 */
