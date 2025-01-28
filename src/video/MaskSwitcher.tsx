@@ -4,7 +4,7 @@ import Switcher from '@/components/Switcher';
 import SwitcherItem2 from '@/components/SwitcherItem2';
 import { useEffect, useState } from 'react';
 
-type MasksSwitcherProps = {
+export type MasksSwitcherProps = {
   className?: string;
   masks: VideoMask[];
   setActiveBitmask: (bitmask: number) => void;
