@@ -1,6 +1,6 @@
 'use client';
 
-import { titleForVideo } from '.';
+import { titleForVideo, VIDEO_WIDTH_LARGE } from '.';
 import SiteGrid from '@/components/SiteGrid';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
@@ -12,15 +12,14 @@ import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';
 import VideoLink from './VideoLink';
 import { SHOULD_PREFETCH_ALL_LINKS, ALLOW_PUBLIC_DOWNLOADS } from '@/site/config';
 import AdminVideoMenuClient from '@/admin/AdminVideoMenuClient';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useOnVisible from '@/utility/useOnVisible';
 import VideoDate from './VideoDate';
 import { useAppState } from '@/state/AppState';
 import { Video } from '@/db/video_orm';
 import MediaTags from '@/tag/MediaTags';
 import { RevalidateMedia } from '@/media';
-import { VIDEO_WIDTH_LARGE } from '@/components/video';
-import VideoSwitchPlayer from '@/components/video/VideoSwitchPlayer';
+
 import MaskSwitcher from './MaskSwitcher';
 
 type VideoDetailProps = {
@@ -39,43 +38,13 @@ type VideoDetailProps = {
   onVisible?: () => void;
 };
 
-const masks = [
-  {
-    name: 'mask1',
-    videoUrl: 'https://8ypnp51mf8nxu2xt.public.blob.vercel-storage.com/video-tIxboLUFoBaetPph.mp4',
-    bitmask: 1,
-  },
-  {
-    name: 'mask2',
-    videoUrl: 'https://8ypnp51mf8nxu2xt.public.blob.vercel-storage.com/video-WBBYS6WWbi6mgaNE.mp4',
-    bitmask: 2,
-  },
-  {
-    name: 'mask3',
-    videoUrl: 'https://example.com/video3.mp4',
-    bitmask: 3,
-  },
-  {
-    name: 'mask4',
-    videoUrl: 'https://example.com/video4.mp4',
-    bitmask: 4,
-  },
-  {
-    name: 'mask5',
-    videoUrl: 'https://example.com/video5.mp4',
-    bitmask: 5,
-  },
-  {
-    name: 'mask6',
-    videoUrl: 'https://example.com/video6.mp4',
-    bitmask: 6,
-  },
-  {
-    name: 'mask7',
-    videoUrl: 'https://example.com/video7.mp4',
-    bitmask: 7,
-  },
-];
+const constVideoAttributes = {
+  controls: true,
+  autoPlay: true,
+  muted: true,
+  loop: true,
+  playsInline: true,
+};
 
 export default function VideoDetail({
   video,
@@ -111,6 +80,29 @@ export default function VideoDetail({
   const hasNonDateContent = hasTitleContent || hasMetaContent;
 
   const [activeBitmask, setActiveBitmask] = useState(0);
+  const masks = useMemo(() => video.videoMask ?? [], [video]);
+  const activeMask = useMemo(
+    () => masks.find(m => m.bitmask === activeBitmask),
+    [activeBitmask, masks],
+  );
+  const playbackTimeRef = useRef(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const onBitmaskChange = useCallback((bitmask: number) => {
+    playbackTimeRef.current = videoRef.current?.currentTime ?? 0;
+    setActiveBitmask(bitmask);
+  }, []);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      const listener = () =>
+        (videoElement.currentTime = Math.min(playbackTimeRef.current, videoElement.duration));
+
+      videoElement.addEventListener('loadedmetadata', listener);
+      return () => videoElement.removeEventListener('loadedmetadata', listener);
+    }
+  }, [activeMask?.videoUrl]);
 
   const renderVideoLink = () => (
     <VideoLink video={video} className="grow font-bold uppercase" prefetch={prefetch} />
@@ -138,12 +130,13 @@ export default function VideoDetail({
               areVideosMatted ? 'h-4/5' : 'h-[90%]',
             )}
           >
-            <VideoSwitchPlayer
-              masks={masks}
-              enabledBit={activeBitmask}
-              videoUrl={video.videoUrl}
+            <video
+              {...constVideoAttributes}
               width={VIDEO_WIDTH_LARGE}
               height={Math.round(VIDEO_WIDTH_LARGE / aspectRatio)}
+              ref={videoRef}
+              src={activeMask ? activeMask.videoUrl : video.videoUrl}
+              className="h-full object-cover"
             />
           </div>
         </Link>
@@ -238,7 +231,7 @@ export default function VideoDetail({
                 )}
               </div>
             </div>
-            <MaskSwitcher masks={masks} setActiveBitmask={setActiveBitmask} />
+            <MaskSwitcher masks={masks} onBitmaskChange={onBitmaskChange} />
           </div>
         </DivDebugBaselineGrid>
       }

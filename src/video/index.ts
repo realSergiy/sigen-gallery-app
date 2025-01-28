@@ -7,6 +7,8 @@ import { parameterize } from '@/utility/string';
 import { isBefore } from 'date-fns';
 import type { Metadata } from 'next';
 
+export const VIDEO_WIDTH_LARGE = 1000;
+
 // INFINITE SCROLL: FEED
 export const INFINITE_SCROLL_FEED_INITIAL = process.env.NODE_ENV === 'development' ? 12 : 24;
 export const INFINITE_SCROLL_FEED_MULTIPLE = process.env.NODE_ENV === 'development' ? 12 : 24;

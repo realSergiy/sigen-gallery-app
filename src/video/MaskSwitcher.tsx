@@ -7,10 +7,14 @@ import { useEffect, useState } from 'react';
 export type MasksSwitcherProps = {
   className?: string;
   masks: VideoMask[];
-  setActiveBitmask: (bitmask: number) => void;
+  onBitmaskChange: (bitmask: number) => void;
 };
 
-const MaskSwitcher = ({ className, masks, setActiveBitmask }: MasksSwitcherProps) => {
+const MaskSwitcher = ({
+  className,
+  masks,
+  onBitmaskChange: onBitmaskChange,
+}: MasksSwitcherProps) => {
   const nonCompositeMasks = masks.filter(({ bitmask }) => (bitmask & (bitmask - 1)) === 0);
   const [activeMasks, setActiveMasks] = useState<number[]>([]);
 
@@ -19,8 +23,8 @@ const MaskSwitcher = ({ className, masks, setActiveBitmask }: MasksSwitcherProps
   };
 
   useEffect(() => {
-    setActiveBitmask(activeMasks.reduce((prev, mask) => prev | mask, 0));
-  }, [activeMasks, setActiveBitmask]);
+    onBitmaskChange(activeMasks.reduce((prev, mask) => prev | mask, 0));
+  }, [activeMasks, onBitmaskChange]);
 
   return (
     <div className={className}>
