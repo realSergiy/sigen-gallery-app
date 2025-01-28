@@ -112,7 +112,11 @@ export const convertVideoToFormData = (video: Video): VideoFormData => {
       case 'hidden':
         return value ? 'true' : 'false';
       default:
-        return value !== undefined && value !== null ? value.toString() : undefined;
+        return typeof value === 'object'
+          ? JSON.stringify(value)
+          : value !== undefined && value !== null
+            ? value.toString()
+            : undefined;
     }
   };
   return Object.entries(video).reduce(

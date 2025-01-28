@@ -21,14 +21,19 @@ const HOSTNAME_AWS_S3 =
     ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
     : undefined;
 
-const createRemotePattern = (hostname: string | undefined): RemotePattern[] =>
+const createRemotePattern = (
+  hostname: string | undefined,
+  protocol = 'https' as const,
+  port = '',
+  pathname = '/**',
+): RemotePattern[] =>
   hostname
     ? [
         {
-          protocol: 'https',
+          protocol,
           hostname,
-          port: '',
-          pathname: '/**',
+          port,
+          pathname,
         },
       ]
     : [];
@@ -44,6 +49,7 @@ const nextConfig: NextConfig = {
       ...createRemotePattern(HOSTNAME_VERCEL_BLOB),
       ...createRemotePattern(HOSTNAME_CLOUDFLARE_R2),
       ...createRemotePattern(HOSTNAME_AWS_S3),
+      ...(process.env.NODE_ENV === 'development' ? createRemotePattern('localhost') : []),
     ],
     minimumCacheTTL: 31_536_000,
   },

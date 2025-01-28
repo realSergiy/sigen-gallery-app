@@ -1,6 +1,4 @@
 import { type VideoMask } from '@/db/video_orm';
-import VideoPlayer, { type VideoPlayerRef } from './VideoPlayer';
-import { useCallback, useEffect, useRef, useState } from 'react';
 
 type VideoWithMasksProps = {
   videoUrl: string;

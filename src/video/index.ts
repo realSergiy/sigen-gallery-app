@@ -141,7 +141,6 @@ export const descriptionForVideoSet = (
 
 const sortVideosByDate = (videos: Video[], order: 'ASC' | 'DESC' = 'DESC') => {
   return [...videos].sort((a, b) => {
-    console.log('comparing dates:', a.takenAt, b.takenAt);
     return order === 'DESC'
       ? new Date(b.takenAt).getTime() - new Date(a.takenAt).getTime()
       : new Date(a.takenAt).getTime() - new Date(b.takenAt).getTime();
